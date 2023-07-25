@@ -27,3 +27,5 @@ yarn-error.log
 .mysql_history
 xdebug.ini
 /old_git
+/.npm
+/.docker/db/storage
