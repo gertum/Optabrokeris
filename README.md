@@ -75,3 +75,16 @@ Activization for cmd line:
 
     php artisan migrate
 
+# npm install and build libs
+
+    npm install 
+    npm run build
+
+# permissions
+
+When you get message about permissions, run the following command from inside 'optabroker' container (with root : docker exec -it optabroker). 
+
+    chmod -R 777 storage 
+    
+Should solve this by using docker / (docker compose) settings where we will work with a custom user permissions instead of the root.
+
