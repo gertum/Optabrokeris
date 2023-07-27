@@ -55,6 +55,10 @@ Change to full access to the cache and logs files
 
     chmod 777 -R storage
 
+Must start composer
+    
+    composer install
+
 ## xdebug
 
 Must write correct ip address in to xdebug.ini and restart docker container.
