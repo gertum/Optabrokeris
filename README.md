@@ -75,16 +75,30 @@ Activization for cmd line:
 
 # application
 
-# migrations
+## migrations
 
     php artisan migrate
 
-# npm install and build libs
+( php artisan migrate:refresh first time)
+
+## initial user
+
+Run this command only in dev environment.
+
+    php artisan db:seed AdminUserSeeder
+
+now you will be able to login with admin@inkodus.lt:Labas123
+
+## Accessing login page for the first time:
+
+    http://localhost:8080/login
+
+## npm install and build libs
 
     npm install 
     npm run build
 
-# permissions
+## permissions
 
 When you get message about permissions, run the following command from inside 'optabroker' container (with root : docker exec -it optabroker). 
 
