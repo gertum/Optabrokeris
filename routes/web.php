@@ -35,6 +35,7 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::get('/jobs', [JobsController::class, 'list'])->name('jobs.list');
+    Route::get('/jobs/{id}', [JobsController::class, 'view'])->name('job.view');
 });
 
 
