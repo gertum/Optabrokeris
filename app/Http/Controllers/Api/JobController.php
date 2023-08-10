@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use mysql_xdevapi\Exception;
 
 class JobController
 {
@@ -27,20 +28,26 @@ class JobController
     public function view(Request $request, $id)
     {
         $job = Job::query()->find($id);
-        $solverClient = $this->solverClientFactory->createClient($job->type);
-        $result = $solverClient->getResult($job->solver_id);
-
         try {
-            $resultDataArray = Utils::jsonDecode($result, true);
-            $status = $resultDataArray['solverStatus'];
-        } catch ( GuzzleException $e ) {
-            Log::warning($e->getMessage());
-            $status = 'error';
+
+            $solverClient = $this->solverClientFactory->createClient($job->type);
+            $result = $solverClient->getResult($job->solver_id);
+
+            try {
+                $resultDataArray = Utils::jsonDecode($result, true);
+                $status = $resultDataArray['solverStatus'];
+            } catch (GuzzleException $e) {
+                Log::warning($e->getMessage());
+                $status = 'error';
+            }
+            $job->update(['result' => $result, 'status' => $status]);
+
+            // TODO create migration for score column
         }
-        $job->update(['result' => $result, 'status' => $status]);
-
-        // TODO create migration for score column
-
+        catch(\Exception $e)
+        {
+            Log::error($e->getMessage());
+        }
         return $job;
     }
 
@@ -93,4 +100,11 @@ class JobController
 
         return $solverClient->startSolving($job->solver_id);
     }
+
+    // TODO upload
+    public function upload(Request $request)
+    {
+
+    }
+    // TODO download
 }

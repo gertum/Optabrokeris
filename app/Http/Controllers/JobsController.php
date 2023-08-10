@@ -26,4 +26,8 @@ class JobsController extends Controller
         ]);
 
     }
+
+    public function testUpload(Request $request) {
+        return view('testupload');
+    }
 }
