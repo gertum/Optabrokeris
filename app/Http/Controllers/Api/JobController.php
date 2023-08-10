@@ -1,15 +1,16 @@
 <?php
 namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Controller;
 use App\Models\Job;
 use App\Solver\SolverClientFactory;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Utils;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
-use mysql_xdevapi\Exception;
 
 class JobController
 {
@@ -104,7 +105,28 @@ class JobController
     // TODO upload
     public function upload(Request $request)
     {
+        $file = $request->file('fileToUpload');
 
+        //Display File Name
+        echo 'File Name: '.$file->getClientOriginalName();
+        echo '<br>';
+
+        //Display File Extension
+        echo 'File Extension: '.$file->getClientOriginalExtension();
+        echo '<br>';
+
+        //Display File Real Path
+        echo 'File Real Path: '.$file->getRealPath();
+        echo '<br>';
+
+        //Display File Size
+        echo 'File Size: '.$file->getSize();
+        echo '<br>';
+
+        //Display File Mime Type
+        echo 'File Mime Type: '.$file->getMimeType();
+
+        Storage::put($file->getClientOriginalName(), file_get_contents($file->getRealPath()));
     }
     // TODO download
 }
