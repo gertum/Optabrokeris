@@ -29,9 +29,6 @@ class JobsController extends Controller
 
     public function newJob(Request $request): Response
     {
-        // Add any necessary logic for creating a new job here
-        // For example, you can set default values or prepare data for the NewJob component
-
         return Inertia::render('NewJob');
     }
 }

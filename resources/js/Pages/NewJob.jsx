@@ -1,17 +1,17 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, Link } from '@inertiajs/react';
-import { Button, Form, Input, Layout, Steps, Upload, List } from "antd";
+import { Button, Form, Input, Layout, Steps, Upload, List, Spin } from "antd";
 import { UserOutlined } from '@ant-design/icons';
 import { useState, useEffect } from "react";
 import SolverwForm from "@/Components/SolverForm";
+import { useTranslation } from 'react-i18next';
 
 const { Content } = Layout;
 
 export default function NewJob({ auth }) {
+    const { t } = useTranslation();
     const [current, setCurrent] = useState(0);
     const [name, setName] = useState({});
-
-    console.log(name);
 
     const onFinishNamingForm = (values) => {
         setName((prev) => ({ ...prev, ...values }));
@@ -25,20 +25,22 @@ export default function NewJob({ auth }) {
 
     const ReusableButtons = () => {
         return <div className="my-2">
-            {current > 0 && <Button htmlType="button" onClick={() => setCurrent(current-1)}>Back</Button>}
+            {/*{current > 0 && <Button htmlType="button" onClick={() => setCurrent(current-1)}>Back</Button>}*/}
             {current < 4 ? <Button htmlType="submit">Continue</Button> : <Button htmlType="submit">Download</Button> }
         </div>
     }
 
     const NamingForm = ({onFinish}) => {
-        return <Form onFinish={onFinish}>
-            <Form.Item label='Enter name' name='newName' rules={[{
-                required: true, message: 'Please enter a name for the profile'
-            }]}>
-                <Input size="small" placeholder='Enter profile name' value={name}/>
-            </Form.Item>
-            <ReusableButtons />
-        </Form>
+        return <div className="my-2">
+            <Form onFinish={onFinish}>
+                <Form.Item label='Enter name' name='newName' rules={[{
+                    required: true, message: 'Please enter a name for the profile'
+                }]}>
+                    <Input size="small" placeholder='Enter profile name' value={name}/>
+                </Form.Item>
+                <ReusableButtons />
+            </Form>
+        </div>
     }
 
     const FileUploadForm = ({onFinish}) => {
@@ -52,27 +54,33 @@ export default function NewJob({ auth }) {
             }, 1000); // Simulated delay of 1 second
         };
 
-        return <Form onFinish={() => onFinish({uploadedFile})} className="mt-4">
-            <Upload.Dragger
-                // multiple
-                // action={"http://localhost:3000/upload/test"}
-                beforeUpload={(file) => {
-                    handleFileUpload(file); // Simulate file upload
-                    return false; // Prevent default upload behavior
-                }}
-                listType="picture"
-                accept='.xls, .xlsx, .json'
-                // beforeUpload={(file) => {
-                //     console.log({file})                     check if the files size is to big and so on}
-                //     return file or return false
-                // }
-            >
-                Drag files here or
-                <br />
-                <Button>Upload</Button>
-            </Upload.Dragger>
-            <ReusableButtons />
-        </Form>
+        return <div className="my-2">
+            <Form onFinish={() => onFinish({uploadedFile})} className="mt-4">
+                <Button className="my-2" onClick={() => console.log('Downloading solver data example...')}>
+                    Download solver data example
+                </Button>
+                <Upload.Dragger
+                    // multiple
+                    // action={"http://localhost:3000/upload/test"}
+                    maxCount={1}
+                    beforeUpload={(file) => {
+                        handleFileUpload(file); // Simulate file upload
+                        return false; // Prevent default upload behavior
+                    }}
+                    listType="picture"
+                    accept='.xls, .xlsx, .json'
+                    // beforeUpload={(file) => {
+                    //     console.log({file})                     check if the files size is to big and so on}
+                    //     return file or return false
+                    // }
+                >
+                    Drag files here or
+                    <br />
+                    <Button>Upload</Button>
+                </Upload.Dragger>
+                <ReusableButtons />
+            </Form>
+        </div>
     }
 
     const LoadingForm = ({ onFinish }) => {
@@ -87,15 +95,21 @@ export default function NewJob({ auth }) {
         }, [onFinish]);
 
         return (
-            <Form>
-                <p>Loading...</p>
-            </Form>
+            <div className="my-2">
+                <Form>
+                    <Spin tip="Executing...">
+                        <div style={{ width: '100%', height: '30vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                            <span></span>
+                        </div>
+                    </Spin>
+                </Form>
+            </div>
         );
     };
 
     const FinalForm = ({ name }) => {
         return (
-            <div>
+            <div className="my-2">
                 <h2>Final Summary</h2>
                 <List
                     header={<div>Data Collected:</div>}
@@ -146,29 +160,33 @@ export default function NewJob({ auth }) {
                                  <Steps
                                      current={current}
                                      onChange={onChange}
-                                     items={[
-                                         {
-                                             title: 'Solver',
-                                             description: 'Choose solver',
-                                         },
-                                         {
-                                             title: 'Name',
-                                             description: 'Enter profile name',
-                                         },
-                                         {
-                                             title: 'Upload',
-                                             description: 'Upload a file',
-                                         },
-                                         {
-                                             title: 'Execution',
-                                             description: 'Solving',
-                                         },
-                                         {
-                                             title: 'Success',
-                                             description: 'Solution is ready',
-                                         },
-                                     ]}
-                                 />
+                                 >
+                                     <Steps.Step
+                                         title={t('step.solver')}
+                                         description={t('step.chooseSolver')}
+                                         disabled={current !== 0}
+                                     />
+                                     <Steps.Step
+                                         title={t('step.name')}
+                                         description={t('step.enterProfileName')}
+                                         disabled={current !== 1}
+                                     />
+                                     <Steps.Step
+                                         title={t('step.upload')}
+                                         description={t('step.uploadFile')}
+                                         disabled={current !== 2}
+                                     />
+                                     <Steps.Step
+                                         title={t('step.execution')}
+                                         description={t('step.solving')}
+                                         disabled={current !== 3}
+                                     />
+                                     <Steps.Step
+                                         title={t('step.success')}
+                                         description={t('step.solutionReady')}
+                                         disabled={current !== 4}
+                                     />
+                                 </Steps>
                                  {forms[current]}
                              </div>
                          </div>

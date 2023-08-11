@@ -1,0 +1,33 @@
+{
+  "login": {
+    "title": "Log In",
+    "email": "Email",
+    "password": "Password",
+    "remember": "Remember me",
+    "forgotPassword": "Forgot your password?",
+    "logIn": "Log in"
+  },
+  "step": {
+    "solver": "Solver",
+    "chooseSolver": "Choose solver",
+    "name": "Name",
+    "enterProfileName": "Enter profile name",
+    "upload": "Upload",
+    "execution": "Execution",
+    "solving": "Solving",
+    "success": "Success",
+    "solutionReady": "Solution is ready"
+  },
+  "jobs": {
+    "createdProfiles": "Created profiles",
+    "createNewProfile": "Create new Profile",
+    "noProfiles": "You have no profiles yet, please start by creating new profile"
+  },
+"dashboard": "Dashboard",
+  "profiles": "Profiles",
+  "newProfile": "New Profile",
+  "profile": "Profile",
+  "logOut": "Log Out",
+  "English": "English",
+  "Lithuanian": "Lithuanian"
+}

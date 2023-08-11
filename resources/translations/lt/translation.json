@@ -1,0 +1,33 @@
+{
+  "login": {
+    "title": "Prisijungti",
+    "email": "El. paštas",
+    "password": "Slaptažodis",
+    "remember": "Prisiminti mane",
+    "forgotPassword": "Pamiršote slaptažodį?",
+    "logIn": "Prisijungti"
+  },
+  "step": {
+    "solver": "Sprendimas",
+    "chooseSolver": "Pasirinkite sprendimą",
+    "name": "Pavadinimas",
+    "enterProfileName": "Įveskite scenarijaus pavadinimą",
+    "upload": "Įkelti",
+    "execution": "Vykdoma",
+    "solving": "Sprendžiama",
+    "success": "Sėkmė",
+    "solutionReady": "Sprendimas pasiruošęs"
+  },
+  "jobs": {
+    "createdProfiles": "Sukurti scenarijai",
+    "createNewProfile": "Pradėti naują scenarijų",
+    "noProfiles": "Nėra sukurtų scenarijų, tęskite sukurdami naują scenarijų"
+},
+  "dashboard": "Valdymo skydelis",
+  "profiles": "Scenariaji",
+  "newProfile": "Naujas scenarijus",
+  "profile": "Profilis",
+  "logOut": "Atsijungti",
+  "English": "Anglų",
+  "Lithuanian": "Lietuvių"
+}

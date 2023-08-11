@@ -1,40 +1,43 @@
 import ApplicationLogo from '@/Components/ApplicationLogo';
+import LanguageSwitch from '@/Components/LanguageSwitch';
 import Dropdown from '@/Components/Dropdown';
 import NavLink from '@/Components/NavLink';
 import { Link } from '@inertiajs/react';
-import {Avatar, Col, Row, Space, Layout} from "antd";
+import { Avatar, Col, Row, Space, Layout } from "antd"; // Make sure you import Menu from Ant Design
+import { useTranslation } from 'react-i18next';
 
 const { Header } = Layout;
 
 export default function Authenticated({ user, header, children }) {
+    const { t } = useTranslation();
     const isDashboardActive = route().current('/') || route().current('dashboard');
 
     return (
-        <div className="min-h-screen bg-gray-100">
+        <div className="min-h-screen bg-blue-100">
             <div className="bg-white border-b border-gray-100">
                 <Header className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 bg-white">
                     <Row>
-                        <Col span={6}>
+                        <Col span={8}>
                             <Space size={12}>
                                 <Link href="/">
                                     <ApplicationLogo className="block h-9 w-auto fill-current text-gray-800" />
                                 </Link>
                                 <NavLink href={route('dashboard')} active={isDashboardActive}>
-                                    Dashboard
+                                    {t('dashboard')}
                                 </NavLink>
                                 <NavLink href={route('jobs.list')} active={route().current('jobs.list')}>
-                                    Profiles
+                                    {t('profiles')}
                                 </NavLink>
                                 <NavLink href={route('jobs.new')} active={route().current('jobs.new')}>
-                                    New profile
+                                    {t('newProfile')}
                                 </NavLink>
                             </Space>
                         </Col>
-                        <Col span={18} style={{textAlign: 'right'}}>
+                        <Col span={16} style={{ textAlign: 'right' }}>
                             <Space size={12}>
                                 <Dropdown>
                                     <Dropdown.Trigger>
-                                        <Avatar size="large">{user.name.slice(0, 1).toUpperCase()}</Avatar>
+                                        <Avatar className="bg-blue-200 text-bold" size="large">{user.name.slice(0, 1).toUpperCase()}</Avatar>
                                     </Dropdown.Trigger>
 
                                     <Dropdown.Content>
@@ -42,6 +45,9 @@ export default function Authenticated({ user, header, children }) {
                                         <Dropdown.Link href={route('logout')} method="post" as="button">
                                             Log Out
                                         </Dropdown.Link>
+                                        <div style={{ borderTop: '1px solid #f0f0f0', marginTop: '8px', paddingTop: '8px' }}>
+                                            <LanguageSwitch />
+                                        </div>
                                     </Dropdown.Content>
                                 </Dropdown>
                             </Space>

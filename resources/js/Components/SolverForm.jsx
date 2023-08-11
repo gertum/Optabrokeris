@@ -22,7 +22,6 @@ const SolverwForm = ({ onFinish, children }) => {
         { title: 'Card 8 Title', description: 'Card 8 Description' },
     ];
 
-    // Function to split cardData into rows
     const splitIntoRows = (array, chunkSize) => {
         const rows = [];
         for (let i = 0; i < array.length; i += chunkSize) {
@@ -42,17 +41,17 @@ const SolverwForm = ({ onFinish, children }) => {
             }
         }} className="mt-4">
             {cardRows.map((row, rowIndex) => (
-                <Row gutter={16} key={rowIndex}>
+                <Row gutter={[16, 16]} key={rowIndex} className="mb-4">
                     {row.map((data, cardIndex) => (
                         <Col span={8} key={cardIndex}>
                             <Card
-                                onClick={() => handleCardClick(cardIndex + rowIndex * 3, data.title)} // Calculate the actual index of the card
+                                onClick={() => handleCardClick(cardIndex + rowIndex * 3, data.title)}
                                 style={{
                                     display: 'flex',
                                     flexDirection: 'column',
                                     alignItems: 'center',
                                     justifyContent: 'center',
-                                    border: selectedCard === cardIndex + rowIndex * 3 ? '2px solid blue' : 'none',
+                                    border: selectedCard === cardIndex + rowIndex * 3 ? '2px solid blue' : '2px solid #ccc',
                                 }}
                             >
                                 <Avatar size={64} icon={<UserOutlined />} style={{ marginBottom: 12 }} />
