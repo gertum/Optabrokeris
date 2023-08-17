@@ -11,7 +11,7 @@ services:
         container_name: optabroker
         build:
             context: ./
-            dockerfile: .docker/optabroker/Dockerfile
+            dockerfile: .docker/optabroker/Dockerfile.local
         volumes:
             - ./:/var/www/html
             - ./shared:/var/shared
@@ -51,7 +51,7 @@ services:
         container_name: optabroker_web
         build:
             context: ./
-            dockerfile: .docker/web/Dockerfile
+            dockerfile: .docker/web/Dockerfile.local
         links:
             - optabroker:php_fpm
         ports:

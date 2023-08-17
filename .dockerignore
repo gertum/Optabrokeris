@@ -1,0 +1,12 @@
+.npm
+node_modules
+.composer
+.docker
+tests
+
+env.dist
+env.example
+xdebug.ini
+xdebug.ini.example
+docker-compose.yml
+.bash_history
