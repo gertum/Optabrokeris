@@ -31,4 +31,8 @@ class JobsController extends Controller
     {
         return Inertia::render('NewJob');
     }
+
+    public function testUpload(Request $request) {
+        return view('testupload');
+    }
 }

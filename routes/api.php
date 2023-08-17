@@ -27,5 +27,7 @@ Route::post('/job', [JobController::class, 'create']);
 Route::put('/job/{id}', [JobController::class, 'update']);
 Route::post('/job/{id}/solve', [JobController::class, 'solve']);
 
+// TODO job upload route from JobController
 
-
+Route::post('/job/{id}/upload', [JobController::class, 'upload']);
+Route::post('/job/{id}/download', [JobController::class, 'upload']);

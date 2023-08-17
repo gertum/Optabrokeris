@@ -106,3 +106,17 @@ When you get message about permissions, run the following command from inside 'o
     
 Should solve this by using docker / (docker compose) settings where we will work with a custom user permissions instead of the root.
 
+Generate your application encryption key using 
+    
+    php artisan key:generate
+.
+
+## API endpoints 
+
+Upload:
+/api/job/1/upload
+
+multipart file parameter 'task'
+
+Download:
+/api/job/1/donwload
