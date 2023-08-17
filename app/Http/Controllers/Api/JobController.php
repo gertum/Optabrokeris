@@ -104,7 +104,7 @@ class JobController
 
     public function upload(Request $request, $id)
     {
-        $file = $request->file('fileToUpload');
+        $file = $request->file('task');
 
 //        //Display File Name
 //        echo 'File Name: '.$file->getClientOriginalName();

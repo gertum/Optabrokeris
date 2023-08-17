@@ -110,3 +110,13 @@ Generate your application encryption key using
     
     php artisan key:generate
 .
+
+## API endpoints 
+
+Upload:
+/api/1/upload
+
+multipart file parameter 'task'
+
+Download:
+/api/1/donwload
