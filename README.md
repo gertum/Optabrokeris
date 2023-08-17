@@ -114,9 +114,9 @@ Generate your application encryption key using
 ## API endpoints 
 
 Upload:
-/api/1/upload
+/api/job/1/upload
 
 multipart file parameter 'task'
 
 Download:
-/api/1/donwload
+/api/job/1/donwload
