@@ -38,6 +38,7 @@ Route::middleware('auth')->group(function () {
     // there are analogs in 'api'
     Route::get('/jobs', [JobsController::class, 'list'])->name('jobs.list');
     Route::get('/jobs/{id}', [JobsController::class, 'view'])->name('job.view');
+    Route::get('/testupload', [JobsController::class, 'testUpload']);
 });
 
 
