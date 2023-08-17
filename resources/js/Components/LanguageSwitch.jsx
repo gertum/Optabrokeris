@@ -25,7 +25,7 @@ export default function LanguageSwitch() {
 
     return (
         <Dropdown overlay={menu} trigger={['click']}>
-            <a className="ant-dropdown-link" onClick={(e) => e.preventDefault()}>
+            <a className="block w-full ant-dropdown-link" onClick={(e) => e.preventDefault()}>
                 {selectedLanguage?.codeLong} <GlobalOutlined />
             </a>
         </Dropdown>

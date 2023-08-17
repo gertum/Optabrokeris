@@ -4,6 +4,7 @@
     "email": "El. paštas",
     "password": "Slaptažodis",
     "remember": "Prisiminti mane",
+    "newProfile": "Naujas vartotojas ->",
     "forgotPassword": "Pamiršote slaptažodį?",
     "logIn": "Prisijungti"
   },
@@ -29,5 +30,6 @@
   "profile": "Profilis",
   "logOut": "Atsijungti",
   "English": "Anglų",
-  "Lithuanian": "Lietuvių"
+  "Lithuanian": "Lietuvių",
+  "forgotPassword": "Pamiršote slaptažodį? Nėra problema. Tiesiog praneškite mums savo el. pašto adresą, ir mes išsiųsime jums slaptažodžio atstatymo nuorodą, leidžiančią jums pasirinkti naują."
 }

@@ -4,6 +4,7 @@
     "email": "Email",
     "password": "Password",
     "remember": "Remember me",
+    "newProfile": "New user ->",
     "forgotPassword": "Forgot your password?",
     "logIn": "Log in"
   },
@@ -29,5 +30,6 @@
   "profile": "Profile",
   "logOut": "Log Out",
   "English": "English",
-  "Lithuanian": "Lithuanian"
+  "Lithuanian": "Lithuanian",
+  "forgotPassword": "Forgot your password? No problem. Just let us know your email address and we will email you a password reset link that will allow you to choose a new one."
 }

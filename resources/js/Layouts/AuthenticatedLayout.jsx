@@ -13,7 +13,7 @@ export default function Authenticated({ user, header, children }) {
     const isDashboardActive = route().current('/') || route().current('dashboard');
 
     return (
-        <div className="min-h-screen bg-blue-100">
+        <div className="min-h-screen bg-blue-200">
             <div className="bg-white border-b border-gray-100">
                 <Header className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 bg-white">
                     <Row>
@@ -22,9 +22,9 @@ export default function Authenticated({ user, header, children }) {
                                 <Link href="/">
                                     <ApplicationLogo className="block h-9 w-auto fill-current text-gray-800" />
                                 </Link>
-                                <NavLink href={route('dashboard')} active={isDashboardActive}>
-                                    {t('dashboard')}
-                                </NavLink>
+                                {/*<NavLink href={route('dashboard')} active={isDashboardActive}>*/}
+                                {/*    {t('dashboard')}*/}
+                                {/*</NavLink>*/}
                                 <NavLink href={route('jobs.list')} active={route().current('jobs.list')}>
                                     {t('profiles')}
                                 </NavLink>
@@ -37,7 +37,7 @@ export default function Authenticated({ user, header, children }) {
                             <Space size={12}>
                                 <Dropdown>
                                     <Dropdown.Trigger>
-                                        <Avatar className="bg-blue-200 text-bold" size="large">{user.name.slice(0, 1).toUpperCase()}</Avatar>
+                                        <Avatar className="bg-blue-300 text-bold" size="large">{user.name.slice(0, 1).toUpperCase()}</Avatar>
                                     </Dropdown.Trigger>
 
                                     <Dropdown.Content>
@@ -45,7 +45,7 @@ export default function Authenticated({ user, header, children }) {
                                         <Dropdown.Link href={route('logout')} method="post" as="button">
                                             Log Out
                                         </Dropdown.Link>
-                                        <div style={{ borderTop: '1px solid #f0f0f0', marginTop: '8px', paddingTop: '8px' }}>
+                                        <div className="block w-full px-4 py-2 text-left text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out" style={{ borderTop: '1px solid #f0f0f0' }}>
                                             <LanguageSwitch />
                                         </div>
                                     </Dropdown.Content>

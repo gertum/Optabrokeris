@@ -6,11 +6,6 @@ const { Content } = Layout;
 
 export default function Job({ auth, job }) {
 
-    console.log('--------------------------')
-    console.log('job')
-    console.log(job)
-    console.log('--------------------------')
-
     return (
         <AuthenticatedLayout
             user={auth.user}

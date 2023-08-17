@@ -12,7 +12,7 @@ export default function Guest({ children }) {
                 {children}
             </div>
 
-            <div className="hidden sm:block w-3/5 h-screen bg-blue-100"></div>
+            <div className="hidden sm:block w-3/5 h-screen bg-blue-200"></div>
         </div>
     );
 }

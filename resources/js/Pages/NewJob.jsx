@@ -3,7 +3,7 @@ import { Head, Link } from '@inertiajs/react';
 import { Button, Form, Input, Layout, Steps, Upload, List, Spin } from "antd";
 import { UserOutlined } from '@ant-design/icons';
 import { useState, useEffect } from "react";
-import SolverwForm from "@/Components/SolverForm";
+import { SolverwForm, NamingForm, FileUploadForm, LoadingForm, FinalForm } from "@/Components/NewJobSteps";
 import { useTranslation } from 'react-i18next';
 
 const { Content } = Layout;
@@ -25,106 +25,9 @@ export default function NewJob({ auth }) {
 
     const ReusableButtons = () => {
         return <div className="my-2">
-            {/*{current > 0 && <Button htmlType="button" onClick={() => setCurrent(current-1)}>Back</Button>}*/}
             {current < 4 ? <Button htmlType="submit">Continue</Button> : <Button htmlType="submit">Download</Button> }
         </div>
     }
-
-    const NamingForm = ({onFinish}) => {
-        return <div className="my-2">
-            <Form onFinish={onFinish}>
-                <Form.Item label='Enter name' name='newName' rules={[{
-                    required: true, message: 'Please enter a name for the profile'
-                }]}>
-                    <Input size="small" placeholder='Enter profile name' value={name}/>
-                </Form.Item>
-                <ReusableButtons />
-            </Form>
-        </div>
-    }
-
-    const FileUploadForm = ({onFinish}) => {
-        const [uploadedFile, setUploadedFile] = useState(null);
-
-        // Simulated upload function
-        const handleFileUpload = (file) => {
-            // Simulate a delay for the upload process
-            setTimeout(() => {
-                setUploadedFile(file.name);
-            }, 1000); // Simulated delay of 1 second
-        };
-
-        return <div className="my-2">
-            <Form onFinish={() => onFinish({uploadedFile})} className="mt-4">
-                <Button className="my-2" onClick={() => console.log('Downloading solver data example...')}>
-                    Download solver data example
-                </Button>
-                <Upload.Dragger
-                    // multiple
-                    // action={"http://localhost:3000/upload/test"}
-                    maxCount={1}
-                    beforeUpload={(file) => {
-                        handleFileUpload(file); // Simulate file upload
-                        return false; // Prevent default upload behavior
-                    }}
-                    listType="picture"
-                    accept='.xls, .xlsx, .json'
-                    // beforeUpload={(file) => {
-                    //     console.log({file})                     check if the files size is to big and so on}
-                    //     return file or return false
-                    // }
-                >
-                    Drag files here or
-                    <br />
-                    <Button>Upload</Button>
-                </Upload.Dragger>
-                <ReusableButtons />
-            </Form>
-        </div>
-    }
-
-    const LoadingForm = ({ onFinish }) => {
-        useEffect(() => {
-            const timer = setTimeout(() => {
-                onFinish();
-            }, 3000);
-
-            return () => {
-                clearTimeout(timer);
-            };
-        }, [onFinish]);
-
-        return (
-            <div className="my-2">
-                <Form>
-                    <Spin tip="Executing...">
-                        <div style={{ width: '100%', height: '30vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                            <span></span>
-                        </div>
-                    </Spin>
-                </Form>
-            </div>
-        );
-    };
-
-    const FinalForm = ({ name }) => {
-        return (
-            <div className="my-2">
-                <h2>Final Summary</h2>
-                <List
-                    header={<div>Data Collected:</div>}
-                    bordered
-                    dataSource={Object.entries(name)}
-                    renderItem={([key, value]) => (
-                        <List.Item>
-                            <strong>{key}:</strong> {value}
-                        </List.Item>
-                    )}
-                />
-                <Button htmlType="submit">Submit</Button>
-            </div>
-        );
-    };
 
     const forms = [
         <SolverwForm onFinish={onFinishNamingForm}>

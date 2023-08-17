@@ -7,7 +7,7 @@ import InputLabel from '@/Components/InputLabel';
 import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
 import LanguageSwitch from '../../Components/LanguageSwitch';
-import { Head, useForm } from '@inertiajs/react';
+import { Head, useForm, Link } from '@inertiajs/react';
 
 export default function Login({ status, canResetPassword }) {
     const { t } = useTranslation();
@@ -66,35 +66,29 @@ export default function Login({ status, canResetPassword }) {
                     <InputError message={errors.password} className="mt-2" />
                 </div>
 
-                <div className="block mt-4">
-                    <label className="flex items-center">
-                        <input
-                            type="checkbox"
-                            name="remember"
-                            checked={data.remember}
-                            onChange={(e) => setData('remember', e.target.checked)}
-                        />
-                        <span className="ml-2 text-sm text-gray-600">{t('login.remember')}</span>
-                    </label>
-                </div>
-
-                <div className="flex items-center justify-end mt-4">
-                    {canResetPassword && (
-                        <a
-                            href={route('password.request')}
-                            className="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                        >
-                            {t('login.forgotPassword')}
-                        </a>
-                    )}
-
-                    <PrimaryButton className="ml-4" disabled={processing}>
+                    <div>
+                        {canResetPassword && (
+                            <a
+                                href={route('password.request')}
+                                className="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                            >
+                                {t('login.forgotPassword')}
+                            </a>
+                        )}
+                        <Link href={route('register')} className="ml-4 underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                            {t('login.newProfile')}
+                        </Link>
+                    </div>
+                <div className='text-center mt-2'>
+                    <PrimaryButton disabled={processing}>
                         {t('login.logIn')}
                     </PrimaryButton>
                 </div>
             </form>
 
-            <LanguageSwitch />
+            <div className="mt-2">
+                <LanguageSwitch/>
+            </div>
         </GuestLayout>
     );
 }

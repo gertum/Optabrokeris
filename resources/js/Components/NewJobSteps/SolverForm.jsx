@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Card, Avatar, Row, Col, Form } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
 
-const SolverwForm = ({ onFinish, children }) => {
+export const SolverwForm = ({ onFinish, children }) => {
     const [selectedCard, setSelectedCard] = useState(null);
     const [selectedTitle, setSelectedTitle] = useState('');
 
@@ -68,5 +68,3 @@ const SolverwForm = ({ onFinish, children }) => {
         </Form>
     );
 };
-
-export default SolverwForm;
