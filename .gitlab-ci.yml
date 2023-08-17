@@ -19,9 +19,13 @@ build-optabroker-fpm:
   variables:
     DOCKER_FOLDER: optabroker
     DOCKER_IMAGE: fpm
+  only:
+    - master
 
 build-optabroker-nginx:
   extends: .build
   variables:
     DOCKER_FOLDER: web
     DOCKER_IMAGE: nginx
+  only:
+    - master
