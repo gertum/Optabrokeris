@@ -24,9 +24,7 @@ class ExcelParserTest extends TestCase
 
         $transformedExcelData = $h->loadSchoolDataFromExcel( __DIR__.'/data/SchoolData.xlsx');
         $dataFromJson = json_decode(file_get_contents('data/data.json' ), true);
-//        $necessaryDataFromJson = array($dataFromJson["timeslotList"], $dataFromJson["roomList"], $dataFromJson["lessonList"]);
         unset($dataFromJson["score"], $dataFromJson["solverStatus"]);
-//        $dataFromJson=array_values($dataFromJson);
         $this->assertEquals($dataFromJson, $transformedExcelData);
     }
 }
