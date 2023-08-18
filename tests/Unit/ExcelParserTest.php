@@ -23,7 +23,7 @@ class ExcelParserTest extends TestCase
         $h = new ExcelDataHandler();
 
         $transformedExcelData = $h->loadSchoolDataFromExcel( __DIR__.'/data/SchoolData.xlsx');
-        $dataFromJson = json_decode(file_get_contents('data/data.json' ), true);
+        $dataFromJson = json_decode(file_get_contents(__DIR__.'/data/data.json' ), true);
         unset($dataFromJson["score"], $dataFromJson["solverStatus"]);
         $this->assertEquals($dataFromJson, $transformedExcelData);
     }

@@ -2,10 +2,8 @@
 
 namespace App\Transformers;
 
-use PhpParser\Node\Expr\Array_;
-use Shuchkin\SimpleXLSX;
 use Exception;
-use function PHPUnit\Framework\assertNotNull;
+use Shuchkin\SimpleXLSX;
 
 class ExcelDataHandler
 {
@@ -13,7 +11,7 @@ class ExcelDataHandler
     {
 
         if ($xlsx = SimpleXLSX::parse($excelFile)) {
-//            print_r($xlsx->rows());
+
             $timeslotList = $xlsx->rows(0);
             //make arrays associative instead of indexed
             $timeslotList = array_map(
@@ -49,30 +47,23 @@ class ExcelDataHandler
                 }, $lessonList
             );
             //json format wants repetition
-            for ($i=0; $i< count($lessonList); $i++)
-            {
-                $lesson=$lessonList[$i];
-                if ($lesson["timeslot"]!=null)
-                {
+            for ($i = 0; $i < count($lessonList); $i++) {
+                $lesson = $lessonList[$i];
+                if ($lesson["timeslot"] != null) {
                     $timeslotId = $lesson["timeslot"];
-                    for ($j=0; $j<count($timeslotList); $j++)
-                    {
-                        if($timeslotList[$j]["id"] == $timeslotId)
-                        {
-                            $lessonList[$i]["timeslot"]=$timeslotList[$j];
+                    for ($j = 0; $j < count($timeslotList); $j++) {
+                        if ($timeslotList[$j]["id"] == $timeslotId) {
+                            $lessonList[$i]["timeslot"] = $timeslotList[$j];
                             break;
                         }
                     }
 
                 }
-                if ($lesson["room"]!=null)
-                {
+                if ($lesson["room"] != null) {
                     $roomId = $lesson["room"];
-                    for ($j=0; $j<count($roomList); $j++)
-                    {
-                        if($roomList[$j]["id"] == $roomId)
-                        {
-                            $lessonList[$i]["room"]=$roomList[$j];
+                    for ($j = 0; $j < count($roomList); $j++) {
+                        if ($roomList[$j]["id"] == $roomId) {
+                            $lessonList[$i]["room"] = $roomList[$j];
                             break;
                         }
                     }
