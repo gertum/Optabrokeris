@@ -12,6 +12,7 @@
         "laravel/sanctum": "^3.2",
         "laravel/tinker": "^2.8",
         "shuchkin/simplexlsx": "^1.0",
+        "shuchkin/simplexlsxgen": "^1.3",
         "tightenco/ziggy": "^1.0"
     },
     "require-dev": {
