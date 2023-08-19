@@ -125,11 +125,22 @@ class JobController extends Controller
     public function download(JobRequest $request, $id, SpreadSheetHandlerFactory $fileHandlerFactory)
     {
         $job = $request->getUserJob($id);
-        $file = sprintf('/tmp/result_%s.xlsx', $id);
+        $fileName = sprintf('result_%s.xlsx', $id);
+
+        $file = '/tmp/'.$fileName;
+
         $fileHandler = $fileHandlerFactory->createHandler($job->getType(), $file);
-        $dataArray = Utils::jsonDecode($job->getResult());
+
+        $data = $job->getResult();
+
+        // solution for development, when solver is not started (so the result is empty), we take data instead
+        if ( empty($data)) {
+            $data = $job->getData();
+        }
+
+        $dataArray = Utils::jsonDecode($data, true);
         $fileHandler->arrayToSpreadSheet($dataArray, $file);
 
-        return response()->download($file);
+        return response()->download($file, $fileName);
     }
 }
