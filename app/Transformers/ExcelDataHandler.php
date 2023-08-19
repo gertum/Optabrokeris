@@ -89,6 +89,7 @@ class ExcelDataHandler
         $xlsx->addSheet($data["timeslotList"], 'timeslotList');
         $xlsx->addSheet($data["roomList"], 'roomList');
         //excel column only needs id, no need to store whole array
+
         for ($i = 0; $i < count($data["lessonList"]); $i++) {
                 if($data["lessonList"][$i]["room"]!=null)
                 {
