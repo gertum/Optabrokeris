@@ -19,5 +19,6 @@ class ExcelExporterTest extends TestCase
         $transformedTestExcelData = $h->loadSchoolDataFromExcel( __DIR__.'/data/TestExportSchoolData.xlsx');
 
         $this->assertEquals($transformedExcelData, $transformedTestExcelData);
+
     }
 }
