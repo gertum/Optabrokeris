@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -29,7 +28,7 @@ class AuthenticatedSessionController extends Controller
     /**
      * Handle an incoming authentication request.
      */
-    public function store(LoginRequest $request):\Symfony\Component\HttpFoundation\Response
+    public function store(LoginRequest $request): \Symfony\Component\HttpFoundation\Response
     {
         $request->authenticate();
 
@@ -37,7 +36,7 @@ class AuthenticatedSessionController extends Controller
 
         $accept = $request->headers->get('Accept');
 
-        if ( strpos($accept, 'json') === false ) {
+        if (strpos($accept, 'json') === false) {
             return redirect()->intended(RouteServiceProvider::HOME);
         }
 
@@ -47,13 +46,18 @@ class AuthenticatedSessionController extends Controller
     /**
      * Destroy an authenticated session.
      */
-    public function destroy(Request $request): RedirectResponse
+    public function destroy(Request $request): \Symfony\Component\HttpFoundation\Response
     {
         Auth::guard('web')->logout();
 
         $request->session()->invalidate();
 
         $request->session()->regenerateToken();
+
+        $accept = $request->headers->get('Accept');
+        if (strpos($accept, 'json') !== false) {
+            return new JsonResponse('bye');
+        }
 
         return redirect('/');
     }
