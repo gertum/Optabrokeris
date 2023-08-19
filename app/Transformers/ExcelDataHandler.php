@@ -4,6 +4,7 @@ namespace App\Transformers;
 
 use Exception;
 use Shuchkin\SimpleXLSX;
+use Shuchkin\SimpleXLSXGen;
 
 class ExcelDataHandler
 {
@@ -80,5 +81,28 @@ class ExcelDataHandler
         }
         throw new Exception(SimpleXLSX::parseError());
 
+    }
+
+    public function exportJsonToExcel(array $data, string $excelFile)
+    {
+        $xlsx = new SimpleXLSXGen();
+        $xlsx->addSheet($data["timeslotList"], 'timeslotList');
+        $xlsx->addSheet($data["roomList"], 'roomList');
+        //excel column only needs id, no need to store whole array
+
+        for ($i = 0; $i < count($data["lessonList"]); $i++) {
+                if($data["lessonList"][$i]["room"]!=null)
+                {
+                    $roomId=$data["lessonList"][$i]["room"]["id"];
+                    $data["lessonList"][$i]["room"]=$roomId;
+                }
+                if($data["lessonList"][$i]["timeslot"]!=null)
+                {
+                    $timeslotId=$data["lessonList"][$i]["timeslot"]["id"];
+                    $data["lessonList"][$i]["timeslot"]=$timeslotId;
+                }
+        }
+        $xlsx->addSheet($data["lessonList"], 'lessonList');
+        $xlsx->saveAs($excelFile);
     }
 }

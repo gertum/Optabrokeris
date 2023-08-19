@@ -11,7 +11,7 @@ class ExcelParserTest extends TestCase
     public function _testParse(){
 
 
-        if ( $xlsx = SimpleXLSX::parse('data/SchoolData.xlsx') ) {
+        if ( $xlsx = SimpleXLSX::parse(__DIR__.'/data/SchoolData.xlsx') ) {
             print_r( $xlsx->rows() );
         } else {
             echo SimpleXLSX::parseError();
