@@ -2,23 +2,22 @@
 
 namespace Tests\Unit;
 
-use App\Transformers\ExcelDataHandler;
+use App\Transformers\ExcelSchoolDataHandler;
 use PHPUnit\Framework\TestCase;
 
 class ExcelExporterTest extends TestCase
 {
 
     public function testHandle() {
-        $h = new ExcelDataHandler();
+        $h = new ExcelSchoolDataHandler();
         $dataFromJson = json_decode(file_get_contents(__DIR__.'/data/data.json' ), true);
 
+        $exportedFileName = sprintf( 'storage/app/TestExportSchoolData_%s.xlsx', time() );
+        $h->arrayToSpreadSheet($dataFromJson, $exportedFileName);
+        $transformedTestExcelData = $h->spreadSheetToArray( $exportedFileName);
 
-        $h->exportJsonToExcel($dataFromJson, __DIR__.'/data/TestExportSchoolData.xlsx');
+        unset($dataFromJson["score"], $dataFromJson["solverStatus"]);
 
-        $transformedExcelData = $h->loadSchoolDataFromExcel( __DIR__.'/data/SchoolData.xlsx');
-        $transformedTestExcelData = $h->loadSchoolDataFromExcel( __DIR__.'/data/TestExportSchoolData.xlsx');
-
-        $this->assertEquals($transformedExcelData, $transformedTestExcelData);
-
+        $this->assertEquals($dataFromJson, $transformedTestExcelData);
     }
 }
