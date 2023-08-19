@@ -39,7 +39,7 @@ Docker network:
 
 ### if need to rebuild docker
 
-    docker build -t inkodus/optabroker .docker/optabroker
+    docker build -t inkodus/optabroker .docker/optabroker/local
 
 ## running
 
