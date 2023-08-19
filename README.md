@@ -73,6 +73,8 @@ Activization for cmd line:
     export PHP_IDE_CONFIG="serverName=optabroker.dv"
 
 
+When you debug from insomnia or postman, add  a header: Cookie XDEBUG_SESSION=PHPSTORM
+
 # application
 
 ## migrations

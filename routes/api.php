@@ -15,11 +15,19 @@ use App\Http\Controllers\Api\JobController;
 |
 */
 
+
+//Route::post('/tokens/create', function (Request $request) {
+//    $token = $request->user()->createToken($request->token_name);
+//
+//    return ['token' => $token->plainTextToken];
+//});
+
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
 
+//Route::middleware('auth:sanctum')->get('/job', [JobController::class, 'list']);
 Route::get('/job', [JobController::class, 'list']);
 Route::get('/job/{id}', [JobController::class, 'view']);
 
