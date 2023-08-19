@@ -39,7 +39,7 @@ Docker network:
 
 ### if need to rebuild docker
 
-    docker build -t inkodus/optabroker .docker/optabroker
+    docker build -t inkodus/optabroker .docker/optabroker/local
 
 ## running
 
@@ -72,6 +72,8 @@ Activization for cmd line:
     export XDEBUG_SESSION=PHPSTORM
     export PHP_IDE_CONFIG="serverName=optabroker.dv"
 
+
+When you debug from insomnia or postman, add  a header: Cookie XDEBUG_SESSION=PHPSTORM
 
 # application
 

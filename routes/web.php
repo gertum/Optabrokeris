@@ -27,6 +27,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     // there are analogs in 'api'
+    // these are for testing or for references in front
     Route::get('/jobs', [JobsController::class, 'list'])->name('jobs.list');
     Route::get('/jobs/new', [JobsController::class, 'newJob'])->name('jobs.new');
     Route::get('/jobs/{id}', [JobsController::class, 'view'])->name('job.view');
