@@ -17,4 +17,20 @@ class Job extends Model
         'result',
         'type',
     ];
+
+    public function scopeUser($builder, $userId) {
+        return $builder->where('user_id', '=', $userId);
+    }
+
+    public function getType() {
+        return $this->getAttribute('type');
+    }
+
+    public function getResult() {
+        return $this->getAttribute('result');
+    }
+
+    public function getData() {
+        return $this->getAttribute('data');
+    }
 }

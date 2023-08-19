@@ -11,24 +11,31 @@ class AdminUserSeeder extends Seeder
 {
     public const ADMIN_EMAIL = 'admin@inkodus.lt';
     public const ADMIN_PASSWORD = 'Labas123';
+
+    public const ADMIN2_EMAIL = 'admin2@inkodus.lt';
+    public const ADMIN2_PASSWORD = 'Labas1234';
+
     public function run(): void
     {
+        $this->checkAndCreateUser(self::ADMIN_EMAIL, self::ADMIN_PASSWORD);
+        $this->checkAndCreateUser(self::ADMIN2_EMAIL, self::ADMIN2_PASSWORD);
+   }
 
+   private function checkAndCreateUser($email, $password) {
+       /** @var Collection $users */
+       $users = User::query()->where(['email'=>$email]);
 
-        /** @var Collection $users */
-        $users = User::query()->where(['email'=>self::ADMIN_EMAIL]);
+       if ( $users->count() != 0) {
+           echo sprintf("User [%s] already exists\n", $email);
+           return;
+       }
 
-        if ( $users->count() != 0) {
-            echo "Admin user already exists\n";
-            return;
-        }
-
-        User::query()->create([
-            'email'=>self::ADMIN_EMAIL,
-            'name' => 'admin',
-            'password' => password_hash(self::ADMIN_PASSWORD, PASSWORD_BCRYPT),
-            'email_verified_at' => now(),
-            'remember_token' => Str::random(10),
-        ]);
+       User::query()->create([
+           'email'=> $email,
+           'name' => 'admin',
+           'password' => password_hash($password, PASSWORD_BCRYPT),
+           'email_verified_at' => now(),
+           'remember_token' => Str::random(10),
+       ]);
    }
 }

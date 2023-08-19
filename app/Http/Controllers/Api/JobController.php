@@ -1,14 +1,16 @@
 <?php
+
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Job\JobRequest;
 use App\Models\Job;
 use App\Solver\SolverClientFactory;
+use App\Transformers\SpreadSheetHandlerFactory;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Utils;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
@@ -23,15 +25,19 @@ class JobController extends Controller
 
     public function list(Request $request)
     {
-        return Job::query()->get();
+        $userId = $request->user()->id;
+
+        return Job::query()->user($userId)->get();
     }
 
-    public function view(Request $request, $id)
+    public function view(JobRequest $request, $id)
     {
-        $job = Job::query()->find($id);
-        try {
+        $job = $request->getUserJob($id);
 
-            $solverClient = $this->solverClientFactory->createClient($job->type);
+        try {
+            $type = $job->getAttribute('type');
+
+            $solverClient = $this->solverClientFactory->createClient($type);
             $result = $solverClient->getResult($job->solver_id);
 
             try {
@@ -42,13 +48,12 @@ class JobController extends Controller
                 $status = 'error';
             }
             $job->update(['result' => $result, 'status' => $status]);
-
             // TODO create migration for score column
-        }
-        catch(\Exception $e)
-        {
+        } catch (\Exception $e) {
+            $job->error_message = $e->getMessage();
             Log::error($e->getMessage());
         }
+
         return $job;
     }
 
@@ -65,8 +70,7 @@ class JobController extends Controller
         $body = $request->getContent();
 
         $validated['data'] = $body;
-        // TODO correct user id
-        $validated['user_id'] = 1;
+        $validated['user_id'] = $request->user()->id;
         $validated['solver_id'] = 0;
         $validated['status'] = '';
         $validated['result'] = '';
@@ -76,11 +80,12 @@ class JobController extends Controller
         return $createdJob;
     }
 
-    public function update(Request $request, $id)
+    public function update(JobRequest $request, $id)
     {
+        $job = $request->getUserJob($id);
+
         $body = $request->getContent();
         $validated['data'] = $body;
-        $job = Job::query()->find($id);
 
         $job->fill($validated);
         $job->update($validated);
@@ -88,13 +93,14 @@ class JobController extends Controller
         return $job;
     }
 
-    public function solve(Request $request, $id)
+    public function solve(JobRequest $request, $id)
     {
-        $job = Job::query()->find($id);
+        $job = $request->getUserJob($id);
+
         $solverClient = $this->solverClientFactory->createClient($job->type);
         $repeat = $request->get('repeat');
 
-        if ( !$repeat) {
+        if (!$repeat) {
             $solverId = $solverClient->registerData($job->data);
             $job->update(['solver_id' => $solverId]);
         }
@@ -102,42 +108,28 @@ class JobController extends Controller
         return $solverClient->startSolving($job->solver_id);
     }
 
-    public function upload(Request $request, $id)
+    public function upload(JobRequest $request, $id, SpreadSheetHandlerFactory $fileHandlerFactory)
     {
+        $job = $request->getUserJob($id);
         $file = $request->file('task');
+        $fileHandler = $fileHandlerFactory->createHandler($job->getType(), $file->getClientOriginalName());
 
-//        //Display File Name
-//        echo 'File Name: '.$file->getClientOriginalName();
-//        echo '<br>';
-//
-//        //Display File Extension
-//        echo 'File Extension: '.$file->getClientOriginalExtension();
-//        echo '<br>';
-//
-//        //Display File Real Path
-//        echo 'File Real Path: '.$file->getRealPath();
-//        echo '<br>';
-//
-//        //Display File Size
-//        echo 'File Size: '.$file->getSize();
-//        echo '<br>';
-//
-//        //Display File Mime Type
-//        echo 'File Mime Type: '.$file->getMimeType();
+        $dataArray = $fileHandler->spreadSheetToArray($file->getRealPath());
+        $job->data = json_encode($dataArray);
 
-        Storage::put($file->getClientOriginalName(), file_get_contents($file->getRealPath()));
+        $job->save();
 
-        $rez = [
-            'name' => $file->getClientOriginalName()
-        ];
-
-        return $rez;
+        return $job;
     }
 
-    // TODO download
-    public function download(Request $request, $id)
+    public function download(JobRequest $request, $id, SpreadSheetHandlerFactory $fileHandlerFactory)
     {
-        // TODO
-        return ['id' => $id];
+        $job = $request->getUserJob($id);
+        $file = sprintf('/tmp/result_%s.xlsx', $id);
+        $fileHandler = $fileHandlerFactory->createHandler($job->getType(), $file);
+        $dataArray = Utils::jsonDecode($job->getResult());
+        $fileHandler->arrayToSpreadSheet($dataArray, $file);
+
+        return response()->download($file);
     }
 }
