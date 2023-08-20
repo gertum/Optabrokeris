@@ -5,8 +5,9 @@ node_modules
 .git
 tests
 
-env.dist
-env.example
+.env
+.env.dist
+.env.example
 xdebug.ini
 xdebug.ini.example
 docker-compose.yml

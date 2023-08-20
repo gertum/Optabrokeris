@@ -15,5 +15,14 @@ RUN composer install && \
 # Clean image
 FROM registry.gitlab.com/inkodus-opta/docker-base-images/fpm:latest
 WORKDIR /var/www/html
-#COPY --from=builder /var/www/html/app /var/www/html/backup /var/www/html/bootstrap /var/www/html/config /var/www/html/data /var/www/html/database /var/www/html/public /var/www/html/resources /var/www/html/routes /var/www/html/shared /var/www/html/storage /var/www/html/vendor /var/www/html/.env /var/www/html/.env.dist /var/www/html/artisan /var/www/html/phpunit.xml /var/www/html/postcss.config.js /var/www/html/tailwind.config.js /var/www/html/vite.config.js ./
-COPY --from=builder /var/www/html/ ./
+#COPY --from=builder /var/www/html/ ./
+COPY --from=builder /var/www/html/app ./app
+COPY --from=builder /var/www/html/bootstrap ./bootstrap
+COPY --from=builder /var/www/html/config ./config
+COPY --from=builder /var/www/html/database ./database
+COPY --from=builder /var/www/html/public ./public
+COPY --from=builder /var/www/html/resources ./resources
+COPY --from=builder /var/www/html/routes ./routes
+COPY --from=builder /var/www/html/shared ./shared
+COPY --from=builder /var/www/html/storage ./storage
+COPY --from=builder /var/www/html/vendor ./vendor
