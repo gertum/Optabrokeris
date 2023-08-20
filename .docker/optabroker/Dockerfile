@@ -23,6 +23,5 @@ COPY --from=builder /var/www/html/database ./database
 COPY --from=builder /var/www/html/public ./public
 COPY --from=builder /var/www/html/resources ./resources
 COPY --from=builder /var/www/html/routes ./routes
-COPY --from=builder /var/www/html/shared ./shared
 COPY --from=builder /var/www/html/storage ./storage
 COPY --from=builder /var/www/html/vendor ./vendor
