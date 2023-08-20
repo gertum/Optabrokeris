@@ -15,4 +15,4 @@ RUN composer install && \
 # Clean webserver image
 FROM nginx:1.25.1
 WORKDIR /var/www/html
-COPY --from=builder /var/www/html/ ./
+COPY --from=builder /var/www/html/public ./public
