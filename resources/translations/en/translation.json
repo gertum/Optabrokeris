@@ -9,11 +9,25 @@
     "logIn": "Log in"
   },
   "step": {
+    "namingForm": {
+      "enterName": "Enter profile name",
+      "pleaseEnterFrofileName": "Please enter a name for the profile"
+    },
+    "fileUploadForm": {
+      "downloadExample": "Download solver data example",
+      "dragFiles": "Drag files here or"
+    },
+    "solverForm": {
+      "school": "School",
+      "schoolsScheduler": "Schools scheduler",
+      "others": "Others",
+      "commingSoon": "Comming soon"
+    },
+    "uploadFile": "Upload File",
     "solver": "Solver",
     "chooseSolver": "Choose solver",
     "name": "Name",
     "enterProfileName": "Enter profile name",
-    "upload": "Upload",
     "execution": "Execution",
     "solving": "Solving",
     "success": "Success",
@@ -24,12 +38,13 @@
     "createNewProfile": "Create new Profile",
     "noProfiles": "You have no profiles yet, please start by creating new profile"
   },
-"dashboard": "Dashboard",
+  "dashboard": "Dashboard",
   "profiles": "Profiles",
   "newProfile": "New Profile",
   "profile": "Profile",
   "logOut": "Log Out",
   "English": "English",
   "Lithuanian": "Lithuanian",
-  "forgotPassword": "Forgot your password? No problem. Just let us know your email address and we will email you a password reset link that will allow you to choose a new one."
+  "forgotPassword": "Forgot your password? No problem. Just let us know your email address and we will email you a password reset link that will allow you to choose a new one.",
+  "upload": "Upload"
 }

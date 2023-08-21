@@ -120,7 +120,7 @@ export default function NewJob({ auth }) {
                     disabled={current !== 1}
                   />
                   <Steps.Step
-                    title={t('step.upload')}
+                    title={t('upload')}
                     description={t('step.uploadFile')}
                     disabled={current !== 2}
                   />

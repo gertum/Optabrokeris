@@ -1,19 +1,28 @@
 import React, { useState } from 'react';
 import { Card, Avatar, Row, Col, Form } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
+import { useTranslation } from 'react-i18next';
 
 export const SolverwForm = ({ onFinish, children }) => {
   const [selectedCard, setSelectedCard] = useState(null);
   const [selectedTitle, setSelectedTitle] = useState('');
+  const { t } = useTranslation();
 
-  const handleCardClick = (index, title) => {
+  const handleCardClick = (index, value) => {
     setSelectedCard(index);
-    setSelectedTitle(title);
+    setSelectedTitle(value);
   };
-
   const cardData = [
-    { title: 'school', description: 'Schools scheduler' },
-    { title: 'others', description: 'Comming soon' },
+    {
+      title: 'step.solverForm.school',
+      description: 'step.solverForm.schoolsScheduler',
+      value: 'school',
+    },
+    {
+      title: 'step.solverForm.others',
+      description: 'step.solverForm.commingSoon',
+      value: 'others',
+    },
   ];
 
   const splitIntoRows = (array, chunkSize) => {
@@ -43,7 +52,7 @@ export const SolverwForm = ({ onFinish, children }) => {
             <Col span={8} key={cardIndex}>
               <Card
                 onClick={() =>
-                  handleCardClick(cardIndex + rowIndex * 3, data.title)
+                  handleCardClick(cardIndex + rowIndex * 3, data.value)
                 }
                 style={{
                   display: 'flex',
@@ -62,10 +71,8 @@ export const SolverwForm = ({ onFinish, children }) => {
                   style={{ marginBottom: 12 }}
                 />
                 <div style={{ textAlign: 'center' }}>
-                  <h3>
-                    {data.title[0].toUpperCase() + data.title.substring(1)}
-                  </h3>
-                  <p>{data.description}</p>
+                  <h3>{t(data.title)}</h3>
+                  <p>{t(data.description)}</p>
                 </div>
               </Card>
             </Col>
