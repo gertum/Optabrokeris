@@ -92,7 +92,10 @@ export default function Jobs({ auth, jobs }) {
                               icon={<EyeOutlined />}
                               size="large"
                               onClick={() =>
-                                window.open(`/api/job/${job.id}/download`, '_blank')
+                                window.open(
+                                  `/api/job/${job.id}/download`,
+                                  '_blank'
+                                )
                               }
                             >
                               Download

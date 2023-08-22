@@ -39,12 +39,20 @@ export default function NewJob({ auth }) {
     current < 4 && setCurrent(current + 1);
   };
 
-  const onFinishLoading = () => {
-    current < 4 && setCurrent(current + 1);
+  const handleSolve = () => {
+    axios
+      .post(`/api/job/${newJob.id}/solve?_token=${token}`)
+      .then(response => {
+        console.log('handleSolve: ', response.data);
+      })
+      .catch(error => {
+        console.error('Error onNameSubmit:', error);
+      });
+    setCurrent(current + 1);
   };
 
   const onFileUploadFinish = () => {
-    current < 4 && setCurrent(current + 1);
+    setCurrent(current + 1);
   };
 
   const onChange = value => {
@@ -74,8 +82,8 @@ export default function NewJob({ auth }) {
     <FileUploadForm onFinish={onFileUploadFinish} newJob={newJob} token={token}>
       <ReusableButtons />
     </FileUploadForm>,
-    <LoadingForm onFinish={onFinishLoading} newJob={newJob} />,
-    <FinalForm data={newJob}>
+    <LoadingForm onFinish={handleSolve} />,
+    <FinalForm>
       <ReusableButtons />
     </FinalForm>,
   ];

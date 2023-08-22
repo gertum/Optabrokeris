@@ -1,37 +1,15 @@
-import React from 'react';
-import { Button, List } from 'antd';
+import { Button } from 'antd';
+import { Link } from '@inertiajs/react';
 
-export const FinalForm = ({ data }) => {
-  const renderListItem = obj => {
-    return Object.entries(obj).map(([key, value]) => {
-      if (typeof value === 'object' && value !== null) {
-        return (
-          <List.Item key={key}>
-            <strong>{key}:</strong>
-            <List
-              size="small"
-              dataSource={[value]}
-              renderItem={item => (
-                <List.Item>
-                  <FinalForm data={item} />
-                </List.Item>
-              )}
-            />
-          </List.Item>
-        );
-      } else {
-        return (
-          <List.Item key={key}>
-            <strong>{key}:</strong> {JSON.stringify(value)}
-          </List.Item>
-        );
-      }
-    });
-  };
-
+export const FinalForm = ({ updated = false }) => {
   return (
     <div className="my-2">
-      <List bordered dataSource={[data]} renderItem={renderListItem} />
+      <h2 className="font-semibold text-xl text-gray-800 leading-tight">
+        {updated ? 'Succesfully updated' : 'Succesfully created!!!'}
+      </h2>
+      <Link href="/jobs" className="mt-2">
+        <Button size="large">View Profiles List</Button>
+      </Link>
     </div>
   );
 };
