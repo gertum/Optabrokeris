@@ -16,6 +16,7 @@ class Job extends Model
         'status',
         'result',
         'type',
+        'name'
     ];
 
     public function scopeUser($builder, $userId) {

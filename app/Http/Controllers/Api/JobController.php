@@ -58,6 +58,7 @@ class JobController extends Controller
     }
 
     #TODO name param :)
+    //?? viskas?
     public function create(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -65,6 +66,7 @@ class JobController extends Controller
                 'required',
                 Rule::in(SolverClientFactory::TYPES),
             ],
+            'name' => 'required',
 
         ]);
 
