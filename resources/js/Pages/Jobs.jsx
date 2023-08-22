@@ -78,9 +78,9 @@ export default function Jobs({ auth, jobs }) {
                         <div className="job-actions">
                           {[
                             <Link
-                              href={route('jobs.new', {
-                                jobTitle: job.title,
-                                createdAt: job.createdAt,
+                              href={route('jobs.edit', {
+                                jobId: job.id,
+                                jobType: job.type,
                               })}
                               className="ant-btn ant-btn-lg"
                             >
@@ -92,7 +92,7 @@ export default function Jobs({ auth, jobs }) {
                               icon={<EyeOutlined />}
                               size="large"
                               onClick={() =>
-                                window.open(`/api/job/${job.id}`, '_blank')
+                                window.open(`/api/job/${job.id}/download`, '_blank')
                               }
                             >
                               Download

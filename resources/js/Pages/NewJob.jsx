@@ -18,7 +18,6 @@ export default function NewJob({ auth }) {
   const { t } = useTranslation();
   const [current, setCurrent] = useState(0);
   const [newJob, setNewJob] = useState({});
-  const [error, setError] = useState({});
   const [token, setToken] = useState('');
 
   const onFormChange = values => {
@@ -28,18 +27,23 @@ export default function NewJob({ auth }) {
 
   const onNameSubmit = values => {
     setNewJob(prev => ({ ...prev, ...values }));
-    axios
-      .post(`/api/job?type=${newJob.type}&_token=${token}`)
-      .then(response => {
-        setNewJob(prev => ({ ...prev, id: response.data.id }));
-      })
-      .catch(error => {
-        console.error('Error:', error);
-      });
+    setNewJob(prev => ({ ...prev, id: 1 }));
+    // axios
+    //   .post(`/api/job?type=${newJob.type}&_token=${token}`)
+    //   .then(response => {
+    //     setNewJob(prev => ({ ...prev, id: response.data.id }));
+    //   })
+    //   .catch(error => {
+    //     console.error('Error:', error);
+    //   });
     current < 4 && setCurrent(current + 1);
   };
 
   const onFinishLoading = () => {
+    current < 4 && setCurrent(current + 1);
+  };
+
+  const onFileUploadFinish = () => {
     current < 4 && setCurrent(current + 1);
   };
 
@@ -67,7 +71,7 @@ export default function NewJob({ auth }) {
     <NamingForm onFinish={onNameSubmit}>
       <ReusableButtons />
     </NamingForm>,
-    <FileUploadForm onFinish={onFormChange} newJob={newJob} token={token}>
+    <FileUploadForm onFinish={onFileUploadFinish} newJob={newJob} token={token}>
       <ReusableButtons />
     </FileUploadForm>,
     <LoadingForm onFinish={onFinishLoading} newJob={newJob} />,

@@ -35,4 +35,16 @@ class JobsController extends Controller
     public function testUpload(Request $request) {
         return view('testupload');
     }
+
+public function editJob($id, $type)
+{
+    $job = Job::query()->find($id);
+
+    return Inertia::render('EditJob', [
+        'job' => $job,
+        'jobId' => $id,
+        'jobType' => $type,
+    ]);
+}
+
 }

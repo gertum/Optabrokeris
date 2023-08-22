@@ -6,7 +6,7 @@ export const FileUploadForm = ({ newJob, onFinish, children, token }) => {
 
   return (
     <div className="my-2">
-      <Form onFinish={() => onFinish({ fileData: data })} className="mt-4">
+      <Form onFinish={() => onFinish()} className="mt-4">
         <Button
           className="my-2"
           onClick={() => console.log('Downloading solver data example...')}
