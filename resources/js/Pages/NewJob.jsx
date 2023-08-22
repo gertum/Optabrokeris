@@ -1,6 +1,6 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head } from '@inertiajs/react';
-import { Button, Layout, Steps } from 'antd';
+import { Button, Layout, message, Steps } from 'antd';
 import { useState, useEffect } from 'react';
 import {
   SolverwForm,
@@ -22,21 +22,21 @@ export default function NewJob({ auth }) {
 
   const onFormChange = values => {
     setNewJob(prev => ({ ...prev, ...values }));
-    current < 4 && setCurrent(current + 1);
+    setCurrent(current + 1);
   };
 
   const onNameSubmit = values => {
     setNewJob(prev => ({ ...prev, ...values }));
-    setNewJob(prev => ({ ...prev, id: 1 }));
-    // axios
-    //   .post(`/api/job?type=${newJob.type}&_token=${token}`)
-    //   .then(response => {
-    //     setNewJob(prev => ({ ...prev, id: response.data.id }));
-    //   })
-    //   .catch(error => {
-    //     console.error('Error:', error);
-    //   });
-    current < 4 && setCurrent(current + 1);
+    // setNewJob(prev => ({ ...prev, id: 1 }));
+    axios
+      .post(`/api/job?type=${newJob.type}&_token=${token}`)
+      .then(response => {
+        setNewJob(prev => ({ ...prev, id: response.data.id }));
+      })
+      .catch(error => {
+        message.error(`Name submit error: ${error.message}`);
+      });
+    setCurrent(current + 1);
   };
 
   const handleSolve = () => {
@@ -46,18 +46,13 @@ export default function NewJob({ auth }) {
         console.log('handleSolve: ', response.data);
       })
       .catch(error => {
-        console.error('Error onNameSubmit:', error);
+        message.error(`HandleSolve error: ${error.message}`);
       });
     setCurrent(current + 1);
   };
 
   const onFileUploadFinish = () => {
     setCurrent(current + 1);
-  };
-
-  const onChange = value => {
-    console.log('onChange:', value);
-    setCurrent(value);
   };
 
   const ReusableButtons = () => {
@@ -95,7 +90,7 @@ export default function NewJob({ auth }) {
         setToken(response.data);
       })
       .catch(error => {
-        console.error('Error:', error);
+        message.error(`Login error: ${error.message}`);
       });
   }, []);
 
@@ -120,7 +115,7 @@ export default function NewJob({ auth }) {
           <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
               <div className="p-6 text-gray-900">
-                <Steps current={current} onChange={onChange}>
+                <Steps current={current}>
                   <Steps.Step
                     title={t('step.solver')}
                     description={t('step.chooseSolver')}

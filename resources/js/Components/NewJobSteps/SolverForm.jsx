@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Card, Avatar, Row, Col, Form } from 'antd';
+import { Card, Avatar, Row, Col, Form, message } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
 
@@ -9,9 +9,14 @@ export const SolverwForm = ({ onFinish, children }) => {
   const { t } = useTranslation();
 
   const handleCardClick = (index, value) => {
-    setSelectedCard(index);
-    setSelectedTitle(value);
+    if (value !== 'others') {
+      setSelectedCard(index);
+      setSelectedTitle(value);
+    } else {
+      message.warning('This card cannot be selected.');
+    }
   };
+
   const cardData = [
     {
       title: 'step.solverForm.school',

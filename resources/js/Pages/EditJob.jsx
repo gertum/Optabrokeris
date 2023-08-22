@@ -25,11 +25,6 @@ export default function EditJob({ auth, jobId, jobType }) {
     setCurrent(current + 1);
   };
 
-  const onChange = value => {
-    console.log('onChange:', value);
-    setCurrent(value);
-  };
-
   const handleSolve = () => {
     axios
       .post(`/api/job/${editedJob.id}/solve?_token=${token}`)
@@ -37,7 +32,7 @@ export default function EditJob({ auth, jobId, jobType }) {
         console.log('handleSolve: ', response.data);
       })
       .catch(error => {
-        console.error('Error onNameSubmit:', error);
+        message.error(`HandleSolve error: ${error.message}`);
       });
     setCurrent(current + 1);
   };
@@ -71,7 +66,7 @@ export default function EditJob({ auth, jobId, jobType }) {
         setToken(response.data);
       })
       .catch(error => {
-        console.error('Error:', error);
+        message.error(`Login error: ${error.message}`);
       });
   }, []);
 
@@ -97,21 +92,21 @@ export default function EditJob({ auth, jobId, jobType }) {
             <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
               <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div className="p-6 text-gray-900">
-                  <Steps current={current} onChange={onChange}>
+                  <Steps current={current}>
                     <Steps.Step
                       title={t('upload')}
                       description={t('step.uploadFile')}
-                      disabled={current !== 2}
+                      disabled={current !== 0}
                     />
                     <Steps.Step
                       title={t('step.execution')}
                       description={t('step.solving')}
-                      disabled={current !== 3}
+                      disabled={current !== 1}
                     />
                     <Steps.Step
                       title={t('step.success')}
                       description={t('step.solutionReady')}
-                      disabled={current !== 4}
+                      disabled={current !== 2}
                     />
                   </Steps>
                   {forms[current]}
