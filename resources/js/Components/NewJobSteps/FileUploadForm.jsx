@@ -1,40 +1,30 @@
-import {useState} from "react";
-import {Button, Form, Upload} from "antd";
+import { Button, Form, Upload } from 'antd';
+import { useTranslation } from 'react-i18next';
 
-export const FileUploadForm = ({onFinish, children}) => {
-    const [uploadedFile, setUploadedFile] = useState(null);
+export const FileUploadForm = ({ newJob, onFinish, children, token }) => {
+  const { t } = useTranslation();
 
-    const handleFileUpload = (file) => {
-        setTimeout(() => {
-            setUploadedFile(file.name);
-        }, 1000);
-    };
-
-    return <div className="my-2">
-        <Form onFinish={() => onFinish({uploadedFile})} className="mt-4">
-            <Button className="my-2" onClick={() => console.log('Downloading solver data example...')}>
-                Download solver data example
-            </Button>
-            <Upload.Dragger
-                // multiple
-                // action={"http://localhost:3000/upload/test"}
-                maxCount={1}
-                beforeUpload={(file) => {
-                    handleFileUpload(file); // Simulate file upload
-                    return false; // Prevent default upload behavior
-                }}
-                listType="picture"
-                accept='.xls, .xlsx, .json'
-                // beforeUpload={(file) => {
-                //     console.log({file})                     check if the files size is to big and so on}
-                //     return file or return false
-                // }
-            >
-                Drag files here or
-                <br />
-                <Button>Upload</Button>
-            </Upload.Dragger>
-            {children}
-        </Form>
+  return (
+    <div className="my-2">
+      <Form onFinish={() => onFinish()} className="mt-4">
+        <Button
+          className="my-2"
+          onClick={() => console.log('Downloading solver data example...')}
+        >
+          {t('step.fileUploadForm.downloadExample')}
+        </Button>
+        <Upload.Dragger
+          action={`/api/job/${newJob.id}/upload?_token=${token}`}
+          maxCount={1}
+          listType="picture"
+          accept=".xlsx"
+        >
+          {t('step.fileUploadForm.dragFiles')}
+          <br />
+          <Button>{t('upload')}</Button>
+        </Upload.Dragger>
+        {children}
+      </Form>
     </div>
-}
+  );
+};

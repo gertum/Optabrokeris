@@ -115,7 +115,7 @@ class JobController extends Controller
     public function upload(JobRequest $request, $id, SpreadSheetHandlerFactory $fileHandlerFactory)
     {
         $job = $request->getUserJob($id);
-        $file = $request->file('task');
+        $file = $request->file('file');
         $fileHandler = $fileHandlerFactory->createHandler($job->getType(), $file->getClientOriginalName());
 
         $dataArray = $fileHandler->spreadSheetToArray($file->getRealPath());

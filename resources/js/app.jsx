@@ -11,35 +11,39 @@ import ltTranslations from '../translations/lt/translation.json';
 
 // Load translations and configure i18next
 i18n.init({
-    lng: 'en',
-    resources: {
-        en: {
-            translation: enTranslations,
-        },
-        lt: {
-            translation: ltTranslations,
-        },
+  lng: 'en',
+  resources: {
+    en: {
+      translation: enTranslations,
     },
-    interpolation: {
-        escapeValue: false,
+    lt: {
+      translation: ltTranslations,
     },
+  },
+  interpolation: {
+    escapeValue: false,
+  },
 });
 
 const appName = import.meta.env.VITE_APP_NAME || 'Inkodus opta broker';
 
 createInertiaApp({
-    title: (title) => `${title} - ${appName}`,
-    resolve: (name) => resolvePageComponent(`./Pages/${name}.jsx`, import.meta.glob('./Pages/**/*.jsx')),
-    setup({ el, App, props }) {
-        const root = createRoot(el);
+  title: title => `${title} - ${appName}`,
+  resolve: name =>
+    resolvePageComponent(
+      `./Pages/${name}.jsx`,
+      import.meta.glob('./Pages/**/*.jsx')
+    ),
+  setup({ el, App, props }) {
+    const root = createRoot(el);
 
-        root.render(
-            <I18nextProvider i18n={i18n}>
-                <App {...props} />
-            </I18nextProvider>
-        );
-    },
-    progress: {
-        color: '#4B5563',
-    },
+    root.render(
+      <I18nextProvider i18n={i18n}>
+        <App {...props} />
+      </I18nextProvider>
+    );
+  },
+  progress: {
+    color: '#4B5563',
+  },
 });
