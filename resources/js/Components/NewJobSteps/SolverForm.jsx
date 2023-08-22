@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Card, Avatar, Row, Col, Form, message } from 'antd';
-import { UserOutlined } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
 
 export const SolverwForm = ({ onFinish, children }) => {
@@ -70,11 +69,12 @@ export const SolverwForm = ({ onFinish, children }) => {
                       : '2px solid #ccc',
                 }}
               >
-                <Avatar
-                  size={64}
-                  icon={<UserOutlined />}
-                  style={{ marginBottom: 12 }}
-                />
+                <Avatar className="bg-blue-500 text-bold mb-2" size={64}>
+                {data?.title
+                    ? t(data.title)[0].toUpperCase() +
+                      t(data.title).substring(1)
+                    : data.value}
+                </Avatar>
                 <div style={{ textAlign: 'center' }}>
                   <h3>{t(data.title)}</h3>
                   <p>{t(data.description)}</p>
