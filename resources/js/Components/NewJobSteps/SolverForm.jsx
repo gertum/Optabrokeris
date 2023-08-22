@@ -13,7 +13,7 @@ export const SolverwForm = ({ onFinish, children }) => {
       setSelectedCard(index);
       setSelectedTitle(value);
     } else {
-      message.warning('This card cannot be selected.');
+      message.warning('This card cannot be selected.', 5);
     }
   };
 
@@ -46,7 +46,7 @@ export const SolverwForm = ({ onFinish, children }) => {
         if (selectedCard !== null) {
           onFinish({ type: selectedTitle });
         } else {
-          message.error('Please select a card before continuing.');
+          message.error('Please select a card before continuing.', 5);
         }
       }}
       className="mt-4"

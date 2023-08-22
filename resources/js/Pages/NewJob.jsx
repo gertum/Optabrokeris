@@ -34,7 +34,7 @@ export default function NewJob({ auth }) {
         setNewJob(prev => ({ ...prev, id: response.data.id }));
       })
       .catch(error => {
-        message.error(`Name submit error: ${error.message}`);
+        message.error(`Name submit error: ${error.message}`, 5);
       });
     setCurrent(current + 1);
   };
@@ -46,7 +46,7 @@ export default function NewJob({ auth }) {
         console.log('handleSolve: ', response.data);
       })
       .catch(error => {
-        message.error(`HandleSolve error: ${error.message}`);
+        message.error(`HandleSolve error: ${error.message}`, 5);
       });
     setCurrent(current + 1);
   };
@@ -90,7 +90,7 @@ export default function NewJob({ auth }) {
         setToken(response.data);
       })
       .catch(error => {
-        message.error(`Login error: ${error.message}`);
+        message.error(`Login error: ${error.message}`, 5);
       });
   }, []);
 

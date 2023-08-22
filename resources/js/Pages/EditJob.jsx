@@ -32,7 +32,7 @@ export default function EditJob({ auth, jobId, jobType }) {
         console.log('handleSolve: ', response.data);
       })
       .catch(error => {
-        message.error(`HandleSolve error: ${error.message}`);
+        message.error(`HandleSolve error: ${error.message}`, 5);
       });
     setCurrent(current + 1);
   };
@@ -66,7 +66,7 @@ export default function EditJob({ auth, jobId, jobType }) {
         setToken(response.data);
       })
       .catch(error => {
-        message.error(`Login error: ${error.message}`);
+        message.error(`Login error: ${error.message}`, 5);
       });
   }, []);
 
