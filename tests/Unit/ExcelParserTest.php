@@ -17,5 +17,8 @@ class ExcelParserTest extends TestCase
         unset($dataFromJson["score"], $dataFromJson["solverStatus"]);
 
         $this->assertEquals($dataFromJson, $transformedExcelData);
+        $this->assertNull($transformedExcelData['lessonList'][1]['timeslot']);
+        $this->assertNull($transformedExcelData['lessonList'][1]['room']);
+
     }
 }
