@@ -19,7 +19,7 @@ class ExcelSchoolDataHandler implements SpreadSheetDataHandler
                     return [
                         'id' => $transformedExcelColumn[0],
                         'dayOfWeek' => $transformedExcelColumn[1],
-                        'startTime' => Carbon::parse( $transformedExcelColumn[2])->format('H:i:s'),
+                        'startTime' => Carbon::parse($transformedExcelColumn[2])->format('H:i:s'),
                         'endTime' => Carbon::parse($transformedExcelColumn[3])->format('H:i:s'),
                     ];
                 },
@@ -46,8 +46,8 @@ class ExcelSchoolDataHandler implements SpreadSheetDataHandler
                         'subject' => $transformedExcelColumn[1],
                         'teacher' => $transformedExcelColumn[2],
                         'studentGroup' => $transformedExcelColumn[3],
-                        'timeslot' => $transformedExcelColumn[4],
-                        'room' => $transformedExcelColumn[5],
+                        'timeslot' => $transformedExcelColumn[4] == '' ? null : $transformedExcelColumn[4],
+                        'room' => $transformedExcelColumn[5] == '' ? null : $transformedExcelColumn[5],
                     ];
                 },
                 $lessonList
