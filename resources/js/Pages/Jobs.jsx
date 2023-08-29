@@ -1,18 +1,41 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, Link } from '@inertiajs/react';
-import { Layout, Button, Avatar, Card } from 'antd';
+import { Layout, Button, Avatar, Card, message } from 'antd';
 import { EditOutlined, EyeOutlined, ReloadOutlined } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
 import { format, parseISO } from 'date-fns';
+import axios from 'axios';
+import { useEffect, useState } from 'react';
 
 const { Content } = Layout;
 
 export default function Jobs({ auth, jobs }) {
+  console.log(jobs);
   const { t } = useTranslation();
+  const [token, setToken] = useState('');
 
   const handleResolve = jobId => {
-    console.log(jobId);
+    axios
+      .post(`/api/job/${jobId}/solve?_token=${token}`)
+      .then(response => {
+        console.log('handleSolve: ', response.data);
+        message.success(`${jobId} resolved`, 5);
+      })
+      .catch(error => {
+        message.error(`handleResolve error: ${error.message}`, 5);
+      });
   };
+
+  useEffect(() => {
+    axios
+      .get('/login')
+      .then(response => {
+        setToken(response.data);
+      })
+      .catch(error => {
+        message.error(`Login error: ${error.message}`, 5);
+      });
+  }, []);
 
   return (
     <AuthenticatedLayout
@@ -59,9 +82,10 @@ export default function Jobs({ auth, jobs }) {
                         <div className="job-info">
                           <div className="job-text">
                             <h3>
-                              {job?.type
+                              {job?.type && job?.id
                                 ? job.type[0].toUpperCase() +
-                                  job.type.substring(1)
+                                  job.type.substring(1) +
+                                  job.id
                                 : '-'}
                             </h3>
                             <p>

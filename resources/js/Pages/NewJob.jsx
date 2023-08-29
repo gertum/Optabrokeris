@@ -27,9 +27,12 @@ export default function NewJob({ auth }) {
 
   const onNameSubmit = values => {
     setNewJob(prev => ({ ...prev, ...values }));
-    // setNewJob(prev => ({ ...prev, id: 1 }));
+    const requestData = {
+      type: newJob.type,
+      // ...values
+    };
     axios
-      .post(`/api/job?type=${newJob.type}&_token=${token}`)
+      .post(`/api/job?_token=${token}`, requestData)
       .then(response => {
         setNewJob(prev => ({ ...prev, id: response.data.id }));
       })

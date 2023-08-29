@@ -70,7 +70,7 @@ export const SolverwForm = ({ onFinish, children }) => {
                 }}
               >
                 <Avatar className="bg-blue-500 text-bold mb-2" size={64}>
-                {data?.title
+                  {data?.title
                     ? t(data.title)[0].toUpperCase() +
                       t(data.title).substring(1)
                     : data.value}
