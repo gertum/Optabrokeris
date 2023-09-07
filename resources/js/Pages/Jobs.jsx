@@ -10,9 +10,13 @@ import { useEffect, useState } from 'react';
 const { Content } = Layout;
 
 export default function Jobs({ auth, jobs }) {
-  console.log(jobs);
   const { t } = useTranslation();
   const [token, setToken] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const jobsPerPage = 6;
+  const startIndex = (currentPage - 1) * jobsPerPage;
+  const endIndex = startIndex + jobsPerPage;
+  const displayedJobs = jobs.slice(startIndex, endIndex);
 
   const handleResolve = jobId => {
     axios
@@ -42,7 +46,7 @@ export default function Jobs({ auth, jobs }) {
       user={auth.user}
       header={
         <h2 className="font-semibold text-xl text-gray-800 leading-tight">
-          {t('jobs.createdProfiles')}
+          {t('jobs.createdJobs')}
         </h2>
       }
     >
@@ -59,7 +63,7 @@ export default function Jobs({ auth, jobs }) {
             <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
               <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div className="p-6 text-gray-900">
-                  {jobs.map((job, index) => (
+                  {displayedJobs.map((job, index) => (
                     <Card
                       key={index}
                       className={`${jobs.length - 1 !== index ? 'mb-4' : ''}`}
@@ -89,7 +93,7 @@ export default function Jobs({ auth, jobs }) {
                                 : '-'}
                             </h3>
                             <p>
-                              Created at:{' '}
+                              Created at:
                               {job?.created_at
                                 ? format(
                                     parseISO(job.created_at),
@@ -136,6 +140,18 @@ export default function Jobs({ auth, jobs }) {
                       </div>
                     </Card>
                   ))}
+                  <Button
+                    disabled={currentPage === 1}
+                    onClick={() => setCurrentPage(currentPage - 1)}
+                  >
+                    Previous
+                  </Button>
+                  <Button
+                    disabled={endIndex >= jobs.length}
+                    onClick={() => setCurrentPage(currentPage + 1)}
+                  >
+                    Next
+                  </Button>
                 </div>
               </div>
             </div>
@@ -149,7 +165,7 @@ export default function Jobs({ auth, jobs }) {
             lineHeight: 4,
           }}
         >
-          <div>{t('jobs.noProfiles')}</div>
+          <div>{t('jobs.noJobs')}</div>
           <Link href={route('jobs.new')}>
             <Button
               shape="circle"
@@ -161,7 +177,7 @@ export default function Jobs({ auth, jobs }) {
               }}
             >
               <span style={{ whiteSpace: 'normal', textAlign: 'center' }}>
-                {t('jobs.createNewProfile')}
+                {t('jobs.createNewJob')}
               </span>
             </Button>
           </Link>

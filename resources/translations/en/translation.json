@@ -10,8 +10,8 @@
   },
   "step": {
     "namingForm": {
-      "enterName": "Enter profile name",
-      "pleaseEnterFrofileName": "Please enter a name for the profile"
+      "enterName": "Enter job name",
+      "pleaseEnterJobName": "Please enter a name for the job"
     },
     "fileUploadForm": {
       "downloadExample": "Download solver data example",
@@ -27,20 +27,20 @@
     "solver": "Solver",
     "chooseSolver": "Choose solver",
     "name": "Name",
-    "enterProfileName": "Enter profile name",
+    "enterJobName": "Enter job name",
     "execution": "Execution",
     "solving": "Solving",
     "success": "Success",
     "solutionReady": "Solution is ready"
   },
   "jobs": {
-    "createdProfiles": "Created profiles",
-    "createNewProfile": "Create new Profile",
-    "noProfiles": "You have no profiles yet, please start by creating new profile"
+    "main": "Jobs",
+    "createdJobs": "Created jobs",
+    "createNewJob": "Create new Job",
+    "noJobs": "You have no jobs yet, please start by creating new job"
   },
   "dashboard": "Dashboard",
-  "profiles": "Profiles",
-  "newProfile": "New Profile",
+  "newJob": "New Job",
   "profile": "Profile",
   "logOut": "Log Out",
   "English": "English",

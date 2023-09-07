@@ -126,7 +126,7 @@ export default function NewJob({ auth }) {
                   />
                   <Steps.Step
                     title={t('step.name')}
-                    description={t('step.enterProfileName')}
+                    description={t('step.enterJobName')}
                     disabled={current !== 1}
                   />
                   <Steps.Step
