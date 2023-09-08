@@ -3,6 +3,7 @@
 namespace App\Transformers;
 
 use App\Exceptions\ExcelParseException;
+use App\Exceptions\SolverDataException;
 use Illuminate\Support\Carbon;
 use Shuchkin\SimpleXLSX;
 use Shuchkin\SimpleXLSXGen;
@@ -89,6 +90,8 @@ class ExcelSchoolDataHandler implements SpreadSheetDataHandler
 
     public function arrayToSpreadSheet(array $data, string $excelFile): void
     {
+        $this->validateData($data);
+
         $xlsx = new SimpleXLSXGen();
         $xlsx->addSheet($data["timeslotList"], 'timeslotList');
         $xlsx->addSheet($data["roomList"], 'roomList');
@@ -106,5 +109,34 @@ class ExcelSchoolDataHandler implements SpreadSheetDataHandler
         }
         $xlsx->addSheet($data["lessonList"], 'lessonList');
         $xlsx->saveAs($excelFile);
+    }
+
+    private function validateData($data): void
+    {
+        $topKeys = ['timeslotList', 'roomList', 'lessonList'];
+
+        foreach ($topKeys as $topKey) {
+            if (!array_key_exists($topKey, $data)) {
+                throw new SolverDataException(sprintf('%s key not found in a data array', $topKey));
+            }
+        }
+
+        $lessonKeys = ['room', 'timeslot'];
+        for ($i = 0; $i < count($data["lessonList"]); $i++) {
+            foreach ($lessonKeys as $lessonKey) {
+                if (!array_key_exists($lessonKey, $data["lessonList"][$i])) {
+                    throw new SolverDataException(
+                        sprintf('%s lessonList key not found in lesson line %s', $lessonKey, $i)
+                    );
+                }
+
+                if (is_array($data["lessonList"][$i][$lessonKey]) &&
+                    !array_key_exists('id', $data["lessonList"][$i][$lessonKey])) {
+                    throw new SolverDataException(
+                        sprintf('id key not found in lessonList elem %s line %s', $lessonKey, $i)
+                    );
+                }
+            }
+        }
     }
 }
