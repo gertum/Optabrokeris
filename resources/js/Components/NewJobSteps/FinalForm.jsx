@@ -7,7 +7,7 @@ export const FinalForm = ({ updated = false }) => {
       <h2 className="font-semibold text-xl text-gray-800 leading-tight">
         {updated ? 'Succesfully updated' : 'Succesfully created!!!'}
       </h2>
-      <Link href="/jobs" className="mt-2">
+      <Link href="/" className="mt-2">
         <Button size="large">View Profiles List</Button>
       </Link>
     </div>

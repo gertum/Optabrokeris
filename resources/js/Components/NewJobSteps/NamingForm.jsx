@@ -6,7 +6,7 @@ export const NamingForm = ({ onFinish, children }) => {
   const { t } = useTranslation();
 
   const enterNameLabel = t('step.namingForm.enterName');
-  const pleaseEnterNameMessage = t('step.namingForm.pleaseEnterFrofileName');
+  const pleaseEnterNameMessage = t('step.namingForm.pleaseEnterJobName');
 
   return (
     <div className="my-2">

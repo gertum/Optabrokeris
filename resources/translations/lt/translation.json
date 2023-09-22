@@ -11,7 +11,7 @@
   "step": {
     "namingForm": {
       "enterName": "Įveskite scenarijaus pavadinimą",
-      "pleaseEnterFrofileName": "Įveskite pavadinimą scenarijui"
+      "pleaseEnterJobName": "Įveskite pavadinimą scenarijui"
     },
     "fileUploadForm": {
       "downloadExample": "Parsisiųsti sprendimo duomenų pavyzdį",
@@ -25,21 +25,23 @@
     },
     "solver": "Sprendimas",
     "chooseSolver": "Pasirinkite sprendimą",
+    "chosenSolver": "Pasirinktas sprendimas",
     "name": "Pavadinimas",
-    "enterProfileName": "Įveskite scenarijaus pavadinimą",
+    "enterJobName": "Įveskite scenarijaus pavadinimą",
+    "enteredName": "Įvestas scenarijaus pavadinimas",
     "execution": "Vykdoma",
     "solving": "Sprendžiama",
     "success": "Sėkmė",
     "solutionReady": "Sprendimas pasiruošęs"
   },
   "jobs": {
-    "createdProfiles": "Sukurti scenarijai",
-    "createNewProfile": "Pradėti naują scenarijų",
-    "noProfiles": "Nėra sukurtų scenarijų, tęskite sukurdami naują scenarijų",
-    "dashboard": "Valdymo skydelis"
+    "main": "Scenariaji",
+    "createdJobs": "Sukurti scenarijai",
+    "createNewJob": "Pradėti naują scenarijų",
+    "noJobs": "Nėra sukurtų scenarijų, tęskite sukurdami naują scenarijų"
   },
-  "profiles": "Scenariaji",
-  "newProfile": "Naujas scenarijus",
+  "dashboard": "Valdymo skydelis",
+  "newJob": "Naujas scenarijus",
   "profile": "Profilis",
   "logOut": "Atsijungti",
   "English": "Anglų",

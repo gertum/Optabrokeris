@@ -1,4 +1,5 @@
 import ApplicationLogo from '@/Components/ApplicationLogo';
+import Logo from '../../images/Logo.png';
 import LanguageSwitch from '@/Components/LanguageSwitch';
 import Dropdown from '@/Components/Dropdown';
 import NavLink from '@/Components/NavLink';
@@ -14,14 +15,14 @@ export default function Authenticated({ user, header, children }) {
     route().current('/') || route().current('dashboard');
 
   return (
-    <div className="min-h-screen bg-blue-200">
+    <div className="min-h-screen">
       <div className="bg-white border-b border-gray-100">
         <Header className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 bg-white">
           <Row>
             <Col span={8}>
               <Space size={12}>
                 <Link href="/">
-                  <ApplicationLogo className="block h-9 w-auto fill-current text-gray-800" />
+                  <img src={Logo} alt="Logo" className="block h-9 w-auto" />
                 </Link>
                 {/*<NavLink href={route('dashboard')} active={isDashboardActive}>*/}
                 {/*    {t('dashboard')}*/}
@@ -30,13 +31,13 @@ export default function Authenticated({ user, header, children }) {
                   href={route('jobs.list')}
                   active={route().current('jobs.list')}
                 >
-                  {t('profiles')}
+                  {t('jobs.main')}
                 </NavLink>
                 <NavLink
                   href={route('jobs.new')}
                   active={route().current('jobs.new')}
                 >
-                  {t('newProfile')}
+                  {t('newJob')}
                 </NavLink>
               </Space>
             </Col>
