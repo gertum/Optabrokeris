@@ -63,6 +63,7 @@ export const SolverwForm = ({ onFinish, children }) => {
                   flexDirection: 'column',
                   alignItems: 'center',
                   justifyContent: 'center',
+                  cursor: 'pointer',
                   border:
                     selectedCard === cardIndex + rowIndex * 3
                       ? '2px solid blue'
