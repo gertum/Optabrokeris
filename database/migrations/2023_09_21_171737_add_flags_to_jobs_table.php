@@ -12,9 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('jobs', function (Blueprint $table) {
-            $table->boolean('flag_uploaded');
-            $table->boolean('flag_solving');
-            $table->boolean('flag_solved');
+            $table->boolean('flag_uploaded')->default(false);
+            $table->boolean('flag_solving')->default(false);
+            $table->boolean('flag_solved')->default(false);
         });
     }
 
