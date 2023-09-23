@@ -28,7 +28,9 @@ class JobController extends Controller
     {
         $userId = $request->user()->id;
 
-        return Job::query()->user($userId)->get();
+        $jobs = Job::query()->orderBy('created_at')->user($userId)->get();
+
+        return $jobs;
     }
 
     public function view(JobRequest $request, $id)
@@ -70,7 +72,7 @@ class JobController extends Controller
                 'required',
                 Rule::in(SolverClientFactory::TYPES),
             ],
-            'name' => 'required',
+            'name' => ['required'],
 
         ]);
 
