@@ -5,6 +5,7 @@ use App\Http\Controllers\JobsController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use \App\Http\Controllers\DownloadController;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,6 +34,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/jobs/{id}', [JobsController::class, 'view'])->name('job.view');
     Route::get('/testupload', [JobsController::class, 'testUpload']);
     Route::get('/jobs/edit/{jobId}/{jobType}', [JobsController::class, 'editJob'])->name('jobs.edit');
+
+    Route::get('/download/school-example', [DownloadController::class, 'downloadSchoolExample'])->name('download.school.example');
+
 });
 
 
