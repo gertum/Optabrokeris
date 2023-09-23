@@ -27,16 +27,19 @@ export default function NewJob({ auth }) {
 
   const onNameSubmit = values => {
     setNewJob(prev => ({ ...prev, ...values }));
-    // setNewJob(prev => ({ ...prev, id: 1 }));
+    const requestData = {
+      type: newJob.type,
+      ...values,
+    };
     axios
-      .post(`/api/job?type=${newJob.type}&_token=${token}`)
+      .post(`/api/job?_token=${token}`, requestData)
       .then(response => {
         setNewJob(prev => ({ ...prev, id: response.data.id }));
+        setCurrent(current + 1);
       })
       .catch(error => {
         message.error(`Name submit error: ${error.message}`, 5);
       });
-    setCurrent(current + 1);
   };
 
   const handleSolve = () => {
@@ -44,11 +47,11 @@ export default function NewJob({ auth }) {
       .post(`/api/job/${newJob.id}/solve?_token=${token}`)
       .then(response => {
         console.log('handleSolve: ', response.data);
+        setCurrent(current + 1);
       })
       .catch(error => {
         message.error(`HandleSolve error: ${error.message}`, 5);
       });
-    setCurrent(current + 1);
   };
 
   const onFileUploadFinish = () => {
@@ -118,28 +121,38 @@ export default function NewJob({ auth }) {
                 <Steps current={current}>
                   <Steps.Step
                     title={t('step.solver')}
-                    description={t('step.chooseSolver')}
+                    description={
+                      newJob?.type
+                        ? `${t('step.chosenSolver')}: ${t(
+                            `step.solverForm.${newJob.type}`
+                          )}`
+                        : t('step.chooseSolver')
+                    }
                     disabled={current !== 0}
                   />
                   <Steps.Step
                     title={t('step.name')}
-                    description={t('step.enterProfileName')}
+                    description={
+                      newJob?.name
+                        ? `${t('step.enteredName')}: ${newJob.name}`
+                        : t('step.enterJobName')
+                    }
                     disabled={current !== 1}
                   />
                   <Steps.Step
                     title={t('upload')}
                     description={t('step.uploadFile')}
-                    disabled={current !== 2}
+                    disabled={current < 2}
                   />
                   <Steps.Step
                     title={t('step.execution')}
                     description={t('step.solving')}
-                    disabled={current !== 3}
+                    disabled={current < 2}
                   />
                   <Steps.Step
                     title={t('step.success')}
                     description={t('step.solutionReady')}
-                    disabled={current !== 4}
+                    disabled={current < 2}
                   />
                 </Steps>
                 {forms[current]}

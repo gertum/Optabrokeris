@@ -18,18 +18,15 @@ use \App\Http\Controllers\DownloadController;
 |
 */
 
-Route::get('/', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
-
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    // there are analogs in 'api'
-    // these are for testing or for references in front
-    Route::get('/jobs', [JobsController::class, 'list'])->name('jobs.list');
+    // Render Jobs component as main page
+    Route::get('/', [JobsController::class, 'list'])->name('jobs.list');
+
+    // other routes
     Route::get('/jobs/new', [JobsController::class, 'newJob'])->name('jobs.new');
     Route::get('/jobs/{id}', [JobsController::class, 'view'])->name('job.view');
     Route::get('/testupload', [JobsController::class, 'testUpload']);
@@ -39,5 +36,5 @@ Route::middleware('auth')->group(function () {
 
 });
 
-
+// Auth routes
 require __DIR__.'/auth.php';
