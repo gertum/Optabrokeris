@@ -7,6 +7,7 @@ use App\Http\Requests\Job\JobRequest;
 use App\Models\Job;
 use App\Solver\SolverClientFactory;
 use App\Transformers\SpreadSheetHandlerFactory;
+use Exception;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Utils;
 use Illuminate\Http\Request;
@@ -40,16 +41,21 @@ class JobController extends Controller
             $solverClient = $this->solverClientFactory->createClient($type);
             $result = $solverClient->getResult($job->solver_id);
 
+            $flagSovled = false;
             try {
                 $resultDataArray = Utils::jsonDecode($result, true);
                 $status = $resultDataArray['solverStatus'];
+
+                if ($job->getFlagSolving() && $status == 'NOT_SOLVING') {
+                    $flagSovled = true;
+                }
             } catch (GuzzleException $e) {
                 Log::warning($e->getMessage());
                 $status = 'error';
             }
-            $job->update(['result' => $result, 'status' => $status]);
+            $job->update(['result' => $result, 'status' => $status, 'flag_solved' => $flagSovled]);
             // TODO create migration for score column
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $job->error_message = $e->getMessage();
             Log::error($e->getMessage());
         }
@@ -57,8 +63,6 @@ class JobController extends Controller
         return $job;
     }
 
-    #TODO name param :)
-    //?? viskas?
     public function create(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -109,7 +113,10 @@ class JobController extends Controller
             $job->update(['solver_id' => $solverId]);
         }
 
-        return $solverClient->startSolving($job->solver_id);
+        $solvingResult = $solverClient->startSolving($job->solver_id);
+        $job->update(['flag_solving' => true, 'flag_solved' => false]);
+
+        return $solvingResult;
     }
 
     public function upload(JobRequest $request, $id, SpreadSheetHandlerFactory $fileHandlerFactory)
@@ -121,6 +128,10 @@ class JobController extends Controller
         $dataArray = $fileHandler->spreadSheetToArray($file->getRealPath());
         $job->data = json_encode($dataArray);
 
+        $job->setFlagUploaded(true);
+        $job->setFlagSolving(false);
+        $job->setFlagSolved(false);
+
         $job->save();
 
         return $job;
@@ -131,14 +142,14 @@ class JobController extends Controller
         $job = $request->getUserJob($id);
         $fileName = sprintf('result_%s.xlsx', $id);
 
-        $file = '/tmp/'.$fileName;
+        $file = '/tmp/' . $fileName;
 
         $fileHandler = $fileHandlerFactory->createHandler($job->getType(), $file);
 
         $data = $job->getResult();
 
         // solution for development, when solver is not started (so the result is empty), we take data instead
-        if ( empty($data)) {
+        if (empty($data)) {
             $data = $job->getData();
         }
 

@@ -16,22 +16,60 @@ class Job extends Model
         'status',
         'result',
         'type',
-        'name'
+        'name',
+        'flag_uploaded',
+        'flag_solving',
+        'flag_solved',
     ];
 
-    public function scopeUser($builder, $userId) {
+    public function scopeUser($builder, $userId)
+    {
         return $builder->where('user_id', '=', $userId);
     }
 
-    public function getType() {
+    public function getType()
+    {
         return $this->getAttribute('type');
     }
 
-    public function getResult() {
+    public function getResult()
+    {
         return $this->getAttribute('result');
     }
 
-    public function getData() {
+    public function getData()
+    {
         return $this->getAttribute('data');
     }
+
+    public function getFlagSolving()
+    {
+        return $this->getAttribute('flag_solving');
+    }
+
+    public function getFlagSolved()
+    {
+        return $this->getAttribute('flag_solved');
+    }
+
+    public function getFlagUploaded()
+    {
+        return $this->getAttribute('flag_uploaded');
+    }
+
+    public function setFlagSolving(bool $flag)
+    {
+        return $this->setAttribute('flag_solving', $flag);
+    }
+
+    public function setFlagSolved(bool $flag)
+    {
+        return $this->setAttribute('flag_solved', $flag);
+    }
+
+    public function setFlagUploaded(bool $flag)
+    {
+        return $this->setAttribute('flag_uploaded', $flag);
+    }
+
 }
