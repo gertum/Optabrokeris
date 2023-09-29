@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Head } from '@inertiajs/react';
+import { Head, Link } from '@inertiajs/react';
 import { Button, Layout, message, Steps } from 'antd';
 import {
   FileUploadForm,
@@ -33,25 +33,33 @@ export default function Job({ auth }) {
     }
   };
 
-  const ReusableButtons = () => {
-    return (
-      <div className="my-2">
-        {current < 3 ? (
-          <Button htmlType="submit">Continue</Button>
-        ) : (
-          <Button htmlType="submit">Download</Button>
-        )}
-      </div>
-    );
-  };
-
   const forms = [
     <FileUploadForm onFinish={onFormChange} newJob={job} token={token}>
-      <ReusableButtons />
+      <Button className="mt-2" onClick={() => setCurrent(current + 1)}>
+        Continue
+      </Button>
     </FileUploadForm>,
-    <LoadingForm onFinish={handleSolve} />,
+    <LoadingForm>
+      <div className="mt-2">
+        <Button className="mr-2" onClick={() => setCurrent(current - 1)}>
+          Back
+        </Button>
+        <Button onClick={handleSolve}>{t('step.solve')}</Button>
+      </div>
+    </LoadingForm>,
     <FinalForm>
-      <ReusableButtons />
+      <div className="mt-2">
+        <Button
+          className="mr-2"
+          size="large"
+          onClick={() => setCurrent(current - 1)}
+        >
+          Step back
+        </Button>
+        <Link href="/">
+          <Button size="large">Jobs List</Button>
+        </Link>
+      </div>
     </FinalForm>,
   ];
 
@@ -62,6 +70,11 @@ export default function Job({ auth }) {
     try {
       const jobResponse = await axios.get(`/api/job/${id}`);
       setJob(jobResponse.data);
+      if (jobResponse.data.flag_solved || jobResponse.data.flag_solving) {
+        setCurrent(2);
+      } else if (jobResponse.data.flag_uploaded) {
+        setCurrent(1);
+      }
     } catch (error) {
       console.error(error);
     } finally {
@@ -115,21 +128,18 @@ export default function Job({ auth }) {
             <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
               <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div className="p-6 text-gray-900">
-                  <Steps current={current}>
+                  <Steps current={current} onChange={setCurrent}>
                     <Steps.Step
                       title={t('upload')}
                       description={t('step.uploadFile')}
-                      disabled={current !== 0}
                     />
                     <Steps.Step
                       title={t('step.execution')}
                       description={t('step.solve')}
-                      disabled={current !== 1}
                     />
                     <Steps.Step
                       title={t('step.success')}
                       description={t('step.solutionReady')}
-                      disabled={current !== 2}
                     />
                   </Steps>
                   {forms[current]}

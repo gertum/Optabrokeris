@@ -1,5 +1,5 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Head } from '@inertiajs/react';
+import { Head, Link } from '@inertiajs/react';
 import { Button, Layout, message, Steps } from 'antd';
 import { useState, useEffect } from 'react';
 import {
@@ -80,9 +80,23 @@ export default function NewJob({ auth }) {
     <FileUploadForm onFinish={onFileUploadFinish} newJob={newJob} token={token}>
       <ReusableButtons />
     </FileUploadForm>,
-    <LoadingForm onFinish={handleSolve} />,
-    <FinalForm>
-      <ReusableButtons />
+    <LoadingForm>
+      <div className="mt-2">
+        <Button className="mr-2" onClick={() => setCurrent(current - 1)}>
+          Back
+        </Button>
+        <Button onClick={handleSolve}>{t('step.solve')}</Button>
+      </div>
+    </LoadingForm>,
+    <FinalForm created>
+      <div className="mt-2">
+        <Button className="mr-2" onClick={() => setCurrent(current - 1)}>
+          Step back
+        </Button>
+        <Link href="/">
+          <Button size="large">Jobs List</Button>
+        </Link>
+      </div>
     </FinalForm>,
   ];
 

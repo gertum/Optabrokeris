@@ -1,7 +1,12 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, Link } from '@inertiajs/react';
 import { Layout, Button, Avatar, Card, message, Spin } from 'antd';
-import { EditOutlined, EyeOutlined, ReloadOutlined } from '@ant-design/icons';
+import {
+  EyeOutlined,
+  ReloadOutlined,
+  EyeInvisibleOutlined,
+  DownloadOutlined,
+} from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
 import { format, parseISO } from 'date-fns';
 import axios from 'axios';
@@ -209,12 +214,21 @@ export default function Jobs({ auth }) {
                             })}
                             className="ant-btn ant-btn-lg"
                           >
-                            <Button icon={<EditOutlined />} size="large">
-                              View
+                            <Button
+                              icon={
+                                !job.flag_uploaded ? (
+                                  <EyeInvisibleOutlined />
+                                ) : (
+                                  <EyeOutlined />
+                                )
+                              }
+                              size="large"
+                            >
+                              {!job.flag_uploaded ? 'Edit' : 'View'}
                             </Button>
                           </Link>,
                           <Button
-                            icon={<EyeOutlined />}
+                            icon={<DownloadOutlined />}
                             size="large"
                             disabled={!job.flag_uploaded}
                             onClick={() =>
