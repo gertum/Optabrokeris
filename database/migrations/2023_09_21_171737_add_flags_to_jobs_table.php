@@ -17,8 +17,8 @@ return new class extends Migration {
             if (!Schema::hasColumn('jobs', 'flag_uploaded')) {
                 $table->boolean('flag_uploaded')->default(false);
             }
-            if (!Schema::hasColumn('jobs', 'flag_solving')) {
-                $table->boolean('flag_solving')->default(false);
+            if (!Schema::hasColumn('jobs', 'flag_solved')) {
+                $table->boolean('flag_solved')->default(false);
             }
             if (!Schema::hasColumn('jobs', 'flag_solving')) {
                 $table->boolean('flag_solving')->default(false);
