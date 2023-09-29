@@ -33,12 +33,4 @@ class JobsController extends Controller
 //    public function testUpload(Request $request) {
 //        return view('testupload');
 //    }
-
-    public function editJob($id, $type)
-    {
-        return Inertia::render('EditJob', [
-            // front must get job from api
-        ]);
-    }
-
 }

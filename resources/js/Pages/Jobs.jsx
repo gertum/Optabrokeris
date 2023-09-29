@@ -1,7 +1,12 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, Link } from '@inertiajs/react';
-import { Layout, Button, Avatar, Card, message } from 'antd';
-import { EditOutlined, EyeOutlined, ReloadOutlined } from '@ant-design/icons';
+import { Layout, Button, Avatar, Card, message, Spin } from 'antd';
+import {
+  EyeOutlined,
+  ReloadOutlined,
+  EyeInvisibleOutlined,
+  DownloadOutlined,
+} from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
 import { format, parseISO } from 'date-fns';
 import axios from 'axios';
@@ -10,39 +15,139 @@ import NewJob from '@/Pages/NewJob.jsx';
 
 const { Content } = Layout;
 
-export default function Jobs({ auth, jobs }) {
+export default function Jobs({ auth }) {
   const { t } = useTranslation();
   const [token, setToken] = useState('');
+  const [jobs, setJobs] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [loadingJobs, setLoadingJobs] = useState(true);
+  const [errorJobs, setErrorJobs] = useState(null);
+
   const jobsPerPage = 6;
   const startIndex = (currentPage - 1) * jobsPerPage;
   const endIndex = startIndex + jobsPerPage;
-  const displayedJobs = jobs.slice(startIndex, endIndex);
 
-  const handleResolve = jobId => {
-    axios
-      .post(`/api/job/${jobId}/solve?_token=${token}`)
-      .then(response => {
-        console.log('handleSolve: ', response.data);
-        message.success(`${jobId} resolved`, 5);
-      })
-      .catch(error => {
-        message.error(`handleResolve error: ${error.message}`, 5);
-      });
+  const fetchJobs = async () => {
+    try {
+      setLoadingJobs(true);
+      const jobsResponse = await axios.get('/api/job');
+      setJobs(jobsResponse.data);
+    } catch (error) {
+      setErrorJobs(error.message);
+    } finally {
+      setLoadingJobs(false);
+    }
   };
 
+  const fetchToken = async () => {
+    try {
+      const tokenResponse = await axios.get('/login');
+      setToken(tokenResponse.data);
+    } catch (error) {
+      message.error(`Login error: ${error.message}`, 5);
+    }
+  };
+
+  const handleResolve = async ({ id, name }) => {
+    try {
+      await axios.post(`/api/job/${id}/solve?_token=${token}`);
+      message.success(`${name ? name : 'No Name'} is solving`, 5);
+    } catch (error) {
+      message.error(`HandleSolve error: ${error.message}`, 5);
+    }
+  };
+
+  const displayedJobs = jobs.slice(startIndex, endIndex);
+
   useEffect(() => {
-    axios
-      .get('/login')
-      .then(response => {
-        setToken(response.data);
-      })
-      .catch(error => {
-        message.error(`Login error: ${error.message}`, 5);
-      });
+    fetchToken();
+    fetchJobs();
   }, []);
 
-  return jobs.length ? (
+  if (loadingJobs) {
+    return (
+      <AuthenticatedLayout
+        user={auth.user}
+        header={
+          <h2 className="font-semibold text-xl text-gray-800 leading-tight">
+            {t('jobs.createdJobs')}
+          </h2>
+        }
+      >
+        <Head title="Jobs" />
+        <Content
+          style={{
+            textAlign: 'center',
+            minHeight: 'calc(100vh - 128px)',
+            lineHeight: 4,
+          }}
+        >
+          <div className="py-12">
+            <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
+              <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                <div className="p-6 text-gray-900">
+                  <Spin
+                    size="large"
+                    style={{
+                      textAlign: 'center',
+                      minHeight: 'calc(100vh - 128px)',
+                      lineHeight: 4,
+                    }}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </Content>
+      </AuthenticatedLayout>
+    );
+  }
+
+  if (errorJobs) {
+    return (
+      <AuthenticatedLayout
+        user={auth.user}
+        header={
+          <h2 className="font-semibold text-xl text-gray-800 leading-tight">
+            {t('jobs.createdJobs')}
+          </h2>
+        }
+      >
+        <Head title="Jobs" />
+        <Content
+          style={{
+            textAlign: 'center',
+            minHeight: 'calc(100vh - 128px)',
+            lineHeight: 4,
+          }}
+        >
+          <div className="py-12">
+            <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
+              <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                <div className="p-6 text-gray-900">
+                  <div
+                    style={{
+                      textAlign: 'center',
+                      minHeight: 'calc(100vh - 128px)',
+                      lineHeight: 4,
+                    }}
+                  >
+                    <div>Error: {errorJobs}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </Content>
+      </AuthenticatedLayout>
+    );
+  }
+
+  if (!jobs.length) {
+    return <NewJob auth={auth} />;
+  }
+
+  return (
     <AuthenticatedLayout
       user={auth.user}
       header={
@@ -104,20 +209,28 @@ export default function Jobs({ auth, jobs }) {
                       <div className="job-actions">
                         {[
                           <Link
-                            href={route('jobs.edit', {
-                              jobId: job.id,
-                              jobType: job.type,
+                            href={route('job.view', {
+                              id: job.id,
                             })}
                             className="ant-btn ant-btn-lg"
                           >
-                            <Button icon={<EditOutlined />} size="large">
-                              Edit
+                            <Button
+                              icon={
+                                !job.flag_uploaded ? (
+                                  <EyeInvisibleOutlined />
+                                ) : (
+                                  <EyeOutlined />
+                                )
+                              }
+                              size="large"
+                            >
+                              {!job.flag_uploaded ? 'Edit' : 'View'}
                             </Button>
                           </Link>,
                           <Button
-                            icon={<EyeOutlined />}
+                            icon={<DownloadOutlined />}
                             size="large"
-                            disabled={!job.data.includes('timeslotList')}
+                            disabled={!job.flag_uploaded}
                             onClick={() =>
                               window.open(
                                 `/api/job/${job.id}/download`,
@@ -130,8 +243,10 @@ export default function Jobs({ auth, jobs }) {
                           <Button
                             icon={<ReloadOutlined />}
                             size="large"
-                            disabled={!job.data.includes('timeslotList')}
-                            onClick={() => handleResolve(job.id)}
+                            disabled={!job.flag_uploaded}
+                            onClick={() =>
+                              handleResolve({ id: job.id, name: job.name })
+                            }
                           >
                             Rerun
                           </Button>,
@@ -158,7 +273,5 @@ export default function Jobs({ auth, jobs }) {
         </div>
       </Content>
     </AuthenticatedLayout>
-  ) : (
-    <NewJob auth={auth} />
   );
 }

@@ -1,28 +1,12 @@
-import { useEffect } from 'react';
-import { Form, Spin } from 'antd';
+import { Form } from 'antd';
+import { useTranslation } from 'react-i18next';
 
-export const LoadingForm = ({ onFinish }) => {
-  useEffect(() => {
-    onFinish();
-  }, []);
+export const LoadingForm = ({ children }) => {
+  const { t } = useTranslation();
 
   return (
     <div className="my-2">
-      <Form>
-        <Spin tip="Executing...">
-          <div
-            style={{
-              width: '100%',
-              height: '30vh',
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-          >
-            <span></span>
-          </div>
-        </Spin>
-      </Form>
+      <Form>{children}</Form>
     </div>
   );
 };

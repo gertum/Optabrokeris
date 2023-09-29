@@ -1,5 +1,5 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Head } from '@inertiajs/react';
+import { Head, Link } from '@inertiajs/react';
 import { Button, Layout, message, Steps } from 'antd';
 import { useState, useEffect } from 'react';
 import {
@@ -25,33 +25,33 @@ export default function NewJob({ auth }) {
     setCurrent(current + 1);
   };
 
-  const onNameSubmit = values => {
-    setNewJob(prev => ({ ...prev, ...values }));
-    const requestData = {
-      type: newJob.type,
-      ...values,
-    };
-    axios
-      .post(`/api/job?_token=${token}`, requestData)
-      .then(response => {
-        setNewJob(prev => ({ ...prev, id: response.data.id }));
-        setCurrent(current + 1);
-      })
-      .catch(error => {
-        message.error(`Name submit error: ${error.message}`, 5);
-      });
+  const onNameSubmit = async values => {
+    try {
+      setNewJob(prev => ({ ...prev, ...values }));
+      const requestData = {
+        type: newJob.type,
+        ...values,
+      };
+
+      const response = await axios.post(
+        `/api/job?_token=${token}`,
+        requestData
+      );
+      setNewJob(prev => ({ ...prev, id: response.data.id }));
+      setCurrent(current + 1);
+    } catch (error) {
+      message.error(`Name submit error: ${error.message}`, 5);
+    }
   };
 
-  const handleSolve = () => {
-    axios
-      .post(`/api/job/${newJob.id}/solve?_token=${token}`)
-      .then(response => {
-        console.log('handleSolve: ', response.data);
-        setCurrent(current + 1);
-      })
-      .catch(error => {
-        message.error(`HandleSolve error: ${error.message}`, 5);
-      });
+  const handleSolve = async () => {
+    try {
+      await axios.post(`/api/job/${newJob.id}/solve?_token=${token}`);
+    } catch (error) {
+      message.error(`HandleSolve error: ${error.message}`, 5);
+    } finally {
+      setCurrent(current + 1);
+    }
   };
 
   const onFileUploadFinish = () => {
@@ -80,21 +80,37 @@ export default function NewJob({ auth }) {
     <FileUploadForm onFinish={onFileUploadFinish} newJob={newJob} token={token}>
       <ReusableButtons />
     </FileUploadForm>,
-    <LoadingForm onFinish={handleSolve} />,
-    <FinalForm>
-      <ReusableButtons />
+    <LoadingForm>
+      <div className="mt-2">
+        <Button className="mr-2" onClick={() => setCurrent(current - 1)}>
+          Back
+        </Button>
+        <Button onClick={handleSolve}>{t('step.solve')}</Button>
+      </div>
+    </LoadingForm>,
+    <FinalForm created>
+      <div className="mt-2">
+        <Button className="mr-2" onClick={() => setCurrent(current - 1)}>
+          Step back
+        </Button>
+        <Link href="/">
+          <Button size="large">Jobs List</Button>
+        </Link>
+      </div>
     </FinalForm>,
   ];
 
+  const fetchToken = async () => {
+    try {
+      const tokenResponse = await axios.get('/login');
+      setToken(tokenResponse.data);
+    } catch (error) {
+      message.error(`Login error: ${error.message}`, 5);
+    }
+  };
+
   useEffect(() => {
-    axios
-      .get('/login')
-      .then(response => {
-        setToken(response.data);
-      })
-      .catch(error => {
-        message.error(`Login error: ${error.message}`, 5);
-      });
+    fetchToken();
   }, []);
 
   return (
@@ -146,7 +162,7 @@ export default function NewJob({ auth }) {
                   />
                   <Steps.Step
                     title={t('step.execution')}
-                    description={t('step.solving')}
+                    description={t('step.solve')}
                     disabled={current < 2}
                   />
                   <Steps.Step

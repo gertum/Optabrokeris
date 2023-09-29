@@ -30,7 +30,7 @@
     "enterJobName": "Įveskite scenarijaus pavadinimą",
     "enteredName": "Įvestas scenarijaus pavadinimas",
     "execution": "Vykdoma",
-    "solving": "Sprendžiama",
+    "solve": "Spręsti",
     "success": "Sėkmė",
     "solutionReady": "Sprendimas pasiruošęs"
   },

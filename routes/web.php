@@ -30,7 +30,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/jobs/new', [JobsController::class, 'newJob'])->name('jobs.new');
     Route::get('/jobs/{id}', [JobsController::class, 'view'])->name('job.view');
     Route::get('/testupload', [JobsController::class, 'testUpload']);
-    Route::get('/jobs/edit/{jobId}/{jobType}', [JobsController::class, 'editJob'])->name('jobs.edit');
 
     Route::get('/download/school-example', [DownloadController::class, 'downloadSchoolExample'])->name('download.school.example');
 

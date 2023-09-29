@@ -1,15 +1,10 @@
-import { Button } from 'antd';
-import { Link } from '@inertiajs/react';
-
-export const FinalForm = ({ updated = false }) => {
+export const FinalForm = ({ created = false, children }) => {
   return (
     <div className="my-2">
       <h2 className="font-semibold text-xl text-gray-800 leading-tight">
-        {updated ? 'Succesfully updated' : 'Succesfully created!!!'}
+        {created ? 'Succesfully created!!!' : 'Check your whole list:'}
       </h2>
-      <Link href="/" className="mt-2">
-        <Button size="large">View Profiles List</Button>
-      </Link>
+      {children}
     </div>
   );
 };

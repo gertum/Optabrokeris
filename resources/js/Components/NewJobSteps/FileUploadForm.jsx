@@ -9,7 +9,7 @@ export const FileUploadForm = ({ newJob, onFinish, children, token }) => {
       <Form onFinish={() => onFinish()} className="mt-4">
         <Button
           className="my-2"
-          onClick={() => console.log('Downloading solver data example...')}
+          onClick={() => window.open('/download/school-example', '_blank')}
         >
           {t('step.fileUploadForm.downloadExample')}
         </Button>

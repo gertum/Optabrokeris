@@ -31,7 +31,7 @@
     "enterJobName": "Enter job name",
     "enteredName": "Entered job name",
     "execution": "Execution",
-    "solving": "Solving",
+    "solve": "Solve",
     "success": "Success",
     "solutionReady": "Solution is ready"
   },
