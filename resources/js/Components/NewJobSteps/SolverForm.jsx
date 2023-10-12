@@ -2,13 +2,14 @@ import React, { useState } from 'react';
 import { Card, Avatar, Row, Col, Form, message } from 'antd';
 import { useTranslation } from 'react-i18next';
 
-export const SolverwForm = ({ onFinish, children }) => {
+export const SolverForm = ({ onFinish, onSelect, children }) => {
   const [selectedCard, setSelectedCard] = useState(null);
   const [selectedTitle, setSelectedTitle] = useState('');
   const { t } = useTranslation();
 
   const handleCardClick = (index, value) => {
     if (value !== 'others') {
+      onSelect(index, value);
       setSelectedCard(index);
       setSelectedTitle(value);
     } else {

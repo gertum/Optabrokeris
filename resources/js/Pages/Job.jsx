@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, Link } from '@inertiajs/react';
-import { Button, Layout, message, Steps } from 'antd';
+import { Button, Divider, Layout, message, Space, Spin, Steps } from 'antd';
 import {
   FileUploadForm,
   FinalForm,
@@ -24,42 +24,59 @@ export default function Job({ auth }) {
   };
 
   const handleSolve = async () => {
-    try {
-      await axios.post(`/api/job/${job.id}/solve?_token=${token}`);
-    } catch (error) {
-      message.error(`HandleSolve error: ${error.message}`, 5);
-    } finally {
-      setCurrent(current + 1);
-    }
+    const response = await axios.post(`/api/job/${job.id}/solve?_token=${token}`);
+
+    return response.data;
   };
 
+  useEffect(() => {
+    console.log(current);
+    if (current === 1 && job !== null && job.id !== undefined) {
+      handleSolve()
+          .then(() => {
+            const solveInterval = setInterval(async () => {
+              await axios
+                  .get(`/api/job/${job.id}?_token=${token}`)
+                  .then((response) => {
+                    if (response.data.flag_solved) {
+                      setJob(response.data);
+                      clearInterval(solveInterval);
+                    }
+                  });
+            }, 5000);
+          })
+          .catch((error) => {
+            message.error(`HandleSolve error: ${error.message}`, 5);
+          });
+    }
+  }, [current, job?.id]);
+
+  useEffect(() => {
+    if (job?.flag_solved) {
+      setCurrent(current + 1);
+      window.open(`/api/job/${job.id}/download?_token=${token}`, '_blank');
+    }
+  }, [job?.flag_solved]);
+
   const forms = [
-    <FileUploadForm onFinish={onFormChange} newJob={job} token={token}>
+    <FileUploadForm onFinish={onFormChange} onUploadChange={() => {}} newJob={job} token={token}>
       <Button className="mt-2" onClick={() => setCurrent(current + 1)}>
         Continue
       </Button>
     </FileUploadForm>,
     <LoadingForm>
-      <div className="mt-2">
-        <Button className="mr-2" onClick={() => setCurrent(current - 1)}>
-          Back
-        </Button>
-        <Button onClick={handleSolve}>{t('step.solve')}</Button>
-      </div>
+      <p>{`Please wait for solution to be ready, this may take up to a minute`}</p>
+      <Spin tip="Solving..." size={'large'}></Spin>
     </LoadingForm>,
-    <FinalForm>
-      <div className="mt-2">
+    <FinalForm token={token} jobId={job?.id}>
+      <Divider dashed />
+      <Space>
         <Button
-          className="mr-2"
-          size="large"
-          onClick={() => setCurrent(current - 1)}
+          onClick={() => setCurrent(current - 2)}
         >
           Step back
         </Button>
-        <Link href="/">
-          <Button size="large">Jobs List</Button>
-        </Link>
-      </div>
+      </Space>
     </FinalForm>,
   ];
 
@@ -101,7 +118,7 @@ export default function Job({ auth }) {
       user={auth.user}
       header={
         <h2 className="font-semibold text-xl text-gray-800 leading-tight">
-          Profile
+          {`Profile "${job?.name}"`}
         </h2>
       }
     >
@@ -125,7 +142,7 @@ export default function Job({ auth }) {
           }}
         >
           <div className="py-12">
-            <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div className="mx-auto sm:px-6 lg:px-8">
               <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div className="p-6 text-gray-900">
                   <Steps current={current} onChange={setCurrent}>
@@ -142,6 +159,7 @@ export default function Job({ auth }) {
                       description={t('step.solutionReady')}
                     />
                   </Steps>
+                  <Divider dashed />
                   {forms[current]}
                 </div>
               </div>

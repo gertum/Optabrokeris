@@ -1,6 +1,7 @@
 import React from 'react';
 import { Form, Input } from 'antd';
 import { useTranslation } from 'react-i18next';
+import {UserOutlined} from "@ant-design/icons";
 
 export const NamingForm = ({ onFinish, children }) => {
   const { t } = useTranslation();
@@ -12,7 +13,7 @@ export const NamingForm = ({ onFinish, children }) => {
     <div className="my-2">
       <Form onFinish={onFinish}>
         <Form.Item
-          label={enterNameLabel} // Use the translated label
+          label={false} // Use the translated label
           name="name"
           rules={[
             {
@@ -22,7 +23,8 @@ export const NamingForm = ({ onFinish, children }) => {
           ]}
         >
           <Input
-            size="small"
+            prefix={<UserOutlined />}
+            size="large"
             placeholder={enterNameLabel} // Use the translated label as placeholder
           />
         </Form.Item>

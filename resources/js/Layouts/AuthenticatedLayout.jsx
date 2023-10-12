@@ -83,7 +83,7 @@ export default function Authenticated({ user, header, children }) {
         </header>
       )}
 
-      <main>{children}</main>
+      <main className={'max-w-5xl mx-auto'}>{children}</main>
     </div>
   );
 }

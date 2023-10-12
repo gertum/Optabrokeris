@@ -1,6 +1,6 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, Link } from '@inertiajs/react';
-import { Layout, Button, Avatar, Card, message, Spin } from 'antd';
+import {Layout, Button, Avatar, Card, message, Spin, Space} from 'antd';
 import {
   EyeOutlined,
   ReloadOutlined,
@@ -83,7 +83,7 @@ export default function Jobs({ auth }) {
           }}
         >
           <div className="py-12">
-            <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div className="mx-auto sm:px-6 lg:px-8">
               <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div className="p-6 text-gray-900">
                   <Spin
@@ -122,7 +122,7 @@ export default function Jobs({ auth }) {
           }}
         >
           <div className="py-12">
-            <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div className="mx-auto sm:px-6 lg:px-8">
               <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div className="p-6 text-gray-900">
                   <div
@@ -165,7 +165,7 @@ export default function Jobs({ auth }) {
         }}
       >
         <div className="py-12">
-          <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
+          <div className="mx-auto sm:px-6 lg:px-8">
             <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
               <div className="p-6 text-gray-900">
                 {displayedJobs.map((job, index) => (
@@ -206,7 +206,7 @@ export default function Jobs({ auth }) {
                           </p>
                         </div>
                       </div>
-                      <div className="job-actions">
+                      <Space className="job-actions">
                         {[
                           <Link
                             href={route('job.view', {
@@ -251,22 +251,24 @@ export default function Jobs({ auth }) {
                             Rerun
                           </Button>,
                         ]}
-                      </div>
+                      </Space>
                     </div>
                   </Card>
                 ))}
-                <Button
-                  disabled={currentPage === 1}
-                  onClick={() => setCurrentPage(currentPage - 1)}
-                >
-                  Previous
-                </Button>
-                <Button
-                  disabled={endIndex >= jobs.length}
-                  onClick={() => setCurrentPage(currentPage + 1)}
-                >
-                  Next
-                </Button>
+                <Space>
+                  <Button
+                      disabled={currentPage === 1}
+                      onClick={() => setCurrentPage(currentPage - 1)}
+                  >
+                    Previous
+                  </Button>
+                  <Button
+                      disabled={endIndex >= jobs.length}
+                      onClick={() => setCurrentPage(currentPage + 1)}
+                  >
+                    Next
+                  </Button>
+                </Space>
               </div>
             </div>
           </div>

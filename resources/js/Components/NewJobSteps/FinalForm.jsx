@@ -1,9 +1,7 @@
-export const FinalForm = ({ created = false, children }) => {
+export const FinalForm = ({ token, jobId,created = false, children }) => {
   return (
     <div className="my-2">
-      <h2 className="font-semibold text-xl text-gray-800 leading-tight">
-        {created ? 'Succesfully created!!!' : 'Check your whole list:'}
-      </h2>
+      <p>Solution is ready. To download result <a href={`/api/job/${jobId}/download?_token=${token}`}>press here.</a></p>
       {children}
     </div>
   );

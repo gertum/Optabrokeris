@@ -1,9 +1,9 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Head, Link } from '@inertiajs/react';
-import { Button, Layout, message, Steps } from 'antd';
+import { Head } from '@inertiajs/react';
+import {Button, Divider, Layout, message, Space, Spin, Steps} from 'antd';
 import { useState, useEffect } from 'react';
 import {
-  SolverwForm,
+  SolverForm,
   NamingForm,
   FileUploadForm,
   LoadingForm,
@@ -17,86 +17,107 @@ const { Content } = Layout;
 export default function NewJob({ auth }) {
   const { t } = useTranslation();
   const [current, setCurrent] = useState(0);
-  const [newJob, setNewJob] = useState({});
+  const [job, setJob] = useState({});
   const [token, setToken] = useState('');
+  const [file, setFile] = useState(null);
+  const [solver, setSolver] = useState(null);
+  const [solveInterval, setSolveInterval] = useState(null);
 
   const onFormChange = values => {
-    setNewJob(prev => ({ ...prev, ...values }));
+    setJob({ ...job, ...values });
     setCurrent(current + 1);
   };
 
   const onNameSubmit = async values => {
     try {
-      setNewJob(prev => ({ ...prev, ...values }));
       const requestData = {
-        type: newJob.type,
+        type: job.type,
         ...values,
       };
 
-      const response = await axios.post(
+      await axios.post(
         `/api/job?_token=${token}`,
         requestData
-      );
-      setNewJob(prev => ({ ...prev, id: response.data.id }));
-      setCurrent(current + 1);
+      ).then(response => {
+        setJob(response.data);
+        setCurrent(current + 1);
+      });
     } catch (error) {
       message.error(`Name submit error: ${error.message}`, 5);
     }
   };
 
   const handleSolve = async () => {
-    try {
-      await axios.post(`/api/job/${newJob.id}/solve?_token=${token}`);
-    } catch (error) {
-      message.error(`HandleSolve error: ${error.message}`, 5);
-    } finally {
-      setCurrent(current + 1);
+    const response = await axios.post(`/api/job/${job.id}/solve?_token=${token}`);
+
+    return response.data;
+  };
+
+  useEffect(() => {
+    if (current === 3 && job !== null && job.id !== undefined) {
+      handleSolve()
+          .then(() => {
+            const solveInterval = setInterval(async () => {
+              await axios
+                  .get(`/api/job/${job.id}?_token=${token}`)
+                  .then((response) => {
+                    console.log(response.data.flag_solved);
+                    if (response.data.flag_solved) {
+                      setJob(response.data);
+                      clearInterval(solveInterval);
+                    }
+                  });
+            }, 5000);
+          })
+          .catch((error) => {
+            message.error(`HandleSolve error: ${error.message}`, 5);
+          });
     }
+  }, [current, job.id]);
+
+  useEffect(() => {
+    if (job.flag_solved) {
+      setCurrent(current + 1);
+      window.open(`/api/job/${job.id}/download?_token=${token}`, '_blank');
+    }
+  }, [job.flag_solved]);
+
+  const handleSolverSelect = (index) => {
+    setSolver(index);
   };
 
   const onFileUploadFinish = () => {
     setCurrent(current + 1);
   };
 
-  const ReusableButtons = () => {
+  const ReusableButtons = (props) => {
     return (
-      <div className="my-2">
-        {current < 4 ? (
-          <Button htmlType="submit">Continue</Button>
-        ) : (
-          <Button htmlType="submit">Download</Button>
-        )}
-      </div>
+      <>
+        <Divider dashed />
+        <Space wrap>
+          <Button onClick={() => setCurrent(current - (current === 4 ? 2 : 1))}>Step back</Button>
+          {current < 4 && <Button htmlType="submit" type={'primary'} disabled={props.continueDisabled}>Continue</Button>}
+        </Space>
+      </>
     );
   };
 
   const forms = [
-    <SolverwForm onFinish={onFormChange}>
-      <ReusableButtons />
-    </SolverwForm>,
+    <SolverForm onFinish={onFormChange} onSelect={handleSolverSelect}>
+      <ReusableButtons continueDisabled={solver === null} />
+    </SolverForm>,
     <NamingForm onFinish={onNameSubmit}>
       <ReusableButtons />
     </NamingForm>,
-    <FileUploadForm onFinish={onFileUploadFinish} newJob={newJob} token={token}>
-      <ReusableButtons />
+    <FileUploadForm onFinish={onFileUploadFinish} onUploadChange={(file) => setFile(file)} newJob={job} token={token}>
+      <ReusableButtons continueDisabled={file === null} />
     </FileUploadForm>,
     <LoadingForm>
-      <div className="mt-2">
-        <Button className="mr-2" onClick={() => setCurrent(current - 1)}>
-          Back
-        </Button>
-        <Button onClick={handleSolve}>{t('step.solve')}</Button>
-      </div>
+      <p>{`Please wait for solution to be ready, this may take up to a minute`}</p>
+      <Spin tip="Solving..." size={'large'}></Spin>
     </LoadingForm>,
-    <FinalForm created>
-      <div className="mt-2">
-        <Button className="mr-2" onClick={() => setCurrent(current - 1)}>
-          Step back
-        </Button>
-        <Link href="/">
-          <Button size="large">Jobs List</Button>
-        </Link>
-      </div>
+    <FinalForm token={token} jobId={job.id} created>
+      <ReusableButtons />
     </FinalForm>,
   ];
 
@@ -131,16 +152,16 @@ export default function NewJob({ auth }) {
         }}
       >
         <div className="py-12">
-          <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
+          <div className="mx-auto sm:px-6 lg:px-8">
             <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
               <div className="p-6 text-gray-900">
                 <Steps current={current}>
                   <Steps.Step
                     title={t('step.solver')}
                     description={
-                      newJob?.type
+                      job?.type
                         ? `${t('step.chosenSolver')}: ${t(
-                            `step.solverForm.${newJob.type}`
+                            `step.solverForm.${job.type}`
                           )}`
                         : t('step.chooseSolver')
                     }
@@ -149,8 +170,8 @@ export default function NewJob({ auth }) {
                   <Steps.Step
                     title={t('step.name')}
                     description={
-                      newJob?.name
-                        ? `${t('step.enteredName')}: ${newJob.name}`
+                      job?.name
+                        ? `${t('step.enteredName')}: ${job.name}`
                         : t('step.enterJobName')
                     }
                     disabled={current !== 1}
@@ -171,6 +192,7 @@ export default function NewJob({ auth }) {
                     disabled={current < 2}
                   />
                 </Steps>
+                <Divider dashed />
                 {forms[current]}
               </div>
             </div>
