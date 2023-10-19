@@ -19,6 +19,7 @@ WORKDIR /var/www/html
 COPY --from=builder /var/www/html/app ./app
 COPY --from=builder /var/www/html/bootstrap ./bootstrap
 COPY --from=builder /var/www/html/config ./config
+COPY --from=builder /var/www/html/data ./data
 COPY --from=builder /var/www/html/database ./database
 COPY --from=builder /var/www/html/public ./public
 COPY --from=builder /var/www/html/resources ./resources
