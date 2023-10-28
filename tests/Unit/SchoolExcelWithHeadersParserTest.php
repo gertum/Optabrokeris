@@ -10,7 +10,7 @@ class SchoolExcelWithHeadersParserTest extends TestCase
 {
     public function testParseExcel() {
         $h = new ExcelSchoolDataWithHeadersHandler();
-        $transformedExcelData = $h->spreadSheetToArray(__DIR__ . '/data/Exc');
+        $transformedExcelData = $h->spreadSheetToArray(__DIR__ . '/data/SchoolDataWithHeaders.xlsx');
         $dataFromJson = json_decode(file_get_contents(__DIR__ . '/data/data.json'), true);
 
         $this->assertEquals($dataFromJson, $transformedExcelData);
