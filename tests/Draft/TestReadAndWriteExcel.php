@@ -15,9 +15,21 @@ class TestReadAndWriteExcel extends TestCase
 
         $rows = ExcelParser::getSheetsRows($file, 3);
 
+//        var_export($rows);
+
         ExcelWriter::writeSheetsRows($rezFile, $rows);
 
         $this->assertTrue(true);
+
+        // lets also read json
+
+        $json = file_get_contents(__DIR__.'/data.json');
+
+        $jsonData = json_decode($json, true);
+
+        var_export($jsonData);
     }
+
+
 
 }
