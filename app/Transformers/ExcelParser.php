@@ -23,4 +23,18 @@ class ExcelParser
 
         return $sheetsRows;
     }
+
+    public static function extractId(?string $data): ?int {
+        if ( $data === null ) {
+            return null;
+        }
+
+        $match = preg_match('/^\[(\d+)\].*/', $data, $matches );
+
+        if ( !$match ) {
+            return null;
+        }
+
+        return $matches[1];
+    }
 }

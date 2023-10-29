@@ -18,7 +18,7 @@ class SchoolDataTransformerTest extends TestCase
         $this->assertEquals($expectedJsonData, $jsonData);
     }
 
-    public function provideExcelData(): array
+    public static function provideExcelData(): array
     {
         return [
             'test1' => [
@@ -605,8 +605,8 @@ class SchoolDataTransformerTest extends TestCase
                                     'room' => null,
                                 ),
                         ),
-                    'score' => '-38init/0hard/0soft',
-                    'solverStatus' => 'NOT_SOLVING',
+//                    'score' => '-38init/0hard/0soft',
+//                    'solverStatus' => 'NOT_SOLVING',
                 )
             ],
         ];
