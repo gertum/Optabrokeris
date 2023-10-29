@@ -32,28 +32,33 @@ class SchoolDataTransformer
 
     public function jsonToExcel(array $jsonData): array
     {
-        // TODO
-        return [];
+        $lessonList = $this->mapToExcelData(self::LESSON_DATA_HEADER_MAP, $jsonData['lessonList']);
+        $this->fixExcelLessonList($lessonList);
+        return [
+            'timeslotList' => $this->mapToExcelData(self::TIMESLOT_DATA_HEADER_MAP, $jsonData['timeslotList']),
+            'roomList' => $this->mapToExcelData(self::ROOM_DATA_HEADER_MAP, $jsonData['roomList']),
+            'lessonList' => $lessonList,
+        ];
     }
 
     public function excelToJson(array $excelData): array
     {
-        $lessonList = $this->mapDataByHeaderMap(
+        $lessonList = $this->mapToJsonDataByHeaderMap(
             self:: LESSON_DATA_HEADER_MAP,
             $excelData['lessonList']
         );
 
-        $timeslotList = $this->mapDataByHeaderMap(
+        $timeslotList = $this->mapToJsonDataByHeaderMap(
             self:: TIMESLOT_DATA_HEADER_MAP,
             $excelData['timeslotList']
         );
 
-        $roomList = $this->mapDataByHeaderMap(
+        $roomList = $this->mapToJsonDataByHeaderMap(
             self:: ROOM_DATA_HEADER_MAP,
             $excelData['roomList']
         );
 
-        $this->fixJsonLessonList($lessonList, $timeslotList, $roomList );
+        $this->fixJsonLessonList($lessonList, $timeslotList, $roomList);
 
         return [
             'timeslotList' => $timeslotList,
@@ -62,37 +67,38 @@ class SchoolDataTransformer
         ];
     }
 
-    private function fixJsonLessonList(array & $lessonList, array $timeslotList, array $roomList ): void {
-        $timeslotMap = MapBuilder::buildMap($timeslotList, fn($timeslotRow)=>$timeslotRow['id']);
-        $roomsMap = MapBuilder::buildMap($roomList, fn($roomRow)=>$roomRow['id']);
+    private function fixJsonLessonList(array &$lessonList, array $timeslotList, array $roomList): void
+    {
+        $timeslotMap = MapBuilder::buildMap($timeslotList, fn($timeslotRow) => $timeslotRow['id']);
+        $roomsMap = MapBuilder::buildMap($roomList, fn($roomRow) => $roomRow['id']);
 
 
-        foreach ( $lessonList as &$lessonRow) {
-            if ( empty($lessonRow['timeslot'])) {
+        foreach ($lessonList as &$lessonRow) {
+            if (empty($lessonRow['timeslot'])) {
                 $lessonRow['timeslot'] = null;
             }
-            if ( empty($lessonRow['room'])) {
+            if (empty($lessonRow['room'])) {
                 $lessonRow['room'] = null;
             }
 
             $timeslotId = ExcelParser::extractId($lessonRow['timeslot']);
-            if ( $timeslotId != null ) {
-                if ( array_key_exists($timeslotId, $timeslotMap)) {
+            if ($timeslotId != null) {
+                if (array_key_exists($timeslotId, $timeslotMap)) {
                     $lessonRow['timeslot'] = $timeslotMap[$timeslotId];
                 }
             }
 
             $roomId = ExcelParser::extractId($lessonRow['room']);
 
-            if ( $roomId != null ) {
-                if ( array_key_exists($roomId, $roomsMap)) {
+            if ($roomId != null) {
+                if (array_key_exists($roomId, $roomsMap)) {
                     $lessonRow['room'] = $roomsMap[$roomId];
                 }
             }
         }
     }
 
-    public function mapDataByHeaderMap(array $headerMap, array $sourceDataList): array
+    public function mapToJsonDataByHeaderMap(array $headerMap, array $sourceDataList): array
     {
         $header = $sourceDataList[0];
 
@@ -111,5 +117,49 @@ class SchoolDataTransformer
         }
 
         return $resultDataList;
+    }
+
+    public function mapToExcelData(array $headerMap, array $jsonDataList): array
+    {
+        $excelHeader = array_keys($headerMap);
+        $excelData = [];
+        $excelData[] = $excelHeader;
+
+        foreach ($jsonDataList as $jsonRow) {
+            $excelRow = [];
+            foreach ($headerMap as $jsonProperty) {
+                $excelRow[] = $jsonRow[$jsonProperty];
+            }
+            $excelData[] = $excelRow;
+        }
+
+        return $excelData;
+    }
+
+    private function fixExcelLessonList(array &$lessonList): void
+    {
+        $jsonKeys = array_values (self::LESSON_DATA_HEADER_MAP);
+        $jsonKeySet = array_flip($jsonKeys);
+
+        $timeslotIndex=$jsonKeySet['timeslot'];
+        $roomIndex = $jsonKeySet['room'];
+
+        for ($row = 1; $row < count($lessonList); $row++) {
+            if (is_array($lessonList[$row][$timeslotIndex])) {
+                $timeslot = $lessonList[$row][$timeslotIndex];
+                $lessonList[$row][$timeslotIndex] = sprintf(
+                    '[%s] %s %s-%s',
+                    $timeslot['id'],
+                    $timeslot['dayOfWeek'],
+                    $timeslot['startTime'],
+                    $timeslot['endTime']
+                );
+            }
+
+            if (is_array($lessonList[$row][$roomIndex])) {
+                $room = $lessonList[$row][$roomIndex];
+                $lessonList[$row][$roomIndex] = sprintf('[%s] %s', $room['id'], $room['name']);
+            }
+        }
     }
 }

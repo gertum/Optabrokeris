@@ -9,6 +9,8 @@ class SpreadSheetWithHeadersDataHandler implements SpreadSheetDataHandler
     public function spreadSheetToArray(string $excelFile): array
     {
         $sheetsRows = ExcelParser::getSheetsRows( $excelFile, 3 );
+
+        // TODO validate sheetsRows !!!
         $schoolDataTransformer = new SchoolDataTransformer();
 
         return $schoolDataTransformer->excelToJson($sheetsRows);
