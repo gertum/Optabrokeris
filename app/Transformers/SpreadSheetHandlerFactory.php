@@ -7,6 +7,7 @@ use App\Solver\SolverClientFactory;
 
 class SpreadSheetHandlerFactory
 {
+    // TODO version with headers or without headers?
     public function createHandler($type, $fileName): SpreadSheetDataHandler
     {
         if (!str_ends_with($fileName, '.xlsx')) {
