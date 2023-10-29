@@ -2,13 +2,16 @@
 
 namespace App\Transformers;
 
+use App\Transformers\School\SchoolDataTransformer;
+
 class SpreadSheetWithHeadersDataHandler implements SpreadSheetDataHandler
 {
     public function spreadSheetToArray(string $excelFile): array
     {
-        // TODO: Implement spreadSheetToArray() method.
+        $sheetsRows = ExcelParser::getSheetsRows( $excelFile, 3 );
+        $schoolDataTransformer = new SchoolDataTransformer();
 
-        return [];
+        return $schoolDataTransformer->excelToJson($sheetsRows);
     }
 
     public function arrayToSpreadSheet(array $data, string $excelFile): void

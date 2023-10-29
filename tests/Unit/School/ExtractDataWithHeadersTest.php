@@ -4,14 +4,15 @@ namespace Tests\Unit\School;
 
 use App\Transformers\ExcelParser;
 use App\Transformers\School\SchoolDataTransformer;
+use App\Transformers\SpreadSheetWithHeadersDataHandler;
 use PHPUnit\Framework\TestCase;
 
 class ExtractDataWithHeadersTest extends TestCase
 {
     public function testExtract() {
-        $sheetsRows = ExcelParser::getSheetsRows( __DIR__ . '/../data/SchoolDataWithHeaders.xlsx', 3 );
-        $schoolDataTransformer = new SchoolDataTransformer();
-        $dataFromExcel = $schoolDataTransformer->excelToJson($sheetsRows);
+        $h = new SpreadSheetWithHeadersDataHandler();
+        $dataFromExcel = $h->spreadSheetToArray(__DIR__ . '/../data/SchoolDataWithHeaders.xlsx');
+
         $dataFromJson = json_decode(file_get_contents(__DIR__ . '/../data/data.json'), true);
 
         unset($dataFromJson['score']);
