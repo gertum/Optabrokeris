@@ -7,14 +7,23 @@ use App\Solver\SolverClientFactory;
 
 class SpreadSheetHandlerFactory
 {
-    // TODO version with headers or without headers?
+    private bool $useHeadersVersion = false;
+
+    public function __construct(bool $useHeadersVersion)
+    {
+        $this->useHeadersVersion = $useHeadersVersion;
+    }
+
     public function createHandler($type, $fileName): SpreadSheetDataHandler
     {
-        if (!str_ends_with($fileName, '.xlsx')) {
-            throw new ValidateException('We currently only handle xlsx file extensions');
-        }
-
         if ($type == SolverClientFactory::TYPE_SCHOOL) {
+            if (!str_ends_with($fileName, '.xlsx')) {
+                throw new ValidateException('We currently only handle xlsx file extensions for %s', $type);
+            }
+
+            if ($this->useHeadersVersion) {
+                return new SpreadSheetWithHeadersDataHandler();
+            }
             return new ExcelSchoolDataHandler();
         }
 
