@@ -4,6 +4,7 @@ namespace App\Transformers;
 
 use App\Exceptions\ValidateException;
 use App\Solver\SolverClientFactory;
+use App\Transformers\School\SpreadSheetWithHeadersDataHandler;
 
 class SpreadSheetHandlerFactory
 {

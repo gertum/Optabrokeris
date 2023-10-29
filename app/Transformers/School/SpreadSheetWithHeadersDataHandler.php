@@ -1,8 +1,10 @@
 <?php
 
-namespace App\Transformers;
+namespace App\Transformers\School;
 
-use App\Transformers\School\SchoolDataTransformer;
+use App\Transformers\ExcelParser;
+use App\Transformers\ExcelWriter;
+use App\Transformers\SpreadSheetDataHandler;
 
 class SpreadSheetWithHeadersDataHandler implements SpreadSheetDataHandler
 {

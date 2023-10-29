@@ -2,9 +2,7 @@
 
 namespace Tests\Unit\School;
 
-use App\Transformers\ExcelParser;
-use App\Transformers\School\SchoolDataTransformer;
-use App\Transformers\SpreadSheetWithHeadersDataHandler;
+use App\Transformers\School\SpreadSheetWithHeadersDataHandler;
 use PHPUnit\Framework\TestCase;
 
 class ExtractDataWithHeadersTest extends TestCase
