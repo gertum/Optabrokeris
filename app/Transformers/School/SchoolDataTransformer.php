@@ -183,6 +183,8 @@ class SchoolDataTransformer
 
             $this->validateSheetHeader($sheetName, $excelData[$sheetName][0], $mustHeaders);
         }
+
+        // TODO validate each field value: suggest parsing each data set to object ( another transformer version )
     }
 
     private function validateSheetHeader ( $sheetName, $sheetHeader, $mustHeaders ) : void {
