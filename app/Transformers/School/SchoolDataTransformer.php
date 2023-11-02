@@ -2,6 +2,7 @@
 
 namespace App\Transformers\School;
 
+use App\Exceptions\ValidateException;
 use App\Transformers\ExcelParser;
 use App\Util\MapBuilder;
 
@@ -43,6 +44,8 @@ class SchoolDataTransformer
 
     public function excelToJson(array $excelData): array
     {
+        $this->validateExcelData($excelData);
+
         $lessonList = $this->mapToJsonDataByHeaderMap(
             self:: LESSON_DATA_HEADER_MAP,
             $excelData['lessonList']
@@ -159,6 +162,33 @@ class SchoolDataTransformer
             if (is_array($lessonList[$row][$roomIndex])) {
                 $room = $lessonList[$row][$roomIndex];
                 $lessonList[$row][$roomIndex] = sprintf('[%s] %s', $room['id'], $room['name']);
+            }
+        }
+    }
+
+    private function validateExcelData(array $excelData) {
+        $mustHeadersList = [
+            'timeslotList' => array_keys(self::TIMESLOT_DATA_HEADER_MAP),
+            'roomList' => array_keys(self::ROOM_DATA_HEADER_MAP),
+            'lessonList' => array_keys(self::LESSON_DATA_HEADER_MAP),
+        ];
+
+        foreach ( $mustHeadersList as $sheetName => $mustHeaders ) {
+            if (!array_key_exists($sheetName, $excelData)) {
+                throw new ValidateException(sprintf('missing sheet [%s]', $sheetName));
+            }
+            if ( !is_array($excelData[$sheetName]) || count($excelData[$sheetName]) == 0) {
+                throw new ValidateException(sprintf('sheet [%s] has no header', $sheetName));
+            }
+
+            $this->validateSheetHeader($sheetName, $excelData[$sheetName][0], $mustHeaders);
+        }
+    }
+
+    private function validateSheetHeader ( $sheetName, $sheetHeader, $mustHeaders ) : void {
+        foreach ($mustHeaders as $mustHeader ) {
+            if ( !in_array( $mustHeader, $sheetHeader) ) {
+                throw new ValidateException(sprintf('%s sheet missing column [%s]', $sheetName,  $mustHeader ));
             }
         }
     }
