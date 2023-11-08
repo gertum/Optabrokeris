@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Job;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -10,27 +11,15 @@ class JobsController extends Controller
 {
     public function list(Request $request): Response
     {
-        return Inertia::render('Jobs', [
-            // front must take jobs from API
+        return Inertia::render('Jobs/List', [
             'jobs' => []
         ]);
     }
 
-    public function view(Request $request)
+    public function form(Job $job = null)
     {
-        return Inertia::render('Job', [
-            // front must get joby from api
+        return Inertia::render('Jobs/Form', [
+            'job' => $job  ? $job->toArray() : null,
         ]);
-
     }
-
-    public function newJob(Request $request): Response
-    {
-        return Inertia::render('NewJob');
-    }
-
-    // this function is not needed anymore
-//    public function testUpload(Request $request) {
-//        return view('testupload');
-//    }
 }

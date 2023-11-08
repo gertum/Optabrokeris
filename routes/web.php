@@ -27,9 +27,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/', [JobsController::class, 'list'])->name('jobs.list');
 
     // other routes
-    Route::get('/jobs/new', [JobsController::class, 'newJob'])->name('jobs.new');
-    Route::get('/jobs/{id}', [JobsController::class, 'view'])->name('job.view');
-    Route::get('/testupload', [JobsController::class, 'testUpload']);
+    Route::get('/jobs/{job?}', [JobsController::class, 'form'])->name('jobs.form');
 
     Route::get('/download/school-example', [DownloadController::class, 'downloadSchoolExample'])->name('download.school.example');
 

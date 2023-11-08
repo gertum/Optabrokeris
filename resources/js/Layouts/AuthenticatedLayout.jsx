@@ -16,8 +16,8 @@ export default function Authenticated({ user, header, children }) {
 
   return (
     <div className="min-h-screen">
-      <div className="bg-white border-b border-gray-100">
-        <Header className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 bg-white">
+      <div className="border-b border-gray-100">
+        <Header className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" style={{backgroundColor: '#FFFFFF'}}>
           <Row>
             <Col span={8}>
               <Space size={12}>
@@ -34,8 +34,8 @@ export default function Authenticated({ user, header, children }) {
                   {t('jobs.main')}
                 </NavLink>
                 <NavLink
-                  href={route('jobs.new')}
-                  active={route().current('jobs.new')}
+                  href={route('jobs.form')}
+                  active={route().current('jobs.form')}
                 >
                   {t('newJob')}
                 </NavLink>
@@ -76,8 +76,8 @@ export default function Authenticated({ user, header, children }) {
       </div>
 
       {header && (
-        <header className="bg-white shadow">
-          <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 text-center">
+        <header>
+          <div className="max-w-7xl mx-auto text-center">
             {header}
           </div>
         </header>

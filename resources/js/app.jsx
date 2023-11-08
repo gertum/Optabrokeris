@@ -6,6 +6,7 @@ import { createInertiaApp } from '@inertiajs/react';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { I18nextProvider } from 'react-i18next';
 import i18n from 'i18next';
+import { StyleProvider } from '@ant-design/cssinjs';
 import enTranslations from '../translations/en/translation.json'; // Import your translation JSON files
 import ltTranslations from '../translations/lt/translation.json';
 
@@ -39,7 +40,9 @@ createInertiaApp({
 
     root.render(
       <I18nextProvider i18n={i18n}>
-        <App {...props} />
+        <StyleProvider hashPriority="high">
+          <App {...props} />
+        </StyleProvider>
       </I18nextProvider>
     );
   },
