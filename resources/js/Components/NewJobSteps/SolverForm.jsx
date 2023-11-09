@@ -11,6 +11,8 @@ export const SolverForm = ({defaultType, onFinish, onSelect, children}) => {
             message.warning('This card cannot be selected.', 5);
         }
 
+        console.log(value);
+
         onSelect(value);
         setSelectedCard(value);
     };
@@ -56,7 +58,7 @@ export const SolverForm = ({defaultType, onFinish, onSelect, children}) => {
                         <Col span={8} key={cardIndex}>
                             <Card
                                 onClick={() =>
-                                    handleCardClick(cardIndex + rowIndex * 3, data.value)
+                                    handleCardClick(data.value)
                                 }
                                 style={{
                                     display: 'flex',

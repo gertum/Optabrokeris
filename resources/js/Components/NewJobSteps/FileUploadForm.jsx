@@ -2,7 +2,7 @@ import {Button, Divider, Form, Space, Upload} from 'antd';
 import {useTranslation} from 'react-i18next';
 import {useState} from "react";
 
-export const FileUploadForm = ({newJob, onFinish, onUploadChange, children, token, disabled}) => {
+export const FileUploadForm = ({newJob, onFinish, children, token, disabled}) => {
     const {t} = useTranslation();
     const {file} = useState(null);
 
@@ -15,9 +15,6 @@ export const FileUploadForm = ({newJob, onFinish, onUploadChange, children, toke
                 maxCount={1}
                 listType="picture"
                 accept=".xlsx"
-                onChange={(file) => {
-                    onUploadChange(file)
-                }}
             >
                 {t('step.fileUploadForm.dragFiles')}
                 <br />

@@ -16,15 +16,33 @@ const {Content} = Layout;
 export default function Form({auth, job: initialJob}) {
     const {t} = useTranslation();
     const [job, setJob] = useState(initialJob);
+    const [values, setValues] = useState({});
     const [current, setCurrent] = useState(0);
+    const [solver, setSolver] = useState(null);
     const [token, setToken] = useState('');
 
-    const handleValuesChange = (changedValues, allValues) => {
+    const handleValuesChange = (allValues) => {
         setValues(allValues);
     };
 
     const handleSolverSelect = (index) => {
         setSolver(index);
+    };
+
+    const handleSubmit = () => {
+        const data = {
+            ...values,
+            type: solver,
+        };
+
+        axios.request({
+            method: job?.id ? 'PUT' : 'POST',
+            url: job?.id ? `/api/job/${job.id}?_token=${token}` : `/api/job?_token=${token}`,
+            data: data,
+        }).then((response) => {
+            setJob(response.data);
+            message.success(`Job ${job?.id ? 'updated' : 'created'} successfully`, 5);
+        });
     };
 
     const onFileUploadFinish = () => {
@@ -67,7 +85,6 @@ export default function Form({auth, job: initialJob}) {
                         {
                             job?.id &&  <FileUploadForm disabled={!!job}
                                                         onFinish={onFileUploadFinish}
-                                                        onUploadChange={(file) => setFile(file)}
                                                         newJob={job}
                                                         token={token} />
                         }
@@ -89,7 +106,7 @@ export default function Form({auth, job: initialJob}) {
                     </Col>
                     <Col>
                         <Space>
-                            <Button size="large" type="primary">
+                            <Button size="large" type="primary" onClick={handleSubmit}>
                                 { job?.id ? 'Update job' : 'Create new job' }
                             </Button>
                         </Space>

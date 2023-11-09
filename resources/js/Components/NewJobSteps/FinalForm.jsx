@@ -12,10 +12,19 @@ export const FinalForm = ({token, job, disabled, children}) => {
         return response.data;
     };
 
+    const handleStop = async () => {
+        const response = await axios.post(`/api/job/${job.id}/stop?_token=${token}`);
+
+        return response.data;
+    };
+
     return <>
         <Divider orientation="left">Solution</Divider>
         <div className="my-2">
             <Space>
+                <Button size="large" danger onClick={handleStop}>
+                    Stop solving
+                </Button>
                 <Button size="large" type="primary" onClick={handleSolve}>
                     {job.flag_solving ? 'Restart solving' : 'Start solving'}
                 </Button>

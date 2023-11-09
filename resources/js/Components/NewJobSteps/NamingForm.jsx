@@ -8,8 +8,8 @@ export const NamingForm = ({onChange, defaultValue, children}) => {
     const enterNameLabel = t('step.namingForm.enterName');
     const pleaseEnterNameMessage = t('step.namingForm.pleaseEnterJobName');
 
-    const handleValuesChange = (changedValues) => {
-        onChange(changedValues);
+    const handleValuesChange = (changedValues, allValues) => {
+        onChange(allValues);
     };
 
 
