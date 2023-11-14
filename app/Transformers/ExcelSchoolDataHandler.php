@@ -139,4 +139,9 @@ class ExcelSchoolDataHandler implements SpreadSheetDataHandler
             }
         }
     }
+
+    public function validateDataArray(array $data): void
+    {
+        // TODO: Implement validateDataArray() method.
+    }
 }
