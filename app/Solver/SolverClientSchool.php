@@ -46,6 +46,20 @@ class SolverClientSchool implements SolverClient
         return $response->getBody()->getContents();
     }
 
+    public function stopSolving($solverId): string
+    {
+        $client = new Client();
+
+        $solveUrl = sprintf('%s%s/stop-solving/%s', $this->url, self::TIMETABLE_URI, $solverId);
+        $response = $client->post($solveUrl,
+            [
+                'headers' => ['Content-Type' => 'application/json'],
+            ]
+        );
+
+        return $response->getBody()->getContents();
+    }
+
     public function getResult($solverId): string
     {
         $client = new Client();
