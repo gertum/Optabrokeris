@@ -121,6 +121,15 @@ class JobController extends Controller
         return $solvingResult;
     }
 
+    public function stop(JobRequest $request, $id)
+    {
+        $job = $request->getUserJob($id);
+        $solverClient = $this->solverClientFactory->createClient($job->type);
+        $solvingResult = $solverClient->stopSolving($job->solver_id);
+
+        return $solvingResult;
+    }
+
     public function upload(JobRequest $request, $id, SpreadSheetHandlerFactory $fileHandlerFactory)
     {
         $job = $request->getUserJob($id);
@@ -128,6 +137,7 @@ class JobController extends Controller
         $fileHandler = $fileHandlerFactory->createHandler($job->getType(), $file->getClientOriginalName());
 
         $dataArray = $fileHandler->spreadSheetToArray($file->getRealPath());
+        $fileHandler->validateDataArray($dataArray);
         $job->data = json_encode($dataArray);
 
         $job->setFlagUploaded(true);

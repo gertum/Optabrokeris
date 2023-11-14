@@ -11,9 +11,6 @@ class SpreadSheetWithHeadersDataHandler implements SpreadSheetDataHandler
     public function spreadSheetToArray(string $excelFile): array
     {
         $sheetsRows = ExcelParser::getSheetsRows($excelFile, 3);
-
-        // TODO validate sheetsRows
-
         $schoolDataTransformer = new SchoolDataTransformer();
 
         return $schoolDataTransformer->excelToJson($sheetsRows);
@@ -24,5 +21,11 @@ class SpreadSheetWithHeadersDataHandler implements SpreadSheetDataHandler
         $schoolDataTransformer = new SchoolDataTransformer();
         $excelData = $schoolDataTransformer->jsonToExcel($data);
         ExcelWriter::writeSheetsRows($excelFile, $excelData);
+    }
+
+    public function validateDataArray(array $data): void
+    {
+        // TODO
+        // validate each cel
     }
 }
