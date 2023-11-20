@@ -1,7 +1,7 @@
 import {Button, Divider, Space, Spin} from "antd";
 import axios from "axios";
 
-export const FinalForm = ({token, job, disabled, children}) => {
+export const FinalForm = ({token, job, disabled, children, onSolve, onStop}) => {
     if (!job) {
         return;
     }
@@ -9,11 +9,15 @@ export const FinalForm = ({token, job, disabled, children}) => {
     const handleSolve = async () => {
         const response = await axios.post(`/api/job/${job.id}/solve?_token=${token}`);
 
+        onSolve();
+
         return response.data;
     };
 
     const handleStop = async () => {
         const response = await axios.post(`/api/job/${job.id}/stop?_token=${token}`);
+
+        onStop();
 
         return response.data;
     };

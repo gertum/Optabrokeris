@@ -58,6 +58,12 @@ export default function Form({auth, job: initialJob}) {
         }
     };
 
+    const reloadJob = async () => {
+        axios.get(`/api/job/${job.id}`).then((response) => {
+            setJob(response.data);
+        });
+    }
+
     useEffect(() => {
         fetchToken();
     }, []);
@@ -92,7 +98,9 @@ export default function Form({auth, job: initialJob}) {
                             job?.id && <FinalForm token={token}
                                                   job={job}
                                                   disabled={!!job}
-                                                  solving={job && job.flag_solving} />
+                                                  solving={job && job.flag_solving}
+                                                  onStop={() => reloadJob()}
+                                                  onSolve={() => reloadJob()} />
                         }
                     </Col>
                 </Row>
