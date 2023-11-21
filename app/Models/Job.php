@@ -42,6 +42,11 @@ class Job extends Model
         return $this->getAttribute('data');
     }
 
+    public function setData($data): self
+    {
+        return $this->setAttribute('data', $data);
+    }
+
     public function getFlagSolving()
     {
         return $this->getAttribute('flag_solving');

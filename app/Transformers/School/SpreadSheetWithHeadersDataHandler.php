@@ -25,7 +25,6 @@ class SpreadSheetWithHeadersDataHandler implements SpreadSheetDataHandler
 
     public function validateDataArray(array $data): void
     {
-        // TODO
-        // validate each cel
+        CellValidator::validateCells($data);
     }
 }

@@ -138,7 +138,7 @@ class JobController extends Controller
 
         $dataArray = $fileHandler->spreadSheetToArray($file->getRealPath());
         $fileHandler->validateDataArray($dataArray);
-        $job->data = json_encode($dataArray);
+        $job->setData(json_encode($dataArray));
 
         $job->setFlagUploaded(true);
         $job->setFlagSolving(false);
