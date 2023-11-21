@@ -42,17 +42,56 @@ class CellValidator
             try {
                 $rez = Carbon::createFromFormat('H:i:s', $startTime);
                 $wrongStartTime = empty($rez);
-           } catch (InvalidFormatException $e) {
+            } catch (InvalidFormatException $e) {
                 $details = $e->getMessage();
                 $wrongStartTime = true;
             }
 
-            if ( $wrongStartTime ) {
+            if ($wrongStartTime) {
                 throw new ValidateException(sprintf('Invalid timeslot start time [%s] (%s). Line %s.',
                     $startTime, $details, $timeslotLine));
             }
 
+            $endTime = $timeslot['endTime'];
+            $wrongEndTime = false;
+            $details = '';
+            try {
+                $rez = Carbon::createFromFormat('H:i:s', $endTime);
+                $wrongEndTime = empty($rez);
+            } catch (InvalidFormatException $e) {
+                $details = $e->getMessage();
+                $wrongEndTime = true;
+            }
+
+            if ($wrongEndTime) {
+                throw new ValidateException(sprintf('Invalid timeslot end time [%s] (%s). Line %s.',
+                    $endTime, $details, $timeslotLine));
+            }
+
+
             $timeslotLine++;
+        }
+
+        $rooms = $data['roomList'];
+        $roomLine = 0;
+        foreach ($rooms as $room) {
+            $id = $room['id'];
+            if (!is_numeric($id) || intval($id) <= 0) {
+                throw new ValidateException(sprintf('Invalid room id [%s]. Line %s.',
+                    $id, $roomLine));
+            }
+            $roomLine++;
+        }
+
+        $lessons = $data['lessonList'];
+        $lessonLine = 0;
+        foreach ($lessons as $lesson) {
+            $id = $lesson['id'];
+            if (!is_numeric($id) || intval($id) <= 0) {
+                throw new ValidateException(sprintf('Invalid lesson id [%s]. Line %s.',
+                    $id, $lessonLine));
+            }
+            $lessonLine++;
         }
 
         return true;
