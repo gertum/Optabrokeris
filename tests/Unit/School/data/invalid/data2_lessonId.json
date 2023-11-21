@@ -1,0 +1,34 @@
+{
+  "timeslotList": [
+    {
+      "id": 1,
+      "dayOfWeek": "MONDAY",
+      "startTime": "08:30:00a",
+      "endTime": "09:30:00"
+    }
+  ],
+  "roomList": [
+    {
+      "id": "a",
+      "name": "Room A"
+    }
+  ],
+  "lessonList": [
+    {
+      "id": "",
+      "subject": "Math",
+      "teacher": "A. Turing",
+      "studentGroup": "9th grade",
+      "timeslot": {
+        "id": 1,
+        "dayOfWeek": "MONDAY",
+        "startTime": "08:30:00",
+        "endTime": "09:30:00"
+      },
+      "room": {
+        "id": 1,
+        "name": "Room A"
+      }
+    }
+  ]
+}
