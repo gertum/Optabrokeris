@@ -127,6 +127,8 @@ class JobController extends Controller
         $solverClient = $this->solverClientFactory->createClient($job->type);
         $solvingResult = $solverClient->stopSolving($job->solver_id);
 
+        $job->update(['flag_solving' => false]);
+
         return $solvingResult;
     }
 
