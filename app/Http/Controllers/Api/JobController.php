@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Job\JobRequest;
+use App\Http\Requests\Job\JobSolveRequest;
+use App\Http\Requests\Job\JobUploadRequest;
 use App\Models\Job;
 use App\Solver\SolverClientFactory;
 use App\Transformers\SpreadSheetHandlerFactory;
@@ -28,15 +30,13 @@ class JobController extends Controller
     {
         $userId = $request->user()->id;
 
-        $jobs = Job::query()->orderBy('created_at')->user($userId)->get();
+        $jobs = Job::query()->orderByDesc('created_at')->user($userId)->get();
 
         return $jobs;
     }
 
-    public function view(JobRequest $request, $id)
+    public function view(Request $request, Job $job)
     {
-        $job = $request->getUserJob($id);
-
         try {
             $type = $job->getAttribute('type');
 
@@ -90,25 +90,15 @@ class JobController extends Controller
         return $createdJob;
     }
 
-    public function update(JobRequest $request, $id)
+    public function update(JobRequest $request, Job $job)
     {
-        $job = $request->getUserJob($id);
-
-        $body = $request->getContent();
-        $validated['data'] = $body;
-
-        $job->fill($validated);
-        $job->update($validated);
-
-        return $job;
+        return $job->update($request->validated());
     }
 
-    public function solve(JobRequest $request, $id)
+    public function solve(JobSolveRequest $request, Job $job)
     {
-        $job = $request->getUserJob($id);
-
         $solverClient = $this->solverClientFactory->createClient($job->type);
-        $repeat = $request->get('repeat');
+        $repeat = $request->get('repeat', false);
 
         if (!$repeat) {
             $solverId = $solverClient->registerData($job->data);
@@ -121,9 +111,8 @@ class JobController extends Controller
         return $solvingResult;
     }
 
-    public function stop(JobRequest $request, $id)
+    public function stop(Request $request, Job $job)
     {
-        $job = $request->getUserJob($id);
         $solverClient = $this->solverClientFactory->createClient($job->type);
         $solvingResult = $solverClient->stopSolving($job->solver_id);
 
@@ -132,9 +121,8 @@ class JobController extends Controller
         return $solvingResult;
     }
 
-    public function upload(JobRequest $request, $id, SpreadSheetHandlerFactory $fileHandlerFactory)
+    public function upload(JobUploadRequest $request, Job $job, SpreadSheetHandlerFactory $fileHandlerFactory)
     {
-        $job = $request->getUserJob($id);
         $file = $request->file('file');
         $fileHandler = $fileHandlerFactory->createHandler($job->getType(), $file->getClientOriginalName());
 
@@ -151,10 +139,9 @@ class JobController extends Controller
         return $job;
     }
 
-    public function download(JobRequest $request, $id, SpreadSheetHandlerFactory $fileHandlerFactory)
+    public function download(Request $request, Job $job, SpreadSheetHandlerFactory $fileHandlerFactory)
     {
-        $job = $request->getUserJob($id);
-        $fileName = sprintf('result_%s.xlsx', $id);
+        $fileName = sprintf('result_%s.xlsx', $job->getKey());
 
         $file = '/tmp/' . $fileName;
 

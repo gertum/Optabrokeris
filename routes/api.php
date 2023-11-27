@@ -21,11 +21,11 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::middleware('auth')->group(function () {
     Route::get('/job', [JobController::class, 'list']);
-    Route::get('/job/{id}', [JobController::class, 'view']);
+    Route::get('/job/{job}', [JobController::class, 'view']);
     Route::post('/job', [JobController::class, 'create']);
-    Route::put('/job/{id}', [JobController::class, 'update']);
-    Route::post('/job/{id}/solve', [JobController::class, 'solve']);
-    Route::post('/job/{id}/stop', [JobController::class, 'stop']);
-    Route::post('/job/{id}/upload', [JobController::class, 'upload']);
-    Route::get('/job/{id}/download', [JobController::class, 'download']);
+    Route::put('/job/{job}', [JobController::class, 'update']);
+    Route::post('/job/{job}/solve', [JobController::class, 'solve']);
+    Route::post('/job/{job}/stop', [JobController::class, 'stop']);
+    Route::post('/job/{job}/upload', [JobController::class, 'upload']);
+    Route::get('/job/{job}/download', [JobController::class, 'download']);
 });

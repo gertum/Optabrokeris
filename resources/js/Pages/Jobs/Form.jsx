@@ -18,7 +18,7 @@ export default function Form({auth, job: initialJob}) {
     const [job, setJob] = useState(initialJob);
     const [values, setValues] = useState({});
     const [current, setCurrent] = useState(0);
-    const [solver, setSolver] = useState(null);
+    const [solver, setSolver] = useState(job?.type);
     const [token, setToken] = useState('');
 
     const handleValuesChange = (allValues) => {
@@ -34,6 +34,8 @@ export default function Form({auth, job: initialJob}) {
             ...values,
             type: solver,
         };
+
+        console.log(data);
 
         axios.request({
             method: job?.id ? 'PUT' : 'POST',

@@ -8,6 +8,14 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class JobRequest extends FormRequest
 {
+    public function rules()
+    {
+        return [
+            'name' => 'required|string|max:255',
+            'type' => 'required|string',
+        ];
+    }
+
     public function getUserJob($id): Job
     {
         $userId = $this->user()->id;

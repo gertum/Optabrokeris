@@ -12,7 +12,6 @@ export const NamingForm = ({onChange, defaultValue, children}) => {
         onChange(allValues);
     };
 
-
     return <>
         <Divider orientation="left">Name of a job</Divider>
         <Form onValuesChange={handleValuesChange} initialValues={{name: defaultValue}}>
