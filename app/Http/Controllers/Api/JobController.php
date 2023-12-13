@@ -92,6 +92,8 @@ class JobController extends Controller
 
     public function update(JobRequest $request, Job $job)
     {
+        // @Vytenis : kai padareik kad Job $job būt per parametrus
+        // Kas bus, kai uzeris updatins ne savo job'ą?
         return $job->update($request->validated());
     }
 
