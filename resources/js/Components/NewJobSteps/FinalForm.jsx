@@ -1,7 +1,11 @@
 import {Button, Divider, Space, Spin} from "antd";
 import axios from "axios";
+import {DownloadOutlined} from "@ant-design/icons";
+import {useState} from "react";
 
 export const FinalForm = ({token, job, disabled, children, onSolve, onStop}) => {
+    const [wasStarted, setWasStarted] = useState(false);
+
     if (!job) {
         return;
     }
@@ -10,6 +14,7 @@ export const FinalForm = ({token, job, disabled, children, onSolve, onStop}) => 
         const response = await axios.post(`/api/job/${job.id}/solve?_token=${token}`);
 
         onSolve();
+        setWasStarted(true);
 
         return response.data;
     };
@@ -26,16 +31,24 @@ export const FinalForm = ({token, job, disabled, children, onSolve, onStop}) => 
         <Divider orientation="left">Solution</Divider>
         <div className="my-2">
             <Space>
-                <Button size="large" danger onClick={handleStop}>
-                    Stop solving
-                </Button>
-                <Button size="large" type="primary" onClick={handleSolve}>
-                    {job.flag_solving ? 'Restart solving' : 'Start solving'}
-                </Button>
+                {!!job.flag_solving && <Button size="large" danger onClick={handleStop}>Stop solving</Button>}
+                {!job.flag_solving && <Button size="large" onClick={handleSolve}>Start solving</Button>}
             </Space>
         </div>
-        {job.flag_solving && <div><Spin tip="Solving" size="large" /></div>}
-        {job && <div><a href={`/api/job/${job.id}/download?_token=${token}`}>{job.flag_solving ? 'Download intermediate result' : 'Download result' }</a></div>}
+        {!!job.flag_solving && <div><Spin tip="Solving" size="large" /></div>}
+        {
+            !!(job && (job.flag_solving || job.flag_solved || wasStarted))
+            && <Button
+                type="primary"
+                shape="round"
+                icon={<DownloadOutlined />}
+                size="large"
+                href={`/api/job/${job.id}/download?_token=${token}`}
+                target="_blank"
+            >
+                {!!job.flag_solving ? 'Download intermediate result' : 'Download result' }
+            </Button>
+        }
         {children}
         <Divider />
     </>;
