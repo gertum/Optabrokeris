@@ -21,4 +21,9 @@ class Cell extends DataTransferObject
     public $comment;
 
 
+    public static function parseCss(string $css) : array {
+        return [
+
+        ];
+    }
 }
