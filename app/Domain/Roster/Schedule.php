@@ -2,24 +2,30 @@
 
 namespace App\Domain\Roster;
 
-use Illuminate\Support\Collection;
 use Spatie\DataTransferObject\Attributes\CastWith;
 use Spatie\DataTransferObject\Casters\ArrayCaster;
 use Spatie\DataTransferObject\DataTransferObject;
 
 class Schedule extends DataTransferObject
 {
-    public $availabilityList=[];
+    /** @var Availability[] */
+    #[CastWith(ArrayCaster::class, itemType: Availability::class)]
+    public ?array $availabilityList = [];
 
     /**
      * @var Employee[]
      */
     #[CastWith(ArrayCaster::class, itemType: Employee::class)]
-    public ?array $employeeList;
-    public $shiftList=[];
-    public $score='';
-    public $scheduleState;
-    public $solverState;
+    public ?array $employeeList = [];
+
+    /** @var Shift[] */
+    #[CastWith(ArrayCaster::class, itemType: Shift::class)]
+    public ?array $shiftList = [];
+
+
+    public ?string $score = '';
+    public ?ScheduleState $scheduleState;
+    public ?string $solverState;
 
     public function setAvailabilityList(array $availabilityList): Schedule
     {
