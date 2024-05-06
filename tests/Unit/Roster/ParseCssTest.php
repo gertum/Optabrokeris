@@ -20,7 +20,11 @@ class ParseCssTest extends TestCase
             'empty' => [
                 'css' => '',
                 'expectedArray' => []
-            ]
+            ],
+            'simple' => [
+                'css' => 'color: #FF0000;',
+                'expectedArray' => ['color'=>'#FF0000']
+            ],
         ];
     }
 
