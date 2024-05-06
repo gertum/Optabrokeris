@@ -21,4 +21,17 @@ class Employee extends DataTransferObject
         return $this;
     }
 
+    // For parsing
+    private int $excelRow=0;
+
+    public function getExcelRow(): int
+    {
+        return $this->excelRow;
+    }
+
+    public function setExcelRow(int $excelRow): Employee
+    {
+        $this->excelRow = $excelRow;
+        return $this;
+    }
 }

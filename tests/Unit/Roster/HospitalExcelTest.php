@@ -2,6 +2,7 @@
 
 namespace Tests\Unit\Roster;
 
+use App\Domain\Roster\Employee;
 use App\Domain\Roster\Hospital\ExcelWrapper;
 use PHPUnit\Framework\TestCase;
 
@@ -49,7 +50,48 @@ class HospitalExcelTest extends TestCase
             'border-left-width' => 'thin',
         ], $cellG12->getParsedCss());
 
-        $this->assertEquals( '#FF0000', $cellG12->getBackgroundColor());
+        $this->assertEquals('#FF0000', $cellG12->getBackgroundColor());
+
+        // TODO availabilities
+        // TODO employees
+
+        $employeesNames = [
+            'Renata Juknevičienė 29/12',
+            'Aleksandras Briedis 24/12',
+            'Julius Jaramavičius 42/12',
+            'Paulius Uksas 38',
+            'Iveta Vėgelytė 41/24',
+            'Raminta Konciene 70/36',
+            'Giedrius Montrimas 67',
+            'Lina Šimėnaitė 37/24',
+            'Grakauskienė 89/72',
+            'Laura Zajančkovskytė 129/84',
+            'Tomas Trybė 87/48',
+            'Vesta Aleliūnienė 137/84',
+            'Karolis Skaisgirys 37',
+            'Eglė Politikaitė 40/24',
+            'Edgaras Baliūnas 18 val.',
+            'Samanta Plikaitytė 40',
+            'Dovilė Petrušytė 24',
+            'Narvoiš 40',
+            'serbentaite',
+            'Michail Lapida 40',
+            'Rinkūnas',
+            'Valerija',
+            'Raminta',
+            'Jonas',
+            'Beatričė',
+        ];
+
+        $expectedEmployees = array_map(
+            fn($name) => (new Employee())->setName($name)
+            , $employeesNames
+        );
+
+        $this->assertEquals( $expectedEmployees, $wrapper->getEmployees());
+
+        
+        // TODO shifts
     }
 }
 
