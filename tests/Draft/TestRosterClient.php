@@ -44,7 +44,7 @@ class TestRosterClient extends TestCase
     }
   ],
 
-  "score": "-133init/0hard/0soft",
+  "score": "-1init/0hard/0soft",
   "scheduleState": {
     "tenantId": 1,
     "publishLength": 7,
@@ -69,7 +69,6 @@ class TestRosterClient extends TestCase
     public function testAdd()
     {
 //        $this->assertTrue(true);
-
         $host = config('solver.solver_hosts.roster');
 
         echo "address=" . $host . "\n";
@@ -81,7 +80,23 @@ class TestRosterClient extends TestCase
         $this->assertTrue($client instanceof SolverClientRoster);
 
 
-        $rez = $client->registerData(self::MINIMAL);
+        $schedule = self::MINIMAL;
+
+        $rez = $client->registerData($schedule);
         $this->assertTrue(is_numeric($rez));
+
+        $id = $rez;
+
+        $gotSchedule = $client->getResult($id);
+
+        $scheduleDecoded = json_decode($schedule, true);
+
+        $scheduleDecoded['scheduleState']['tenantId'] = $id;
+        $scheduleDecoded['id'] = $id;
+        $gotScheduleDecoded = json_decode($gotSchedule, true );
+
+        $this->assertEquals($scheduleDecoded, $gotScheduleDecoded);
+
+        // TODO solve
     }
 }

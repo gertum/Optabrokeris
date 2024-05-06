@@ -7,7 +7,7 @@ use GuzzleHttp\Client;
 class SolverClientRoster implements SolverClient
 {
     private const URI_SCHEDULE = "/schedule";
-    private const URI_SCHEDULE_ID = "/schedule/{id}";
+    private const URI_SCHEDULE_ID = "/schedule/%s";
     private const URI_SOLVE = "/schedule/%s/solve";
     private const URI_STOP_SOLVING = "/schedule/%s/stop-solving";
 
