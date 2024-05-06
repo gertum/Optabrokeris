@@ -110,6 +110,7 @@ Should solve this by using docker / (docker compose) settings where we will work
 
 ## key
 
+In case you get error : "Illuminate\Encryption\MissingAppKeyException: No application encryption key has been specified."
 Generate your application encryption key using 
     
     php artisan key:generate

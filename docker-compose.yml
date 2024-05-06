@@ -20,7 +20,8 @@ services:
             BASEDIR: /var/www/html
             COMPOSER_AUTH: '${COMPOSER_AUTH}'
             HOME: /var/www/html
-            PHP_IDE_CONFIG: 'serverName=optabroker.local'
+            # look at .docker/web/nginx/conf.d/default.conf for optabroker.dv value
+            PHP_IDE_CONFIG: 'serverName=optabroker.dv'
         #      CURRENT_UID: '${CURRENT_UID}'
         #      SYSTEM_UID: '${SYSTEM_UID}'
         #      SYSTEM_GID: '${SYSTEM_GID}'
