@@ -98,5 +98,9 @@ class TestRosterClient extends TestCase
         $this->assertEquals($scheduleDecoded, $gotScheduleDecoded);
 
         // TODO solve
+
+        $client->startSolving($id);
+
+
     }
 }
