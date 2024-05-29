@@ -146,4 +146,32 @@ class ExcelWrapper
         return null;
     }
 
+    /**
+     * @return EilNr[]
+     */
+    public function getEilNrs(EilNrTitle $eilNrTitle, $maxRowSpan = 2) : array {
+
+        /** @var EilNr[] $eilNrs */
+        $eilNrs = [];
+
+        $skippedEmpties = 0;
+        for ( $row= $eilNrTitle->getRow()+$eilNrTitle->getRowSpan(); $row < self::MAX_ROWS; $row++) {
+            $cell = $this->getCell($row, $eilNrTitle->getColumn());
+
+            if ( $cell->value == '') {
+                $skippedEmpties++;
+                // break cycle when we encounter too much empty values
+                if ( $skippedEmpties == $maxRowSpan) {
+                    break;
+                }
+                continue;
+            }
+
+            $skippedEmpties = 0;
+
+            $eilNrs[] = (new EilNr())->setValue($cell->value)->setRow($row)->setColumn($eilNrTitle->getColumn());
+        }
+        return $eilNrs;
+    }
+
 }

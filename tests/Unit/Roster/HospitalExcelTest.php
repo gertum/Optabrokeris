@@ -4,6 +4,7 @@ namespace Tests\Unit\Roster;
 
 use App\Domain\Roster\Availability;
 use App\Domain\Roster\Employee;
+use App\Domain\Roster\Hospital\EilNr;
 use App\Domain\Roster\Hospital\EilNrTitle;
 use App\Domain\Roster\Hospital\ExcelWrapper;
 use PHPUnit\Framework\TestCase;
@@ -55,9 +56,17 @@ class HospitalExcelTest extends TestCase
         $this->assertEquals('#FF0000', $cellG12->getBackgroundColor());
 
 
+        // 1) top left corner
         $expectedEilNrTitle = (new EilNrTitle())->setRow(7)->setColumn(0);
         $eilNrTitle = $wrapper->findEilNrTitle();
         $this->assertEquals($expectedEilNrTitle, $eilNrTitle);
+
+
+        // 2) the first column
+        $expectedEilNrs  = $this->getExpectedEilNrs();
+        $eilNrs = $wrapper->getEilNrs($eilNrTitle);
+        $this->assertEquals($expectedEilNrs, $eilNrs);
+
 
         $expectedEmployees = $this->getExpectedEmployees();
 
@@ -163,7 +172,29 @@ class HospitalExcelTest extends TestCase
     }
 
     public function getExpectedEilNrs() : array {
-
+        return [
+            (new EilNr())->setValue(1)->setRow(9)->setColumn(0),
+            (new EilNr())->setValue(2)->setRow(11)->setColumn(0),
+            (new EilNr())->setValue(3)->setRow(13)->setColumn(0),
+            (new EilNr())->setValue(4)->setRow(15)->setColumn(0),
+            (new EilNr())->setValue(5)->setRow(17)->setColumn(0),
+            (new EilNr())->setValue(6)->setRow(19)->setColumn(0),
+            (new EilNr())->setValue(7)->setRow(21)->setColumn(0),
+            (new EilNr())->setValue(8)->setRow(23)->setColumn(0),
+            (new EilNr())->setValue(9)->setRow(25)->setColumn(0),
+            (new EilNr())->setValue(10)->setRow(27)->setColumn(0),
+            (new EilNr())->setValue(11)->setRow(29)->setColumn(0),
+            (new EilNr())->setValue(12)->setRow(31)->setColumn(0),
+            (new EilNr())->setValue(13)->setRow(33)->setColumn(0),
+            (new EilNr())->setValue(14)->setRow(35)->setColumn(0),
+            (new EilNr())->setValue(15)->setRow(37)->setColumn(0),
+            (new EilNr())->setValue(16)->setRow(39)->setColumn(0),
+            (new EilNr())->setValue(17)->setRow(41)->setColumn(0),
+            (new EilNr())->setValue(18)->setRow(43)->setColumn(0),
+            (new EilNr())->setValue(19)->setRow(45)->setColumn(0),
+            (new EilNr())->setValue(20)->setRow(47)->setColumn(0),
+            (new EilNr())->setValue(21)->setRow(49)->setColumn(0),
+        ];
     }
 }
 
