@@ -2,7 +2,9 @@
 
 namespace Tests\Unit\Roster;
 
+use App\Domain\Roster\Availability;
 use App\Domain\Roster\Employee;
+use App\Domain\Roster\Hospital\EilNrTitle;
 use App\Domain\Roster\Hospital\ExcelWrapper;
 use PHPUnit\Framework\TestCase;
 
@@ -53,9 +55,15 @@ class HospitalExcelTest extends TestCase
         $this->assertEquals('#FF0000', $cellG12->getBackgroundColor());
 
 
+        $expectedEilNrTitle = (new EilNrTitle())->setRow(7)->setColumn(0);
+        $eilNrTitle = $wrapper->findEilNrTitle();
+        $this->assertEquals($expectedEilNrTitle, $eilNrTitle);
+
         $expectedEmployees = $this->getExpectedEmployees();
 
         $this->assertEquals($expectedEmployees, $wrapper->getEmployees());
+
+        // TODO availabilities
         // TODO shifts
     }
 
@@ -142,6 +150,20 @@ class HospitalExcelTest extends TestCase
                 ->setName('Beatričė')
                 ->setExcelRow(60),
         ];
+    }
+
+
+    /**
+     * @return Availability[][]
+     */
+    public function getGroupedExpectedAvailabilities() : array {
+        return [
+            ''
+        ];
+    }
+
+    public function getExpectedEilNrs() : array {
+
     }
 }
 

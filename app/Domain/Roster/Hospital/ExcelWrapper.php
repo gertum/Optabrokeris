@@ -11,8 +11,16 @@ use Shuchkin\SimpleXLSX;
  */
 class ExcelWrapper
 {
+    const MAX_ROWS = 70;
+    const MAX_COLUMNS = 40;
     private array $rowsEx = [];
     private ?SimpleXLSX $xlsx = null;
+
+    /**
+     * In memory cache
+     * @var Cell[][]
+     */
+    private array $cellCache = [];
 
     public static function parse(string $file): self
     {
@@ -34,9 +42,18 @@ class ExcelWrapper
         return $this->xlsx;
     }
 
+
     public function getCell($row, $column): Cell
     {
-        return new Cell($this->rowsEx[$row][$column]);
+        if ( !array_key_exists($row, $this->cellCache)) {
+            $this->cellCache[$row] = [];
+        }
+
+        if ( !array_key_exists($column, $this->cellCache[$row])) {
+            $this->cellCache[$row][$column] = new Cell($this->rowsEx[$row][$column]);
+        }
+
+        return $this->cellCache[$row][$column];
     }
 
 
@@ -111,4 +128,22 @@ class ExcelWrapper
         // TODO
         return [];
     }
+
+
+    public function findEilNrTitle() : ?EilNrTitle {
+
+
+        for ($row = 0; $row <= self::MAX_ROWS; $row++) {
+            for ( $column=0; $column <= self::MAX_COLUMNS; $column++ ) {
+                $cell = $this->getCell($row, $column);
+
+                if ( preg_match( EilNrTitle::EIL_NR_MARKER, $cell->value)) {
+                    return (new EilNrTitle())->setRow($row)->setColumn($column);
+                }
+            }
+        }
+
+        return null;
+    }
+
 }
