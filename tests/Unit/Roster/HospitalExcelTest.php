@@ -64,13 +64,14 @@ class HospitalExcelTest extends TestCase
 
         // 2) the first column
         $expectedEilNrs  = $this->getExpectedEilNrs();
-        $eilNrs = $wrapper->getEilNrs($eilNrTitle);
+        $eilNrs = $wrapper->parseEilNrs($eilNrTitle);
         $this->assertEquals($expectedEilNrs, $eilNrs);
 
 
         $expectedEmployees = $this->getExpectedEmployees();
+        $employees = $wrapper->parseEmployees($eilNrs);
 
-        $this->assertEquals($expectedEmployees, $wrapper->getEmployees());
+        $this->assertEquals($expectedEmployees, $employees);
 
         // TODO availabilities
         // TODO shifts
@@ -146,18 +147,6 @@ class HospitalExcelTest extends TestCase
             (new Employee())
                 ->setName('Rinkūnas')
                 ->setExcelRow(50),
-            (new Employee())
-                ->setName('Valerija')
-                ->setExcelRow(54),
-            (new Employee())
-                ->setName('Raminta')
-                ->setExcelRow(56),
-            (new Employee())
-                ->setName('Jonas')
-                ->setExcelRow(58),
-            (new Employee())
-                ->setName('Beatričė')
-                ->setExcelRow(60),
         ];
     }
 

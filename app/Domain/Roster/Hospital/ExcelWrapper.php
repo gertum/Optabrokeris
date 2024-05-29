@@ -45,11 +45,11 @@ class ExcelWrapper
 
     public function getCell($row, $column): Cell
     {
-        if ( !array_key_exists($row, $this->cellCache)) {
+        if (!array_key_exists($row, $this->cellCache)) {
             $this->cellCache[$row] = [];
         }
 
-        if ( !array_key_exists($column, $this->cellCache[$row])) {
+        if (!array_key_exists($column, $this->cellCache[$row])) {
             $this->cellCache[$row][$column] = new Cell($this->rowsEx[$row][$column]);
         }
 
@@ -58,54 +58,30 @@ class ExcelWrapper
 
 
     /**
+     * @param EilNr[] $eilNrs
      * @return Employee[]
      */
-    public function parseEmployees() : array {
-        // TODO later dynamically detect bounds
-        $column = 1;
-        $startRow = 9;
-        $endRow = 60;
+    public function parseEmployees(array $eilNrs): array
+    {
+        $employees = [];
 
-        $result = [];
-        for ($row = $startRow; $row <= $endRow; $row++) {
-            $cell = $this->getCell($row, $column);
+        foreach ($eilNrs as $eilNr) {
+            $employeeRow = $eilNr->getRow();
+            $employeeColumn = $eilNr->getColumn() + 1;
 
-            if ( $cell->value == '' ) {
-                continue;
-            }
-
-            $employee = new Employee();
-            $employee->setName( $cell->value);
-            $employee->setExcelRow($cell->r); // difference between $cell->r - $row = 1
-            // TODO skillSet
-            $result[] =  $employee;
+            $employeeCell = $this->getCell($employeeRow, $employeeColumn);
+//            // TODO skillSet
+            $employees [] = (new Employee())->setName($employeeCell->value)->setExcelRow($employeeCell->r);
         }
 
-        return $result;
-    }
-
-    /**
-     * in memory cache
-     * @var Employee[]|null
-     */
-    private ?array $employees=null;
-
-
-    /**
-     * @return Employee[]
-     */
-    public function getEmployees() : array {
-        if ( $this->employees == null ) {
-            $this->employees = $this->parseEmployees();
-        }
-
-        return $this->employees;
+        return $employees;
     }
 
     /**
      * @return Availability[]
      */
-    public function getAvailabilities() : array {
+    public function getAvailabilities(): array
+    {
         // TODO
         // relate cell row to relate with the parsed employees
 
@@ -117,27 +93,28 @@ class ExcelWrapper
      * @param Employee $employee
      * @return Availability[]
      */
-    public function getAvailabilitiesForEmployee(Employee $employee) : array {
+    public function getAvailabilitiesForEmployee(Employee $employee): array
+    {
         $startColumn = 5;
         $endColumn = 40;
 
         return [];
     }
 
-    public function getShifts() : array {
+    public function getShifts(): array
+    {
         // TODO
         return [];
     }
 
 
-    public function findEilNrTitle() : ?EilNrTitle {
-
-
+    public function findEilNrTitle(): ?EilNrTitle
+    {
         for ($row = 0; $row <= self::MAX_ROWS; $row++) {
-            for ( $column=0; $column <= self::MAX_COLUMNS; $column++ ) {
+            for ($column = 0; $column <= self::MAX_COLUMNS; $column++) {
                 $cell = $this->getCell($row, $column);
 
-                if ( preg_match( EilNrTitle::EIL_NR_MARKER, $cell->value)) {
+                if (preg_match(EilNrTitle::EIL_NR_MARKER, $cell->value)) {
                     return (new EilNrTitle())->setRow($row)->setColumn($column);
                 }
             }
@@ -149,19 +126,19 @@ class ExcelWrapper
     /**
      * @return EilNr[]
      */
-    public function getEilNrs(EilNrTitle $eilNrTitle, $maxRowSpan = 2) : array {
-
+    public function parseEilNrs(EilNrTitle $eilNrTitle, $maxRowSpan = 2): array
+    {
         /** @var EilNr[] $eilNrs */
         $eilNrs = [];
 
         $skippedEmpties = 0;
-        for ( $row= $eilNrTitle->getRow()+$eilNrTitle->getRowSpan(); $row < self::MAX_ROWS; $row++) {
+        for ($row = $eilNrTitle->getRow() + $eilNrTitle->getRowSpan(); $row < self::MAX_ROWS; $row++) {
             $cell = $this->getCell($row, $eilNrTitle->getColumn());
 
-            if ( $cell->value == '') {
+            if ($cell->value == '') {
                 $skippedEmpties++;
                 // break cycle when we encounter too much empty values
-                if ( $skippedEmpties == $maxRowSpan) {
+                if ($skippedEmpties == $maxRowSpan) {
                     break;
                 }
                 continue;
