@@ -7,6 +7,7 @@ use App\Domain\Roster\Employee;
 use App\Domain\Roster\Hospital\EilNr;
 use App\Domain\Roster\Hospital\EilNrTitle;
 use App\Domain\Roster\Hospital\ExcelWrapper;
+use Carbon\Carbon;
 use PHPUnit\Framework\TestCase;
 
 class HospitalExcelTest extends TestCase
@@ -151,15 +152,6 @@ class HospitalExcelTest extends TestCase
     }
 
 
-    /**
-     * @return Availability[][]
-     */
-    public function getGroupedExpectedAvailabilities() : array {
-        return [
-            ''
-        ];
-    }
-
     public function getExpectedEilNrs() : array {
         return [
             (new EilNr())->setValue(1)->setRow(9)->setColumn(0),
@@ -185,5 +177,108 @@ class HospitalExcelTest extends TestCase
             (new EilNr())->setValue(21)->setRow(49)->setColumn(0),
         ];
     }
+
+
+    /**
+     * @return Availability[][]
+     */
+    public function getGroupedExpectedAvailabilities() : array {
+
+        // TODO split availability by shift values - 3 in the day
+        return [
+            // the key is eilnr value
+            1 => [
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-01'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-02'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-03'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-04'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-05'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-06'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-07'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-08'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-09'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-10'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-11'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-12'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-13'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-14'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-15'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-16'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-17'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-18'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-19'))
+                    ->setAvailabilityType(Availability::DESIRED),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-20'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-21'))
+                    ->setAvailabilityType(Availability::DESIRED),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-22'))
+                    ->setAvailabilityType(Availability::DESIRED),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-23'))
+                    ->setAvailabilityType(Availability::DESIRED),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-24'))
+                    ->setAvailabilityType(Availability::DESIRED),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-25'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-26'))
+                    ->setAvailabilityType(Availability::DESIRED),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-27'))
+                    ->setAvailabilityType(Availability::DESIRED),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-28'))
+                    ->setAvailabilityType(Availability::DESIRED),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-29'))
+                    ->setAvailabilityType(Availability::DESIRED),
+            ]
+        ];
+    }
+
+
 }
 

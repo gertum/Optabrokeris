@@ -6,6 +6,10 @@ use Spatie\DataTransferObject\DataTransferObject;
 
 class Availability extends DataTransferObject
 {
+    const     DESIRED = 'DESIRED',
+        UNDESIRED = 'UNDESIRED',
+        UNAVAILABLE = 'UNAVAILABLE';
+
     public ?int $id = 0;
     public ?Employee $employee = null;
     public $date;

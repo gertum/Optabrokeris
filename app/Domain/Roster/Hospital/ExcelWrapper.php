@@ -57,56 +57,6 @@ class ExcelWrapper
     }
 
 
-    /**
-     * @param EilNr[] $eilNrs
-     * @return Employee[]
-     */
-    public function parseEmployees(array $eilNrs): array
-    {
-        $employees = [];
-
-        foreach ($eilNrs as $eilNr) {
-            $employeeRow = $eilNr->getRow();
-            $employeeColumn = $eilNr->getColumn() + 1;
-
-            $employeeCell = $this->getCell($employeeRow, $employeeColumn);
-//            // TODO skillSet
-            $employees [] = (new Employee())->setName($employeeCell->value)->setExcelRow($employeeCell->r);
-        }
-
-        return $employees;
-    }
-
-    /**
-     * @return Availability[]
-     */
-    public function getAvailabilities(): array
-    {
-        // TODO
-        // relate cell row to relate with the parsed employees
-
-
-        return [];
-    }
-
-    /**
-     * @param Employee $employee
-     * @return Availability[]
-     */
-    public function getAvailabilitiesForEmployee(Employee $employee): array
-    {
-        $startColumn = 5;
-        $endColumn = 40;
-
-        return [];
-    }
-
-    public function getShifts(): array
-    {
-        // TODO
-        return [];
-    }
-
 
     public function findEilNrTitle(): ?EilNrTitle
     {
@@ -150,5 +100,58 @@ class ExcelWrapper
         }
         return $eilNrs;
     }
+
+    /**
+     * @param EilNr[] $eilNrs
+     * @return Employee[]
+     */
+    public function parseEmployees(array $eilNrs): array
+    {
+        $employees = [];
+
+        foreach ($eilNrs as $eilNr) {
+            $employeeRow = $eilNr->getRow();
+            $employeeColumn = $eilNr->getColumn() + 1;
+
+            $employeeCell = $this->getCell($employeeRow, $employeeColumn);
+//            // TODO skillSet
+            $employees [] = (new Employee())->setName($employeeCell->value)->setExcelRow($employeeCell->r);
+        }
+
+        return $employees;
+    }
+
+
+    /**
+     * @return Availability[]
+     */
+    public function parseAvailabilities(): array
+    {
+        // TODO
+        // relate cell row to relate with the parsed employees
+
+
+        return [];
+    }
+
+    /**
+     * @return Availability[]
+     */
+    public function parseAvailabilitiesForEilNr(EilNr $eilNr): array
+    {
+        /** @var Availability[] $availabilities */
+        $availabilities = [];
+
+        return $availabilities;
+    }
+
+    public function getShifts(): array
+    {
+        // TODO
+        return [];
+    }
+
+
+
 
 }
