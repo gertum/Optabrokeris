@@ -9,6 +9,9 @@ class Employee extends DataTransferObject
     public ?string $name;
     public ?array $skillSet;
 
+    // For parsing
+    private int $excelRow=0;
+
     public function setName(string $name): Employee
     {
         $this->name = $name;
@@ -21,8 +24,6 @@ class Employee extends DataTransferObject
         return $this;
     }
 
-    // For parsing
-    private int $excelRow=0;
 
     public function getExcelRow(): int
     {

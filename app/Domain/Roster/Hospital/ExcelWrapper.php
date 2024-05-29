@@ -2,9 +2,13 @@
 
 namespace App\Domain\Roster\Hospital;
 
+use App\Domain\Roster\Availability;
 use App\Domain\Roster\Employee;
 use Shuchkin\SimpleXLSX;
 
+/**
+ * The main excel parser class for now.
+ */
 class ExcelWrapper
 {
     private array $rowsEx = [];
@@ -55,6 +59,7 @@ class ExcelWrapper
 
             $employee = new Employee();
             $employee->setName( $cell->value);
+            $employee->setExcelRow($cell->r); // difference between $cell->r - $row = 1
             // TODO skillSet
             $result[] =  $employee;
         }
@@ -80,9 +85,24 @@ class ExcelWrapper
         return $this->employees;
     }
 
+    /**
+     * @return Availability[]
+     */
     public function getAvailabilities() : array {
         // TODO
         // relate cell row to relate with the parsed employees
+
+
+        return [];
+    }
+
+    /**
+     * @param Employee $employee
+     * @return Availability[]
+     */
+    public function getAvailabilitiesForEmployee(Employee $employee) : array {
+        $startColumn = 5;
+        $endColumn = 40;
 
         return [];
     }

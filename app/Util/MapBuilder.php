@@ -2,6 +2,9 @@
 
 namespace App\Util;
 
+/**
+ * Indexer.
+ */
 class MapBuilder
 {
     public static function buildMap(array $objects, callable $keyGetter) : array {

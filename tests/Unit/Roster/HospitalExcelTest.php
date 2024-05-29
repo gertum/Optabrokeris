@@ -52,46 +52,96 @@ class HospitalExcelTest extends TestCase
 
         $this->assertEquals('#FF0000', $cellG12->getBackgroundColor());
 
-        // TODO availabilities
-        // TODO employees
 
-        $employeesNames = [
-            'Renata Juknevičienė 29/12',
-            'Aleksandras Briedis 24/12',
-            'Julius Jaramavičius 42/12',
-            'Paulius Uksas 38',
-            'Iveta Vėgelytė 41/24',
-            'Raminta Konciene 70/36',
-            'Giedrius Montrimas 67',
-            'Lina Šimėnaitė 37/24',
-            'Grakauskienė 89/72',
-            'Laura Zajančkovskytė 129/84',
-            'Tomas Trybė 87/48',
-            'Vesta Aleliūnienė 137/84',
-            'Karolis Skaisgirys 37',
-            'Eglė Politikaitė 40/24',
-            'Edgaras Baliūnas 18 val.',
-            'Samanta Plikaitytė 40',
-            'Dovilė Petrušytė 24',
-            'Narvoiš 40',
-            'serbentaite',
-            'Michail Lapida 40',
-            'Rinkūnas',
-            'Valerija',
-            'Raminta',
-            'Jonas',
-            'Beatričė',
-        ];
+        $expectedEmployees = $this->getExpectedEmployees();
 
-        $expectedEmployees = array_map(
-            fn($name) => (new Employee())->setName($name)
-            , $employeesNames
-        );
-
-        $this->assertEquals( $expectedEmployees, $wrapper->getEmployees());
-
-        
+        $this->assertEquals($expectedEmployees, $wrapper->getEmployees());
         // TODO shifts
+    }
+
+
+    /**
+     * @return Employee[]
+     */
+    public function getExpectedEmployees(): array
+    {
+        return [
+            (new Employee())
+                ->setName('Renata Juknevičienė 29/12')
+                ->setExcelRow(10),
+            (new Employee())
+                ->setName('Aleksandras Briedis 24/12')
+                ->setExcelRow(12),
+            (new Employee())
+                ->setName('Julius Jaramavičius 42/12')
+                ->setExcelRow(14),
+            (new Employee())
+                ->setName('Paulius Uksas 38')
+                ->setExcelRow(16),
+            (new Employee())
+                ->setName('Iveta Vėgelytė 41/24')
+                ->setExcelRow(18),
+            (new Employee())
+                ->setName('Raminta Konciene 70/36')
+                ->setExcelRow(20),
+            (new Employee())
+                ->setName('Giedrius Montrimas 67')
+                ->setExcelRow(22),
+            (new Employee())
+                ->setName('Lina Šimėnaitė 37/24')
+                ->setExcelRow(24),
+            (new Employee())
+                ->setName('Grakauskienė 89/72')
+                ->setExcelRow(26),
+            (new Employee())
+                ->setName('Laura Zajančkovskytė 129/84')
+                ->setExcelRow(28),
+            (new Employee())
+                ->setName('Tomas Trybė 87/48')
+                ->setExcelRow(30),
+            (new Employee())
+                ->setName('Vesta Aleliūnienė 137/84')
+                ->setExcelRow(32),
+            (new Employee())
+                ->setName('Karolis Skaisgirys 37')
+                ->setExcelRow(34),
+            (new Employee())
+                ->setName('Eglė Politikaitė 40/24')
+                ->setExcelRow(36),
+            (new Employee())
+                ->setName('Edgaras Baliūnas 18 val.')
+                ->setExcelRow(38),
+            (new Employee())
+                ->setName('Samanta Plikaitytė 40')
+                ->setExcelRow(40),
+            (new Employee())
+                ->setName('Dovilė Petrušytė 24')
+                ->setExcelRow(42),
+            (new Employee())
+                ->setName('Narvoiš 40')
+                ->setExcelRow(44),
+            (new Employee())
+                ->setName('serbentaite')
+                ->setExcelRow(46),
+            (new Employee())
+                ->setName('Michail Lapida 40')
+                ->setExcelRow(48),
+            (new Employee())
+                ->setName('Rinkūnas')
+                ->setExcelRow(50),
+            (new Employee())
+                ->setName('Valerija')
+                ->setExcelRow(54),
+            (new Employee())
+                ->setName('Raminta')
+                ->setExcelRow(56),
+            (new Employee())
+                ->setName('Jonas')
+                ->setExcelRow(58),
+            (new Employee())
+                ->setName('Beatričė')
+                ->setExcelRow(60),
+        ];
     }
 }
 
