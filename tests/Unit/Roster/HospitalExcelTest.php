@@ -64,7 +64,7 @@ class HospitalExcelTest extends TestCase
 
 
         // 2) the first column
-        $expectedEilNrs  = $this->getExpectedEilNrs();
+        $expectedEilNrs = $this->getExpectedEilNrs();
         $eilNrs = $wrapper->parseEilNrs($eilNrTitle);
         $this->assertEquals($expectedEilNrs, $eilNrs);
 
@@ -74,21 +74,19 @@ class HospitalExcelTest extends TestCase
 
         // not wise to compare whole objects
 //        $this->assertEquals($expectedEmployees, $employees);
-        $expectedEmployeesNames = array_map ( fn(Employee $e)=>$e->name, $expectedEmployees);
-        $employeesNames = array_map ( fn(Employee $e)=>$e->name, $employees);
+        $expectedEmployeesNames = array_map(fn(Employee $e) => $e->name, $expectedEmployees);
+        $employeesNames = array_map(fn(Employee $e) => $e->name, $employees);
 
         $this->assertEquals($expectedEmployeesNames, $employeesNames);
 
         $groupedExpectedAvailabilities = $this->getGroupedExpectedAvailabilities();
-        $expectedAvailabilities1 = $wrapper->parseAvailabilitiesForEilNr($eilNrs[0], 2024, 2 , $employees[0]);
+        $expectedAvailabilities1 = $wrapper->parseAvailabilitiesForEilNr($eilNrs[0], 2024, 2, $employees[0]);
 
         $this->assertEquals($groupedExpectedAvailabilities[1], $expectedAvailabilities1);
 
-//        $availabilities = $wrapper->parseAvailabilities($eilNrs, $employees, 2024, 2);
-//
-//        $this->assertEquals($groupedExpectedAvailabilities, $availabilities);
+        $availabilities = $wrapper->parseAvailabilities($eilNrs, $employees, 2024, 2);
 
-
+        $this->assertEquals($groupedExpectedAvailabilities, $availabilities);
         // TODO shifts
     }
 
@@ -208,7 +206,8 @@ class HospitalExcelTest extends TestCase
     }
 
 
-    public function getExpectedEilNrs() : array {
+    public function getExpectedEilNrs(): array
+    {
         return [
             (new EilNr())->setValue(1)->setRow(9)->setColumn(0),
             (new EilNr())->setValue(2)->setRow(11)->setColumn(0),
@@ -238,128 +237,2491 @@ class HospitalExcelTest extends TestCase
     /**
      * @return Availability[][]
      */
-    public function getGroupedExpectedAvailabilities() : array {
+    public function getGroupedExpectedAvailabilities(): array
+    {
         $employees = $this->getExpectedEmployees();
         return [
             1 => [
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-01'))
                     ->setAvailabilityType(Availability::UNAVAILABLE)
-                    ->setEmployee($employees[0])
-                ->setEmployee($employees[0]),
+                    ->setEmployee($employees[0]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-02'))
                     ->setAvailabilityType(Availability::UNAVAILABLE)
-                ->setEmployee($employees[0]),
+                    ->setEmployee($employees[0]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-03'))
                     ->setAvailabilityType(Availability::UNAVAILABLE)
-                ->setEmployee($employees[0]),
+                    ->setEmployee($employees[0]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-04'))
                     ->setAvailabilityType(Availability::UNAVAILABLE)
-                ->setEmployee($employees[0]),
+                    ->setEmployee($employees[0]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-05'))
                     ->setAvailabilityType(Availability::UNAVAILABLE)
-                ->setEmployee($employees[0]),
+                    ->setEmployee($employees[0]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-06'))
                     ->setAvailabilityType(Availability::UNAVAILABLE)
-                ->setEmployee($employees[0]),
+                    ->setEmployee($employees[0]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-07'))
                     ->setAvailabilityType(Availability::UNAVAILABLE)
-                ->setEmployee($employees[0]),
+                    ->setEmployee($employees[0]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-08'))
                     ->setAvailabilityType(Availability::UNAVAILABLE)
-                ->setEmployee($employees[0]),
+                    ->setEmployee($employees[0]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-09'))
                     ->setAvailabilityType(Availability::UNAVAILABLE)
-                ->setEmployee($employees[0]),
+                    ->setEmployee($employees[0]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-10'))
                     ->setAvailabilityType(Availability::UNAVAILABLE)
-                ->setEmployee($employees[0]),
+                    ->setEmployee($employees[0]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-11'))
                     ->setAvailabilityType(Availability::UNAVAILABLE)
-                ->setEmployee($employees[0]),
+                    ->setEmployee($employees[0]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-12'))
                     ->setAvailabilityType(Availability::UNAVAILABLE)
-                ->setEmployee($employees[0]),
+                    ->setEmployee($employees[0]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-13'))
                     ->setAvailabilityType(Availability::UNAVAILABLE)
-                ->setEmployee($employees[0]),
+                    ->setEmployee($employees[0]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-14'))
                     ->setAvailabilityType(Availability::UNAVAILABLE)
-                ->setEmployee($employees[0]),
+                    ->setEmployee($employees[0]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-15'))
                     ->setAvailabilityType(Availability::UNAVAILABLE)
-                ->setEmployee($employees[0]),
+                    ->setEmployee($employees[0]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-16'))
                     ->setAvailabilityType(Availability::UNAVAILABLE)
-                ->setEmployee($employees[0]),
+                    ->setEmployee($employees[0]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-17'))
                     ->setAvailabilityType(Availability::UNAVAILABLE)
-                ->setEmployee($employees[0]),
+                    ->setEmployee($employees[0]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-18'))
                     ->setAvailabilityType(Availability::UNAVAILABLE)
-                ->setEmployee($employees[0]),
+                    ->setEmployee($employees[0]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-19'))
                     ->setAvailabilityType(Availability::DESIRED)
-                ->setEmployee($employees[0]),
+                    ->setEmployee($employees[0]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-20'))
                     ->setAvailabilityType(Availability::UNAVAILABLE)
-                ->setEmployee($employees[0]),
+                    ->setEmployee($employees[0]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-21'))
                     ->setAvailabilityType(Availability::DESIRED)
-                ->setEmployee($employees[0]),
+                    ->setEmployee($employees[0]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-22'))
                     ->setAvailabilityType(Availability::DESIRED)
-                ->setEmployee($employees[0]),
+                    ->setEmployee($employees[0]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-23'))
                     ->setAvailabilityType(Availability::DESIRED)
-                ->setEmployee($employees[0]),
+                    ->setEmployee($employees[0]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-24'))
                     ->setAvailabilityType(Availability::DESIRED)
-                ->setEmployee($employees[0]),
+                    ->setEmployee($employees[0]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-25'))
                     ->setAvailabilityType(Availability::UNAVAILABLE)
-                ->setEmployee($employees[0]),
+                    ->setEmployee($employees[0]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-26'))
                     ->setAvailabilityType(Availability::DESIRED)
-                ->setEmployee($employees[0]),
+                    ->setEmployee($employees[0]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-27'))
                     ->setAvailabilityType(Availability::DESIRED)
-                ->setEmployee($employees[0]),
+                    ->setEmployee($employees[0]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-28'))
                     ->setAvailabilityType(Availability::DESIRED)
-                ->setEmployee($employees[0]),
+                    ->setEmployee($employees[0]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-29'))
                     ->setAvailabilityType(Availability::DESIRED)
-                ->setEmployee($employees[0]),
-            ]
+                    ->setEmployee($employees[0]),
+            ],
+            2 => [
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-01'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[1])
+                    ->setEmployee($employees[1]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-02'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[1]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-03'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[1]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-04'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[1]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-05'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[1]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-06'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[1]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-07'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[1]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-08'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[1]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-09'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[1]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-10'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[1]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-11'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[1]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-12'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[1]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-13'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[1]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-14'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[1]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-15'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[1]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-16'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[1]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-17'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[1]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-18'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[1]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-19'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[1]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-20'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[1]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-21'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[1]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-22'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[1]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-23'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[1]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-24'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[1]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-25'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[1]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-26'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[1]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-27'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[1]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-28'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[1]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-29'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[1]),
+            ],
+            3 => [
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-01'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[2]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-02'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[2]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-03'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[2]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-04'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[2]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-05'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[2]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-06'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[2]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-07'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[2]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-08'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[2]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-09'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[2]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-10'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[2]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-11'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[2]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-12'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[2]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-13'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[2]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-14'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[2]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-15'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[2]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-16'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[2]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-17'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[2]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-18'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[2]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-19'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[2]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-20'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[2]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-21'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[2]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-22'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[2]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-23'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[2]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-24'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[2]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-25'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[2]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-26'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[2]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-27'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[2]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-28'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[2]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-29'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[2]),
+            ],
+            4 => [
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-01'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[3])
+                    ->setEmployee($employees[3]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-02'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[3]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-03'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[3]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-04'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[3]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-05'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[3]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-06'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[3]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-07'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[3]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-08'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[3]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-09'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[3]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-10'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[3]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-11'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[3]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-12'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[3]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-13'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[3]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-14'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[3]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-15'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[3]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-16'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[3]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-17'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[3]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-18'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[3]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-19'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[3]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-20'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[3]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-21'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[3]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-22'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[3]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-23'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[3]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-24'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[3]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-25'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[3]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-26'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[3]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-27'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[3]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-28'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[3]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-29'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[3]),
+            ],
+            5 => [
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-01'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[4]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-02'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[4]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-03'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[4]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-04'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[4]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-05'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[4]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-06'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[4]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-07'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[4]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-08'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[4]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-09'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[4]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-10'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[4]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-11'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[4]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-12'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[4]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-13'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[4]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-14'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[4]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-15'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[4]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-16'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[4]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-17'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[4]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-18'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[4]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-19'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[4]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-20'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[4]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-21'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[4]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-22'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[4]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-23'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[4]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-24'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[4]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-25'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[4]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-26'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[4]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-27'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[4]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-28'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[4]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-29'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[4]),
+            ],
+            6 => [
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-01'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[5]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-02'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[5]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-03'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[5]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-04'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[5]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-05'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[5]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-06'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[5]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-07'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[5]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-08'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[5]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-09'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[5]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-10'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[5]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-11'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[5]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-12'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[5]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-13'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[5]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-14'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[5]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-15'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[5]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-16'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[5]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-17'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[5]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-18'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[5]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-19'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[5]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-20'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[5]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-21'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[5]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-22'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[5]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-23'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[5]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-24'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[5]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-25'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[5]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-26'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[5]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-27'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[5]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-28'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[5]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-29'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[5]),
+            ],
+            7 => [
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-01'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[6]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-02'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[6]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-03'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[6]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-04'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[6]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-05'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[6]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-06'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[6]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-07'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[6]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-08'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[6]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-09'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[6]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-10'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[6]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-11'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[6]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-12'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[6]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-13'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[6]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-14'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[6]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-15'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[6]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-16'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[6]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-17'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[6]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-18'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[6]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-19'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[6]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-20'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[6]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-21'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[6]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-22'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[6]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-23'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[6]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-24'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[6]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-25'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[6]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-26'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[6]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-27'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[6]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-28'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[6]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-29'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[6]),
+            ],
+            8 => [
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-01'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[7]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-02'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[7]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-03'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[7]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-04'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[7]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-05'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[7]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-06'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[7]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-07'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[7]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-08'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[7]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-09'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[7]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-10'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[7]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-11'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[7]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-12'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[7]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-13'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[7]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-14'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[7]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-15'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[7]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-16'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[7]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-17'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[7]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-18'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[7]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-19'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[7]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-20'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[7]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-21'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[7]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-22'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[7]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-23'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[7]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-24'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[7]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-25'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[7]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-26'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[7]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-27'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[7]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-28'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[7]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-29'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[7]),
+            ],
+            9 => [
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-01'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[8]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-02'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[8]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-03'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[8]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-04'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[8]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-05'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[8]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-06'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[8]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-07'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[8]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-08'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[8]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-09'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[8]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-10'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[8]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-11'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[8]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-12'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[8]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-13'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[8]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-14'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[8]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-15'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[8]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-16'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[8]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-17'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[8]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-18'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[8]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-19'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[8]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-20'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[8]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-21'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[8]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-22'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[8]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-23'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[8]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-24'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[8]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-25'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[8]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-26'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[8]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-27'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[8]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-28'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[8]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-29'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[8]),
+            ],
+            10 => [
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-01'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[9]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-02'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[9]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-03'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[9]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-04'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[9]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-05'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[9]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-06'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[9]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-07'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[9]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-08'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[9]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-09'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[9]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-10'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[9]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-11'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[9]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-12'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[9]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-13'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[9]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-14'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[9]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-15'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[9]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-16'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[9]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-17'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[9]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-18'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[9]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-19'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[9]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-20'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[9]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-21'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[9]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-22'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[9]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-23'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[9]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-24'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[9]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-25'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[9]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-26'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[9]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-27'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[9]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-28'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[9]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-29'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[9]),
+            ],
+            11 => [
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-01'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[10]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-02'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[10]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-03'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[10]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-04'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[10]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-05'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[10]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-06'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[10]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-07'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[10]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-08'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[10]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-09'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[10]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-10'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[10]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-11'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[10]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-12'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[10]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-13'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[10]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-14'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[10]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-15'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[10]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-16'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[10]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-17'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[10]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-18'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[10]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-19'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[10]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-20'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[10]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-21'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[10]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-22'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[10]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-23'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[10]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-24'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[10]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-25'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[10]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-26'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[10]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-27'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[10]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-28'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[10]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-29'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[10]),
+            ],
+            12 => [
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-01'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[11]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-02'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[11]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-03'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[11]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-04'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[11]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-05'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[11]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-06'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[11]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-07'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[11]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-08'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[11]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-09'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[11]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-10'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[11]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-11'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[11]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-12'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[11]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-13'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[11]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-14'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[11]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-15'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[11]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-16'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[11]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-17'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[11]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-18'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[11]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-19'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[11]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-20'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[11]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-21'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[11]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-22'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[11]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-23'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[11]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-24'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[11]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-25'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[11]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-26'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[11]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-27'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[11]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-28'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[11]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-29'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[11]),
+            ],
+            13 => [
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-01'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[12]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-02'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[12]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-03'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[12]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-04'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[12]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-05'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[12]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-06'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[12]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-07'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[12]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-08'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[12]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-09'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[12]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-10'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[12]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-11'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[12]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-12'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[12]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-13'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[12]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-14'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[12]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-15'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[12]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-16'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[12]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-17'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[12]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-18'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[12]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-19'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[12]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-20'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[12]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-21'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[12]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-22'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[12]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-23'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[12]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-24'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[12]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-25'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[12]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-26'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[12]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-27'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[12]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-28'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[12]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-29'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[12]),
+            ],
+            14 => [
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-01'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[13]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-02'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[13]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-03'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[13]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-04'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[13]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-05'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[13]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-06'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[13]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-07'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[13]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-08'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[13]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-09'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[13]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-10'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[13]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-11'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[13]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-12'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[13]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-13'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[13]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-14'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[13]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-15'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[13]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-16'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[13]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-17'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[13]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-18'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[13]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-19'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[13]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-20'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[13]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-21'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[13]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-22'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[13]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-23'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[13]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-24'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[13]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-25'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[13]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-26'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[13]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-27'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[13]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-28'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[13]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-29'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[13]),
+            ],
+            15 => [
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-01'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[14]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-02'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[14]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-03'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[14]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-04'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[14]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-05'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[14]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-06'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[14]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-07'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[14]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-08'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[14]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-09'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[14]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-10'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[14]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-11'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[14]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-12'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[14]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-13'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[14]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-14'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[14]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-15'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[14]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-16'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[14]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-17'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[14]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-18'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[14]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-19'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[14]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-20'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[14]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-21'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[14]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-22'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[14]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-23'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[14]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-24'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[14]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-25'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[14]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-26'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[14]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-27'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[14]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-28'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[14]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-29'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[14]),
+            ],
+            16 => [
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-01'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[15]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-02'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[15]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-03'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[15]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-04'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[15]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-05'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[15]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-06'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[15]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-07'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[15]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-08'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[15]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-09'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[15]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-10'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[15]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-11'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[15]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-12'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[15]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-13'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[15]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-14'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[15]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-15'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[15]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-16'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[15]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-17'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[15]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-18'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[15]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-19'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[15]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-20'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[15]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-21'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[15]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-22'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[15]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-23'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[15]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-24'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[15]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-25'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[15]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-26'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[15]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-27'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[15]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-28'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[15]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-29'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[15]),
+            ],
+            17 => [
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-01'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[16]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-02'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[16]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-03'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[16]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-04'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[16]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-05'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[16]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-06'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[16]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-07'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[16]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-08'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[16]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-09'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[16]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-10'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[16]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-11'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[16]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-12'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[16]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-13'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[16]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-14'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[16]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-15'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[16]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-16'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[16]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-17'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[16]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-18'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[16]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-19'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[16]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-20'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[16]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-21'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[16]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-22'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[16]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-23'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[16]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-24'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[16]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-25'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[16]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-26'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[16]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-27'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[16]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-28'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[16]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-29'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[16]),
+            ],
+            18 => [
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-01'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[17]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-02'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[17]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-03'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[17]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-04'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[17]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-05'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[17]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-06'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[17]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-07'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[17]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-08'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[17]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-09'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[17]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-10'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[17]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-11'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[17]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-12'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[17]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-13'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[17]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-14'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[17]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-15'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[17]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-16'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[17]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-17'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[17]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-18'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[17]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-19'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[17]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-20'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[17]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-21'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[17]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-22'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[17]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-23'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[17]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-24'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[17]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-25'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[17]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-26'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[17]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-27'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[17]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-28'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[17]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-29'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[17]),
+            ],
+            19 => [
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-01'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[18]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-02'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[18]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-03'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[18]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-04'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[18]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-05'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[18]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-06'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[18]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-07'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[18]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-08'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[18]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-09'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[18]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-10'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[18]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-11'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[18]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-12'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[18]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-13'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[18]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-14'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[18]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-15'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[18]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-16'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[18]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-17'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[18]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-18'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[18]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-19'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[18]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-20'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[18]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-21'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[18]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-22'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[18]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-23'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[18]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-24'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[18]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-25'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[18]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-26'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[18]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-27'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[18]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-28'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[18]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-29'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[18]),
+            ],
+            20 => [
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-01'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[19]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-02'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[19]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-03'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[19]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-04'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[19]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-05'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[19]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-06'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[19]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-07'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[19]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-08'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[19]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-09'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[19]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-10'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[19]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-11'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[19]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-12'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[19]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-13'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[19]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-14'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[19]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-15'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[19]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-16'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[19]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-17'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[19]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-18'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[19]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-19'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[19]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-20'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[19]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-21'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[19]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-22'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[19]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-23'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[19]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-24'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[19]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-25'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[19]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-26'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[19]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-27'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[19]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-28'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[19]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-29'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[19]),
+            ],
+            21 => [
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-01'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[20])
+                    ->setEmployee($employees[20]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-02'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[20]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-03'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[20]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-04'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[20]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-05'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[20]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-06'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[20]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-07'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[20]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-08'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[20]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-09'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[20]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-10'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[20]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-11'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[20]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-12'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[20]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-13'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[20]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-14'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[20]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-15'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[20]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-16'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[20]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-17'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[20]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-18'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[20]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-19'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[20]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-20'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[20]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-21'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[20]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-22'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[20]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-23'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[20]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-24'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[20]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-25'))
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee($employees[20]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-26'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[20]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-27'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[20]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-28'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[20]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-29'))
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[20]),
+            ],
         ];
     }
 

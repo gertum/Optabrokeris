@@ -61,6 +61,12 @@ class Cell extends DataTransferObject
     }
 
     public function getBackgroundColor () : string {
-        return $this->getParsedCss()['background-color'];
+        $backgroundColor = $this->getParsedCss()['background-color'];
+
+        if ( $backgroundColor == null ) {
+            return '';
+        }
+
+        return $backgroundColor;
     }
 }
