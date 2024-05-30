@@ -4,6 +4,9 @@ namespace App\Domain\Roster\Hospital;
 
 use App\Domain\Roster\Availability;
 use App\Domain\Roster\Employee;
+use App\Exceptions\ExcelParseException;
+use App\Util\MapBuilder;
+use Carbon\Carbon;
 use Shuchkin\SimpleXLSX;
 
 /**
@@ -13,6 +16,9 @@ class ExcelWrapper
 {
     const MAX_ROWS = 70;
     const MAX_COLUMNS = 40;
+
+    const UNAVAILABLE_BACGROUND = '#FF0000';
+
     private array $rowsEx = [];
     private ?SimpleXLSX $xlsx = null;
 
@@ -55,7 +61,6 @@ class ExcelWrapper
 
         return $this->cellCache[$row][$column];
     }
-
 
 
     public function findEilNrTitle(): ?EilNrTitle
@@ -115,7 +120,10 @@ class ExcelWrapper
 
             $employeeCell = $this->getCell($employeeRow, $employeeColumn);
 //            // TODO skillSet
-            $employees [] = (new Employee())->setName($employeeCell->value)->setExcelRow($employeeCell->r);
+            $employees [] = (new Employee())
+                ->setName($employeeCell->value)
+                ->setExcelRow($employeeCell->r)
+                ->setRow($eilNr->getRow());
         }
 
         return $employees;
@@ -123,24 +131,61 @@ class ExcelWrapper
 
 
     /**
-     * @return Availability[]
+     * @param EilNr[] $eilNrs
+     * @param Employee[] $employees
+     *
+     * @return Availability[][]
      */
-    public function parseAvailabilities(): array
+    public function parseAvailabilities(array $eilNrs, array $employees, int $year, int $month): array
     {
-        // TODO
-        // relate cell row to relate with the parsed employees
+        /** @var Employee[] $employeesByRow */
+        $employeesByRow = MapBuilder::buildMap($employees, fn(Employee $employee) => $employee->getRow());
 
+        /** @var Availability[][] $availabilities */
+        $availabilities = [];
 
-        return [];
+        foreach ($eilNrs as $eilNr) {
+            if (!array_key_exists($eilNr->getRow(), $employeesByRow)) {
+                throw new ExcelParseException(sprintf('No employee in row %s', $eilNr->getRow()));
+            }
+
+            $employee = $employeesByRow[$eilNr->getRow()];
+            $employeeAvailabilities = $this->parseAvailabilitiesForEilNr($eilNr, $year, $month, $employee);
+            $availabilities[$eilNr->getValue()] = $employeeAvailabilities;
+        }
+
+        return $availabilities;
     }
 
     /**
      * @return Availability[]
      */
-    public function parseAvailabilitiesForEilNr(EilNr $eilNr): array
+    public function parseAvailabilitiesForEilNr(EilNr $eilNr, int $year, int $month, Employee $employee): array
     {
         /** @var Availability[] $availabilities */
         $availabilities = [];
+
+        $row = $eilNr->getRow();
+
+        $monthDate = Carbon::create($year, $month);
+        for ($day = 1; $day <= $monthDate->daysInMonth; $day++) {
+            $date = Carbon::create($year, $month, $day);
+            $column = $eilNr->getColumn() + $day + 4;
+
+
+            $availabilityCeil = $this->getCell($row, $column);
+
+            $availabilityType = Availability::DESIRED;
+
+            if ($availabilityCeil->getBackgroundColor() == self::UNAVAILABLE_BACGROUND) {
+                $availabilityType = Availability::UNAVAILABLE;
+            }
+
+            $availabilities[] = (new Availability())
+                ->setEmployee($employee)
+                ->setAvailabilityType($availabilityType)
+                ->setDate($date);
+        }
 
         return $availabilities;
     }
@@ -150,8 +195,6 @@ class ExcelWrapper
         // TODO
         return [];
     }
-
-
 
 
 }

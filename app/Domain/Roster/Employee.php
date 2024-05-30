@@ -9,8 +9,12 @@ class Employee extends DataTransferObject
     public ?string $name;
     public ?array $skillSet;
 
-    // For parsing
+    /**
+     * @deprecated use $row instead
+     */
     private int $excelRow=0;
+
+    private int $row=0;
 
     public function setName(string $name): Employee
     {
@@ -33,6 +37,17 @@ class Employee extends DataTransferObject
     public function setExcelRow(int $excelRow): Employee
     {
         $this->excelRow = $excelRow;
+        return $this;
+    }
+
+    public function getRow(): int
+    {
+        return $this->row;
+    }
+
+    public function setRow(int $row): Employee
+    {
+        $this->row = $row;
         return $this;
     }
 }

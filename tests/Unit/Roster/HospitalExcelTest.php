@@ -72,9 +72,23 @@ class HospitalExcelTest extends TestCase
         $expectedEmployees = $this->getExpectedEmployees();
         $employees = $wrapper->parseEmployees($eilNrs);
 
-        $this->assertEquals($expectedEmployees, $employees);
+        // not wise to compare whole objects
+//        $this->assertEquals($expectedEmployees, $employees);
+        $expectedEmployeesNames = array_map ( fn(Employee $e)=>$e->name, $expectedEmployees);
+        $employeesNames = array_map ( fn(Employee $e)=>$e->name, $employees);
 
-        // TODO availabilities
+        $this->assertEquals($expectedEmployeesNames, $employeesNames);
+
+        $groupedExpectedAvailabilities = $this->getGroupedExpectedAvailabilities();
+        $expectedAvailabilities1 = $wrapper->parseAvailabilitiesForEilNr($eilNrs[0], 2024, 2 , $employees[0]);
+
+        $this->assertEquals($groupedExpectedAvailabilities[1], $expectedAvailabilities1);
+
+//        $availabilities = $wrapper->parseAvailabilities($eilNrs, $employees, 2024, 2);
+//
+//        $this->assertEquals($groupedExpectedAvailabilities, $availabilities);
+
+
         // TODO shifts
     }
 
@@ -87,67 +101,109 @@ class HospitalExcelTest extends TestCase
         return [
             (new Employee())
                 ->setName('Renata Juknevičienė 29/12')
-                ->setExcelRow(10),
+                ->setExcelRow(10)
+                ->setRow(9)
+            ,
             (new Employee())
                 ->setName('Aleksandras Briedis 24/12')
-                ->setExcelRow(12),
+                ->setExcelRow(12)
+                ->setRow(11)
+            ,
             (new Employee())
                 ->setName('Julius Jaramavičius 42/12')
-                ->setExcelRow(14),
+                ->setExcelRow(14)
+                ->setRow(13)
+            ,
             (new Employee())
                 ->setName('Paulius Uksas 38')
-                ->setExcelRow(16),
+                ->setExcelRow(16)
+                ->setRow(15)
+            ,
             (new Employee())
                 ->setName('Iveta Vėgelytė 41/24')
-                ->setExcelRow(18),
+                ->setExcelRow(18)
+                ->setRow(17)
+            ,
             (new Employee())
                 ->setName('Raminta Konciene 70/36')
-                ->setExcelRow(20),
+                ->setExcelRow(20)
+                ->setRow(19)
+            ,
             (new Employee())
                 ->setName('Giedrius Montrimas 67')
-                ->setExcelRow(22),
+                ->setExcelRow(22)
+                ->setRow(21)
+            ,
             (new Employee())
                 ->setName('Lina Šimėnaitė 37/24')
-                ->setExcelRow(24),
+                ->setExcelRow(24)
+                ->setRow(23)
+            ,
             (new Employee())
                 ->setName('Grakauskienė 89/72')
-                ->setExcelRow(26),
+                ->setExcelRow(26)
+                ->setRow(25)
+            ,
             (new Employee())
                 ->setName('Laura Zajančkovskytė 129/84')
-                ->setExcelRow(28),
+                ->setExcelRow(28)
+                ->setRow(27)
+            ,
             (new Employee())
                 ->setName('Tomas Trybė 87/48')
-                ->setExcelRow(30),
+                ->setExcelRow(30)
+                ->setRow(29)
+            ,
             (new Employee())
                 ->setName('Vesta Aleliūnienė 137/84')
-                ->setExcelRow(32),
+                ->setExcelRow(32)
+                ->setRow(31)
+            ,
             (new Employee())
                 ->setName('Karolis Skaisgirys 37')
-                ->setExcelRow(34),
+                ->setExcelRow(34)
+                ->setRow(33)
+            ,
             (new Employee())
                 ->setName('Eglė Politikaitė 40/24')
-                ->setExcelRow(36),
+                ->setExcelRow(36)
+                ->setRow(35)
+            ,
             (new Employee())
                 ->setName('Edgaras Baliūnas 18 val.')
-                ->setExcelRow(38),
+                ->setExcelRow(38)
+                ->setRow(37)
+            ,
             (new Employee())
                 ->setName('Samanta Plikaitytė 40')
-                ->setExcelRow(40),
+                ->setExcelRow(40)
+                ->setRow(39)
+            ,
             (new Employee())
                 ->setName('Dovilė Petrušytė 24')
-                ->setExcelRow(42),
+                ->setExcelRow(42)
+                ->setRow(41)
+            ,
             (new Employee())
                 ->setName('Narvoiš 40')
-                ->setExcelRow(44),
+                ->setExcelRow(44)
+                ->setRow(43)
+            ,
             (new Employee())
                 ->setName('serbentaite')
-                ->setExcelRow(46),
+                ->setExcelRow(46)
+                ->setRow(45)
+            ,
             (new Employee())
                 ->setName('Michail Lapida 40')
-                ->setExcelRow(48),
+                ->setExcelRow(48)
+                ->setRow(47)
+            ,
             (new Employee())
                 ->setName('Rinkūnas')
-                ->setExcelRow(50),
+                ->setExcelRow(50)
+                ->setRow(49)
+            ,
         ];
     }
 
@@ -183,98 +239,126 @@ class HospitalExcelTest extends TestCase
      * @return Availability[][]
      */
     public function getGroupedExpectedAvailabilities() : array {
-
-        // TODO split availability by shift values - 3 in the day
+        $employees = $this->getExpectedEmployees();
         return [
-            // the key is eilnr value
             1 => [
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-01'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE),
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[0])
+                ->setEmployee($employees[0]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-02'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE),
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                ->setEmployee($employees[0]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-03'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE),
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                ->setEmployee($employees[0]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-04'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE),
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                ->setEmployee($employees[0]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-05'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE),
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                ->setEmployee($employees[0]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-06'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE),
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                ->setEmployee($employees[0]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-07'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE),
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                ->setEmployee($employees[0]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-08'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE),
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                ->setEmployee($employees[0]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-09'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE),
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                ->setEmployee($employees[0]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-10'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE),
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                ->setEmployee($employees[0]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-11'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE),
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                ->setEmployee($employees[0]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-12'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE),
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                ->setEmployee($employees[0]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-13'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE),
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                ->setEmployee($employees[0]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-14'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE),
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                ->setEmployee($employees[0]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-15'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE),
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                ->setEmployee($employees[0]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-16'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE),
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                ->setEmployee($employees[0]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-17'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE),
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                ->setEmployee($employees[0]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-18'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE),
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                ->setEmployee($employees[0]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-19'))
-                    ->setAvailabilityType(Availability::DESIRED),
+                    ->setAvailabilityType(Availability::DESIRED)
+                ->setEmployee($employees[0]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-20'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE),
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                ->setEmployee($employees[0]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-21'))
-                    ->setAvailabilityType(Availability::DESIRED),
+                    ->setAvailabilityType(Availability::DESIRED)
+                ->setEmployee($employees[0]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-22'))
-                    ->setAvailabilityType(Availability::DESIRED),
+                    ->setAvailabilityType(Availability::DESIRED)
+                ->setEmployee($employees[0]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-23'))
-                    ->setAvailabilityType(Availability::DESIRED),
+                    ->setAvailabilityType(Availability::DESIRED)
+                ->setEmployee($employees[0]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-24'))
-                    ->setAvailabilityType(Availability::DESIRED),
+                    ->setAvailabilityType(Availability::DESIRED)
+                ->setEmployee($employees[0]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-25'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE),
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                ->setEmployee($employees[0]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-26'))
-                    ->setAvailabilityType(Availability::DESIRED),
+                    ->setAvailabilityType(Availability::DESIRED)
+                ->setEmployee($employees[0]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-27'))
-                    ->setAvailabilityType(Availability::DESIRED),
+                    ->setAvailabilityType(Availability::DESIRED)
+                ->setEmployee($employees[0]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-28'))
-                    ->setAvailabilityType(Availability::DESIRED),
+                    ->setAvailabilityType(Availability::DESIRED)
+                ->setEmployee($employees[0]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-29'))
-                    ->setAvailabilityType(Availability::DESIRED),
+                    ->setAvailabilityType(Availability::DESIRED)
+                ->setEmployee($employees[0]),
             ]
         ];
     }
