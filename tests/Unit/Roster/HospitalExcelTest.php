@@ -1312,15 +1312,15 @@ class HospitalExcelTest extends TestCase
                     ->setEmployee($employees[9]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-02'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[9]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-03'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[9]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-04'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[9]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-05'))
@@ -1332,7 +1332,7 @@ class HospitalExcelTest extends TestCase
                     ->setEmployee($employees[9]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-07'))
-                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
                     ->setEmployee($employees[9]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-08'))
@@ -1340,7 +1340,7 @@ class HospitalExcelTest extends TestCase
                     ->setEmployee($employees[9]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-09'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[9]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-10'))
@@ -1356,11 +1356,11 @@ class HospitalExcelTest extends TestCase
                     ->setEmployee($employees[9]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-13'))
-                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
                     ->setEmployee($employees[9]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-14'))
-                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
                     ->setEmployee($employees[9]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-15'))
@@ -1368,15 +1368,15 @@ class HospitalExcelTest extends TestCase
                     ->setEmployee($employees[9]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-16'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[9]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-17'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[9]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-18'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[9]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-19'))
@@ -1388,7 +1388,7 @@ class HospitalExcelTest extends TestCase
                     ->setEmployee($employees[9]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-21'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[9]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-22'))
@@ -1396,7 +1396,7 @@ class HospitalExcelTest extends TestCase
                     ->setEmployee($employees[9]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-23'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[9]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-24'))
@@ -1408,37 +1408,37 @@ class HospitalExcelTest extends TestCase
                     ->setEmployee($employees[9]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-26'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[9]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-27'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[9]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-28'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[9]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-29'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[9]),
             ],
             11 => [
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-01'))
-                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
                     ->setEmployee($employees[10]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-02'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[10]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-03'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[10]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-04'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[10]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-05'))
@@ -1454,11 +1454,11 @@ class HospitalExcelTest extends TestCase
                     ->setEmployee($employees[10]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-08'))
-                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
                     ->setEmployee($employees[10]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-09'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[10]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-10'))
@@ -1486,15 +1486,15 @@ class HospitalExcelTest extends TestCase
                     ->setEmployee($employees[10]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-16'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[10]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-17'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[10]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-18'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[10]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-19'))
@@ -1506,15 +1506,15 @@ class HospitalExcelTest extends TestCase
                     ->setEmployee($employees[10]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-21'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
-                    ->setEmployee($employees[10]),
-                (new Availability())
-                    ->setDate(Carbon::parse('2024-02-22'))
                     ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[10]),
                 (new Availability())
-                    ->setDate(Carbon::parse('2024-02-23'))
+                    ->setDate(Carbon::parse('2024-02-22'))
                     ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setEmployee($employees[10]),
+                (new Availability())
+                    ->setDate(Carbon::parse('2024-02-23'))
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[10]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-24'))
@@ -1526,15 +1526,15 @@ class HospitalExcelTest extends TestCase
                     ->setEmployee($employees[10]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-26'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[10]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-27'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[10]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-28'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[10]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-29'))
@@ -1560,19 +1560,19 @@ class HospitalExcelTest extends TestCase
                     ->setEmployee($employees[11]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-05'))
-                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
                     ->setEmployee($employees[11]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-06'))
-                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
                     ->setEmployee($employees[11]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-07'))
-                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
                     ->setEmployee($employees[11]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-08'))
-                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
                     ->setEmployee($employees[11]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-09'))
@@ -1580,11 +1580,11 @@ class HospitalExcelTest extends TestCase
                     ->setEmployee($employees[11]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-10'))
-                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
                     ->setEmployee($employees[11]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-11'))
-                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
                     ->setEmployee($employees[11]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-12'))
@@ -1600,7 +1600,7 @@ class HospitalExcelTest extends TestCase
                     ->setEmployee($employees[11]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-15'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[11]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-16'))
@@ -1624,15 +1624,15 @@ class HospitalExcelTest extends TestCase
                     ->setEmployee($employees[11]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-21'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
-                    ->setEmployee($employees[11]),
-                (new Availability())
-                    ->setDate(Carbon::parse('2024-02-22'))
                     ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[11]),
                 (new Availability())
+                    ->setDate(Carbon::parse('2024-02-22'))
+                    ->setAvailabilityType(Availability::UNDESIRED)
+                    ->setEmployee($employees[11]),
+                (new Availability())
                     ->setDate(Carbon::parse('2024-02-23'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[11]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-24'))
@@ -1644,19 +1644,19 @@ class HospitalExcelTest extends TestCase
                     ->setEmployee($employees[11]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-26'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[11]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-27'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[11]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-28'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[11]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-29'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[11]),
             ],
             13 => [
@@ -1666,15 +1666,15 @@ class HospitalExcelTest extends TestCase
                     ->setEmployee($employees[12]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-02'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[12]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-03'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[12]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-04'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[12]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-05'))
@@ -1694,7 +1694,7 @@ class HospitalExcelTest extends TestCase
                     ->setEmployee($employees[12]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-09'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[12]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-10'))
@@ -1718,19 +1718,19 @@ class HospitalExcelTest extends TestCase
                     ->setEmployee($employees[12]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-15'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[12]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-16'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[12]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-17'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[12]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-18'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[12]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-19'))
@@ -1742,7 +1742,7 @@ class HospitalExcelTest extends TestCase
                     ->setEmployee($employees[12]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-21'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[12]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-22'))
@@ -1750,7 +1750,7 @@ class HospitalExcelTest extends TestCase
                     ->setEmployee($employees[12]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-23'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[12]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-24'))
@@ -1762,19 +1762,19 @@ class HospitalExcelTest extends TestCase
                     ->setEmployee($employees[12]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-26'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[12]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-27'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[12]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-28'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[12]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-29'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[12]),
             ],
             14 => [
@@ -1784,15 +1784,15 @@ class HospitalExcelTest extends TestCase
                     ->setEmployee($employees[13]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-02'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[13]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-03'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[13]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-04'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[13]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-05'))
@@ -1812,7 +1812,7 @@ class HospitalExcelTest extends TestCase
                     ->setEmployee($employees[13]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-09'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[13]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-10'))
@@ -1836,19 +1836,19 @@ class HospitalExcelTest extends TestCase
                     ->setEmployee($employees[13]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-15'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[13]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-16'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[13]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-17'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[13]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-18'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[13]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-19'))
@@ -1860,11 +1860,11 @@ class HospitalExcelTest extends TestCase
                     ->setEmployee($employees[13]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-21'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[13]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-22'))
-                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
                     ->setEmployee($employees[13]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-23'))
@@ -1872,11 +1872,11 @@ class HospitalExcelTest extends TestCase
                     ->setEmployee($employees[13]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-24'))
-                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
                     ->setEmployee($employees[13]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-25'))
-                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
                     ->setEmployee($employees[13]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-26'))
@@ -1902,15 +1902,15 @@ class HospitalExcelTest extends TestCase
                     ->setEmployee($employees[14]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-02'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[14]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-03'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[14]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-04'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[14]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-05'))
@@ -1930,7 +1930,7 @@ class HospitalExcelTest extends TestCase
                     ->setEmployee($employees[14]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-09'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[14]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-10'))
@@ -1954,19 +1954,19 @@ class HospitalExcelTest extends TestCase
                     ->setEmployee($employees[14]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-15'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[14]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-16'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[14]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-17'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[14]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-18'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[14]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-19'))
@@ -1978,7 +1978,7 @@ class HospitalExcelTest extends TestCase
                     ->setEmployee($employees[14]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-21'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[14]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-22'))
@@ -1986,7 +1986,7 @@ class HospitalExcelTest extends TestCase
                     ->setEmployee($employees[14]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-23'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[14]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-24'))
@@ -1998,19 +1998,19 @@ class HospitalExcelTest extends TestCase
                     ->setEmployee($employees[14]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-26'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[14]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-27'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[14]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-28'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[14]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-29'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[14]),
             ],
             16 => [
@@ -2020,23 +2020,23 @@ class HospitalExcelTest extends TestCase
                     ->setEmployee($employees[15]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-02'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[15]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-03'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[15]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-04'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[15]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-05'))
-                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
                     ->setEmployee($employees[15]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-06'))
-                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
                     ->setEmployee($employees[15]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-07'))
@@ -2044,7 +2044,7 @@ class HospitalExcelTest extends TestCase
                     ->setEmployee($employees[15]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-08'))
-                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
                     ->setEmployee($employees[15]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-09'))
@@ -2052,11 +2052,11 @@ class HospitalExcelTest extends TestCase
                     ->setEmployee($employees[15]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-10'))
-                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
                     ->setEmployee($employees[15]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-11'))
-                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
                     ->setEmployee($employees[15]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-12'))
@@ -2064,7 +2064,7 @@ class HospitalExcelTest extends TestCase
                     ->setEmployee($employees[15]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-13'))
-                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
                     ->setEmployee($employees[15]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-14'))
@@ -2072,19 +2072,19 @@ class HospitalExcelTest extends TestCase
                     ->setEmployee($employees[15]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-15'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[15]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-16'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[15]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-17'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[15]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-18'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[15]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-19'))
@@ -2092,11 +2092,11 @@ class HospitalExcelTest extends TestCase
                     ->setEmployee($employees[15]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-20'))
-                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
                     ->setEmployee($employees[15]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-21'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[15]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-22'))
@@ -2104,7 +2104,7 @@ class HospitalExcelTest extends TestCase
                     ->setEmployee($employees[15]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-23'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[15]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-24'))
@@ -2116,7 +2116,7 @@ class HospitalExcelTest extends TestCase
                     ->setEmployee($employees[15]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-26'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[15]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-27'))
@@ -2124,17 +2124,17 @@ class HospitalExcelTest extends TestCase
                     ->setEmployee($employees[15]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-28'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[15]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-29'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[15]),
             ],
             17 => [
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-01'))
-                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
                     ->setEmployee($employees[16]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-02'))
@@ -2150,19 +2150,19 @@ class HospitalExcelTest extends TestCase
                     ->setEmployee($employees[16]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-05'))
-                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
                     ->setEmployee($employees[16]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-06'))
-                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
                     ->setEmployee($employees[16]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-07'))
-                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
                     ->setEmployee($employees[16]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-08'))
-                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
                     ->setEmployee($employees[16]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-09'))
@@ -2170,11 +2170,11 @@ class HospitalExcelTest extends TestCase
                     ->setEmployee($employees[16]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-10'))
-                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
                     ->setEmployee($employees[16]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-11'))
-                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
                     ->setEmployee($employees[16]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-12'))
@@ -2186,7 +2186,7 @@ class HospitalExcelTest extends TestCase
                     ->setEmployee($employees[16]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-14'))
-                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
                     ->setEmployee($employees[16]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-15'))
@@ -2206,7 +2206,7 @@ class HospitalExcelTest extends TestCase
                     ->setEmployee($employees[16]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-19'))
-                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
                     ->setEmployee($employees[16]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-20'))
@@ -2214,7 +2214,7 @@ class HospitalExcelTest extends TestCase
                     ->setEmployee($employees[16]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-21'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[16]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-22'))
@@ -2222,7 +2222,7 @@ class HospitalExcelTest extends TestCase
                     ->setEmployee($employees[16]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-23'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[16]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-24'))
@@ -2230,7 +2230,7 @@ class HospitalExcelTest extends TestCase
                     ->setEmployee($employees[16]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-25'))
-                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
                     ->setEmployee($employees[16]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-26'))
@@ -2238,15 +2238,15 @@ class HospitalExcelTest extends TestCase
                     ->setEmployee($employees[16]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-27'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[16]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-28'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[16]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-29'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[16]),
             ],
             18 => [
@@ -2284,7 +2284,7 @@ class HospitalExcelTest extends TestCase
                     ->setEmployee($employees[17]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-09'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[17]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-10'))
@@ -2308,19 +2308,19 @@ class HospitalExcelTest extends TestCase
                     ->setEmployee($employees[17]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-15'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[17]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-16'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[17]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-17'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[17]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-18'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[17]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-19'))
@@ -2332,7 +2332,7 @@ class HospitalExcelTest extends TestCase
                     ->setEmployee($employees[17]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-21'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[17]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-22'))
@@ -2340,7 +2340,7 @@ class HospitalExcelTest extends TestCase
                     ->setEmployee($employees[17]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-23'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[17]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-24'))
@@ -2352,19 +2352,19 @@ class HospitalExcelTest extends TestCase
                     ->setEmployee($employees[17]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-26'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[17]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-27'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[17]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-28'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[17]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-29'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[17]),
             ],
             19 => [
@@ -2374,15 +2374,15 @@ class HospitalExcelTest extends TestCase
                     ->setEmployee($employees[18]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-02'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[18]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-03'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[18]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-04'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[18]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-05'))
@@ -2402,7 +2402,7 @@ class HospitalExcelTest extends TestCase
                     ->setEmployee($employees[18]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-09'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[18]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-10'))
@@ -2426,19 +2426,19 @@ class HospitalExcelTest extends TestCase
                     ->setEmployee($employees[18]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-15'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[18]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-16'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[18]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-17'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[18]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-18'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[18]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-19'))
@@ -2450,7 +2450,7 @@ class HospitalExcelTest extends TestCase
                     ->setEmployee($employees[18]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-21'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[18]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-22'))
@@ -2458,7 +2458,7 @@ class HospitalExcelTest extends TestCase
                     ->setEmployee($employees[18]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-23'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[18]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-24'))
@@ -2470,19 +2470,19 @@ class HospitalExcelTest extends TestCase
                     ->setEmployee($employees[18]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-26'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[18]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-27'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[18]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-28'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[18]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-29'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[18]),
             ],
             20 => [
@@ -2492,15 +2492,15 @@ class HospitalExcelTest extends TestCase
                     ->setEmployee($employees[19]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-02'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[19]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-03'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[19]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-04'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[19]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-05'))
@@ -2520,7 +2520,7 @@ class HospitalExcelTest extends TestCase
                     ->setEmployee($employees[19]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-09'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[19]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-10'))
@@ -2544,19 +2544,19 @@ class HospitalExcelTest extends TestCase
                     ->setEmployee($employees[19]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-15'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[19]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-16'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[19]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-17'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[19]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-18'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[19]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-19'))
@@ -2568,7 +2568,7 @@ class HospitalExcelTest extends TestCase
                     ->setEmployee($employees[19]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-21'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[19]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-22'))
@@ -2576,7 +2576,7 @@ class HospitalExcelTest extends TestCase
                     ->setEmployee($employees[19]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-23'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[19]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-24'))
@@ -2588,19 +2588,19 @@ class HospitalExcelTest extends TestCase
                     ->setEmployee($employees[19]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-26'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[19]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-27'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[19]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-28'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[19]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-29'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[19]),
             ],
             21 => [
@@ -2611,15 +2611,15 @@ class HospitalExcelTest extends TestCase
                     ->setEmployee($employees[20]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-02'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[20]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-03'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[20]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-04'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[20]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-05'))
@@ -2639,7 +2639,7 @@ class HospitalExcelTest extends TestCase
                     ->setEmployee($employees[20]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-09'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[20]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-10'))
@@ -2647,19 +2647,19 @@ class HospitalExcelTest extends TestCase
                     ->setEmployee($employees[20]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-11'))
-                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
                     ->setEmployee($employees[20]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-12'))
-                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
                     ->setEmployee($employees[20]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-13'))
-                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
                     ->setEmployee($employees[20]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-14'))
-                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
                     ->setEmployee($employees[20]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-15'))
@@ -2679,11 +2679,11 @@ class HospitalExcelTest extends TestCase
                     ->setEmployee($employees[20]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-19'))
-                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
                     ->setEmployee($employees[20]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-20'))
-                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
                     ->setEmployee($employees[20]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-21'))
@@ -2691,7 +2691,7 @@ class HospitalExcelTest extends TestCase
                     ->setEmployee($employees[20]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-22'))
-                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
                     ->setEmployee($employees[20]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-23'))
@@ -2699,7 +2699,7 @@ class HospitalExcelTest extends TestCase
                     ->setEmployee($employees[20]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-24'))
-                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
                     ->setEmployee($employees[20]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-25'))
@@ -2707,19 +2707,19 @@ class HospitalExcelTest extends TestCase
                     ->setEmployee($employees[20]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-26'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[20]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-27'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[20]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-28'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[20]),
                 (new Availability())
                     ->setDate(Carbon::parse('2024-02-29'))
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::DESIRED)
                     ->setEmployee($employees[20]),
             ],
         ];
