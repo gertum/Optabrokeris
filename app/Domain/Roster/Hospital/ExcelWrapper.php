@@ -140,7 +140,7 @@ class ExcelWrapper
      */
     public function parseAvailabilities(array $eilNrs, array $employees, int $year, int $month): array
     {
-        $this->availabilityId = 0;
+        $this->availabilityId = 1;
         /** @var Employee[] $employeesByRow */
         $employeesByRow = MapBuilder::buildMap($employees, fn(Employee $employee) => $employee->getRow());
 
