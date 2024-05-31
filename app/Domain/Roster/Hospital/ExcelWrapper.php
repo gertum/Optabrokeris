@@ -28,6 +28,8 @@ class ExcelWrapper
      */
     private array $cellCache = [];
 
+    private int $availabilityId=1;
+
     public static function parse(string $file): self
     {
         $wrapper = new ExcelWrapper();
@@ -138,6 +140,7 @@ class ExcelWrapper
      */
     public function parseAvailabilities(array $eilNrs, array $employees, int $year, int $month): array
     {
+        $this->availabilityId = 0;
         /** @var Employee[] $employeesByRow */
         $employeesByRow = MapBuilder::buildMap($employees, fn(Employee $employee) => $employee->getRow());
 
@@ -182,6 +185,7 @@ class ExcelWrapper
             }
 
             $availabilities[] = (new Availability())
+                ->setId($this->availabilityId++)
                 ->setEmployee($employee)
                 ->setAvailabilityType($availabilityType)
                 ->setDate($date);
