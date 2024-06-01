@@ -30,7 +30,25 @@ class DateRecognizerTest extends TestCase
                 'recognized' => true,
                 'expectedYear' => 2024,
                 'expectedMonth' => 2,
-            ]
+            ],
+            'test 2' => [
+                'yearMonthRepresentation' => 'asdfasdf 2024 m. Vasario mėn.asdfasdf',
+                'recognized' => true,
+                'expectedYear' => 2024,
+                'expectedMonth' => 2,
+            ],
+            'test 3' => [
+                'yearMonthRepresentation' => 'asdfasdf 2025 m. gruodžio mėn.asdfasdf',
+                'recognized' => true,
+                'expectedYear' => 2025,
+                'expectedMonth' => 12,
+            ],
+            'test 4' => [
+                'yearMonthRepresentation' => 'asdfasdf 2025 m. balalaika mėn.asdfasdf',
+                'recognized' => false,
+                'expectedYear' => 0,
+                'expectedMonth' => 0,
+            ],
         ];
     }
 }
