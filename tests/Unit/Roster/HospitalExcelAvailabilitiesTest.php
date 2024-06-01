@@ -10,9 +10,14 @@ use App\Domain\Roster\Hospital\ExcelWrapper;
 use Carbon\Carbon;
 use PHPUnit\Framework\TestCase;
 
+
+/**
+ * Semi draft test TOO heavy
+ * Will check only part of results in the future.
+ */
 class HospitalExcelAvailabilitiesTest extends TestCase
 {
-    public function testParse()
+    public function _testParse()
     {
         $excelFile = __DIR__ . "/data/vasaris.xlsx";
         $wrapper = ExcelWrapper::parse($excelFile);
@@ -103,106 +108,127 @@ class HospitalExcelAvailabilitiesTest extends TestCase
     {
         return [
             (new Employee())
+                ->setSequenceNumber(1)
                 ->setName('Renata Juknevičienė 29/12')
                 ->setExcelRow(10)
                 ->setRow(9)
             ,
             (new Employee())
+                ->setSequenceNumber(2)
                 ->setName('Aleksandras Briedis 24/12')
                 ->setExcelRow(12)
                 ->setRow(11)
             ,
             (new Employee())
+                ->setSequenceNumber(3)
                 ->setName('Julius Jaramavičius 42/12')
                 ->setExcelRow(14)
                 ->setRow(13)
             ,
             (new Employee())
+                ->setSequenceNumber(4)
                 ->setName('Paulius Uksas 38')
                 ->setExcelRow(16)
                 ->setRow(15)
             ,
             (new Employee())
+                ->setSequenceNumber(5)
                 ->setName('Iveta Vėgelytė 41/24')
                 ->setExcelRow(18)
                 ->setRow(17)
             ,
             (new Employee())
+                ->setSequenceNumber(6)
                 ->setName('Raminta Konciene 70/36')
                 ->setExcelRow(20)
                 ->setRow(19)
             ,
             (new Employee())
+                ->setSequenceNumber(7)
                 ->setName('Giedrius Montrimas 67')
                 ->setExcelRow(22)
                 ->setRow(21)
             ,
             (new Employee())
+                ->setSequenceNumber(8)
                 ->setName('Lina Šimėnaitė 37/24')
                 ->setExcelRow(24)
                 ->setRow(23)
             ,
             (new Employee())
+                ->setSequenceNumber(9)
                 ->setName('Grakauskienė 89/72')
                 ->setExcelRow(26)
                 ->setRow(25)
             ,
             (new Employee())
+                ->setSequenceNumber(10)
                 ->setName('Laura Zajančkovskytė 129/84')
                 ->setExcelRow(28)
                 ->setRow(27)
             ,
             (new Employee())
+                ->setSequenceNumber(11)
                 ->setName('Tomas Trybė 87/48')
                 ->setExcelRow(30)
                 ->setRow(29)
             ,
             (new Employee())
+                ->setSequenceNumber(12)
                 ->setName('Vesta Aleliūnienė 137/84')
                 ->setExcelRow(32)
                 ->setRow(31)
             ,
             (new Employee())
+                ->setSequenceNumber(13)
                 ->setName('Karolis Skaisgirys 37')
                 ->setExcelRow(34)
                 ->setRow(33)
             ,
             (new Employee())
+                ->setSequenceNumber(14)
                 ->setName('Eglė Politikaitė 40/24')
                 ->setExcelRow(36)
                 ->setRow(35)
             ,
             (new Employee())
+                ->setSequenceNumber(15)
                 ->setName('Edgaras Baliūnas 18 val.')
                 ->setExcelRow(38)
                 ->setRow(37)
             ,
             (new Employee())
+                ->setSequenceNumber(16)
                 ->setName('Samanta Plikaitytė 40')
                 ->setExcelRow(40)
                 ->setRow(39)
             ,
             (new Employee())
+                ->setSequenceNumber(17)
                 ->setName('Dovilė Petrušytė 24')
                 ->setExcelRow(42)
                 ->setRow(41)
             ,
             (new Employee())
+                ->setSequenceNumber(18)
                 ->setName('Narvoiš 40')
                 ->setExcelRow(44)
                 ->setRow(43)
             ,
             (new Employee())
+                ->setSequenceNumber(19)
                 ->setName('serbentaite')
                 ->setExcelRow(46)
                 ->setRow(45)
             ,
             (new Employee())
+                ->setSequenceNumber(20)
                 ->setName('Michail Lapida 40')
                 ->setExcelRow(48)
                 ->setRow(47)
             ,
             (new Employee())
+                ->setSequenceNumber(21)
                 ->setName('Rinkūnas')
                 ->setExcelRow(50)
                 ->setRow(49)

@@ -117,16 +117,23 @@ class ExcelWrapper
     {
         $employees = [];
 
+        $workingHoursTitle = $this->findWorkingHoursTitle();
+
         foreach ($eilNrs as $eilNr) {
             $employeeRow = $eilNr->getRow();
             $employeeColumn = $eilNr->getColumn() + 1;
 
             $employeeCell = $this->getCell($employeeRow, $employeeColumn);
+
+            $workingHoursCell = $this->getCell($employeeRow, $workingHoursTitle->getColumn());
 //            // TODO skillSet
             $employees [] = (new Employee())
                 ->setName($employeeCell->value)
                 ->setExcelRow($employeeCell->r)
-                ->setRow($eilNr->getRow());
+                ->setRow($eilNr->getRow())
+                ->setHoursLimit(floatval($workingHoursCell->value))
+                ->setSequenceNumber($eilNr->getValue())
+            ;
         }
 
         return $employees;

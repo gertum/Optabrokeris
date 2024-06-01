@@ -9,12 +9,16 @@ class Employee extends DataTransferObject
     public ?string $name;
     public ?array $skillSet;
 
+    public float $hoursLimit=0;
+
     /**
      * @deprecated use $row instead
      */
     private int $excelRow=0;
 
     private int $row=0;
+
+    private int $sequenceNumber;
 
     public function setName(string $name): Employee
     {
@@ -48,6 +52,28 @@ class Employee extends DataTransferObject
     public function setRow(int $row): Employee
     {
         $this->row = $row;
+        return $this;
+    }
+
+    public function getHoursLimit(): float
+    {
+        return $this->hoursLimit;
+    }
+
+    public function setHoursLimit(float $hoursLimit): Employee
+    {
+        $this->hoursLimit = $hoursLimit;
+        return $this;
+    }
+
+    public function getSequenceNumber(): int
+    {
+        return $this->sequenceNumber;
+    }
+
+    public function setSequenceNumber(int $sequenceNumber): Employee
+    {
+        $this->sequenceNumber = $sequenceNumber;
         return $this;
     }
 }
