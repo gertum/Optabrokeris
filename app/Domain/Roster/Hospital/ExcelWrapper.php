@@ -5,6 +5,7 @@ namespace App\Domain\Roster\Hospital;
 use App\Domain\Roster\Availability;
 use App\Domain\Roster\Employee;
 use App\Exceptions\ExcelParseException;
+use App\Util\DateRecognizer;
 use App\Util\MapBuilder;
 use Carbon\Carbon;
 use Shuchkin\SimpleXLSX;
@@ -28,7 +29,7 @@ class ExcelWrapper
      */
     private array $cellCache = [];
 
-    private int $availabilityId=1;
+    private int $availabilityId = 1;
 
     public static function parse(string $file): self
     {
@@ -201,4 +202,19 @@ class ExcelWrapper
     }
 
 
+    public function findYearMonth(): DateRecognizer
+    {
+        $dateRecognizer = new DateRecognizer();
+
+        for ($row = 0; $row <= self::MAX_ROWS; $row++) {
+            for ($column = 0; $column <= self::MAX_COLUMNS; $column++) {
+                $cell = $this->getCell($row, $column);
+                if ($dateRecognizer->recognizeMonthDate($cell->value)) {
+                    return $dateRecognizer;
+                }
+            }
+        }
+
+        return $dateRecognizer;
+    }
 }

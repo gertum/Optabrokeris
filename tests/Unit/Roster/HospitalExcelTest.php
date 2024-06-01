@@ -72,7 +72,7 @@ class HospitalExcelTest extends TestCase
         $expectedEmployees = $this->getExpectedEmployees();
         $employees = $wrapper->parseEmployees($eilNrs);
 
-        // not wise to compare whole objects
+        // not wise to compare whole objects ?
 //        $this->assertEquals($expectedEmployees, $employees);
         $expectedEmployeesNames = array_map(fn(Employee $e) => $e->name, $expectedEmployees);
         $employeesNames = array_map(fn(Employee $e) => $e->name, $employees);
