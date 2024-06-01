@@ -10,7 +10,7 @@ use App\Domain\Roster\Hospital\ExcelWrapper;
 use Carbon\Carbon;
 use PHPUnit\Framework\TestCase;
 
-class HospitalExcelTest extends TestCase
+class HospitalExcelAvailabilitiesTest extends TestCase
 {
     public function testParse()
     {

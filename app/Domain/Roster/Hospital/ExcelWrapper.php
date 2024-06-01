@@ -217,4 +217,20 @@ class ExcelWrapper
 
         return $dateRecognizer;
     }
+
+    public function findWorkingHoursTitle() : WorkingHoursTitle {
+        $workingHoursTitle = new WorkingHoursTitle();
+
+        for ($row = 0; $row <= self::MAX_ROWS; $row++) {
+            for ($column = 0; $column <= self::MAX_COLUMNS; $column++) {
+                $cell = $this->getCell($row, $column);
+                if ($workingHoursTitle->matchCell($cell, $row, $column)) {
+                    return $workingHoursTitle;
+                }
+            }
+        }
+
+
+        return $workingHoursTitle;
+    }
 }
