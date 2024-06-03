@@ -14,8 +14,14 @@ class HospitalExcelAvailabilitiesWithCorrectDateTest extends TestCase
     /**
      * @dataProvider provideExcelsAndExpectations
      */
-    public function testGetAvailabilities(string $file, int $testedEmployeeNumber, int $testedNumber, DateTimeInterface $expectedDate, string $expectedAvailability) {
-
+    public function testGetAvailabilities(
+        string $file,
+        int $testedEmployeeNumber,
+        int $testedNumber,
+        DateTimeInterface $expectedDate,
+        string $expectedAvailability,
+        int $expectedAvailabilitiesCount,
+    ) {
         $wrapper = ExcelWrapper::parse($file);
 
         $eilNrTitle = $wrapper->findEilNrTitle();
@@ -24,15 +30,21 @@ class HospitalExcelAvailabilitiesWithCorrectDateTest extends TestCase
 
         $dateRecognizer = $wrapper->findYearMonth();
 
-        $availabilities = $wrapper->parseAvailabilities($eilNrs, $employees, $dateRecognizer->getYear(), $dateRecognizer->getMonth() );
+        $availabilities = $wrapper->parseAvailabilities(
+            $eilNrs,
+            $employees,
+            $dateRecognizer->getYear(),
+            $dateRecognizer->getMonth()
+        );
 
+        $this->assertCount($expectedAvailabilitiesCount, $availabilities[$testedEmployeeNumber]);
         $availability = $availabilities[$testedEmployeeNumber][$testedNumber];
-
-        $this->assertEquals( $expectedDate, $availability->date );
-        $this->assertEquals($expectedAvailability, $availability->availabilityType );
+        $this->assertEquals($expectedDate, $availability->date);
+        $this->assertEquals($expectedAvailability, $availability->availabilityType);
     }
 
-    public static function provideExcelsAndExpectations() : array {
+    public static function provideExcelsAndExpectations(): array
+    {
         return [
             'test vasaris 1 employee' => [
                 'file' => __DIR__ . '/data/vasaris.xlsx',
@@ -40,6 +52,7 @@ class HospitalExcelAvailabilitiesWithCorrectDateTest extends TestCase
                 'testedNumber' => 0,
                 'expectedDate' => Carbon::create(2024, 2, 1),
                 'expectedAvailability' => Availability::UNAVAILABLE,
+                'expactedAvailabilitiesCount' => 29,
             ],
             'test birželis 1 employee' => [
                 'file' => __DIR__ . '/data/birželis.xlsx',
@@ -47,6 +60,15 @@ class HospitalExcelAvailabilitiesWithCorrectDateTest extends TestCase
                 'testedNumber' => 8,
                 'expectedDate' => Carbon::create(2024, 6, 9),
                 'expectedAvailability' => Availability::UNAVAILABLE,
+                'expectedAvailabilitiesCount' => 30,
+            ],
+            'test small' => [
+                'file' => __DIR__ . '/data/small.xlsx',
+                'testedEmployeeNumber' => 2,
+                'testedNumber' => 0,
+                'expectedDate' => Carbon::create(2024, 6, 1),
+                'expectedAvailability' => Availability::DESIRED,
+                'expectedAvailabilitiesCount' => 6,
             ],
         ];
     }

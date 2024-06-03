@@ -1,4 +1,4 @@
-1) išsaugom excel koordinates Employee klasėje, kad galima būtų ištraukti availability duomenis
-2) Traukiam tam žmogui priskirtus Availability array (masyvą) formatu
-3) Transformuojam masyvą  į Availability objektus.
-    - dar reikalinga data. Pradžioj įhardkodinam konstantą, po to bandysim iš ekscelio ištraukti.
+
+
+1) limitas - žalia linija
+2) shift'ai

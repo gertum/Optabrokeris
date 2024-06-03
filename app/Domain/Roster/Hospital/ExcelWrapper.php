@@ -19,6 +19,7 @@ class ExcelWrapper
     const MAX_COLUMNS = 40;
 
     const UNAVAILABLE_BACGROUND = '#FF0000';
+    const SEPARATOR_BACKGROUND = '#92D050';
 
     private array $rowsEx = [];
     private ?SimpleXLSX $xlsx = null;
@@ -181,10 +182,14 @@ class ExcelWrapper
         $monthDate = Carbon::create($year, $month);
         for ($day = 1; $day <= $monthDate->daysInMonth; $day++) {
             $date = Carbon::create($year, $month, $day);
+            // TODO 4 to constants or somehow different
             $column = $eilNr->getColumn() + $day + 4;
 
-
             $availabilityCeil = $this->getCell($row, $column);
+            // go till green line ( add break in to the cycle )
+            if ( $availabilityCeil->getBackgroundColor() == self::SEPARATOR_BACKGROUND) {
+                break;
+            }
 
             $availabilityType = Availability::DESIRED;
 
