@@ -46,7 +46,7 @@ class DateRecognizer
         return true;
     }
 
-    public function getMonthSet(): array
+    private function getMonthSet(): array
     {
         if (count(self::$monthSet) == 0) {
             self::$monthSet = array_flip(self::LT_BELONG_TO_MONTH);
