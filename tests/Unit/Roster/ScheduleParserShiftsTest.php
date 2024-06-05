@@ -6,7 +6,7 @@ use App\Domain\Roster\Hospital\ScheduleParser;
 use App\Domain\Roster\Shift;
 use PHPUnit\Framework\TestCase;
 
-class ScheduleParserTest extends TestCase
+class ScheduleParserShiftsTest extends TestCase
 {
     /**
      * @dataProvider provideDataForShiftParser
