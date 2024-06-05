@@ -2,6 +2,9 @@
 
 namespace App\Util;
 
+/**
+ * Recognizes date from a value received from a xlsx cell.
+ */
 class DateRecognizer
 {
     public const LT_BELONG_TO_MONTH = [
