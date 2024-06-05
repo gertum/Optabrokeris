@@ -2,3 +2,9 @@
 
 1) limitas - žalia linija
 2) shift'ai
+
+3) Problemos su DataTransferObject biblioteka, kažkodėl datų nepagauna, nors bibliotekos readme rašo, kad turėtų veikt.
+Gali būti, kad nesutampa php versijos ar dar kažkas..
+Biblioteka nesuportinama, rekomenduoja naudoti cuyz/valinor, taip pat spatie/laravel-data. Spatie/laravel-data gaidys,
+nes unit testų neįmanoma daryti :), kadangi tada objektas turi būti laravelio modelis; modelis turi jungtis prie db,
+o čia nėra jokių db :)

@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\Roster;
+namespace Draft;
 
 use App\Domain\Roster\Availability;
 use App\Domain\Roster\Employee;

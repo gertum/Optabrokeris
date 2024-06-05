@@ -4,12 +4,15 @@ namespace App\Domain\Roster;
 
 use Spatie\DataTransferObject\DataTransferObject;
 
+// TODO use other lib
 class Shift  extends DataTransferObject
 {
     public int $id = 0;
-    // TODO date ?
-    public $start = null;
-    public $end = null;
+
+    // TODO change to datetime
+    public ?string $start = null;
+    // TODO change to datetime
+    public ?string $end = null;
     public ?string $location;
     public ?string $requiredSkill = null;
     public ?Employee $employee = null;
