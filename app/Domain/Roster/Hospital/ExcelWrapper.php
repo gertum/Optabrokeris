@@ -36,6 +36,10 @@ class ExcelWrapper
     {
         $wrapper = new ExcelWrapper();
 
+        if ( !file_exists($file)) {
+            throw new ExcelParseException(sprintf('File %s does not exist', $file));
+        }
+
         $wrapper->xlsx = SimpleXLSX::parse($file);
         $wrapper->rowsEx = $wrapper->xlsx->rowsEx();
 
