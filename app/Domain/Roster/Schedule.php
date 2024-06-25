@@ -2,10 +2,10 @@
 
 namespace App\Domain\Roster;
 
+use App\Util\BinarySearch;
 use Spatie\DataTransferObject\Attributes\CastWith;
 use Spatie\DataTransferObject\Casters\ArrayCaster;
 use Spatie\DataTransferObject\DataTransferObject;
-use DateTimeInterface;
 
 class Schedule extends DataTransferObject
 {
@@ -75,16 +75,15 @@ class Schedule extends DataTransferObject
     /**
      * @param $start mixed currently it is string, later we will make DateTimeInterface or something like that.
      */
-    public function  findShiftByStartDate ($start) : ? Shift {
-        // TODO more effective later
+    public function findShiftByStartDate($start): ?Shift
+    {
+        BinarySearch::search($this->shiftList, $start, fn(Shift $shift, string $start) => $shift->start <=> $start);
 
-        $filteredShifts = array_filter($this->shiftList, fn (Shift $shift)=>$shift->start == $start);
-        if ( count($filteredShifts) == 0 ) {
+        $filteredShifts = array_filter($this->shiftList, fn(Shift $shift) => $shift->start == $start);
+        if (count($filteredShifts) == 0) {
             return null;
         }
 
         return reset($filteredShifts);
     }
-
-
 }

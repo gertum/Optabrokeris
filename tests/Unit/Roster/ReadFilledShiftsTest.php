@@ -37,16 +37,16 @@ class ReadFilledShiftsTest extends TestCase
                         ->setName("Renata Juknevičienė 29/12")
                 )
             ],
-//            'test1_2' => [
-//                'xslxFile'  => __DIR__.'/data/small_partly_filled.xlsx',
-//                'expectedShift' => (new Shift())
-//                ->setStart('2024-06-02 20:00:00')
-//                ->setEnd('2024-06-03 00:00:00')
-//                ->setEmployee(
-//                    (new Employee())
-//                        ->setName("Aleksandras Briedis 24/12")
-//                )
-//            ],
+            'test1_2' => [
+                'xslxFile'  => __DIR__.'/data/small_partly_filled.xlsx',
+                'expectedShift' => (new Shift())
+                ->setStart('2024-06-02T20:00:00')
+                ->setEnd('2024-06-03T00:00:00')
+                ->setEmployee(
+                    (new Employee())
+                        ->setName("Aleksandras Briedis 24/12")
+                )
+            ],
         ];
     }
 }
