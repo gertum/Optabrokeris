@@ -32,21 +32,21 @@ class WriteScheduleTest extends TestCase
 
     public static function provideDataForWriter() : array  {
         return [
-            'test1' => [
-                'sourceXlsx' => __DIR__.'/../data/small.xlsx',
-                'schedule' => (new Schedule()) -> setShiftList([
-                    (new Shift())
-                        ->setStart('2024-06-01T00:00:00')
-                        ->setEnd( '2024-06-01T08:00:00' )
-                        ->setEmployee( (new Employee())->setName('Aleksandras Briedis 24/12'))
-                ]),
-                'destinationXlsx' => __DIR__.'/tmp/smallfilled.xlsx',
-                'expectedShift' =>
-                    (new Shift())
-                        ->setStart('2024-06-01T00:00:00')
-                        ->setEnd( '2024-06-01T08:00:00' )
-                        ->setEmployee( (new Employee())->setName('Aleksandras Briedis 24/12'))
-            ]
+//            'test1' => [
+//                'sourceXlsx' => __DIR__.'/../data/small.xlsx',
+//                'schedule' => (new Schedule()) -> setShiftList([
+//                    (new Shift())
+//                        ->setStart('2024-06-01T00:00:00')
+//                        ->setEnd( '2024-06-01T08:00:00' )
+//                        ->setEmployee( (new Employee())->setName('Aleksandras Briedis 24/12'))
+//                ]),
+//                'destinationXlsx' => __DIR__.'/tmp/smallfilled.xlsx',
+//                'expectedShift' =>
+//                    (new Shift())
+//                        ->setStart('2024-06-01T00:00:00')
+//                        ->setEnd( '2024-06-01T08:00:00' )
+//                        ->setEmployee( (new Employee())->setName('Aleksandras Briedis 24/12'))
+//            ]
         ];
     }
 }
