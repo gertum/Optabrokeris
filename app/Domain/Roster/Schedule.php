@@ -23,7 +23,7 @@ class Schedule extends DataTransferObject
     public ?array $shiftList = [];
 
 
-    public ?string $score = '';
+    public ?string $score = '-999999init/0hard/0soft';
     public ?ScheduleState $scheduleState;
     public ?string $solverState;
 
