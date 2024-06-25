@@ -26,11 +26,33 @@ class ScheduleParser
 
         $dateRecognizer = $wrapper->findYearMonth();
 
+
+        $dateFrom = Carbon::create($dateRecognizer->getYear(), $dateRecognizer->getMonth())->toImmutable();
+
+        $maxAvailabilityDate =  $wrapper->extractMaxAvailabilityDate ($eilNrs[0], $dateRecognizer->getYear(), $dateRecognizer->getMonth());
+
+        /** @var Carbon $dateTill */
+        $dateTill = Carbon::createFromInterface($maxAvailabilityDate);
+        $dateTill->setTime(24, 0);
+
+        $shifts = ShiftsBuilder::buildShifts($dateFrom, $dateTill->toImmutable(), $timeSlices);
+
+        $schedule->setShiftList($shifts);
+
+
+
         $availabilities = $wrapper->parseAvailabilities(
             $eilNrs,
             $employees,
             $dateRecognizer->getYear(),
-            $dateRecognizer->getMonth()
+            $dateRecognizer->getMonth(),
+            new LambdaAvailableAssignmentConsumer( function($from, $till) {
+                if ( $from == null ) {
+                    return;
+                }
+                // TODO
+                echo "from=$from, till=$till\n";
+            })
         );
 
         $availabilitiesFlat = array_reduce(
@@ -42,21 +64,21 @@ class ScheduleParser
         $schedule->setEmployeeList($employees);
         $schedule->setAvailabilityList($availabilitiesFlat);
 
-        $dateFrom = Carbon::create($dateRecognizer->getYear(), $dateRecognizer->getMonth())->toImmutable();
-
-        $maxAvailabilityDate = array_reduce(
-            $availabilitiesFlat,
-            fn(DateTimeInterface $locallyMaxDate, Availability $a) => max($locallyMaxDate, $a->date),
-            $dateFrom
-        );
-
-        /** @var Carbon $dateTill */
-        $dateTill = Carbon::createFromInterface($maxAvailabilityDate);
-        $dateTill->setTime(24, 0);
-
-        $shifts = ShiftsBuilder::buildShifts($dateFrom, $dateTill->toImmutable(), $timeSlices);
-
-        $schedule->setShiftList($shifts);
+//        $dateFrom = Carbon::create($dateRecognizer->getYear(), $dateRecognizer->getMonth())->toImmutable();
+//
+//        $maxAvailabilityDate = array_reduce(
+//            $availabilitiesFlat,
+//            fn(DateTimeInterface $locallyMaxDate, Availability $a) => max($locallyMaxDate, $a->date),
+//            $dateFrom
+//        );
+//
+//        /** @var Carbon $dateTill */
+//        $dateTill = Carbon::createFromInterface($maxAvailabilityDate);
+//        $dateTill->setTime(24, 0);
+//
+//        $shifts = ShiftsBuilder::buildShifts($dateFrom, $dateTill->toImmutable(), $timeSlices);
+//
+//        $schedule->setShiftList($shifts);
 
         // TODO read already written time assignment
 

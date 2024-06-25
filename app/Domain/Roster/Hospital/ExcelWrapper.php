@@ -8,6 +8,7 @@ use App\Exceptions\ExcelParseException;
 use App\Util\DateRecognizer;
 use App\Util\MapBuilder;
 use Carbon\Carbon;
+use DateTimeInterface;
 use Shuchkin\SimpleXLSX;
 
 /**
@@ -17,6 +18,8 @@ class ExcelWrapper
 {
     const MAX_ROWS = 70;
     const MAX_COLUMNS = 40;
+
+    const DISTANCE_BETWEEN_NO_AND_AVAILABILITIES = 4;
 
     const UNAVAILABLE_BACGROUND = '#FF0000';
     const SEPARATOR_BACKGROUND = '#92D050';
@@ -36,7 +39,7 @@ class ExcelWrapper
     {
         $wrapper = new ExcelWrapper();
 
-        if ( !file_exists($file)) {
+        if (!file_exists($file)) {
             throw new ExcelParseException(sprintf('File %s does not exist', $file));
         }
 
@@ -137,8 +140,7 @@ class ExcelWrapper
                 ->setExcelRow($employeeCell->r)
                 ->setRow($eilNr->getRow())
                 ->setMaxWorkingHours(floatval($workingHoursCell->value))
-                ->setSequenceNumber($eilNr->getValue())
-            ;
+                ->setSequenceNumber($eilNr->getValue());
         }
 
         return $employees;
@@ -151,8 +153,13 @@ class ExcelWrapper
      *
      * @return Availability[][]
      */
-    public function parseAvailabilities(array $eilNrs, array $employees, int $year, int $month): array
-    {
+    public function parseAvailabilities(
+        array $eilNrs,
+        array $employees,
+        int $year,
+        int $month,
+        ?AvailableAssignmentConsumer $assignmentConsumer
+    ): array {
         $this->availabilityId = 1;
         /** @var Employee[] $employeesByRow */
         $employeesByRow = MapBuilder::buildMap($employees, fn(Employee $employee) => $employee->getRow());
@@ -166,7 +173,13 @@ class ExcelWrapper
             }
 
             $employee = $employeesByRow[$eilNr->getRow()];
-            $employeeAvailabilities = $this->parseAvailabilitiesForEilNr($eilNr, $year, $month, $employee);
+            $employeeAvailabilities = $this->parseAvailabilitiesForEilNr(
+                $eilNr,
+                $year,
+                $month,
+                $employee,
+                $assignmentConsumer
+            );
             $availabilities[$eilNr->getValue()] = $employeeAvailabilities;
         }
 
@@ -176,8 +189,13 @@ class ExcelWrapper
     /**
      * @return Availability[]
      */
-    public function parseAvailabilitiesForEilNr(EilNr $eilNr, int $year, int $month, Employee $employee): array
-    {
+    public function parseAvailabilitiesForEilNr(
+        EilNr $eilNr,
+        int $year,
+        int $month,
+        Employee $employee,
+        ?AvailableAssignmentConsumer $assignmentConsumer
+    ): array {
         /** @var Availability[] $availabilities */
         $availabilities = [];
 
@@ -186,18 +204,17 @@ class ExcelWrapper
         $monthDate = Carbon::create($year, $month);
         for ($day = 1; $day <= $monthDate->daysInMonth; $day++) {
             $date = Carbon::create($year, $month, $day);
-            // TODO 4 to constants or somehow different
-            $column = $eilNr->getColumn() + $day + 4;
+            $column = $eilNr->getColumn() + $day + self::DISTANCE_BETWEEN_NO_AND_AVAILABILITIES;
 
-            $availabilityCeil = $this->getCell($row, $column);
+            $availabilityCell = $this->getCell($row, $column);
             // go till green line ( add break in to the cycle )
-            if ( $availabilityCeil->getBackgroundColor() == self::SEPARATOR_BACKGROUND) {
+            if ($availabilityCell->getBackgroundColor() == self::SEPARATOR_BACKGROUND) {
                 break;
             }
 
             $availabilityType = Availability::DESIRED;
 
-            if ($availabilityCeil->getBackgroundColor() == self::UNAVAILABLE_BACGROUND) {
+            if ($availabilityCell->getBackgroundColor() == self::UNAVAILABLE_BACGROUND) {
                 $availabilityType = Availability::UNAVAILABLE;
             }
 
@@ -206,15 +223,18 @@ class ExcelWrapper
                 ->setEmployee($employee)
                 ->setAvailabilityType($availabilityType)
                 ->setDate($date);
+
+            if ($assignmentConsumer != null) {
+                $from = $availabilityCell->value;
+                // the lower cell is 'till'
+                $availabilityCell2 = $this->getCell($row + 1, $column);
+                $till = $availabilityCell2->value;
+
+                $assignmentConsumer->setAssignment($from, $till, $employee);
+            }
         }
 
         return $availabilities;
-    }
-
-    public function getShifts(): array
-    {
-        // TODO
-        return [];
     }
 
 
@@ -234,7 +254,8 @@ class ExcelWrapper
         return $dateRecognizer;
     }
 
-    public function findWorkingHoursTitle() : WorkingHoursTitle {
+    public function findWorkingHoursTitle(): WorkingHoursTitle
+    {
         $workingHoursTitle = new WorkingHoursTitle();
 
         for ($row = 0; $row <= self::MAX_ROWS; $row++) {
@@ -248,5 +269,23 @@ class ExcelWrapper
 
 
         return $workingHoursTitle;
+    }
+
+    public function extractMaxAvailabilityDate(EilNr $eilNr, int $year, int $month): DateTimeInterface
+    {
+        $row = $eilNr->getRow();
+        $monthDate = Carbon::create($year, $month);
+        for ($day = 1; $day <= $monthDate->daysInMonth; $day++) {
+            $column = $eilNr->getColumn() + $day + self::DISTANCE_BETWEEN_NO_AND_AVAILABILITIES;
+
+            $availabilityCeil = $this->getCell($row, $column);
+            // go till green line ( add break in to the cycle )
+            if ($availabilityCeil->getBackgroundColor() == self::SEPARATOR_BACKGROUND) {
+                // TODO if the green color is modified, better to check if the rgb part green is the greatest?
+                return Carbon::create($year, $month, $day - 1);
+            }
+        }
+
+        return Carbon::create($year, $month, $monthDate->daysInMonth);
     }
 }

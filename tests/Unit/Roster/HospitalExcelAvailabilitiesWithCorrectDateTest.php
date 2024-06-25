@@ -34,7 +34,8 @@ class HospitalExcelAvailabilitiesWithCorrectDateTest extends TestCase
             $eilNrs,
             $employees,
             $dateRecognizer->getYear(),
-            $dateRecognizer->getMonth()
+            $dateRecognizer->getMonth(),
+            null
         );
 
         $this->assertCount($expectedAvailabilitiesCount, $availabilities[$testedEmployeeNumber]);
