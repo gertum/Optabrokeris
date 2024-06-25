@@ -136,7 +136,7 @@ class ExcelWrapper
                 ->setName($employeeCell->value)
                 ->setExcelRow($employeeCell->r)
                 ->setRow($eilNr->getRow())
-                ->setHoursLimit(floatval($workingHoursCell->value))
+                ->setMaxWorkingHours(floatval($workingHoursCell->value))
                 ->setSequenceNumber($eilNr->getValue())
             ;
         }

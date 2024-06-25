@@ -9,7 +9,7 @@ class Employee extends DataTransferObject
     public ?string $name;
     public ?array $skillSet;
 
-    public float $hoursLimit=0;
+    public float $maxWorkingHours=0;
 
     /**
      * @deprecated use $row instead
@@ -55,14 +55,14 @@ class Employee extends DataTransferObject
         return $this;
     }
 
-    public function getHoursLimit(): float
+    public function getMaxWorkingHours(): float
     {
-        return $this->hoursLimit;
+        return $this->maxWorkingHours;
     }
 
-    public function setHoursLimit(float $hoursLimit): Employee
+    public function setMaxWorkingHours(float $maxWorkingHours): Employee
     {
-        $this->hoursLimit = $hoursLimit;
+        $this->maxWorkingHours = $maxWorkingHours;
         return $this;
     }
 

@@ -5,7 +5,7 @@
       "employee": {
         "name": "Renata Juknevi\u010dien\u0117 29\/12",
         "skillSet": null,
-        "hoursLimit": 74
+        "maxWorkingHours": 74
       },
       "date": "2024-06-01T00:00:00.000000Z",
       "availabilityType": "UNAVAILABLE"
@@ -15,7 +15,7 @@
       "employee": {
         "name": "Renata Juknevi\u010dien\u0117 29\/12",
         "skillSet": null,
-        "hoursLimit": 74
+        "maxWorkingHours": 74
       },
       "date": "2024-06-02T00:00:00.000000Z",
       "availabilityType": "UNAVAILABLE"
@@ -25,7 +25,7 @@
       "employee": {
         "name": "Renata Juknevi\u010dien\u0117 29\/12",
         "skillSet": null,
-        "hoursLimit": 74
+        "maxWorkingHours": 74
       },
       "date": "2024-06-03T00:00:00.000000Z",
       "availabilityType": "DESIRED"
@@ -35,7 +35,7 @@
       "employee": {
         "name": "Renata Juknevi\u010dien\u0117 29\/12",
         "skillSet": null,
-        "hoursLimit": 74
+        "maxWorkingHours": 74
       },
       "date": "2024-06-04T00:00:00.000000Z",
       "availabilityType": "DESIRED"
@@ -45,7 +45,7 @@
       "employee": {
         "name": "Renata Juknevi\u010dien\u0117 29\/12",
         "skillSet": null,
-        "hoursLimit": 74
+        "maxWorkingHours": 74
       },
       "date": "2024-06-05T00:00:00.000000Z",
       "availabilityType": "UNAVAILABLE"
@@ -55,7 +55,7 @@
       "employee": {
         "name": "Renata Juknevi\u010dien\u0117 29\/12",
         "skillSet": null,
-        "hoursLimit": 74
+        "maxWorkingHours": 74
       },
       "date": "2024-06-06T00:00:00.000000Z",
       "availabilityType": "DESIRED"
@@ -65,7 +65,7 @@
       "employee": {
         "name": "Aleksandras Briedis 24\/12",
         "skillSet": null,
-        "hoursLimit": 74
+        "maxWorkingHours": 74
       },
       "date": "2024-06-01T00:00:00.000000Z",
       "availabilityType": "DESIRED"
@@ -75,7 +75,7 @@
       "employee": {
         "name": "Aleksandras Briedis 24\/12",
         "skillSet": null,
-        "hoursLimit": 74
+        "maxWorkingHours": 74
       },
       "date": "2024-06-02T00:00:00.000000Z",
       "availabilityType": "DESIRED"
@@ -85,7 +85,7 @@
       "employee": {
         "name": "Aleksandras Briedis 24\/12",
         "skillSet": null,
-        "hoursLimit": 74
+        "maxWorkingHours": 74
       },
       "date": "2024-06-03T00:00:00.000000Z",
       "availabilityType": "UNAVAILABLE"
@@ -95,7 +95,7 @@
       "employee": {
         "name": "Aleksandras Briedis 24\/12",
         "skillSet": null,
-        "hoursLimit": 74
+        "maxWorkingHours": 74
       },
       "date": "2024-06-04T00:00:00.000000Z",
       "availabilityType": "UNAVAILABLE"
@@ -105,7 +105,7 @@
       "employee": {
         "name": "Aleksandras Briedis 24\/12",
         "skillSet": null,
-        "hoursLimit": 74
+        "maxWorkingHours": 74
       },
       "date": "2024-06-05T00:00:00.000000Z",
       "availabilityType": "DESIRED"
@@ -115,7 +115,7 @@
       "employee": {
         "name": "Aleksandras Briedis 24\/12",
         "skillSet": null,
-        "hoursLimit": 74
+        "maxWorkingHours": 74
       },
       "date": "2024-06-06T00:00:00.000000Z",
       "availabilityType": "UNAVAILABLE"
@@ -125,12 +125,12 @@
     {
       "name": "Renata Juknevi\u010dien\u0117 29\/12",
       "skillSet": null,
-      "hoursLimit": 74
+      "maxWorkingHours": 74
     },
     {
       "name": "Aleksandras Briedis 24\/12",
       "skillSet": null,
-      "hoursLimit": 74
+      "maxWorkingHours": 74
     }
   ],
   "shiftList": [

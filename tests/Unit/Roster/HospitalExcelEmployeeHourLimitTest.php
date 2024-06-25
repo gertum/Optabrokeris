@@ -25,7 +25,7 @@ class HospitalExcelEmployeeHourLimitTest extends TestCase
         $employee = $employees[$testedEmployeeNumber];
 
         $this->assertEquals($expectedName, $employee->name);
-        $this->assertEquals($expectedHoursLimit, $employee->getHoursLimit());
+        $this->assertEquals($expectedHoursLimit, $employee->getMaxWorkingHours());
     }
 
     public static function provideExcels(): array
