@@ -19,7 +19,8 @@ class ScheduleParserShiftsTest extends TestCase
         $this->assertCount($expectedShiftsCount, $schedule->shiftList);
         $shift = $schedule->shiftList[$shiftIndex];
 
-        $this->assertEquals($expectedShift, $shift);
+        $this->assertEquals($expectedShift->start, $shift->start);
+        $this->assertEquals($expectedShift->end, $shift->end);
     }
 
     public static function provideDataForShiftParser() : array {

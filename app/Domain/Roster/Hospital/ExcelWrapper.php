@@ -24,6 +24,8 @@ class ExcelWrapper
     const UNAVAILABLE_BACGROUND = '#FF0000';
     const SEPARATOR_BACKGROUND = '#92D050';
 
+    const TARGET_DATE_FORMAT = 'Y-m-d\\TH:i:s';
+
     private array $rowsEx = [];
     private ?SimpleXLSX $xlsx = null;
 
@@ -226,16 +228,22 @@ class ExcelWrapper
 
             if ($assignmentConsumer != null) {
                 $from = $availabilityCell->value;
-                // the lower cell is 'till'
-                $availabilityCell2 = $this->getCell($row + 1, $column);
-                $till = $availabilityCell2->value;
+                if ( $from != null ) {
+                    $from = Carbon::parse($from)->setDate($year, $month, $day)->format(self::TARGET_DATE_FORMAT);
+                    // the lower cell is 'till'
+                    $availabilityCell2 = $this->getCell($row + 1, $column);
+                    $till = $availabilityCell2->value;
+                    $till = Carbon::parse($till)->setDate($year, $month, $day)->format(self::TARGET_DATE_FORMAT);
 
-                $assignmentConsumer->setAssignment($from, $till, $employee);
+                    $assignmentConsumer->setAssignment($from, $till, $employee);
+                }
             }
         }
 
         return $availabilities;
     }
+
+
 
 
     public function findYearMonth(): DateRecognizer

@@ -30,12 +30,12 @@ class BinarySearch
                 return $mid;
             }
 
-            if ($comparedValue < 0) {
+            if ($comparedValue > 0) {
                 $high = $mid - 1;
                 continue;
             }
 
-            // $comparedValue > 0
+            // $comparedValue < 0
             $low = $mid + 1;
         }
 
