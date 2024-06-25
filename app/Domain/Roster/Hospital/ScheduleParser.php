@@ -2,11 +2,9 @@
 
 namespace App\Domain\Roster\Hospital;
 
-use App\Domain\Roster\Availability;
 use App\Domain\Roster\Schedule;
 use Carbon\Carbon;
 use DateInterval;
-use DateTimeInterface;
 
 class ScheduleParser
 {
@@ -14,8 +12,12 @@ class ScheduleParser
     /**
      * @param DateInterval[] $timeSlices
      */
-    public function parseScheduleXls(string $file, array $timeSlices): Schedule
+    public function parseScheduleXls(string $file, ?array $timeSlices = null): Schedule
     {
+        if ($timeSlices == null || count($timeSlices) == 0) {
+            $timeSlices = ScheduleParser::createHospitalTimeSlices();
+        }
+
         $schedule = new Schedule();
 
         $wrapper = ExcelWrapper::parse($file);
@@ -28,7 +30,11 @@ class ScheduleParser
 
         $dateFrom = Carbon::create($dateRecognizer->getYear(), $dateRecognizer->getMonth())->toImmutable();
 
-        $maxAvailabilityDate =  $wrapper->extractMaxAvailabilityDate ($eilNrs[0], $dateRecognizer->getYear(), $dateRecognizer->getMonth());
+        $maxAvailabilityDate = $wrapper->extractMaxAvailabilityDate(
+            $eilNrs[0],
+            $dateRecognizer->getYear(),
+            $dateRecognizer->getMonth()
+        );
 
         /** @var Carbon $dateTill */
         $dateTill = Carbon::createFromInterface($maxAvailabilityDate);
