@@ -58,6 +58,8 @@ class ScheduleParser
 
         $schedule->setShiftList($shifts);
 
+        // TODO read already written time assignment
+
         return $schedule;
     }
 

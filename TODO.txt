@@ -1,0 +1,7 @@
+dabar padarytas uždavinio siuntimas solveriui.
+
+Reikia:
+
+* įsiginlinti ar gerai sprendžia ( padaryti sprendžiamą minimalų pavyzdį )
+* suprogramuoti rezultatų išvedimą į xlsx failą.
+    * reiks gal padaryti, kad ne kurtų naują nuo 0, o imtų už pagrindą duotą kažkokį xlsx failą, tuomet liks papildomi duomenys ir formatavimas, buvęs tame xlsx faile (toks tikslas).
