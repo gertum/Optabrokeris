@@ -125,3 +125,61 @@ multipart file parameter 'task'
 
 Download:
 /api/job/1/donwload
+
+### login
+Request:
+
+    http://localhost:8080/login
+
+Body:
+
+    {"email":"admin@inkodus.lt","password":"Labas123","remember":false}
+
+Response:
+
+    vJt3JqBkzqTUkPbZS9FTZKW6aT8h3lJjQifPQcdS
+
+
+Others http request headers will need to have:
+
+    X-CSRF-TOKEN : vJt3JqBkzqTUkPbZS9FTZKW6aT8h3lJjQifPQcdS
+
+Or a http request parameter will need to be passed: 
+    
+    _token=vJt3JqBkzqTUkPbZS9FTZKW6aT8h3lJjQifPQcdS
+
+
+### adding job
+
+POST 
+
+    http://localhost:8080/api/job?type=roster
+
+body 
+
+    {
+    "name" : "kapiec"
+    }
+
+arba vietoj body galima paduoti "name" per parametrus : &name=kapiec
+
+### job list
+
+http://localhost:8080/api/job
+
+
+
+### uploading
+
+POST 
+
+    http://localhost:8080/api/job/1/upload
+
+Body
+
+    multipart ,
+    give parameter 'file' value - your file.
+
+
+
+

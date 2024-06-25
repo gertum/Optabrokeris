@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Exceptions\ValidateException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Job\JobRequest;
 use App\Http\Requests\Job\JobSolveRequest;
@@ -68,15 +69,21 @@ class JobController extends Controller
     public function create(Request $request)
     {
         $validator = Validator::make($request->all(), [
+            'name' => ['required'],
             'type' => [
                 'required',
                 Rule::in(SolverClientFactory::TYPES),
             ],
-            'name' => ['required'],
 
         ]);
 
+
         $validated = $validator->validated();
+        // laravelis gaidys, nes nurodžiau kad name 'required' (žr 10 eilučių aukščiau :  'name' => ['required'] ) , o jis neduoda klaidos, jeigu nepaduodu 'name' per requestą.
+        if (!array_key_exists('name', $validated)) {
+            throw new ValidateException('Required job parameter "name" is missing.');
+        }
+
         $body = $request->getContent();
 
         $validated['data'] = $body;
@@ -92,8 +99,7 @@ class JobController extends Controller
 
     public function update(JobRequest $request, Job $job)
     {
-        // @Vytenis : kai padareik kad Job $job būt per parametrus
-        // Kas bus, kai uzeris updatins ne savo job'ą?
+        // TODO @Vytenis : po pakeitimo, kad Job $job būtų per parametrus, nustojo veikti mano padarytas apribojimas matyti ir redaguoti tik savo job'us.
         return $job->update($request->validated());
     }
 

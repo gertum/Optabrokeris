@@ -4,10 +4,12 @@ namespace App\Transformers;
 
 use App\Exceptions\ValidateException;
 use App\Solver\SolverClientFactory;
+use App\Transformers\Roster\AmbulanceOfficeDataHandler;
 use App\Transformers\School\SpreadSheetWithHeadersDataHandler;
 
 class SpreadSheetHandlerFactory
 {
+    /** @var bool feature flag */
     private bool $useHeadersVersion = false;
 
     public function __construct(bool $useHeadersVersion)
@@ -26,6 +28,14 @@ class SpreadSheetHandlerFactory
                 return new SpreadSheetWithHeadersDataHandler();
             }
             return new ExcelSchoolDataHandler();
+        }
+
+        if ( $type== SolverClientFactory::TYPE_ROSTER) {
+            if (!str_ends_with($fileName, '.xlsx')) {
+                throw new ValidateException('We currently only handle xlsx file extensions for %s', $type);
+            }
+
+            return new AmbulanceOfficeDataHandler();
         }
 
         throw new ValidateException(sprintf('Unimplemented job type %s', $type));
