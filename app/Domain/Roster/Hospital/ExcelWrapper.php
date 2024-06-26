@@ -206,7 +206,7 @@ class ExcelWrapper
         $monthDate = Carbon::create($year, $month);
         for ($day = 1; $day <= $monthDate->daysInMonth; $day++) {
             $date = Carbon::create($year, $month, $day);
-            $column = $eilNr->getColumn() + $day + self::DISTANCE_BETWEEN_NO_AND_AVAILABILITIES;
+            $column = $this->getCell($eilNr->getColumn(), $day);
 
             $availabilityCell = $this->getCell($row, $column);
             // go till green line ( add break in to the cycle )
@@ -228,7 +228,7 @@ class ExcelWrapper
 
             if ($assignmentConsumer != null) {
                 $from = $availabilityCell->value;
-                if ( $from != null ) {
+                if ($from != null) {
                     $from = Carbon::parse($from)->setDate($year, $month, $day)->format(self::TARGET_DATE_FORMAT);
                     // the lower cell is 'till'
                     $availabilityCell2 = $this->getCell($row + 1, $column);
@@ -242,8 +242,6 @@ class ExcelWrapper
 
         return $availabilities;
     }
-
-
 
 
     public function findYearMonth(): DateRecognizer
@@ -279,12 +277,15 @@ class ExcelWrapper
         return $workingHoursTitle;
     }
 
+    /**
+     * Detects greatest date by searching a separator column, or going max of this month days.
+     */
     public function extractMaxAvailabilityDate(EilNr $eilNr, int $year, int $month): DateTimeInterface
     {
         $row = $eilNr->getRow();
         $monthDate = Carbon::create($year, $month);
         for ($day = 1; $day <= $monthDate->daysInMonth; $day++) {
-            $column = $eilNr->getColumn() + $day + self::DISTANCE_BETWEEN_NO_AND_AVAILABILITIES;
+            $column = $this->getColumnByDay($eilNr->getColumn(), $day);
 
             $availabilityCeil = $this->getCell($row, $column);
             // go till green line ( add break in to the cycle )
@@ -295,5 +296,10 @@ class ExcelWrapper
         }
 
         return Carbon::create($year, $month, $monthDate->daysInMonth);
+    }
+
+    public function getColumnByDay(int $eilNrColumn, int $day): int
+    {
+        return $eilNrColumn + $day + self::DISTANCE_BETWEEN_NO_AND_AVAILABILITIES;
     }
 }

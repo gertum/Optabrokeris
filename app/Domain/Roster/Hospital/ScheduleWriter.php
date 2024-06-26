@@ -3,39 +3,75 @@
 namespace App\Domain\Roster\Hospital;
 
 use alexandrainst\XlsxFastEditor\XlsxFastEditor;
+use App\Domain\Roster\Employee;
 use App\Domain\Roster\Schedule;
-use Shuchkin\SimpleXLSXGen;
+use App\Util\MapBuilder;
+use Carbon\Carbon;
+use Monolog\Logger;
 
 class ScheduleWriter
 {
-    public function writeSchedule(string $fileTemplate, Schedule $schedule, string $outputFile)
-    {
-        $wrapper = ExcelWrapper::parse($fileTemplate);
-//        $xlsxGen = new SimpleXLSXGen();
-//        // šitas sprendimas netinka, reikia kitos bibliotekos
-//        // gal šita tiktų : alexandrainst/php-xlsx-fast-editor
-//        $sheets = $wrapper->getXlsx()->getSheets();
-//        $xlsxGen->addSheet($wrapper->getXlsx()->rows(), $sheets[0]->getName());
-//
-//        // TODO fill values from $schedule
-//
-//        $xlsxGen->setAuthor('Inkodus');
-//        $xlsxGen->setCompany('Inkodus');
-//        $xlsxGen->setManager('Inkodus');
-//        $xlsxGen->setLastModifiedBy('Inkodus');
-//
-//        $xlsxGen->saveAs($outputFile);
+    private Logger $logger;
 
+    /**
+     * @param Logger $logger
+     */
+    public function __construct(Logger $logger)
+    {
+        $this->logger = $logger;
+    }
+
+    public function writeSchedule(string $fileTemplate, Schedule $schedule, string $outputFile): void
+    {
         copy($fileTemplate, $outputFile);
 
-        // $wrapper must tell where is the cell we need to edit
-
         $xlsxFastEditor = new XlsxFastEditor($outputFile);
+        $worksheetId1 = 1;
 
-        $worksheetName = $xlsxFastEditor->getWorksheetName(1);
-        $worksheetId1 = $xlsxFastEditor->getWorksheetNumber($worksheetName);
+        // $wrapper must tell where is the cell we need to edit
+        $wrapper = ExcelWrapper::parse($fileTemplate);
 
-        $xlsxFastEditor->writeString($worksheetId1,'H10', 'test');
+        $eilNrTitle = $wrapper->findEilNrTitle();
+        $eilNrs = $wrapper->parseEilNrs($eilNrTitle);
+        $employees = $wrapper->parseEmployees($eilNrs); // employees brings row number inside
+
+        /** @var Employee[] $employeesByName */
+        $employeesByName = MapBuilder::buildMap($employees, fn(Employee $e) => $e->name);
+
+        foreach ($schedule->shiftList as $shift) {
+            if ($shift->employee == null || $shift->employee->name == null) {
+                continue;
+            }
+
+            if (!array_key_exists($shift->employee->name, $employeesByName)) {
+                $this->logger->warning(
+                    sprintf(
+                        'Could not find employee by name [%s] in excel file [%s]',
+                        $shift->employee->name,
+                        $fileTemplate
+                    )
+                );
+                continue;
+            }
+
+            $parsedEmployee = $employeesByName[$shift->employee->name];
+            $row = $parsedEmployee->getRow();
+
+            $startDate = Carbon::parse($shift->start);
+            $endDate = Carbon::parse($shift->end);
+            $column = $wrapper->getColumnByDay($eilNrTitle->getColumn(), $startDate->day);
+
+            $cellFrom = $wrapper->getCell($row, $column);
+            $cellTill = $wrapper->getCell($row + 1, $column);
+
+
+//            $xlsxFastEditor->writeString($worksheetId1, $cellFrom->name, $startDate->format('H:i'));
+//            $xlsxFastEditor->writeString($worksheetId1, $cellTill->name, $endDate->format('H:i'));
+            $dayPartFrom = $startDate->hour/24;
+            $dayPartTill = $endDate->hour/24;
+            $xlsxFastEditor->writeFloat($worksheetId1, $cellFrom->name, $dayPartFrom);
+            $xlsxFastEditor->writeFloat($worksheetId1, $cellTill->name, $dayPartTill);
+        }
 
         $xlsxFastEditor->save();
     }

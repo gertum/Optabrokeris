@@ -7,6 +7,7 @@ use App\Domain\Roster\Hospital\ScheduleParser;
 use App\Domain\Roster\Hospital\ScheduleWriter;
 use App\Domain\Roster\Schedule;
 use App\Domain\Roster\Shift;
+use Monolog\Logger;
 use PHPUnit\Framework\TestCase;
 
 class WriteScheduleTest extends TestCase
@@ -16,7 +17,8 @@ class WriteScheduleTest extends TestCase
      */
     public function testWrite(string $sourceXlsx, Schedule $schedule, string $destinationXlsx, Shift $expectedShift)
     {
-        $scheduleWriter = new ScheduleWriter();
+        $logger = new Logger('test');
+        $scheduleWriter = new ScheduleWriter($logger);
         $scheduleWriter->writeSchedule($sourceXlsx, $schedule, $destinationXlsx);
 
         // asserts
@@ -30,22 +32,23 @@ class WriteScheduleTest extends TestCase
         $this->assertEquals($expectedShift->employee->name, $foundShift->employee->name);
     }
 
-    public static function provideDataForWriter() : array  {
+    public static function provideDataForWriter(): array
+    {
         return [
             'test1' => [
-                'sourceXlsx' => __DIR__.'/../data/small.xlsx',
-                'schedule' => (new Schedule()) -> setShiftList([
+                'sourceXlsx' => __DIR__ . '/../data/small.xlsx',
+                'schedule' => (new Schedule())->setShiftList([
                     (new Shift())
                         ->setStart('2024-06-01T00:00:00')
-                        ->setEnd( '2024-06-01T08:00:00' )
-                        ->setEmployee( (new Employee())->setName('Aleksandras Briedis 24/12'))
+                        ->setEnd('2024-06-01T08:00:00')
+                        ->setEmployee((new Employee())->setName('Aleksandras Briedis 24/12'))
                 ]),
-                'destinationXlsx' => __DIR__.'/tmp/smallfilled.xlsx',
+                'destinationXlsx' => __DIR__ . '/tmp/smallfilled.xlsx',
                 'expectedShift' =>
                     (new Shift())
                         ->setStart('2024-06-01T00:00:00')
-                        ->setEnd( '2024-06-01T08:00:00' )
-                        ->setEmployee( (new Employee())->setName('Aleksandras Briedis 24/12'))
+                        ->setEnd('2024-06-01T08:00:00')
+                        ->setEmployee((new Employee())->setName('Aleksandras Briedis 24/12'))
             ]
         ];
     }
