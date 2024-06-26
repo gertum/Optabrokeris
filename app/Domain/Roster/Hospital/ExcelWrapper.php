@@ -62,7 +62,7 @@ class ExcelWrapper
     }
 
 
-    public function getCell($row, $column): Cell
+    public function getCell(int $row, int $column): Cell
     {
         if (!array_key_exists($row, $this->cellCache)) {
             $this->cellCache[$row] = [];
@@ -206,7 +206,7 @@ class ExcelWrapper
         $monthDate = Carbon::create($year, $month);
         for ($day = 1; $day <= $monthDate->daysInMonth; $day++) {
             $date = Carbon::create($year, $month, $day);
-            $column = $this->getCell($eilNr->getColumn(), $day);
+            $column = $this->getColumnByDay($eilNr->getColumn(), $day);
 
             $availabilityCell = $this->getCell($row, $column);
             // go till green line ( add break in to the cycle )
@@ -228,11 +228,18 @@ class ExcelWrapper
 
             if ($assignmentConsumer != null) {
                 $from = $availabilityCell->value;
-                if ($from != null) {
+                $availabilityCell2 = $this->getCell($row + 1, $column);
+                $till = $availabilityCell2->value;
+
+                if ($from != null || $till != null ) {
+                    if ( $from == null ) {
+                        $from = "00:00";
+                    }
+                    if ( $till == null ) {
+                        $till = "00:00";
+                    }
+
                     $from = Carbon::parse($from)->setDate($year, $month, $day)->format(self::TARGET_DATE_FORMAT);
-                    // the lower cell is 'till'
-                    $availabilityCell2 = $this->getCell($row + 1, $column);
-                    $till = $availabilityCell2->value;
                     $till = Carbon::parse($till)->setDate($year, $month, $day)->format(self::TARGET_DATE_FORMAT);
 
                     $assignmentConsumer->setAssignment($from, $till, $employee);
