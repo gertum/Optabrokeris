@@ -12,6 +12,7 @@ return new class extends Migration
      */
     public function up(): void
     {
+        // This way we make longblob (good) instead of blob (bad), which is created using ->binary function.
         DB::statement( /** @lang MySQL */"ALTER TABLE jobs ADD original_file_content LONGBLOB");
     }
 
