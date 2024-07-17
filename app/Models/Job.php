@@ -84,8 +84,14 @@ class Job extends Model
         return $this->setAttribute('original_file_content', base64_encode($content));
     }
 
-    public function getOriginalFileContent() : string {
-        return base64_decode( $this->getAttribute('original_file_content') );
+    public function getOriginalFileContent(): string
+    {
+        return base64_decode($this->getAttribute('original_file_content'));
+    }
+
+    public function getName(): string
+    {
+        return $this->getAttribute('name');
     }
 
 }
