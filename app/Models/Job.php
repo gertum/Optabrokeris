@@ -22,6 +22,8 @@ class Job extends Model
         'flag_solved',
     ];
 
+    protected $hidden = ['original_file_content'];
+
     public function scopeUser($builder, $userId)
     {
         return $builder->where('user_id', '=', $userId);
@@ -75,6 +77,15 @@ class Job extends Model
     public function setFlagUploaded(bool $flag)
     {
         return $this->setAttribute('flag_uploaded', $flag);
+    }
+
+    public function setOriginalFileContent(string $content)
+    {
+        return $this->setAttribute('original_file_content', base64_encode($content));
+    }
+
+    public function getOriginalFileContent() : string {
+        return base64_decode( $this->getAttribute('original_file_content') );
     }
 
 }

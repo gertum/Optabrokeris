@@ -136,6 +136,8 @@ class JobController extends Controller
         $fileHandler = $fileHandlerFactory->createHandler($job->getType(), $file->getClientOriginalName());
 
         $dataArray = $fileHandler->spreadSheetToArray($file->getRealPath());
+        $job->setOriginalFileContent(file_get_contents($file->getRealPath()));
+
         $fileHandler->validateDataArray($dataArray);
         $job->setData(json_encode($dataArray));
 
