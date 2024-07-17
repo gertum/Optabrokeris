@@ -109,7 +109,8 @@ class JobController extends Controller
         $repeat = $request->get('repeat', false);
 
         if (!$repeat) {
-            $solverId = $solverClient->registerData($job->data);
+            $data = $job->getData();
+            $solverId = $solverClient->registerData($data);
             $job->update(['solver_id' => $solverId]);
         }
 

@@ -86,4 +86,26 @@ class Schedule extends DataTransferObject
 
         return reset($filteredShifts);
     }
+
+    public function fillSkills(string $skill): self
+    {
+        foreach ($this->shiftList as $shift) {
+            $shift->setRequiredSkill($skill);
+        }
+
+        foreach ($this->employeeList as $employee) {
+            $employee->skillSet = [$skill];
+        }
+
+        return $this;
+    }
+
+    public function fillLocation(string $location): self
+    {
+        foreach ($this->shiftList as $shift) {
+            $shift->setLocation($location);
+        }
+        return $this;
+    }
+
 }

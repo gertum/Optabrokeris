@@ -8,3 +8,32 @@ Gali būti, kad nesutampa php versijos ar dar kažkas..
 Biblioteka nesuportinama, rekomenduoja naudoti cuyz/valinor, taip pat spatie/laravel-data. Spatie/laravel-data gaidys,
 nes unit testų neįmanoma daryti :), kadangi tada objektas turi būti laravelio modelis; modelis turi jungtis prie db,
 o čia nėra jokių db :)
+
+
+4) Reikia dabar kartu su solvinimu išbandyti upload'ą ir downlod'ą.
+
+- ką daryti , kai restartuojasi solveris ir išsitrina visi job'ai ?
+Tuo tarpu optabrokeryje lieka id įrašytas kurs nebeatitinka realybės.
++ gali taip atsitikti kad solveryje jau kažkas kitas uploadino savo duomenis
+ir tada rodys svetimus duomenis.
+
+Siūlomas sprendimas:
+solveryje naudoti UUID
+Restartavus solverį dings, bet sugeneravus naują niekados svetimas nepaims ne savo rezultatus iš solverio. ( UUID niekad nepersidengia )
+
+vadinasi solver id turi būti ne int'as, o 40 simbolių string'as.
+
+Kol kas šitoj versijoj dirbsim su int'ais kad išleisti veikiantį variantą.
+
+Reikia handlinti 404 klaidą, kai kreipiamasi į solverį. Tokiu atveju reikia solveryje pakartotinai sukurti naują job'ą ir id įrašyti į optabrocker job'o solver_id.
+
+Atrodo dabar padaryta, kad jeigu nenurodytas parametras 'repeat' kiekvieną kartą sukuria naują job'ą solveryje;
+reiškia turėtų nebūti visų tų problemų.
+
+Dabar problema json'e - rašo solveris, kad nėra skillset'o. Reikia paimti json'ą ir testuoti atskirai vien solverį, kol pavyks išspręsti problemą.
+
+Reikia sutvarkyti problemos handlinimą - nes jei ateity bus kokių prolbemų, tai labai sunku identifikuoti problemą.
+T.y. dabar sutvarkytume skillset'o nustatymus, bet jei bus kokia kita klaida, tai ją bus sunku aptikti, kol nebus sutvarkytas error handleris.
+
+** prioritetas 1 sutvarkyti handlerį
+** prioritetas 2 užpildyti skillset'ą

@@ -27,8 +27,13 @@ class AmbulanceOfficeDataHandler implements SpreadSheetDataHandler
 
         $schedule = $scheduleParser->parseScheduleXls($excelFile, ScheduleParser::createHospitalTimeSlices());
 
+        // fill missing skills because they are non-existent in the exel file.
+        $schedule->fillSkills('medicine' );
+        $schedule->fillLocation('ambulance office');
+
         return $schedule->toArray();
     }
+
 
     public function arrayToSpreadSheet(array $data, string $excelFile, string $originalFileContent = ''): void
     {
@@ -43,7 +48,6 @@ class AmbulanceOfficeDataHandler implements SpreadSheetDataHandler
     public function validateDataArray(array $data): void
     {
         // not implemented yet
-        // TODO: Implement validateDataArray() method.
     }
 
 }
