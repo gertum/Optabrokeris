@@ -152,7 +152,7 @@ class JobController extends Controller
 
     public function download(Request $request, Job $job, SpreadSheetHandlerFactory $fileHandlerFactory)
     {
-        $fileName = sprintf('result_%s.xlsx', $job->getKey());
+        $fileName = sprintf('%s_result_%s.xlsx', $job->getName(), $job->getKey());
 
         $file = '/tmp/' . $fileName;
 
@@ -166,7 +166,7 @@ class JobController extends Controller
         }
 
         $dataArray = Utils::jsonDecode($data, true);
-        $fileHandler->arrayToSpreadSheet($dataArray, $file);
+        $fileHandler->arrayToSpreadSheet($dataArray, $file, $job->getOriginalFileContent());
 
         return response()->download($file, $fileName);
     }

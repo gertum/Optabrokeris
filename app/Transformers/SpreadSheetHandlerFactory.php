@@ -6,6 +6,7 @@ use App\Exceptions\ValidateException;
 use App\Solver\SolverClientFactory;
 use App\Transformers\Roster\AmbulanceOfficeDataHandler;
 use App\Transformers\School\SpreadSheetWithHeadersDataHandler;
+use Illuminate\Support\Facades\App;
 
 class SpreadSheetHandlerFactory
 {
@@ -27,15 +28,16 @@ class SpreadSheetHandlerFactory
             if ($this->useHeadersVersion) {
                 return new SpreadSheetWithHeadersDataHandler();
             }
+            
             return new ExcelSchoolDataHandler();
         }
 
-        if ( $type== SolverClientFactory::TYPE_ROSTER) {
+        if ($type == SolverClientFactory::TYPE_ROSTER) {
             if (!str_ends_with($fileName, '.xlsx')) {
                 throw new ValidateException('We currently only handle xlsx file extensions for %s', $type);
             }
 
-            return new AmbulanceOfficeDataHandler();
+            return App::make(AmbulanceOfficeDataHandler::class);
         }
 
         throw new ValidateException(sprintf('Unimplemented job type %s', $type));

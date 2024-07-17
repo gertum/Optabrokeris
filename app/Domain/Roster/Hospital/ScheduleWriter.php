@@ -7,16 +7,13 @@ use App\Domain\Roster\Employee;
 use App\Domain\Roster\Schedule;
 use App\Util\MapBuilder;
 use Carbon\Carbon;
-use Monolog\Logger;
+use Psr\Log\LoggerInterface;
 
 class ScheduleWriter
 {
-    private Logger $logger;
+    private LoggerInterface $logger;
 
-    /**
-     * @param Logger $logger
-     */
-    public function __construct(Logger $logger)
+    public function __construct(LoggerInterface $logger)
     {
         $this->logger = $logger;
     }

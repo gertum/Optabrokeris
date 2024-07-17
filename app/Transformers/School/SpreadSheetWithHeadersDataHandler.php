@@ -16,7 +16,7 @@ class SpreadSheetWithHeadersDataHandler implements SpreadSheetDataHandler
         return $schoolDataTransformer->excelToJson($sheetsRows);
     }
 
-    public function arrayToSpreadSheet(array $data, string $excelFile): void
+    public function arrayToSpreadSheet(array $data, string $excelFile, string $originalFileContent=''): void
     {
         $schoolDataTransformer = new SchoolDataTransformer();
         $excelData = $schoolDataTransformer->jsonToExcel($data);

@@ -88,7 +88,7 @@ class ExcelSchoolDataHandler implements SpreadSheetDataHandler
         throw new ExcelParseException(SimpleXLSX::parseError());
     }
 
-    public function arrayToSpreadSheet(array $data, string $excelFile): void
+    public function arrayToSpreadSheet(array $data, string $excelFile, string $originalFileContent = ''): void
     {
         $this->validateData($data);
 
