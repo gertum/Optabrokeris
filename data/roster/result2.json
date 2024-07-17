@@ -1,0 +1,479 @@
+{
+  "id": 2,
+  "availabilityList": [
+    {
+      "id": 1,
+      "employee": {
+        "name": "Renata Juknevičienė 29/12",
+        "skillSet": [
+          "medicine"
+        ],
+        "maxWorkingHours": 74.0,
+        "maxWorkingMinutes": 4440
+      },
+      "date": "2024-06-01",
+      "availabilityType": "UNAVAILABLE"
+    },
+    {
+      "id": 2,
+      "employee": {
+        "name": "Renata Juknevičienė 29/12",
+        "skillSet": [
+          "medicine"
+        ],
+        "maxWorkingHours": 74.0,
+        "maxWorkingMinutes": 4440
+      },
+      "date": "2024-06-02",
+      "availabilityType": "UNAVAILABLE"
+    },
+    {
+      "id": 3,
+      "employee": {
+        "name": "Renata Juknevičienė 29/12",
+        "skillSet": [
+          "medicine"
+        ],
+        "maxWorkingHours": 74.0,
+        "maxWorkingMinutes": 4440
+      },
+      "date": "2024-06-03",
+      "availabilityType": "DESIRED"
+    },
+    {
+      "id": 4,
+      "employee": {
+        "name": "Renata Juknevičienė 29/12",
+        "skillSet": [
+          "medicine"
+        ],
+        "maxWorkingHours": 74.0,
+        "maxWorkingMinutes": 4440
+      },
+      "date": "2024-06-04",
+      "availabilityType": "DESIRED"
+    },
+    {
+      "id": 5,
+      "employee": {
+        "name": "Renata Juknevičienė 29/12",
+        "skillSet": [
+          "medicine"
+        ],
+        "maxWorkingHours": 74.0,
+        "maxWorkingMinutes": 4440
+      },
+      "date": "2024-06-05",
+      "availabilityType": "UNAVAILABLE"
+    },
+    {
+      "id": 6,
+      "employee": {
+        "name": "Renata Juknevičienė 29/12",
+        "skillSet": [
+          "medicine"
+        ],
+        "maxWorkingHours": 74.0,
+        "maxWorkingMinutes": 4440
+      },
+      "date": "2024-06-06",
+      "availabilityType": "DESIRED"
+    },
+    {
+      "id": 7,
+      "employee": {
+        "name": "Aleksandras Briedis 24/12",
+        "skillSet": [
+          "medicine"
+        ],
+        "maxWorkingHours": 74.0,
+        "maxWorkingMinutes": 4440
+      },
+      "date": "2024-06-01",
+      "availabilityType": "DESIRED"
+    },
+    {
+      "id": 8,
+      "employee": {
+        "name": "Aleksandras Briedis 24/12",
+        "skillSet": [
+          "medicine"
+        ],
+        "maxWorkingHours": 74.0,
+        "maxWorkingMinutes": 4440
+      },
+      "date": "2024-06-02",
+      "availabilityType": "DESIRED"
+    },
+    {
+      "id": 9,
+      "employee": {
+        "name": "Aleksandras Briedis 24/12",
+        "skillSet": [
+          "medicine"
+        ],
+        "maxWorkingHours": 74.0,
+        "maxWorkingMinutes": 4440
+      },
+      "date": "2024-06-03",
+      "availabilityType": "UNAVAILABLE"
+    },
+    {
+      "id": 10,
+      "employee": {
+        "name": "Aleksandras Briedis 24/12",
+        "skillSet": [
+          "medicine"
+        ],
+        "maxWorkingHours": 74.0,
+        "maxWorkingMinutes": 4440
+      },
+      "date": "2024-06-04",
+      "availabilityType": "UNAVAILABLE"
+    },
+    {
+      "id": 11,
+      "employee": {
+        "name": "Aleksandras Briedis 24/12",
+        "skillSet": [
+          "medicine"
+        ],
+        "maxWorkingHours": 74.0,
+        "maxWorkingMinutes": 4440
+      },
+      "date": "2024-06-05",
+      "availabilityType": "DESIRED"
+    },
+    {
+      "id": 12,
+      "employee": {
+        "name": "Aleksandras Briedis 24/12",
+        "skillSet": [
+          "medicine"
+        ],
+        "maxWorkingHours": 74.0,
+        "maxWorkingMinutes": 4440
+      },
+      "date": "2024-06-06",
+      "availabilityType": "UNAVAILABLE"
+    }
+  ],
+  "employeeList": [
+    {
+      "name": "Renata Juknevičienė 29/12",
+      "skillSet": [
+        "medicine"
+      ],
+      "maxWorkingHours": 74.0,
+      "maxWorkingMinutes": 4440
+    },
+    {
+      "name": "Aleksandras Briedis 24/12",
+      "skillSet": [
+        "medicine"
+      ],
+      "maxWorkingHours": 74.0,
+      "maxWorkingMinutes": 4440
+    }
+  ],
+  "shiftList": [
+    {
+      "id": 1,
+      "start": "2024-06-01T00:00:00",
+      "end": "2024-06-01T08:00:00",
+      "location": "ambulance office",
+      "requiredSkill": "medicine",
+      "employee": {
+        "name": "Renata Juknevičienė 29/12",
+        "skillSet": [
+          "medicine"
+        ],
+        "maxWorkingHours": 74.0,
+        "maxWorkingMinutes": 4440
+      },
+      "durationInMinutes": 480
+    },
+    {
+      "id": 2,
+      "start": "2024-06-01T08:00:00",
+      "end": "2024-06-01T20:00:00",
+      "location": "ambulance office",
+      "requiredSkill": "medicine",
+      "employee": {
+        "name": "Aleksandras Briedis 24/12",
+        "skillSet": [
+          "medicine"
+        ],
+        "maxWorkingHours": 74.0,
+        "maxWorkingMinutes": 4440
+      },
+      "durationInMinutes": 720
+    },
+    {
+      "id": 3,
+      "start": "2024-06-01T20:00:00",
+      "end": "2024-06-02T00:00:00",
+      "location": "ambulance office",
+      "requiredSkill": "medicine",
+      "employee": {
+        "name": "Renata Juknevičienė 29/12",
+        "skillSet": [
+          "medicine"
+        ],
+        "maxWorkingHours": 74.0,
+        "maxWorkingMinutes": 4440
+      },
+      "durationInMinutes": 240
+    },
+    {
+      "id": 4,
+      "start": "2024-06-02T00:00:00",
+      "end": "2024-06-02T08:00:00",
+      "location": "ambulance office",
+      "requiredSkill": "medicine",
+      "employee": {
+        "name": "Aleksandras Briedis 24/12",
+        "skillSet": [
+          "medicine"
+        ],
+        "maxWorkingHours": 74.0,
+        "maxWorkingMinutes": 4440
+      },
+      "durationInMinutes": 480
+    },
+    {
+      "id": 5,
+      "start": "2024-06-02T08:00:00",
+      "end": "2024-06-02T20:00:00",
+      "location": "ambulance office",
+      "requiredSkill": "medicine",
+      "employee": {
+        "name": "Renata Juknevičienė 29/12",
+        "skillSet": [
+          "medicine"
+        ],
+        "maxWorkingHours": 74.0,
+        "maxWorkingMinutes": 4440
+      },
+      "durationInMinutes": 720
+    },
+    {
+      "id": 6,
+      "start": "2024-06-02T20:00:00",
+      "end": "2024-06-03T00:00:00",
+      "location": "ambulance office",
+      "requiredSkill": "medicine",
+      "employee": {
+        "name": "Renata Juknevičienė 29/12",
+        "skillSet": [
+          "medicine"
+        ],
+        "maxWorkingHours": 74.0,
+        "maxWorkingMinutes": 4440
+      },
+      "durationInMinutes": 240
+    },
+    {
+      "id": 7,
+      "start": "2024-06-03T00:00:00",
+      "end": "2024-06-03T08:00:00",
+      "location": "ambulance office",
+      "requiredSkill": "medicine",
+      "employee": {
+        "name": "Aleksandras Briedis 24/12",
+        "skillSet": [
+          "medicine"
+        ],
+        "maxWorkingHours": 74.0,
+        "maxWorkingMinutes": 4440
+      },
+      "durationInMinutes": 480
+    },
+    {
+      "id": 8,
+      "start": "2024-06-03T08:00:00",
+      "end": "2024-06-03T20:00:00",
+      "location": "ambulance office",
+      "requiredSkill": "medicine",
+      "employee": {
+        "name": "Renata Juknevičienė 29/12",
+        "skillSet": [
+          "medicine"
+        ],
+        "maxWorkingHours": 74.0,
+        "maxWorkingMinutes": 4440
+      },
+      "durationInMinutes": 720
+    },
+    {
+      "id": 9,
+      "start": "2024-06-03T20:00:00",
+      "end": "2024-06-04T00:00:00",
+      "location": "ambulance office",
+      "requiredSkill": "medicine",
+      "employee": {
+        "name": "Aleksandras Briedis 24/12",
+        "skillSet": [
+          "medicine"
+        ],
+        "maxWorkingHours": 74.0,
+        "maxWorkingMinutes": 4440
+      },
+      "durationInMinutes": 240
+    },
+    {
+      "id": 10,
+      "start": "2024-06-04T00:00:00",
+      "end": "2024-06-04T08:00:00",
+      "location": "ambulance office",
+      "requiredSkill": "medicine",
+      "employee": {
+        "name": "Aleksandras Briedis 24/12",
+        "skillSet": [
+          "medicine"
+        ],
+        "maxWorkingHours": 74.0,
+        "maxWorkingMinutes": 4440
+      },
+      "durationInMinutes": 480
+    },
+    {
+      "id": 11,
+      "start": "2024-06-04T08:00:00",
+      "end": "2024-06-04T20:00:00",
+      "location": "ambulance office",
+      "requiredSkill": "medicine",
+      "employee": {
+        "name": "Renata Juknevičienė 29/12",
+        "skillSet": [
+          "medicine"
+        ],
+        "maxWorkingHours": 74.0,
+        "maxWorkingMinutes": 4440
+      },
+      "durationInMinutes": 720
+    },
+    {
+      "id": 12,
+      "start": "2024-06-04T20:00:00",
+      "end": "2024-06-05T00:00:00",
+      "location": "ambulance office",
+      "requiredSkill": "medicine",
+      "employee": {
+        "name": "Aleksandras Briedis 24/12",
+        "skillSet": [
+          "medicine"
+        ],
+        "maxWorkingHours": 74.0,
+        "maxWorkingMinutes": 4440
+      },
+      "durationInMinutes": 240
+    },
+    {
+      "id": 13,
+      "start": "2024-06-05T00:00:00",
+      "end": "2024-06-05T08:00:00",
+      "location": "ambulance office",
+      "requiredSkill": "medicine",
+      "employee": {
+        "name": "Renata Juknevičienė 29/12",
+        "skillSet": [
+          "medicine"
+        ],
+        "maxWorkingHours": 74.0,
+        "maxWorkingMinutes": 4440
+      },
+      "durationInMinutes": 480
+    },
+    {
+      "id": 14,
+      "start": "2024-06-05T08:00:00",
+      "end": "2024-06-05T20:00:00",
+      "location": "ambulance office",
+      "requiredSkill": "medicine",
+      "employee": {
+        "name": "Aleksandras Briedis 24/12",
+        "skillSet": [
+          "medicine"
+        ],
+        "maxWorkingHours": 74.0,
+        "maxWorkingMinutes": 4440
+      },
+      "durationInMinutes": 720
+    },
+    {
+      "id": 15,
+      "start": "2024-06-05T20:00:00",
+      "end": "2024-06-06T00:00:00",
+      "location": "ambulance office",
+      "requiredSkill": "medicine",
+      "employee": {
+        "name": "Renata Juknevičienė 29/12",
+        "skillSet": [
+          "medicine"
+        ],
+        "maxWorkingHours": 74.0,
+        "maxWorkingMinutes": 4440
+      },
+      "durationInMinutes": 240
+    },
+    {
+      "id": 16,
+      "start": "2024-06-06T00:00:00",
+      "end": "2024-06-06T08:00:00",
+      "location": "ambulance office",
+      "requiredSkill": "medicine",
+      "employee": {
+        "name": "Renata Juknevičienė 29/12",
+        "skillSet": [
+          "medicine"
+        ],
+        "maxWorkingHours": 74.0,
+        "maxWorkingMinutes": 4440
+      },
+      "durationInMinutes": 480
+    },
+    {
+      "id": 17,
+      "start": "2024-06-06T08:00:00",
+      "end": "2024-06-06T20:00:00",
+      "location": "ambulance office",
+      "requiredSkill": "medicine",
+      "employee": {
+        "name": "Aleksandras Briedis 24/12",
+        "skillSet": [
+          "medicine"
+        ],
+        "maxWorkingHours": 74.0,
+        "maxWorkingMinutes": 4440
+      },
+      "durationInMinutes": 720
+    },
+    {
+      "id": 18,
+      "start": "2024-06-06T20:00:00",
+      "end": "2024-06-07T00:00:00",
+      "location": "ambulance office",
+      "requiredSkill": "medicine",
+      "employee": {
+        "name": "Renata Juknevičienė 29/12",
+        "skillSet": [
+          "medicine"
+        ],
+        "maxWorkingHours": 74.0,
+        "maxWorkingMinutes": 4440
+      },
+      "durationInMinutes": 240
+    }
+  ],
+  "score": "-963hard/0soft",
+  "scheduleState": {
+    "tenantId": 2,
+    "publishLength": 6,
+    "draftLength": 6,
+    "firstDraftDate": "2024-06-01",
+    "lastHistoricDate": "2024-06-07",
+    "firstUnplannedDate": "2024-06-07"
+  },
+  "solverStatus": "NOT_SOLVING"
+}

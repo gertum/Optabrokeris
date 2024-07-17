@@ -17,6 +17,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use DateTime;
 
 class JobController extends Controller
 {
@@ -153,7 +154,12 @@ class JobController extends Controller
 
     public function download(Request $request, Job $job, SpreadSheetHandlerFactory $fileHandlerFactory)
     {
-        $fileName = sprintf('%s_result_%s.xlsx', $job->getName(), $job->getKey());
+        $fileName = sprintf(
+            '%s_result_%s_%s.xlsx',
+            $job->getName(),
+            $job->getKey(),
+            (new DateTime())->format('Y-m-d_H-i-s')
+        );
 
         $file = '/tmp/' . $fileName;
 
