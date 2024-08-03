@@ -1,6 +1,6 @@
 <html>
 <body>
-<p>Job id: {{ $job->id  }} </p>
-<p>Job name: {{ $job->name  }} </p>
+<p>Job id: {{ $report->getId()  }} </p>
+<p>Job name: {{ $report->getName()  }} </p>
 </body>
 </html>
