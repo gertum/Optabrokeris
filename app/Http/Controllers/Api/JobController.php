@@ -39,32 +39,51 @@ class JobController extends Controller
 
     public function view(Request $request, Job $job)
     {
+        // TODO reiks perdaryti visą šitą funkciją
         try {
             $type = $job->getAttribute('type');
 
             $solverClient = $this->solverClientFactory->createClient($type);
             $result = $solverClient->getResult($job->solver_id);
 
-            $flagSovled = false;
+            $flagSolved = false;
             try {
                 $resultDataArray = Utils::jsonDecode($result, true);
                 $status = $resultDataArray['solverStatus'];
 
                 if ($job->getFlagSolving() && $status == 'NOT_SOLVING') {
-                    $flagSovled = true;
+                    $flagSolved = true;
                 }
+                $job->update(['result' => $result, 'status' => $status, 'flag_solved' => $flagSolved]);
             } catch (GuzzleException $e) {
                 Log::warning($e->getMessage());
                 $status = 'error';
+                $job->update(['result' => $result, 'status' => $status, 'flag_solved' => $flagSolved, 'flag_solving'=>0]);
             }
-            $job->update(['result' => $result, 'status' => $status, 'flag_solved' => $flagSovled]);
-            // TODO create migration for score column
+
+            // TODO create migration for score column ?? Nebeatsimenu ką čia turėjau omeny.
         } catch (Exception $e) {
+            $job->setResult(null);
             $job->error_message = $e->getMessage();
             Log::error($e->getMessage());
         }
 
+//        $this->prepareForBautifulJson($job);
         return $job;
+    }
+
+    public function prepareForBautifulJson(Job $job) {
+        $data = $job->getData();
+        $result  = $job->getResult();
+
+        // for beautifull json
+        if ( $data != null ) {
+            $job->setData(json_decode($data));
+        }
+
+        if ($result != null ) {
+            $job->setResult(json_decode($result));
+        }
     }
 
     public function create(Request $request)
