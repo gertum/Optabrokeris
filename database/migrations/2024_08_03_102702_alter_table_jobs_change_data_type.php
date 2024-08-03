@@ -12,6 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         DB::statement( /** @lang MySQL */"ALTER TABLE jobs change data data LONGBLOB");
+        DB::statement( /** @lang MySQL */"ALTER TABLE jobs change result result LONGBLOB");
     }
 
     /**
