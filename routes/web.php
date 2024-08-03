@@ -6,6 +6,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use \App\Http\Controllers\DownloadController;
+use App\Http\Controllers\ResultsReportController;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,6 +31,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/jobs/{job?}', [JobsController::class, 'form'])->name('jobs.form');
 
     Route::get('/download/school-example', [DownloadController::class, 'downloadSchoolExample'])->name('download.school.example');
+    Route::get('/report-results', [ResultsReportController::class, 'getResults'])->name('report.results');
 
 });
 
