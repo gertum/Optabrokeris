@@ -25,27 +25,27 @@ class HospitalExcelHoursLimitTest extends TestCase
         return [
             'test vasaris' => [
                 'file' => __DIR__ . '/data/vasaris.xlsx',
-                '$expectedWorkingHoursTitle' => (new WorkingHoursTitle())->setRow(8)->setColumn(38),
+                'expectedWorkingHoursTitle' => (new WorkingHoursTitle())->setRow(8)->setColumn(38),
             ],
             'test sausis' => [
                 'file' => __DIR__ . '/data/sausis.xlsx',
-                '$expectedWorkingHoursTitle' => (new WorkingHoursTitle())->setRow(8)->setColumn(38),
+                'expectedWorkingHoursTitle' => (new WorkingHoursTitle())->setRow(8)->setColumn(38),
             ],
             'test birzelis' => [
                 'file' => __DIR__ . '/data/birželis.xlsx',
-                '$expectedWorkingHoursTitle' => (new WorkingHoursTitle())->setRow(8)->setColumn(39),
+                'expectedWorkingHoursTitle' => (new WorkingHoursTitle())->setRow(8)->setColumn(39),
             ],
             'test birzelis bad' => [
                 'file' => __DIR__ . '/data/birželis_bad.xlsx',
-                '$expectedWorkingHoursTitle' => (new WorkingHoursTitle())->setRow(8)->setColumn(38),
+                'expectedWorkingHoursTitle' => (new WorkingHoursTitle())->setRow(8)->setColumn(38),
             ],
             'test rugpjutis' => [
                 'file' => __DIR__ . '/data/rugpjūtis.xlsx',
-                '$expectedWorkingHoursTitle' => (new WorkingHoursTitle())->setRow(8)->setColumn(38),
+                'expectedWorkingHoursTitle' => (new WorkingHoursTitle())->setRow(8)->setColumn(38),
             ],
             'test gruodis' => [
                 'file' => __DIR__ . '/data/gruodis.xlsx',
-                '$expectedWorkingHoursTitle' => (new WorkingHoursTitle())->setRow(8)->setColumn(38),
+                'expectedWorkingHoursTitle' => (new WorkingHoursTitle())->setRow(8)->setColumn(38),
             ],
         ];
     }
