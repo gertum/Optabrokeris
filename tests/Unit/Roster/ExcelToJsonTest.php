@@ -16,10 +16,10 @@ class ExcelToJsonTest extends TestCase
     /**
      * @dataProvider provideXlsxAndJson
      */
-    public function testReadFilled(string $xslxFile, string $expectedJson)
+    public function testReadFilled(string $xlsxFile, string $expectedJson)
     {
         $scheduleParser = new ScheduleParser();
-        $schedule = $scheduleParser->parseScheduleXls($xslxFile, ScheduleParser::createHospitalTimeSlices());
+        $schedule = $scheduleParser->parseScheduleXls($xlsxFile, ScheduleParser::createHospitalTimeSlices());
         $json = json_encode($schedule->toArray());
 
         $this->assertEquals($expectedJson, $json);
