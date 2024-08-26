@@ -75,18 +75,20 @@ class SolverClientRoster implements SolverClient
         return $response->getBody()->getContents();
     }
 
-    public function stopSolving(int $id): array
+    public function stopSolving($solverId): string
     {
         $client = new Client();
 
-        $url = $this->url . sprintf(self::URI_STOP_SOLVING, $id);
+        $url = $this->url . sprintf(self::URI_STOP_SOLVING, $solverId);
         $response = $client->post($url, [
             'headers' => ['Content-Type' => 'application/json'],
         ]);
 
         $responseData = $response->getBody()->getContents();
 
-        return json_decode($responseData);
+        return $responseData;
+
+//        return json_decode($responseData, true);
     }
 
     public function getType(): string

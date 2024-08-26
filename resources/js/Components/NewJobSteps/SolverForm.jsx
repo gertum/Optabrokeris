@@ -24,6 +24,11 @@ export const SolverForm = ({defaultType, onFinish, onSelect, children}) => {
             value: 'school',
         },
         {
+            title: 'step.solverForm.roster',
+            description: 'step.solverForm.rosterScheduler',
+            value: 'roster',
+        },
+        {
             title: 'step.solverForm.others',
             description: 'step.solverForm.commingSoon',
             value: 'others',

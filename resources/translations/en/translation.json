@@ -19,6 +19,8 @@
     },
     "solverForm": {
       "school": "School",
+      "roster": "Roster",
+      "rosterScheduler": "Roster scheduler",
       "schoolsScheduler": "Schools scheduler",
       "others": "Others",
       "commingSoon": "Comming soon"
