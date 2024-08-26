@@ -35,6 +35,9 @@ class ScheduleWriter
         /** @var Employee[] $employeesByName */
         $employeesByName = MapBuilder::buildMap($employees, fn(Employee $e) => $e->name);
 
+
+        $this->clearAllTimings($wrapper, $eilNrTitle, $eilNrs, $xlsxFastEditor);
+
         foreach ($schedule->shiftList as $shift) {
             if ($shift->employee == null || $shift->employee->name == null) {
                 continue;
@@ -71,5 +74,26 @@ class ScheduleWriter
         }
 
         $xlsxFastEditor->save();
+    }
+
+    /**
+     * @param EilNr[] $eilNrs
+     */
+    public function clearAllTimings(ExcelWrapper $wrapper, EilNrTitle $eilNrTitle, array $eilNrs, XlsxFastEditor $xlsxFastEditor) {
+
+        $worksheetId1 = 1;
+
+        foreach ($eilNrs as $eilNr) {
+            $row = $eilNr->getRow();
+            for ($day = 1; $day <= 31; $day++) {
+                $column =  $wrapper->getColumnByDay($eilNrTitle->getColumn(), $day);
+
+                $cellFrom = $wrapper->getCell($row, $column);
+                $cellTill = $wrapper->getCell($row + 1, $column);
+
+                $xlsxFastEditor->writeString($worksheetId1, $cellFrom->name, "");
+                $xlsxFastEditor->writeString($worksheetId1, $cellTill->name, "");
+            }
+        }
     }
 }
