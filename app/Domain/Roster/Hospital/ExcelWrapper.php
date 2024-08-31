@@ -16,8 +16,8 @@ use Shuchkin\SimpleXLSX;
  */
 class ExcelWrapper
 {
-    const MAX_ROWS = 70;
-    const MAX_COLUMNS = 40;
+//    const MAX_ROWS = 70;
+//    const MAX_COLUMNS = 40;
 
     const DISTANCE_BETWEEN_NO_AND_AVAILABILITIES = 4;
 
@@ -78,8 +78,8 @@ class ExcelWrapper
 
     public function findEilNrTitle(): ?EilNrTitle
     {
-        for ($row = 0; $row <= self::MAX_ROWS; $row++) {
-            for ($column = 0; $column <= self::MAX_COLUMNS; $column++) {
+        for ($row = 0; $row < $this->getMaxRows(); $row++) {
+            for ($column = 0; $column < $this->getMaxColumnsAtRow($row); $column++) {
                 $cell = $this->getCell($row, $column);
 
                 if (preg_match(EilNrTitle::EIL_NR_MARKER, $cell->value)) {
@@ -100,7 +100,7 @@ class ExcelWrapper
         $eilNrs = [];
 
         $skippedEmpties = 0;
-        for ($row = $eilNrTitle->getRow() + $eilNrTitle->getRowSpan(); $row < self::MAX_ROWS; $row++) {
+        for ($row = $eilNrTitle->getRow() + $eilNrTitle->getRowSpan(); $row < $this->getMaxRows(); $row++) {
             $cell = $this->getCell($row, $eilNrTitle->getColumn());
 
             if ($cell->value == '') {
@@ -255,8 +255,8 @@ class ExcelWrapper
     {
         $dateRecognizer = new DateRecognizer();
 
-        for ($row = 0; $row <= self::MAX_ROWS; $row++) {
-            for ($column = 0; $column <= self::MAX_COLUMNS; $column++) {
+        for ($row = 0; $row < $this->getMaxRows(); $row++) {
+            for ($column = 0; $column < $this->getMaxColumnsAtRow($row); $column++) {
                 $cell = $this->getCell($row, $column);
                 if ($dateRecognizer->recognizeMonthDate($cell->value)) {
                     return $dateRecognizer;
@@ -271,8 +271,8 @@ class ExcelWrapper
     {
         $workingHoursTitle = new WorkingHoursTitle();
 
-        for ($row = 0; $row <= self::MAX_ROWS; $row++) {
-            for ($column = 0; $column <= self::MAX_COLUMNS; $column++) {
+        for ($row = 0; $row < $this->getMaxRows(); $row++) {
+            for ($column = 0; $column < $this->getMaxColumnsAtRow($row); $column++) {
                 $cell = $this->getCell($row, $column);
                 if ($workingHoursTitle->matchCell($cell, $row, $column)) {
                     return $workingHoursTitle;
@@ -308,5 +308,13 @@ class ExcelWrapper
     public function getColumnByDay(int $eilNrColumn, int $day): int
     {
         return $eilNrColumn + $day + self::DISTANCE_BETWEEN_NO_AND_AVAILABILITIES;
+    }
+
+    public function getMaxRows() : int {
+        return count($this->rowsEx);
+    }
+
+    public function getMaxColumnsAtRow(int $row) : int {
+        return count($this->rowsEx[$row]);
     }
 }

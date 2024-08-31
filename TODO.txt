@@ -6,3 +6,9 @@ Reikia:
 * suprogramuoti rezultatų išvedimą į xlsx failą.
     * padarytas jau suvestų laikų parsinimas.
     * reiks gal padaryti, kad ne kurtų naują nuo 0, o imtų už pagrindą duotą kažkokį xlsx failą, tuomet liks papildomi duomenys ir formatavimas, buvęs tame xlsx faile (toks tikslas).
+
+
+
+    2024-08-28:
+
+    reikia padaryti sumą valandų ties kiekvienu žmogumi ir sumą valandų ties kiekviena diena.
