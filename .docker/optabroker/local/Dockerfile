@@ -1,4 +1,5 @@
-FROM php:8.2.3-fpm-bullseye
+#FROM php:8.2.3-fpm-bullseye
+FROM php:8.3-fpm-bullseye
 
 WORKDIR /var/www/html
 
