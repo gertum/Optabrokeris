@@ -20,6 +20,11 @@ class Cell extends DataTransferObject
     public $height;
     public $comment;
 
+    // added latest
+
+    public $row;
+    public $column;
+
 
     public static function parseCss(string $css): array
     {

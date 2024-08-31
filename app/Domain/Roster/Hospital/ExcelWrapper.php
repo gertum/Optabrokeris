@@ -69,7 +69,10 @@ class ExcelWrapper
         }
 
         if (!array_key_exists($column, $this->cellCache[$row])) {
-            $this->cellCache[$row][$column] = new Cell($this->rowsEx[$row][$column]);
+            $cell = new Cell($this->rowsEx[$row][$column]);
+            $cell->row = $row;
+            $cell->column = $column;
+            $this->cellCache[$row][$column] = $cell;
         }
 
         return $this->cellCache[$row][$column];
@@ -123,7 +126,7 @@ class ExcelWrapper
      * @param EilNr[] $eilNrs
      * @return Employee[]
      */
-    public function parseEmployees(array $eilNrs): array
+    public function   parseEmployees(array $eilNrs): array
     {
         $employees = [];
 
@@ -231,11 +234,11 @@ class ExcelWrapper
                 $availabilityCell2 = $this->getCell($row + 1, $column);
                 $till = $availabilityCell2->value;
 
-                if ($from != null || $till != null ) {
-                    if ( $from == null ) {
+                if ($from != null || $till != null) {
+                    if ($from == null) {
                         $from = "00:00";
                     }
-                    if ( $till == null ) {
+                    if ($till == null) {
                         $till = "00:00";
                     }
 
@@ -284,6 +287,29 @@ class ExcelWrapper
         return $workingHoursTitle;
     }
 
+    public function findDaySumsTitle(): ?Cell
+    {
+        return $this->findCellWithValue('Dienos sumos:');
+    }
+
+    public function findWorkingHoursAssignedTitle(): ?Cell
+    {
+        return $this->findCellWithValue('Darbo valandų priskirta');
+    }
+
+    public function findCellWithValue(string $cellValue): ?Cell
+    {
+        for ($row = 0; $row < $this->getMaxRows(); $row++) {
+            for ($column = 0; $column < $this->getMaxColumnsAtRow($row); $column++) {
+                $cell = $this->getCell($row, $column);
+                if ($cellValue == $cell->value) {
+                    return $cell;
+                }
+            }
+        }
+        return null;
+    }
+
     /**
      * Detects greatest date by searching a separator column, or going max of this month days.
      */
@@ -310,11 +336,13 @@ class ExcelWrapper
         return $eilNrColumn + $day + self::DISTANCE_BETWEEN_NO_AND_AVAILABILITIES;
     }
 
-    public function getMaxRows() : int {
+    public function getMaxRows(): int
+    {
         return count($this->rowsEx);
     }
 
-    public function getMaxColumnsAtRow(int $row) : int {
+    public function getMaxColumnsAtRow(int $row): int
+    {
         return count($this->rowsEx[$row]);
     }
 }

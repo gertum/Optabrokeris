@@ -4,6 +4,7 @@ namespace App\Domain\Roster\Hospital;
 
 use alexandrainst\XlsxFastEditor\XlsxFastEditor;
 use App\Domain\Roster\Employee;
+use App\Domain\Roster\Report\ScheduleReport;
 use App\Domain\Roster\Schedule;
 use App\Util\MapBuilder;
 use Carbon\Carbon;
@@ -67,26 +68,69 @@ class ScheduleWriter
 
 //            $xlsxFastEditor->writeString($worksheetId1, $cellFrom->name, $startDate->format('H:i'));
 //            $xlsxFastEditor->writeString($worksheetId1, $cellTill->name, $endDate->format('H:i'));
-            $dayPartFrom = $startDate->hour/24;
-            $dayPartTill = $endDate->hour/24;
+            $dayPartFrom = $startDate->hour / 24;
+            $dayPartTill = $endDate->hour / 24;
             $xlsxFastEditor->writeFloat($worksheetId1, $cellFrom->name, $dayPartFrom);
             $xlsxFastEditor->writeFloat($worksheetId1, $cellTill->name, $dayPartTill);
         }
 
+        // ================ Write summaries ==========================
+
+        $scheduleReport = new ScheduleReport();
+
+        $scheduleReport->fillFromSchedule($schedule);
+
+        // find column for 'Darbo valandų priskirta'
+        $workingHoursAssignedCell = $wrapper->findWorkingHoursAssignedTitle();
+        if ($workingHoursAssignedCell != null) {
+            foreach ($scheduleReport->getEmployeesInfos() as $employeeinfo) {
+                if (!array_key_exists($employeeinfo->getEmployee()->name, $employeesByName)) {
+                    // TODO log error
+                    continue;
+                }
+                $parsedEmployee = $employeesByName[$employeeinfo->getEmployee()->name];
+
+                $row = $parsedEmployee->getRow();
+                $column = $workingHoursAssignedCell->column;
+
+                $cell = $wrapper->getCell($row, $column);
+
+                $xlsxFastEditor->writeFloat($worksheetId1, $cell->name, $employeeinfo->getHoursTotal());
+            }
+        }
+
+        // find row for 'Dienos sumos:'
+        $daySumsCell = $wrapper->findDaySumsTitle();
+        if ($daySumsCell != null) {
+            // write days sums
+            foreach ($scheduleReport->getDaysInfos() as $dayInfo) {
+                $column = $daySumsCell->column + $dayInfo->getDay();
+                $row = $daySumsCell->row;
+
+                $cell = $wrapper->getCell($row, $column);
+                $xlsxFastEditor->writeString($worksheetId1, $cell->name, "".$dayInfo->getHoursTotal());
+            }
+        }
+
+        // ===================== storing results =====================
         $xlsxFastEditor->save();
     }
 
     /**
      * @param EilNr[] $eilNrs
      */
-    public function clearAllTimings(ExcelWrapper $wrapper, EilNrTitle $eilNrTitle, array $eilNrs, XlsxFastEditor $xlsxFastEditor) {
-
+    public function clearAllTimings(
+        ExcelWrapper $wrapper,
+        EilNrTitle $eilNrTitle,
+        array $eilNrs,
+        XlsxFastEditor $xlsxFastEditor
+    ) {
         $worksheetId1 = 1;
 
         foreach ($eilNrs as $eilNr) {
             $row = $eilNr->getRow();
             for ($day = 1; $day <= 31; $day++) {
-                $column =  $wrapper->getColumnByDay($eilNrTitle->getColumn(), $day);
+                $column = $wrapper->getColumnByDay($eilNrTitle->getColumn(), $day);
 
                 $cellFrom = $wrapper->getCell($row, $column);
                 $cellTill = $wrapper->getCell($row + 1, $column);
