@@ -39,7 +39,16 @@ class JobController extends Controller
 
     public function view(Request $request, Job $job)
     {
-        // TODO reiks perdaryti visą šitą funkciją
+        $this->tryToGetResultFromSolver($job);
+
+//        $this->prepareForBautifulJson($job);
+
+
+        return $job;
+    }
+
+
+    protected  function tryToGetResultFromSolver(Job $job) {
         try {
             $type = $job->getAttribute('type');
 
@@ -61,17 +70,15 @@ class JobController extends Controller
                 $job->update(['result' => $result, 'status' => $status, 'flag_solved' => $flagSolved, 'flag_solving'=>0]);
             }
 
-            // TODO create migration for score column ?? Nebeatsimenu ką čia turėjau omeny.
         } catch (Exception $e) {
             $job->setResult(null);
             $job->error_message = $e->getMessage();
             Log::error($e->getMessage());
         }
 
-//        $this->prepareForBautifulJson($job);
         return $job;
-    }
 
+    }
     public function prepareForBautifulJson(Job $job) {
         $data = $job->getData();
         $result  = $job->getResult();
@@ -173,6 +180,8 @@ class JobController extends Controller
 
     public function download(Request $request, Job $job, SpreadSheetHandlerFactory $fileHandlerFactory)
     {
+        $this->tryToGetResultFromSolver($job);
+
         $fileName = sprintf(
             '%s_result_%s_%s.xlsx',
             $job->getName(),
