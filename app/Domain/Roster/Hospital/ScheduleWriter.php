@@ -78,7 +78,7 @@ class ScheduleWriter
 
         $scheduleReport = new ScheduleReport();
 
-        $scheduleReport->fillFromSchedule($schedule);
+        $scheduleReport->fillFromSchedule($schedule, $this->logger);
 
         // find column for 'Darbo valandų priskirta'
         $workingHoursAssignedCell = $wrapper->findWorkingHoursAssignedTitle();

@@ -126,7 +126,7 @@ class ExcelWrapper
      * @param EilNr[] $eilNrs
      * @return Employee[]
      */
-    public function   parseEmployees(array $eilNrs): array
+    public function parseEmployees(array $eilNrs): array
     {
         $employees = [];
 
@@ -217,37 +217,41 @@ class ExcelWrapper
                 break;
             }
 
-            $availabilityType = Availability::DESIRED;
+            $availabilityType = Availability::AVAILABLE;
 
             if ($availabilityCell->getBackgroundColor() == self::UNAVAILABLE_BACGROUND) {
                 $availabilityType = Availability::UNAVAILABLE;
             }
 
-            $availabilities[] = (new Availability())
+            $availability = (new Availability())
                 ->setId($this->availabilityId++)
                 ->setEmployee($employee)
                 ->setAvailabilityType($availabilityType)
                 ->setDate($date);
 
-            if ($assignmentConsumer != null) {
-                $from = $availabilityCell->value;
-                $availabilityCell2 = $this->getCell($row + 1, $column);
-                $till = $availabilityCell2->value;
+            $from = $availabilityCell->value;
+            $availabilityCell2 = $this->getCell($row + 1, $column);
+            $till = $availabilityCell2->value;
 
-                if ($from != null || $till != null) {
-                    if ($from == null) {
-                        $from = "00:00";
-                    }
-                    if ($till == null) {
-                        $till = "00:00";
-                    }
+            if ($from != null || $till != null) {
+                $availability->setAvailabilityType(Availability::DESIRED);
 
-                    $from = Carbon::parse($from)->setDate($year, $month, $day)->format(self::TARGET_DATE_FORMAT);
-                    $till = Carbon::parse($till)->setDate($year, $month, $day)->format(self::TARGET_DATE_FORMAT);
+                if ($from == null) {
+                    $from = "00:00";
+                }
+                if ($till == null) {
+                    $till = "00:00";
+                }
 
-                    $assignmentConsumer->setAssignment($from, $till, $employee);
+                $fromDate = Carbon::parse($from)->setDate($year, $month, $day)->format(self::TARGET_DATE_FORMAT);
+                $tillDate = Carbon::parse($till)->setDate($year, $month, $day)->format(self::TARGET_DATE_FORMAT);
+
+                if ($assignmentConsumer != null) {
+                    $assignmentConsumer->setAssignment($fromDate, $tillDate, $employee);
                 }
             }
+
+            $availabilities[] = $availability;
         }
 
         return $availabilities;

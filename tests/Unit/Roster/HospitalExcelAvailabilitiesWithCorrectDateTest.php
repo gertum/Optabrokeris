@@ -68,7 +68,7 @@ class HospitalExcelAvailabilitiesWithCorrectDateTest extends TestCase
                 'testedEmployeeNumber' => 2,
                 'testedNumber' => 0,
                 'expectedDate' => Carbon::create(2024, 6, 1),
-                'expectedAvailability' => Availability::DESIRED,
+                'expectedAvailability' => Availability::AVAILABLE,
                 'expectedAvailabilitiesCount' => 6,
             ],
         ];

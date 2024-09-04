@@ -5,6 +5,7 @@ namespace App\Domain\Roster\Report;
 use App\Domain\Roster\Schedule;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
+use Psr\Log\LoggerInterface;
 
 class ScheduleReport
 {
@@ -18,7 +19,7 @@ class ScheduleReport
      */
     private array $employeesInfos = [];
 
-    public function fillFromSchedule(Schedule $schedule)
+    public function fillFromSchedule(Schedule $schedule, LoggerInterface $logger)
     {
         // initialize day infos and employees infos
         for ($day = 1; $day <= 31; $day++) {
@@ -44,12 +45,12 @@ class ScheduleReport
             }
             // find employee info
             if (!array_key_exists($shift->employee->name, $this->employeesInfos)) {
-                Log::error('In schedule report could not find an employee by name '.$shift->employee->name);
+                $logger->error('In schedule report could not find an employee by name '.$shift->employee->name);
 
                 continue;
             }
             if (!array_key_exists($start->day, $this->daysInfos)) {
-                Log::error('In schedule report could not find a day '.$start->day);
+                $logger->error('In schedule report could not find a day '.$start->day);
 
                 continue;
             }

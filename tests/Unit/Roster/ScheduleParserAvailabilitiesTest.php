@@ -38,13 +38,53 @@ class ScheduleParserAvailabilitiesTest extends TestCase
     public static function provideScheduleParserData(): array
     {
         return [
-            'test small' => [
+            'test small 1' => [
                 'file' => __DIR__ . '/data/small.xlsx',
                 'expectedAvailabilitiesCount' => 12,
                 'testedAvailabilityIndex' => 6,
                 'expectedEmployeeName' => 'Aleksandras Briedis 24/12',
-                'expectedAvailabilityType' => Availability::DESIRED,
+                'expectedAvailabilityType' => Availability::AVAILABLE,
                 'expectedAvailabilityDate' => Carbon::create(2024, 06, 01)
+            ],
+            'test small 2' => [
+                'file' => __DIR__ . '/data/small.xlsx',
+                'expectedAvailabilitiesCount' => 12,
+                'testedAvailabilityIndex' => 7,
+                'expectedEmployeeName' => 'Aleksandras Briedis 24/12',
+                'expectedAvailabilityType' => Availability::AVAILABLE,
+                'expectedAvailabilityDate' => Carbon::create(2024, 06, 02)
+            ],
+            'test small 3' => [
+                'file' => __DIR__ . '/data/small.xlsx',
+                'expectedAvailabilitiesCount' => 12,
+                'testedAvailabilityIndex' => 8,
+                'expectedEmployeeName' => 'Aleksandras Briedis 24/12',
+                'expectedAvailabilityType' => Availability::UNAVAILABLE,
+                'expectedAvailabilityDate' => Carbon::create(2024, 06, 03)
+            ],
+            'test small 4' => [
+                'file' => __DIR__ . '/data/small.xlsx',
+                'expectedAvailabilitiesCount' => 12,
+                'testedAvailabilityIndex' => 9,
+                'expectedEmployeeName' => 'Aleksandras Briedis 24/12',
+                'expectedAvailabilityType' => Availability::UNAVAILABLE,
+                'expectedAvailabilityDate' => Carbon::create(2024, 06, 04)
+            ],
+            'test small 5' => [
+                'file' => __DIR__ . '/data/small.xlsx',
+                'expectedAvailabilitiesCount' => 12,
+                'testedAvailabilityIndex' => 10,
+                'expectedEmployeeName' => 'Aleksandras Briedis 24/12',
+                'expectedAvailabilityType' => Availability::AVAILABLE,
+                'expectedAvailabilityDate' => Carbon::create(2024, 06, 05)
+            ],
+            'test small 1 3' => [
+                'file' => __DIR__ . '/data/small.xlsx',
+                'expectedAvailabilitiesCount' => 12,
+                'testedAvailabilityIndex' => 2,
+                'expectedEmployeeName' => 'Renata Juknevičienė 29/12',
+                'expectedAvailabilityType' => Availability::DESIRED,
+                'expectedAvailabilityDate' => Carbon::create(2024, 06, 03)
             ],
             'test birželis' => [
                 'file' => __DIR__ . '/data/birželis.xlsx',

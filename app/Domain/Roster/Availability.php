@@ -7,6 +7,7 @@ use Spatie\DataTransferObject\DataTransferObject;
 class Availability extends DataTransferObject
 {
     const     DESIRED = 'DESIRED',
+        AVAILABLE = 'AVAILABLE',
         UNDESIRED = 'UNDESIRED',
         UNAVAILABLE = 'UNAVAILABLE';
 
