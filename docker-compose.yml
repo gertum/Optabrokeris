@@ -42,7 +42,7 @@ services:
             - ./.docker/db/storage/volumes/mysql:/var/lib/mysql
 #            - ./.docker/db/resources/database_character_set.sh:/docker-entrypoint-initdb.d/database_character_set.sh
         environment:
-            - MYSQL_ROOT_PASSWORD=optabrokerp/home/giedrius/programs/PhpStorm-232.10072.32
+            - MYSQL_ROOT_PASSWORD=optabrokerp
             - MYSQL_USER=optabroker
             - MYSQL_PASSWORD=optabroker
             - MYSQL_DATABASE=optabroker
