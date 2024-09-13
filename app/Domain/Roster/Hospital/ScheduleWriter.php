@@ -85,7 +85,7 @@ class ScheduleWriter
         if ($workingHoursAssignedCell != null) {
             foreach ($scheduleReport->getEmployeesInfos() as $employeeinfo) {
                 if (!array_key_exists($employeeinfo->getEmployee()->name, $employeesByName)) {
-                    // TODO log error
+                    $this->logger->error(sprintf('There is no employee by name [%s]', $employeeinfo->getEmployee()->name));
                     continue;
                 }
                 $parsedEmployee = $employeesByName[$employeeinfo->getEmployee()->name];
