@@ -83,7 +83,7 @@ class ScheduleParserAvailabilitiesTest extends TestCase
                 'expectedAvailabilitiesCount' => 12,
                 'testedAvailabilityIndex' => 2,
                 'expectedEmployeeName' => 'Renata Juknevičienė 29/12',
-                'expectedAvailabilityType' => Availability::DESIRED,
+                'expectedAvailabilityType' => Availability::AVAILABLE,
                 'expectedAvailabilityDate' => Carbon::create(2024, 06, 03)
             ],
             'test birželis' => [

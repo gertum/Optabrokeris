@@ -234,7 +234,9 @@ class ExcelWrapper
             $till = $availabilityCell2->value;
 
             if ($from != null || $till != null) {
-                $availability->setAvailabilityType(Availability::DESIRED);
+                // DO not change availability type, because it  is not correct to make DESIRED for a whole day.
+                // The DESIRED availability is set in the roster solver for the exact same time period as is defined in  the assigned shift.
+//                $availability->setAvailabilityType(Availability::DESIRED);
 
                 if ($from == null) {
                     $from = "00:00";
