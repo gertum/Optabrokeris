@@ -183,6 +183,20 @@ class ShiftsAvailableAssignmentConsumerTest extends TestCase
                     ->setEnd('2024-06-01T08:00:00')
                     ->setEmployee(null)
             ],
+
+            // test with interval 08:00 - 24:00 ( 08:00 - 00:00 )
+//            'test 8-24' => [
+//                'from' => '2024-06-05T08:00:00',
+//                'till' => '2024-06-03T20:00:00', // this should be the next  day time
+//                'employee' => (new Employee())->setName('Aleksandras Briedis 24/12'),
+//                'shifts' => [
+//                ],
+//                'expectedIndex' => 14,
+//                'expectedShift' => (new Shift())
+//                    ->setStart('2024-06-05T08:00:00')
+//                    ->setEnd('2024-06-05T20:00:00')
+//                    ->setEmployee((new Employee())->setName('Aleksandras Briedis 24/12'))
+//            ],
         ];
     }
 }

@@ -67,6 +67,48 @@ class ReadFilledShiftsTest extends TestCase
                         ->setName("Aleksandras Briedis 24/12")
                 )
             ],
+            'test 8-24 -> 8-20' => [
+                'xslxFile'  => __DIR__.'/data/small_partly_filled_complex.xlsx',
+                'expectedShift' => (new Shift())
+                ->setStart('2024-06-05T08:00:00')
+                ->setEnd('2024-06-05T20:00:00')
+                ->setEmployee(
+                    (new Employee())
+                        ->setName("Aleksandras Briedis 24/12")
+                )
+            ],
+            'test 8-24 -> 20-24' => [
+                'xslxFile'  => __DIR__.'/data/small_partly_filled_complex.xlsx',
+                'expectedShift' => (new Shift())
+                ->setStart('2024-06-05T20:00:00')
+                ->setEnd('2024-06-06T00:00:00')
+                ->setEmployee(
+                    (new Employee())
+                        ->setName("Aleksandras Briedis 24/12")
+                )
+            ],
+            'test 8-24 -> 8-20 (0)' => [
+                'xslxFile'  => __DIR__.'/data/small_partly_filled_complex.xlsx',
+                'expectedShift' => (new Shift())
+                ->setStart('2024-06-04T08:00:00')
+                ->setEnd('2024-06-04T20:00:00')
+                ->setEmployee(
+                    (new Employee())
+                        ->setName("Renata Juknevičienė 29/12")
+                )
+            ],
+            'test 8-24 -> 20-0 (0)' => [
+                'xslxFile'  => __DIR__.'/data/small_partly_filled_complex.xlsx',
+                'expectedShift' => (new Shift())
+                ->setStart('2024-06-04T20:00:00')
+                ->setEnd('2024-06-05T00:00:00')
+                ->setEmployee(
+                    (new Employee())
+                        ->setName("Renata Juknevičienė 29/12")
+                )
+            ],
+
+            // test with interval 08:00 - 24:00 ( 08:00 - 00:00 )
         ];
     }
 }

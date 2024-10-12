@@ -241,12 +241,15 @@ class ExcelWrapper
                 if ($from == null) {
                     $from = "00:00";
                 }
+
+                $tillDay = $day;
                 if ($till == null) {
                     $till = "00:00";
+                    $tillDay = $day + 1;
                 }
 
                 $fromDate = Carbon::parse($from)->setDate($year, $month, $day)->format(self::TARGET_DATE_FORMAT);
-                $tillDate = Carbon::parse($till)->setDate($year, $month, $day)->format(self::TARGET_DATE_FORMAT);
+                $tillDate = Carbon::parse($till)->setDate($year, $month, $tillDay)->format(self::TARGET_DATE_FORMAT);
 
                 if ($assignmentConsumer != null) {
                     $assignmentConsumer->setAssignment($fromDate, $tillDate, $employee);

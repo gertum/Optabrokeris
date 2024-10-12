@@ -175,6 +175,13 @@ class JobController extends Controller
 
         $job->save();
 
+//
+//        $solverClient = $this->solverClientFactory->createClient($job->type);
+//        $data = $job->getData();
+//        $solverId = $solverClient->registerData($data);
+//        $job->update(['solver_id' => $solverId]);
+//        // --
+
         return $job;
     }
 
