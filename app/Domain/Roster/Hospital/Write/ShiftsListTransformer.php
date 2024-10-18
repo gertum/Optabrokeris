@@ -83,7 +83,7 @@ class ShiftsListTransformer
                     ->setEmployee($oGroup[0]->getEmployee())
                     ->setDay($startDay)
                     // instead of throwing exception, we put 2 seconds for the start date, to show that the situation is not ok
-                    ->setStartHour($startHour + $gap / 1800 )
+                    ->setStartHour($startHour + $gap / 1000 )
                     ->setEndHour($endHour);
                 continue;
             }
