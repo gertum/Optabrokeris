@@ -136,6 +136,35 @@ class ShiftsTransformerTest extends TestCase
                         ->setEmployee((new Employee())->setName('Marry')),
                 ],
             ],
+            'test null employee' => [
+                'shifts' => [
+                    (new Shift())
+                        ->setStart('2024-02-01T00:00:00')
+                        ->setEnd('2024-02-01T08:00:00')
+                        ->setEmployee((new Employee())->setName('Peter')),
+                    (new Shift())
+                        ->setStart('2024-02-01T08:00:00')
+                        ->setEnd('2024-02-01T20:00:00')
+                        ->setEmployee((new Employee())->setName('Peter')),
+                    (new Shift())
+                        ->setStart('2024-02-01T20:00:00')
+                        ->setEnd('2024-02-02T00:00:00')
+                        ->setEmployee(null),
+                ],
+                'expectedOccupations' => [
+                    (new DayOccupation())
+                        ->setDay(1)
+                        ->setStartHour(0.0)
+                        ->setEndHour(20.0)
+                        ->setEmployee((new Employee())->setName('Peter')),
+                    (new DayOccupation())
+                        ->setDay(1)
+                        ->setStartHour(20.0)
+                        ->setEndHour(24.0)
+                        ->setEmployee(null),
+                ],
+            ],
+
         ];
     }
 }

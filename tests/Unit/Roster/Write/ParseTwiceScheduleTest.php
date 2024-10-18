@@ -43,14 +43,18 @@ class ParseTwiceScheduleTest extends TestCase
     public static function provideDataForWriter(): array
     {
         return [
-//            'test1' => [
-//                'sourceXlsx' => __DIR__ . '/../data/small.xlsx',
-//            ],
+            'test1' => [
+                'sourceXlsx' => __DIR__ . '/../data/small.xlsx',
+                'tmpXlsx' => __DIR__ . '/../data/tmp_small.xlsx',
+            ],
             'test vasaris' => [
                 'sourceXlsx' => __DIR__ . '/../data/vasaris.xlsx',
                 'tmpXlsx' => __DIR__ . '/../data/tmp_vasaris.xlsx',
             ],
-            // TODO to be sure test with a cleaned_schedule2.xlsx too
+            'test cleaned' => [
+                'sourceXlsx' => __DIR__ . '/../data/cleaned_schedule2.xlsx',
+                'tmpXlsx' => __DIR__ . '/../data/tmp_cleaned_schedule2.xlsx',
+            ],
         ];
     }
 

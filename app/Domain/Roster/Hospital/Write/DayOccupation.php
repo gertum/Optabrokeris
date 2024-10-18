@@ -10,7 +10,7 @@ class DayOccupation
     private float $startHour;
     private float $endHour;
 
-    private Employee $employee;
+    private ?Employee $employee;
 
     public function getDay(): int
     {
@@ -45,18 +45,21 @@ class DayOccupation
         return $this;
     }
 
-    public function getEmployee(): Employee
+    public function getEmployee(): ?Employee
     {
         return $this->employee;
     }
 
-    public function setEmployee(Employee $employee): DayOccupation
+    public function setEmployee(?Employee $employee): DayOccupation
     {
         $this->employee = $employee;
         return $this;
     }
 
     public function createGroupKey() : string {
+        if ( $this->employee== null ) {
+            return "__". $this->day;
+        }
         return $this->employee->name . "__". $this->day;
     }
 }
