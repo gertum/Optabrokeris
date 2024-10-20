@@ -31,13 +31,13 @@ export default function Authenticated({ user, header, children }) {
                   href={route('jobs.list')}
                   active={route().current('jobs.list')}
                 >
-                  {t('jobs.main')}
+                  {t('Profiles')}
                 </NavLink>
                 <NavLink
                   href={route('jobs.form')}
                   active={route().current('jobs.form')}
                 >
-                  {t('newJob')}
+                  {t('Create Profile')}
                 </NavLink>
               </Space>
             </Col>

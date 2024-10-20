@@ -126,8 +126,10 @@ class JobController extends Controller
 
     public function update(JobRequest $request, Job $job)
     {
-        // TODO @Vytenis : po pakeitimo, kad Job $job būtų per parametrus, nustojo veikti mano padarytas apribojimas matyti ir redaguoti tik savo job'us.
-        return $job->update($request->validated());
+        $data = $request->validated();
+        $job->update($data);
+
+        return $job;
     }
 
     public function solve(JobSolveRequest $request, Job $job)
@@ -211,5 +213,12 @@ class JobController extends Controller
         $fileHandler->arrayToSpreadSheet($dataArray, $file, $job->getOriginalFileContent());
 
         return response()->download($file, $fileName);
+    }
+
+    public function delete(Job $job)
+    {
+        $job->delete();
+
+        return $job;
     }
 }

@@ -15,6 +15,7 @@ export const FileUploadForm = ({newJob, onFinish, children, token, disabled}) =>
                 maxCount={1}
                 listType="picture"
                 accept=".xlsx"
+                onChange={() => onFinish()}
             >
                 {t('step.fileUploadForm.dragFiles')}
                 <br />

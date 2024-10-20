@@ -39,7 +39,7 @@ services:
         container_name: optabroker_db
         image: mariadb:latest
         volumes:
-            - ./.docker/db/storage/volumes/mysql:/var/lib/mysql
+            - optabroker_db_data:/var/lib/mysql
 #            - ./.docker/db/resources/database_character_set.sh:/docker-entrypoint-initdb.d/database_character_set.sh
         environment:
             - MYSQL_ROOT_PASSWORD=optabrokerp
@@ -75,3 +75,6 @@ services:
 
         depends_on:
             - optabroker
+
+volumes:
+    optabroker_db_data:

@@ -1,15 +1,26 @@
-import React from 'react';
+import React, {useMemo} from 'react';
 import {Divider, Form, Input} from 'antd';
 import {useTranslation} from 'react-i18next';
+import debounce from 'lodash.debounce';
 
-export const NamingForm = ({onChange, defaultValue, children}) => {
+export const NamingForm = ({onChange, defaultValue, children, creating}) => {
     const {t} = useTranslation();
 
     const enterNameLabel = t('step.namingForm.enterName');
     const pleaseEnterNameMessage = t('step.namingForm.pleaseEnterJobName');
 
+    const debouncedOnChange = useMemo(() => debounce(onChange, 1), [onChange]);
+
     const handleValuesChange = (changedValues, allValues) => {
-        onChange(allValues);
+        console.log(creating);
+
+        if (creating) {
+            onChange(allValues);
+
+            return;
+        }
+
+        debouncedOnChange(allValues);
     };
 
     return <>
@@ -32,6 +43,5 @@ export const NamingForm = ({onChange, defaultValue, children}) => {
             </Form.Item>
             {children}
         </Form>
-        <Divider />
     </>;
 };

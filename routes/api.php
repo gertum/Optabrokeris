@@ -24,6 +24,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/job/{job}', [JobController::class, 'view']);
     Route::post('/job', [JobController::class, 'create']);
     Route::put('/job/{job}', [JobController::class, 'update']);
+    Route::delete('/job/{job}', [JobController::class, 'delete']);
     Route::post('/job/{job}/solve', [JobController::class, 'solve']);
     Route::post('/job/{job}/stop', [JobController::class, 'stop']);
     Route::post('/job/{job}/upload', [JobController::class, 'upload']);
