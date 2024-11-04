@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Data\Profile;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -99,4 +100,21 @@ class Job extends Model
         return $this->getAttribute('name');
     }
 
+    public function getProfile(): string
+    {
+        return $this->getAttribute('profile');
+    }
+
+    public function setProfile(string $profile): string
+    {
+        return $this->setAttribute('profile', $profile);
+    }
+
+    public function getProfileObj(): Profile {
+        return new Profile($this->getProfile());
+    }
+
+    public function setProfileObj(Profile $profile) {
+        $this->setProfile(json_encode($profile));
+    }
 }

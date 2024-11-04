@@ -2,20 +2,27 @@
 
 namespace App\Data;
 
-class Profile
+use Spatie\DataTransferObject\DataTransferObject;
+
+/**
+ * Used to parse json data, stored in Job and in User
+ */
+class Profile extends DataTransferObject
 {
     /**
      * @var float[] Hour value.
      */
-    private array $shiftBounds=[];
+    public array $shiftBounds=[];
 
     public function getShiftBounds(): array
     {
         return $this->shiftBounds;
     }
 
-    public function setShiftBounds(array $shiftBounds): void
+    public function setShiftBounds(array $shiftBounds): self
     {
         $this->shiftBounds = $shiftBounds;
+
+        return $this;
     }
 }
