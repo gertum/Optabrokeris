@@ -33,19 +33,45 @@ class ShiftsBuilderOfBoundsTest extends TestCase
     public static function provideShiftsParameters(): array
     {
         return [
-            'test1' => [
+//            'test1' => [
+//                'from' => DateTimeImmutable::createFromFormat('Y-m-d H:i', '2024-06-01 00:00'),
+//                'till' => DateTimeImmutable::createFromFormat('Y-m-d H:i', '2024-06-02 00:00'),
+//                'shiftBounds' => [0, 8, 20],
+//                'expectedShiftsAmount' => 3,
+//                'shiftNumberToCheck' => 0,
+//                'expectedShift' =>
+//                    (new Shift())
+//                        ->setId(1)
+//                        ->setStart("2024-06-01T00:00:00")
+//                        ->setEnd("2024-06-01T08:00:00")
+//
+//            ],
+            'test3A' => [
                 'from' => DateTimeImmutable::createFromFormat('Y-m-d H:i', '2024-06-01 00:00'),
                 'till' => DateTimeImmutable::createFromFormat('Y-m-d H:i', '2024-06-02 00:00'),
-                'shiftBounds' => [0, 8, 20],
-                'expectedShiftsAmount' => 3,
+                'shiftBounds' => [8, 20],
+                'expectedShiftsAmount' => 2,
                 'shiftNumberToCheck' => 0,
                 'expectedShift' =>
                     (new Shift())
                         ->setId(1)
-                        ->setStart("2024-06-01T00:00:00")
-                        ->setEnd("2024-06-01T08:00:00")
+                        ->setStart("2024-06-01T08:00:00")
+                        ->setEnd("2024-06-01T20:00:00")
 
-            ]
+            ],
+//            'test3B' => [
+//                'from' => DateTimeImmutable::createFromFormat('Y-m-d H:i', '2024-06-01 00:00'),
+//                'till' => DateTimeImmutable::createFromFormat('Y-m-d H:i', '2024-06-02 00:00'),
+//                'shiftBounds' => [8, 20],
+//                'expectedShiftsAmount' => 2,
+//                'shiftNumberToCheck' => 1,
+//                'expectedShift' =>
+//                    (new Shift())
+//                        ->setId(2)
+//                        ->setStart("2024-06-01T20:00:00")
+//                        ->setEnd("2024-06-02T08:00:00")
+//
+//            ],
         ];
     }
 

@@ -32,7 +32,25 @@ class BoundsToIntervalsTest extends TestCase
                     new DateInterval('PT12H'),
                     new DateInterval('PT4H'),
                 ]
-            ]
+            ],
+            'test2' => [
+                'bounds' => [
+                    8,20
+                ],
+                'expectedIntervals' => [
+                    new DateInterval('PT12H'),
+                    new DateInterval('PT12H'),
+                ]
+            ],
+            'test3' => [
+                'bounds' => [
+                    8.5,20
+                ],
+                'expectedIntervals' => [
+                    new DateInterval('PT11H30M'),
+                    new DateInterval('PT12H30M'),
+                ]
+            ],
         ];
     }
 
