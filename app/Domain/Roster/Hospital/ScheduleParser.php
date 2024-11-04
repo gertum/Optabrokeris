@@ -2,6 +2,7 @@
 
 namespace App\Domain\Roster\Hospital;
 
+use App\Data\Profile;
 use App\Domain\Roster\Schedule;
 use Carbon\Carbon;
 use DateInterval;
@@ -76,5 +77,12 @@ class ScheduleParser
             new DateInterval('PT12H'),
             new DateInterval('PT4H'),
         ];
+    }
+
+    public function parsePreferedScheduleXls(string $file, Profile $profile) : Schedule {
+        $schedule = new Schedule();
+        // TODO
+
+        return $schedule;
     }
 }
