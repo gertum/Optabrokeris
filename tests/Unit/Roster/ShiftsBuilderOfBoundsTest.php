@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Tests\Unit\Roster;
-
 
 use App\Domain\Roster\Hospital\ShiftsBuilder;
 use App\Domain\Roster\Shift;
