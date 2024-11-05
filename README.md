@@ -181,5 +181,14 @@ Body
     give parameter 'file' value - your file.
 
 
+# tests
+
+## unit
+
+    vendor/bin/phpunit
+
+## unit slow
+
+    vendor/bin/phpunit --testsuite=UnitSlow
 
 

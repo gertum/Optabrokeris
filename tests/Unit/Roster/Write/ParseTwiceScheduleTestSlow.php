@@ -16,7 +16,7 @@ use PHPUnit\Framework\TestCase;
  * 1) Original xlsx file, 2) the written xlsx file .
  * Compare the result.
  */
-class ParseTwiceScheduleTest extends TestCase
+class ParseTwiceScheduleTestSlow extends TestCase
 {
     /**
      * @dataProvider provideDataForWriter
