@@ -6,6 +6,10 @@ use App\Domain\Roster\Shift;
 use App\Util\Grouper;
 use Carbon\Carbon;
 
+/**
+ * This class is used to transform shifts list to a table-type structure
+ * for writing data to the output xlsx file.
+ */
 class ShiftsListTransformer
 {
     /**

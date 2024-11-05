@@ -26,16 +26,16 @@ class ExcelWrapper
 
     const TARGET_DATE_FORMAT = 'Y-m-d\\TH:i:s';
 
-    private array $rowsEx = [];
-    private ?SimpleXLSX $xlsx = null;
+    protected array $rowsEx = [];
+    protected ?SimpleXLSX $xlsx = null;
 
     /**
      * In memory cache
      * @var Cell[][]
      */
-    private array $cellCache = [];
+    protected array $cellCache = [];
 
-    private int $availabilityId = 1;
+    protected int $availabilityId = 1;
 
     public static function parse(string $file): self
     {

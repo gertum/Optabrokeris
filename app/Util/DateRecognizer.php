@@ -21,6 +21,21 @@ class DateRecognizer
         11 => 'lapkričio',
         12 => 'gruodžio',
     ];
+
+    public const LT_MONTH = [
+        1 => 'SAUSIS',
+        2 => 'VASARIS',
+        3 => 'KOVAS',
+        4 => 'BALANDIS',
+        5 => 'GEGUŽĖ',
+        6 => 'BIRŽELIS',
+        7 => 'LIEPA',
+        8 => 'RUGPJŪTIS',
+        9 => 'RUGSĖJIS',
+        10 => 'SPALIS',
+        11 => 'LAPKRITIS',
+        12 => 'GRUODIS',
+    ];
     private static array $monthSet = [];
 
     private static string $regexp = '';
