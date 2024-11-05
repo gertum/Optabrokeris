@@ -41,7 +41,7 @@ class ExcelWrapper
         return new static();
     }
 
-    public static function parse(string $file): self
+    public static function parse(string $file): static
     {
         $wrapper = self::getInstance();
 

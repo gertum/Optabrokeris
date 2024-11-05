@@ -3,6 +3,7 @@
 namespace App\Domain\Roster\Hospital;
 
 use App\Data\Profile;
+use App\Domain\Roster\Employee;
 use App\Domain\Roster\Schedule;
 use Carbon\Carbon;
 use DateInterval;
@@ -81,8 +82,46 @@ class ScheduleParser
 
     public function parsePreferedScheduleXls(string $file, Profile $profile) : Schedule {
         $schedule = new Schedule();
+
+
+        $wrapper = PreferencesExcelWrapper::parse($file);
+
+        $yearMonth = $wrapper->findYearMonth();
+
         // TODO
+        // parse employees
+
+        $employees = $this->parseEmployees(wrapper: $wrapper );
+        $schedule->setEmployeeList($employees);
+
+        // TODO parse shifts
 
         return $schedule;
+    }
+
+    public function parseEmployees(PreferencesExcelWrapper $wrapper): array {
+        $row = 2;
+
+        $employees = [];
+        while ( true ) {
+            $employeeCell = $wrapper->getCell($row, 0);
+            if ( $employeeCell->value == null ) {
+                break;
+            }
+
+            $employees [] = (new Employee())
+                ->setName($employeeCell->value)
+                ->setExcelRow($employeeCell->r)
+                ->setRow($row);
+//                ->setMaxWorkingHours(floatval($workingHoursCell->value))
+//                ->setSequenceNumber($eilNr->getValue());
+
+            // TODO max working hours later
+
+            $row++;
+        }
+
+        return $employees;
+
     }
 }
