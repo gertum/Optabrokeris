@@ -16,15 +16,16 @@ class PreferedScheduleParseTest extends TestCase
      * @dataProvider provideFiles
      */
     public function testParse(
-        string $file,
-        Profile $profile,
-        int $checkEmployeeIndex,
-        int $checkShiftIndex,
-        int $checkAvailabilityIndex,
-        Employee $expectedEmployee,
-        Shift $expectedShift,
+        string       $file,
+        Profile      $profile,
+        int          $checkEmployeeIndex,
+        int          $checkShiftIndex,
+        int          $checkAvailabilityIndex,
+        Employee     $expectedEmployee,
+        Shift        $expectedShift,
         Availability $expectedAvailability
-    ) {
+    )
+    {
         $scheduleParser = new ScheduleParser();
 
         $schedule = $scheduleParser->parsePreferedScheduleXls($file, $profile);
@@ -34,11 +35,12 @@ class PreferedScheduleParseTest extends TestCase
 //        $this->assertEquals($expectedAvailability, $schedule->availabilityList[$checkAvailabilityIndex]);
     }
 
-    public static function provideFiles() : array {
+    public static function provideFiles(): array
+    {
         return [
             'test1' => [
-                'file' => __DIR__.'/data/VULSK SPS budėjimų pageidavimai.xlsx',
-                'profile' => new Profile(),
+                'file' => __DIR__ . '/data/VULSK SPS budėjimų pageidavimai.xlsx',
+                'profile' => (new Profile())->setShiftBounds([8, 20]),
                 'checkEmployeeIndex' => 0,
                 'checkShiftIndex' => 0,
                 'checkAvailabilityIndex' => 0,
@@ -46,20 +48,29 @@ class PreferedScheduleParseTest extends TestCase
                     ->setName('Aleksandras Briedis')
                     ->setRow(2)
                     ->setExcelRow(3),
-                'expectedShift' => new Shift(),
+                'expectedShift' => (new Shift())
+                    ->setId(1)
+                    ->setStart('2022-12-01T08:00:00')
+                    ->setEnd('2022-12-01T20:00:00')
+                ,
                 'expectedAvailability' => new Availability()
             ],
             'test2' => [
-                'file' => __DIR__.'/data/VULSK SPS budėjimų pageidavimai.xlsx',
-                'profile' => new Profile(),
+                'file' => __DIR__ . '/data/VULSK SPS budėjimų pageidavimai.xlsx',
+                'profile' => (new Profile())
+                    ->setShiftBounds([8, 20])
+                ,
                 'checkEmployeeIndex' => 30,
-                'checkShiftIndex' => 0,
+                'checkShiftIndex' => 1,
                 'checkAvailabilityIndex' => 0,
                 'expectedEmployee' => (new Employee())
                     ->setName('Linas Rinkūnas')
                     ->setRow(32)
                     ->setExcelRow(33),
-                'expectedShift' => new Shift(),
+                'expectedShift' => (new Shift())
+                    ->setId(2)
+                    ->setStart('2022-12-01T20:00:00')
+                    ->setEnd('2022-12-02T08:00:00'),
                 'expectedAvailability' => new Availability()
             ]
         ];

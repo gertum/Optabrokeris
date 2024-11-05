@@ -86,15 +86,18 @@ class ScheduleParser
 
         $wrapper = PreferencesExcelWrapper::parse($file);
 
-        $yearMonth = $wrapper->findYearMonth();
 
-        // TODO
         // parse employees
 
         $employees = $this->parseEmployees(wrapper: $wrapper );
         $schedule->setEmployeeList($employees);
 
-        // TODO parse shifts
+        // build shifts
+        $dateRecognizer = $wrapper->findYearMonth();
+        $dateFrom = Carbon::create($dateRecognizer->getYear(), $dateRecognizer->getMonth())->toImmutable();
+        $dateTill = Carbon::create( $dateRecognizer->getYear(), $dateRecognizer->getMonth(), $dateFrom->daysInMonth, 24)->toImmutable();
+        $shifts = ShiftsBuilder::buildShiftsOfBounds($dateFrom, $dateTill, $profile->getShiftBounds());
+        $schedule->setShiftList($shifts);
 
         return $schedule;
     }

@@ -3,6 +3,8 @@
 namespace App\Domain\Roster\Hospital;
 
 use App\Domain\Roster\Shift;
+use App\Exceptions\ExcelParseException;
+use App\Exceptions\SolverDataException;
 use DateInterval;
 use DateTimeImmutable;
 
@@ -43,6 +45,9 @@ class ShiftsBuilder
         DateTimeImmutable $till,
         array $shiftBounds
     ): array {
+        if ( count($shiftBounds) == 0 ) {
+            throw new SolverDataException('Bounds are not defined in a given profile when generating shifts');
+        }
         $timeSlices = self::transformBoundsToTimeSlices($shiftBounds);
         $initialInterval = self::getInitialInterval($shiftBounds[0]);
         $current = $from->add($initialInterval);
