@@ -36,6 +36,21 @@ class DateRecognizer
         11 => 'LAPKRITIS',
         12 => 'GRUODIS',
     ];
+
+    public const LT_MONTH_LATINIZED = [
+        1 => 'SAUSIS',
+        2 => 'VASARIS',
+        3 => 'KOVAS',
+        4 => 'BALANDIS',
+        5 => 'GEGUZE',
+        6 => 'BIRZELIS',
+        7 => 'LIEPA',
+        8 => 'RUGPJUTIS',
+        9 => 'RUGSEJIS',
+        10 => 'SPALIS',
+        11 => 'LAPKRITIS',
+        12 => 'GRUODIS',
+    ];
     private static array $monthSet = [];
 
     private static string $regexp = '';
@@ -88,5 +103,31 @@ class DateRecognizer
     public function getMonth(): int
     {
         return $this->month;
+    }
+
+    public function setYear(int $year): DateRecognizer
+    {
+        $this->year = $year;
+        return $this;
+    }
+
+    public function setMonth(int $month): DateRecognizer
+    {
+        $this->month = $month;
+        return $this;
+    }
+
+    public function recognizeMonthOnly($monthName) : void {
+        $ltMonthSet = array_flip(self::LT_MONTH);
+
+        if ( array_key_exists($monthName, $ltMonthSet) ) {
+            $this->month = $ltMonthSet[$monthName];
+            return;
+        }
+
+        $ltLatMontSet = array_flip(self::LT_MONTH_LATINIZED);
+        if ( array_key_exists($monthName, $ltLatMontSet) ) {
+            $this->month = $ltLatMontSet[$monthName];
+        }
     }
 }

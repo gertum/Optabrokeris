@@ -37,9 +37,13 @@ class ExcelWrapper
 
     protected int $availabilityId = 1;
 
+    protected static function getInstance(): static {
+        return new static();
+    }
+
     public static function parse(string $file): self
     {
-        $wrapper = new ExcelWrapper();
+        $wrapper = self::getInstance();
 
         if (!file_exists($file)) {
             throw new ExcelParseException(sprintf('File %s does not exist', $file));

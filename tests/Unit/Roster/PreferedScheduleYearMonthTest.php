@@ -12,7 +12,8 @@ class PreferedScheduleYearMonthTest extends TestCase
      */
     public function testDetectYearMonth(string $file, int $expectedYear, int $expectedMonth) {
 
-        $wrapper = new PreferencesExcelWrapper($file);
+        /** @var PreferencesExcelWrapper $wrapper */
+        $wrapper = PreferencesExcelWrapper::parse($file);
 
         $yearMonth = $wrapper->findYearMonth();
 
@@ -23,9 +24,19 @@ class PreferedScheduleYearMonthTest extends TestCase
     public static function provideFiles() : array {
         return [
             'test1' => [
-                'file' => __DIR__.'/data/VULSK SPS budėjimų pageidavimai.xlsx.xlsx',
+                'file' => __DIR__.'/data/VULSK SPS budėjimų pageidavimai.xlsx',
                 'expectedYear' => 2022,
                 'expectedMonth' => 12,
+            ],
+            'test2' => [
+                'file' => __DIR__.'/data/VULSK SPS budėjimų pageidavimai rugsejis.xlsx',
+                'expectedYear' => 2022,
+                'expectedMonth' => 9,
+            ],
+            'test3' => [
+                'file' => __DIR__.'/data/VULSK SPS budėjimų pageidavimai rugseejis.xlsx',
+                'expectedYear' => 2022,
+                'expectedMonth' => 9,
             ]
         ];
     }
