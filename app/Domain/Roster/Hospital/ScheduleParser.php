@@ -9,6 +9,7 @@ use App\Domain\Roster\Schedule;
 use App\Exceptions\ExcelParseException;
 use App\Util\MapBuilder;
 use Carbon\Carbon;
+use Carbon\CarbonInterface;
 use DateInterval;
 use DateTimeInterface;
 
@@ -112,7 +113,8 @@ class ScheduleParser
         $shifts = ShiftsBuilder::buildShiftsOfBounds($dateFrom, $dateTill, $profile->getShiftBounds());
         $schedule->setShiftList($shifts);
 
-        $availabilities = $this->parseAvailabilities($wrapper);
+        $availabilities = $this->parseAvailabilities($wrapper, $dateFrom, $employees);
+        $schedule->setAvailabilityList($availabilities);
 
         return $schedule;
     }
@@ -150,9 +152,8 @@ class ScheduleParser
      */
     public function parseAvailabilities(
         PreferencesExcelWrapper $wrapper,
-        Carbon $startingDate,
-        array $employees,
-        Profile $profile
+        CarbonInterface $startingDate,
+        array $employees
     ): array {
         $availabilities = [];
         // 1) find a cell with value '1' at the row index 1, then use it as the marker of the column,
@@ -177,6 +178,10 @@ class ScheduleParser
             for ($day = 1; $day <= $startingDate->daysInMonth; $day++) {
                 $row = $employee->getRow();
                 $column = $startingCell->column + $day;
+
+                if( $column >= $wrapper->getMaxColumnsAtRow($row)) {
+                    continue;
+                }
                 $availabilityCell = $wrapper->getCell($row, $column);
                 $collectedValues[$day] = $availabilityCell->value;
             }
@@ -185,7 +190,8 @@ class ScheduleParser
             $employeeAvailabilities = $this->createAvailabilitiesForMultipleDay($collectedValues, $startingDate);
             array_walk($employeeAvailabilities, fn(Availability $a) => $a->setEmployee($employee));
 
-            $availabilities = array_merge($availabilities, $employeeAvailabilities);
+            // We remove key indexes, because else the following merge is impossible.
+            $availabilities = array_merge($availabilities, array_values($employeeAvailabilities));
         }
 
         return $availabilities;
@@ -214,7 +220,7 @@ class ScheduleParser
      * We are going to set availabilities independent on profile.
      * @return Availability[]
      */
-    public function createAvailabilitiesForOneDay(string $availabilityValue, Carbon $currentDay): array
+    public function createAvailabilitiesForOneDay(?string $availabilityValue, Carbon $currentDay): array
     {
         $availabilities = [];
 

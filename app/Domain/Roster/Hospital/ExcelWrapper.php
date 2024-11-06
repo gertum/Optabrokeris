@@ -73,6 +73,10 @@ class ExcelWrapper
         }
 
         if (!array_key_exists($column, $this->cellCache[$row])) {
+            if ( !isset($this->rowsEx[$row][$column])) {
+                throw new ExcelParseException(sprintf('There is no cell at row %s and column %s', $row, $column));
+            }
+
             $cell = new Cell($this->rowsEx[$row][$column]);
             $cell->row = $row;
             $cell->column = $column;
@@ -358,4 +362,5 @@ class ExcelWrapper
     {
         return count($this->rowsEx[$row]);
     }
+
 }
