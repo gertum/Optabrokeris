@@ -265,11 +265,11 @@ class ScheduleParser
             $availabilities = [
                 (new Availability())
                     ->setDate($dayStartStr)
-                    ->setDateTill($nightStartStr)
+                    ->setDateTill($dayEndStr)
                     ->setAvailabilityType(Availability::DESIRED),
 
                 (new Availability())
-                    ->setDate($nightStartStr)
+                    ->setDate($dayEndStr)
                     ->setDateTill($nextDayStartStr)
                     ->setAvailabilityType(Availability::DESIRED)
             ];

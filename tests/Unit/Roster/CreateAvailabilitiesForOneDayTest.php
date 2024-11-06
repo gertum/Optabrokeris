@@ -6,6 +6,7 @@ use App\Domain\Roster\Availability;
 use App\Domain\Roster\Hospital\ScheduleParser;
 use Carbon\Carbon;
 use PHPUnit\Framework\TestCase;
+use Spatie\DataTransferObject\DataTransferObject;
 
 class CreateAvailabilitiesForOneDayTest extends TestCase
 {
@@ -35,7 +36,63 @@ class CreateAvailabilitiesForOneDayTest extends TestCase
                         ->setDateTill('2022-12-02T20:00:00')
                         ->setAvailabilityType(Availability::AVAILABLE),
                 ]
-            ]
+            ],
+            'test2' => [
+                'availabilityValue' => 'D',
+                'currentDay' => Carbon::create(2022, 12, 2),
+                'expectedAvailabilities' => [
+                    '2022-12-01T20:00:00' => (new Availability())
+                        ->setDate('2022-12-01T20:00:00')
+                        ->setDateTill('2022-12-02T08:00:00')
+                        ->setAvailabilityType(Availability::UNAVAILABLE),
+                    '2022-12-02T08:00:00' => (new Availability())
+                        ->setDate('2022-12-02T08:00:00')
+                        ->setDateTill('2022-12-02T20:00:00')
+                        ->setAvailabilityType(Availability::DESIRED),
+                ]
+            ],
+            'test3 P' => [
+                'availabilityValue' => 'P',
+                'currentDay' => Carbon::create(2022, 12, 2),
+                'expectedAvailabilities' => [
+                    '2022-12-01T20:00:00' => (new Availability())
+                        ->setDate('2022-12-01T20:00:00')
+                        ->setDateTill('2022-12-02T08:00:00')
+                        ->setAvailabilityType(Availability::DESIRED),
+                    '2022-12-02T08:00:00' => (new Availability())
+                        ->setDate('2022-12-02T08:00:00')
+                        ->setDateTill('2022-12-02T20:00:00')
+                        ->setAvailabilityType(Availability::DESIRED),
+                ]
+            ],
+            'test4 8-8' => [
+                'availabilityValue' => '8-8',
+                'currentDay' => Carbon::create(2022, 12, 2),
+                'expectedAvailabilities' => [
+                    '2022-12-02T08:00:00' => (new Availability())
+                        ->setDate('2022-12-02T08:00:00')
+                        ->setDateTill('2022-12-02T20:00:00')
+                        ->setAvailabilityType(Availability::DESIRED),
+                    '2022-12-02T20:00:00' => (new Availability())
+                        ->setDate('2022-12-02T20:00:00')
+                        ->setDateTill('2022-12-03T08:00:00')
+                        ->setAvailabilityType(Availability::DESIRED),
+                ]
+            ],
+            'test5 n' => [
+                'availabilityValue' => 'n',
+                'currentDay' => Carbon::create(2022, 12, 1),
+                'expectedAvailabilities' => [
+                    '2022-11-30T20:00:00' => (new Availability())
+                        ->setDate('2022-11-30T20:00:00')
+                        ->setDateTill('2022-12-01T08:00:00')
+                        ->setAvailabilityType(Availability::DESIRED),
+                    '2022-12-01T08:00:00' => (new Availability())
+                        ->setDate('2022-12-01T08:00:00')
+                        ->setDateTill('2022-12-01T20:00:00')
+                        ->setAvailabilityType(Availability::UNAVAILABLE),
+                ]
+            ],
         ];
     }
 }
