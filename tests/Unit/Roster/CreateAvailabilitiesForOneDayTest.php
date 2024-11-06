@@ -44,7 +44,7 @@ class CreateAvailabilitiesForOneDayTest extends TestCase
                     '2022-12-01T20:00:00' => (new Availability())
                         ->setDate('2022-12-01T20:00:00')
                         ->setDateTill('2022-12-02T08:00:00')
-                        ->setAvailabilityType(Availability::UNAVAILABLE),
+                        ->setAvailabilityType(Availability::UNDESIRED),
                     '2022-12-02T08:00:00' => (new Availability())
                         ->setDate('2022-12-02T08:00:00')
                         ->setDateTill('2022-12-02T20:00:00')
@@ -87,6 +87,20 @@ class CreateAvailabilitiesForOneDayTest extends TestCase
                         ->setDate('2022-11-30T20:00:00')
                         ->setDateTill('2022-12-01T08:00:00')
                         ->setAvailabilityType(Availability::DESIRED),
+                    '2022-12-01T08:00:00' => (new Availability())
+                        ->setDate('2022-12-01T08:00:00')
+                        ->setDateTill('2022-12-01T20:00:00')
+                        ->setAvailabilityType(Availability::UNDESIRED),
+                ]
+            ],
+            'test6 x' => [
+                'availabilityValue' => 'x',
+                'currentDay' => Carbon::create(2022, 12, 1),
+                'expectedAvailabilities' => [
+                    '2022-11-30T20:00:00' => (new Availability())
+                        ->setDate('2022-11-30T20:00:00')
+                        ->setDateTill('2022-12-01T08:00:00')
+                        ->setAvailabilityType(Availability::UNAVAILABLE),
                     '2022-12-01T08:00:00' => (new Availability())
                         ->setDate('2022-12-01T08:00:00')
                         ->setDateTill('2022-12-01T20:00:00')

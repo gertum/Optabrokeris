@@ -177,9 +177,9 @@ class ScheduleParser
             $collectedValues = [];
             for ($day = 1; $day <= $startingDate->daysInMonth; $day++) {
                 $row = $employee->getRow();
-                $column = $startingCell->column + $day;
+                $column = $startingCell->column + $day - 1;
 
-                if( $column >= $wrapper->getMaxColumnsAtRow($row)) {
+                if ($column > $wrapper->getMaxColumnsAtRow($row)) {
                     continue;
                 }
                 $availabilityCell = $wrapper->getCell($row, $column);
@@ -188,11 +188,17 @@ class ScheduleParser
 
             $startingDate = Carbon::create($startingDate->year, $startingDate->month, 1);
             $employeeAvailabilities = $this->createAvailabilitiesForMultipleDay($collectedValues, $startingDate);
+
+
             array_walk($employeeAvailabilities, fn(Availability $a) => $a->setEmployee($employee));
 
             // We remove key indexes, because else the following merge is impossible.
             $availabilities = array_merge($availabilities, array_values($employeeAvailabilities));
         }
+
+        $availabilityId = 1;
+        array_walk($availabilities, fn(Availability $availability) => $availability->setId($availabilityId++));
+
 
         return $availabilities;
     }
@@ -204,6 +210,10 @@ class ScheduleParser
      */
     public function createAvailabilitiesForMultipleDay(array $collectedValues, Carbon $startingDate): array
     {
+        if (count($collectedValues) == 0) {
+            return [];
+        }
+
         $availabilities = [];
 
         foreach ($collectedValues as $day => $value) {
@@ -213,6 +223,20 @@ class ScheduleParser
             // we may resolve overlapping issues by indexing availabilities by availability start date and then check dates when merging arrays.
             $availabilities = self::mergeAvailabilities($availabilities, $dayAvailabilities);
         }
+
+        // --- filling gaps
+        $maxDay = max(array_keys($collectedValues));
+        $minDay = min(array_keys($collectedValues));
+
+        $startingDateTime = Carbon::create($startingDate->year, $startingDate->month, $minDay);
+        $startingDateTime = $startingDateTime->modify('-1 day');
+        $startingDateTime->setTime(20, 0);
+
+
+        $endDateTime = Carbon::create($startingDate->year, $startingDate->month, $maxDay, 20, 0);
+        $availabilities = $this->fillGaps($startingDateTime, $endDateTime, $availabilities);
+        // ---
+
         return $availabilities;
     }
 
@@ -234,15 +258,24 @@ class ScheduleParser
 
         // TODO take hours from settings
         $nightStartStr = Carbon::create($previousDay->year, $previousDay->month, $previousDay->day, 20)
-            ->format(self::TARGET_DATE_FORMAT);
+            ->format(self::TARGET_DATE_FORMAT)
+        ;
         $dayStartStr = Carbon::create($currentDay->year, $currentDay->month, $currentDay->day, 8)
-            ->format(self::TARGET_DATE_FORMAT);
+            ->format(self::TARGET_DATE_FORMAT)
+        ;
         $dayEndStr = Carbon::create($currentDay->year, $currentDay->month, $currentDay->day, 20)
-            ->format(self::TARGET_DATE_FORMAT);
+            ->format(self::TARGET_DATE_FORMAT)
+        ;
         $nextDayStartStr = Carbon::create($nextDay->year, $nextDay->month, $nextDay->day, 8)
-            ->format(self::TARGET_DATE_FORMAT);
+            ->format(self::TARGET_DATE_FORMAT)
+        ;
 
-        if (in_array($availabilityValue, ['X', 'x', 'a', 'A'])) {
+        $availabilityValue = trim($availabilityValue);
+
+        // be aware: these two X are not the same!!
+        if (in_array($availabilityValue, [
+            'Х', // different encoding!
+            'X', 'x', 'a', 'A'])) {
             $availabilities = [
                 (new Availability())
                     ->setDate($nightStartStr)
@@ -266,7 +299,7 @@ class ScheduleParser
                     ->setDateTill($dayEndStr)
                     ->setAvailabilityType(Availability::AVAILABLE)
             ];
-        } elseif (in_array($availabilityValue, ['8-8', '8-8r.'])) {
+        } elseif (in_array($availabilityValue, ['8-8', '8-8r.']) || str_contains($availabilityValue, '08-08')) {
             $availabilities = [
                 (new Availability())
                     ->setDate($dayStartStr)
@@ -295,7 +328,7 @@ class ScheduleParser
                 (new Availability())
                     ->setDate($nightStartStr)
                     ->setDateTill($dayStartStr)
-                    ->setAvailabilityType(Availability::UNAVAILABLE),
+                    ->setAvailabilityType(Availability::UNDESIRED),
 
                 (new Availability())
                     ->setDate($dayStartStr)
@@ -312,8 +345,11 @@ class ScheduleParser
                 (new Availability())
                     ->setDate($dayStartStr)
                     ->setDateTill($dayEndStr)
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::UNDESIRED)
             ];
+        }
+        else {
+            throw new ExcelParseException( sprintf('Unknown value [%s] to parse', $availabilityValue));
         }
 
         return MapBuilder::buildMap(
@@ -328,11 +364,12 @@ class ScheduleParser
      * @param Availability[] $b
      * @return Availability[]
      */
-    public function mergeAvailabilities(array $a, array $b) : array {
+    public function mergeAvailabilities(array $a, array $b): array
+    {
         $result = $a;
 
         foreach ($b as $day => $bAvailability) {
-            if ( !array_key_exists($day, $result)) {
+            if (!array_key_exists($day, $result)) {
                 $result[$day] = $bAvailability;
                 continue;
             }
@@ -344,7 +381,7 @@ class ScheduleParser
             $bPriority = Availability::getAvailabilityTypePriority($bAvailability->availabilityType);
 
             $selectedAvailability = $aAvailability;
-            if ( $bPriority > $aPriority) {
+            if ($bPriority > $aPriority) {
                 $selectedAvailability = $bAvailability;
             }
 
@@ -352,5 +389,31 @@ class ScheduleParser
         }
 
         return $result;
+    }
+
+    public function fillGaps(Carbon $startDate, Carbon $endDate, array $availabilities): array
+    {
+        $currentDate = clone $startDate;
+        $interval12 = new DateInterval('PT12H');
+
+        while ($currentDate < $endDate) {
+            $currentDateStr = $currentDate->format(self::TARGET_DATE_FORMAT);
+            $currentDate = $currentDate->add($interval12);
+
+            if (array_key_exists($currentDateStr, $availabilities)) {
+                continue;
+            }
+            $nextDateStr = $currentDate->format(self::TARGET_DATE_FORMAT);
+
+            $availability = (new Availability())
+                ->setDate($currentDateStr)
+                ->setDateTill($nextDateStr)
+                ->setAvailabilityType(Availability::UNDESIRED)
+            ;
+
+            $availabilities[$currentDateStr] = $availability;
+        }
+
+        return $availabilities;
     }
 }

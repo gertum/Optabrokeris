@@ -36,7 +36,7 @@ class CreateAvailabilitiesForMultipleDaysTest extends TestCase
                     '2024-11-01T20:00:00' => (new Availability())
                         ->setDate('2024-11-01T20:00:00')
                         ->setDateTill('2024-11-02T08:00:00')
-                        ->setAvailabilityType(Availability::UNAVAILABLE),
+                        ->setAvailabilityType(Availability::UNDESIRED),
                     '2024-11-02T08:00:00' => (new Availability())
                         ->setDate('2024-11-02T08:00:00')
                         ->setDateTill('2024-11-02T20:00:00')
@@ -53,7 +53,7 @@ class CreateAvailabilitiesForMultipleDaysTest extends TestCase
                     '2024-11-01T20:00:00' => (new Availability())
                         ->setDate('2024-11-01T20:00:00')
                         ->setDateTill('2024-11-02T08:00:00')
-                        ->setAvailabilityType(Availability::UNAVAILABLE),
+                        ->setAvailabilityType(Availability::UNDESIRED),
                     '2024-11-02T08:00:00' => (new Availability())
                         ->setDate('2024-11-02T08:00:00')
                         ->setDateTill('2024-11-02T20:00:00')
@@ -75,6 +75,10 @@ class CreateAvailabilitiesForMultipleDaysTest extends TestCase
                 ],
                 'startingDate' => Carbon::create(2024,11, 1),
                 'expectedAvailabilities' => [
+                    '2024-11-01T20:00:00' => (new Availability())
+                        ->setDate('2024-11-01T20:00:00')
+                        ->setDateTill('2024-11-02T08:00:00')
+                        ->setAvailabilityType(Availability::UNDESIRED),
                     '2024-11-02T08:00:00' => (new Availability())
                         ->setDate('2024-11-02T08:00:00')
                         ->setDateTill('2024-11-02T20:00:00')
@@ -99,16 +103,15 @@ class CreateAvailabilitiesForMultipleDaysTest extends TestCase
                     '2024-11-01T20:00:00' => (new Availability())
                         ->setDate('2024-11-01T20:00:00')
                         ->setDateTill('2024-11-02T08:00:00')
-                        ->setAvailabilityType(Availability::UNAVAILABLE),
+                        ->setAvailabilityType(Availability::UNDESIRED),
                     '2024-11-02T08:00:00' => (new Availability())
                         ->setDate('2024-11-02T08:00:00')
                         ->setDateTill('2024-11-02T20:00:00')
                         ->setAvailabilityType(Availability::DESIRED),
-                    // lets leave gaps, the gaps solution will be resolved in the solution microservice
-//                    '2024-11-02T20:00:00' => (new Availability())
-//                        ->setDate('2024-11-02T20:00:00')
-//                        ->setDateTill('2024-11-03T08:00:00')
-//                        ->setAvailabilityType(Availability::UNAVAILABLE),
+                    '2024-11-02T20:00:00' => (new Availability())
+                        ->setDate('2024-11-02T20:00:00')
+                        ->setDateTill('2024-11-03T08:00:00')
+                        ->setAvailabilityType(Availability::UNDESIRED),
                     '2024-11-03T08:00:00' => (new Availability())
                         ->setDate('2024-11-03T08:00:00')
                         ->setDateTill('2024-11-03T20:00:00')
