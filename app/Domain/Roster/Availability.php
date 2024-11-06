@@ -16,6 +16,8 @@ class Availability extends DataTransferObject
     public $date;
     public ?string $availabilityType;
 
+    public $dateTill;
+
     public function setId(int $id): Availability
     {
         $this->id = $id;
@@ -44,4 +46,13 @@ class Availability extends DataTransferObject
         $this->availabilityType = $availabilityType;
         return $this;
     }
+
+    public function setDateTill($dateTill): self
+    {
+        $this->dateTill = $dateTill;
+
+        return $this;
+    }
+
+
 }

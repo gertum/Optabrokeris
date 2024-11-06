@@ -7,12 +7,15 @@ use App\Domain\Roster\Availability;
 use App\Domain\Roster\Employee;
 use App\Domain\Roster\Schedule;
 use App\Exceptions\ExcelParseException;
+use App\Util\MapBuilder;
 use Carbon\Carbon;
 use DateInterval;
 use DateTimeInterface;
 
 class ScheduleParser
 {
+
+    const TARGET_DATE_FORMAT = 'Y-m-d\\TH:i:s';
 
     /**
      * @param DateInterval[] $timeSlices
@@ -99,7 +102,13 @@ class ScheduleParser
         // build shifts
         $dateRecognizer = $wrapper->findYearMonth();
         $dateFrom = Carbon::create($dateRecognizer->getYear(), $dateRecognizer->getMonth())->toImmutable();
-        $dateTill = Carbon::create($dateRecognizer->getYear(), $dateRecognizer->getMonth(), $dateFrom->daysInMonth, 24)->toImmutable();
+        $dateTill = Carbon::create(
+            $dateRecognizer->getYear(),
+            $dateRecognizer->getMonth(),
+            $dateFrom->daysInMonth,
+            24
+        )->toImmutable()
+        ;
         $shifts = ShiftsBuilder::buildShiftsOfBounds($dateFrom, $dateTill, $profile->getShiftBounds());
         $schedule->setShiftList($shifts);
 
@@ -122,7 +131,8 @@ class ScheduleParser
             $employees [] = (new Employee())
                 ->setName($employeeCell->value)
                 ->setExcelRow($employeeCell->r)
-                ->setRow($row);
+                ->setRow($row)
+            ;
 //                ->setMaxWorkingHours(floatval($workingHoursCell->value))
 //                ->setSequenceNumber($eilNr->getValue());
 
@@ -138,8 +148,12 @@ class ScheduleParser
      * @param Employee[] $employees
      * @return Availability[]
      */
-    public function parseAvailabilities(PreferencesExcelWrapper $wrapper, Carbon $startingDate, array $employees, Profile $profile): array
-    {
+    public function parseAvailabilities(
+        PreferencesExcelWrapper $wrapper,
+        Carbon $startingDate,
+        array $employees,
+        Profile $profile
+    ): array {
         $availabilities = [];
         // 1) find a cell with value '1' at the row index 1, then use it as the marker of the column,
         // where availabilities starts from
@@ -154,43 +168,153 @@ class ScheduleParser
             }
         }
 
-        if ($startingCell != null) {
+        if ($startingCell == null) {
             throw new ExcelParseException('When parsing excel can\'t find header with a day 1');
         }
 
         foreach ($employees as $employee) {
+            $collectedValues = [];
             for ($day = 1; $day <= $startingDate->daysInMonth; $day++) {
                 $row = $employee->getRow();
                 $column = $startingCell->column + $day;
                 $availabilityCell = $wrapper->getCell($row, $column);
-                $dayDate = Carbon::create($startingDate->year, $startingDate->month, $startingDate->day);
-                $dayAvailabilities = $this->createAvailabilitiesForOneDay($availabilityCell->value, $profile, $dayDate, $employee);
-                $availabilities = array_merge($availabilities, $dayAvailabilities);
+                $collectedValues[$day] = $availabilityCell->value;
             }
+
+            $startingDate = Carbon::create($startingDate->year, $startingDate->month, 1);
+            $employeeAvailabilities = $this->createAvailabilitiesForMultipleDay($collectedValues, $startingDate);
+            array_walk($employeeAvailabilities, fn(Availability $a) => $a->setEmployee($employee));
+
+            $availabilities = array_merge($availabilities, $employeeAvailabilities);
         }
 
         return $availabilities;
     }
 
-    public static function createAvailabilitiesForOneDay(string $availabilityMarker, Profile $profile, DateTimeInterface $day, Employee $employee): array
+    /**
+     * @param string[] $collectedValues
+     * @param Carbon $startingDate
+     * @return Availability[]
+     */
+    public function createAvailabilitiesForMultipleDay(array $collectedValues, Carbon $startingDate): array
     {
-        if (in_array($availabilityMarker, ['X', 'x', 'a', 'A'])) {
-            $availabilityType = Availability::UNAVAILABLE;
-            // TODO mark all shifts in that day
-        } elseif ($availabilityMarker == '') {
-            $availabilityType = Availability::AVAILABLE;
-            // TODO mark all shifts in that day
-        } elseif (in_array($availabilityMarker, ['8-8', '8-8r.', 'P', 'p'])) {
-            $availabilityType = Availability::DESIRED;
-            // TODO mark all shifts in that day
-        } elseif (in_array($availabilityMarker, ['D', 'd'])) {
-            $availabilityType = Availability::DESIRED;
-            // mark one part as desired , other as unavailable
-        } elseif (in_array($availabilityMarker, ['N', 'n'])) {
-            $availabilityType = Availability::DESIRED;
-            // mark one part as desired , other as unavailable
+        $availabilities = [];
+
+        foreach ($collectedValues as $day => $value) {
+            $dayDate = Carbon::create($startingDate->year, $startingDate->month, $startingDate->day);
+            $dayAvailabilities = $this->createAvailabilitiesForOneDay($value, $dayDate);
+
+            // we may resolve overlapping issues by indexing availabilities by availability start date and then check dates when merging arrays.
+            // TODO
+            $availabilities = array_merge($availabilities, $dayAvailabilities);
+        }
+        return $availabilities;
+    }
+
+    /**
+     * We are going to set availabilities independent on profile.
+     * @return Availability[]
+     */
+    public function createAvailabilitiesForOneDay(string $availabilityValue, Carbon $currentDay): array
+    {
+        $availabilities = [];
+
+        // function 'modify' is not immutable
+        $previousDay = clone($currentDay);
+        $previousDay = $previousDay->modify('-1 day');
+
+        // function 'modify' is not immutable
+        $nextDay = clone($currentDay);
+        $nextDay = $nextDay->modify('+1 day');
+
+        // TODO take hours from settings
+        $nightStartStr = Carbon::create($previousDay->year, $previousDay->month, $previousDay->day, 20)
+            ->format(self::TARGET_DATE_FORMAT);
+        $dayStartStr = Carbon::create($currentDay->year, $currentDay->month, $currentDay->day, 8)
+            ->format(self::TARGET_DATE_FORMAT);
+        $dayEndStr = Carbon::create($currentDay->year, $currentDay->month, $currentDay->day, 20)
+            ->format(self::TARGET_DATE_FORMAT);
+        $nextDayStartStr = Carbon::create($nextDay->year, $nextDay->month, $nextDay->day, 8)
+            ->format(self::TARGET_DATE_FORMAT);
+
+        if (in_array($availabilityValue, ['X', 'x', 'a', 'A'])) {
+            $availabilities = [
+                (new Availability())
+                    ->setDate($nightStartStr)
+                    ->setDateTill($dayStartStr)
+                    ->setAvailabilityType(Availability::UNAVAILABLE),
+
+                (new Availability())
+                    ->setDate($dayStartStr)
+                    ->setDateTill($dayEndStr)
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+            ];
+        } elseif ($availabilityValue == '') {
+            $availabilities = [
+                (new Availability())
+                    ->setDate($nightStartStr)
+                    ->setDateTill($dayStartStr)
+                    ->setAvailabilityType(Availability::AVAILABLE),
+
+                (new Availability())
+                    ->setDate($dayStartStr)
+                    ->setDateTill($dayEndStr)
+                    ->setAvailabilityType(Availability::AVAILABLE)
+            ];
+        } elseif (in_array($availabilityValue, ['8-8', '8-8r.'])) {
+            $availabilities = [
+                (new Availability())
+                    ->setDate($dayStartStr)
+                    ->setDateTill($nightStartStr)
+                    ->setAvailabilityType(Availability::DESIRED),
+
+                (new Availability())
+                    ->setDate($nightStartStr)
+                    ->setDateTill($nextDayStartStr)
+                    ->setAvailabilityType(Availability::DESIRED)
+            ];
+        } elseif (in_array($availabilityValue, ['P', 'p'])) {
+            $availabilities = [
+                (new Availability())
+                    ->setDate($nightStartStr)
+                    ->setDateTill($dayStartStr)
+                    ->setAvailabilityType(Availability::DESIRED),
+
+                (new Availability())
+                    ->setDate($dayStartStr)
+                    ->setDateTill($dayEndStr)
+                    ->setAvailabilityType(Availability::DESIRED)
+            ];
+        } elseif (in_array($availabilityValue, ['D', 'd'])) {
+            $availabilities = [
+                (new Availability())
+                    ->setDate($nightStartStr)
+                    ->setDateTill($dayStartStr)
+                    ->setAvailabilityType(Availability::UNAVAILABLE),
+
+                (new Availability())
+                    ->setDate($dayStartStr)
+                    ->setDateTill($dayEndStr)
+                    ->setAvailabilityType(Availability::DESIRED)
+            ];
+        } elseif (in_array($availabilityValue, ['N', 'n'])) {
+            $availabilities = [
+                (new Availability())
+                    ->setDate($nightStartStr)
+                    ->setDateTill($dayStartStr)
+                    ->setAvailabilityType(Availability::DESIRED),
+
+                (new Availability())
+                    ->setDate($dayStartStr)
+                    ->setDateTill($dayEndStr)
+                    ->setAvailabilityType(Availability::UNAVAILABLE)
+            ];
         }
 
-        return [];
+        return MapBuilder::buildMap(
+            $availabilities,
+            fn(Availability $a) => $a->date instanceof DateTimeInterface ?
+                $a->date->format(self::TARGET_DATE_FORMAT) : $a->date
+        );
     }
 }
