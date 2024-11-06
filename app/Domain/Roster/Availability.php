@@ -11,6 +11,13 @@ class Availability extends DataTransferObject
         UNDESIRED = 'UNDESIRED',
         UNAVAILABLE = 'UNAVAILABLE';
 
+    const AVAILABILITY_PRIORITIES = [
+        self::UNAVAILABLE => 4,
+        self::DESIRED => 3,
+        self::UNDESIRED => 2,
+        self::AVAILABLE => 1,
+    ];
+
     public ?int $id = 0;
     public ?Employee $employee = null;
     public $date;
@@ -54,5 +61,8 @@ class Availability extends DataTransferObject
         return $this;
     }
 
-
+    public static function getAvailabilityTypePriority(string $availabilityTYpe): int
+    {
+        return self::AVAILABILITY_PRIORITIES[$availabilityTYpe];
+    }
 }

@@ -205,8 +205,7 @@ class ScheduleParser
             $dayAvailabilities = $this->createAvailabilitiesForOneDay($value, $dayDate);
 
             // we may resolve overlapping issues by indexing availabilities by availability start date and then check dates when merging arrays.
-            // TODO
-            $availabilities = array_merge($availabilities, $dayAvailabilities);
+            $availabilities = self::mergeAvailabilities($availabilities, $dayAvailabilities);
         }
         return $availabilities;
     }
@@ -316,5 +315,36 @@ class ScheduleParser
             fn(Availability $a) => $a->date instanceof DateTimeInterface ?
                 $a->date->format(self::TARGET_DATE_FORMAT) : $a->date
         );
+    }
+
+    /**
+     * @param Availability[] $a
+     * @param Availability[] $b
+     * @return Availability[]
+     */
+    public function mergeAvailabilities(array $a, array $b) : array {
+        $result = $a;
+
+        foreach ($b as $day => $bAvailability) {
+            if ( !array_key_exists($day, $result)) {
+                $result[$day] = $bAvailability;
+                continue;
+            }
+
+            // overlapping
+            $aAvailability = $a[$day];
+
+            $aPriority = Availability::getAvailabilityTypePriority($aAvailability->availabilityType);
+            $bPriority = Availability::getAvailabilityTypePriority($bAvailability->availabilityType);
+
+            $selectedAvailability = $aAvailability;
+            if ( $bPriority > $aPriority) {
+                $selectedAvailability = $bAvailability;
+            }
+
+            $result[$day] = $selectedAvailability;
+        }
+
+        return $result;
     }
 }
