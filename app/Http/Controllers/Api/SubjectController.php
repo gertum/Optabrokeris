@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Data\SubjectsArray;
+use App\Domain\Roster\SubjectsArray;
 use App\Models\Subject;
 use App\Repositories\SubjectRepository;
 use Illuminate\Http\Request;
@@ -73,6 +73,8 @@ class SubjectController
 
     public function upsertXslx(Request $request)
     {
+        $file = $request->file('file');
+//        file->getRealPath()
     }
 
     public function upsertCsv(Request $request)

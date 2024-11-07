@@ -2,9 +2,9 @@
 
 namespace App\Domain\Roster\Hospital;
 
-use App\Data\Profile;
 use App\Domain\Roster\Availability;
 use App\Domain\Roster\Employee;
+use App\Domain\Roster\Profile;
 use App\Domain\Roster\Schedule;
 use App\Exceptions\ExcelParseException;
 use App\Util\MapBuilder;

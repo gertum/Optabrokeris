@@ -2,10 +2,10 @@
 
 namespace Tests\Unit\Roster;
 
-use App\Data\Profile;
 use App\Domain\Roster\Availability;
 use App\Domain\Roster\Employee;
 use App\Domain\Roster\Hospital\ScheduleParser;
+use App\Domain\Roster\Profile;
 use App\Domain\Roster\Shift;
 use PHPUnit\Framework\TestCase;
 

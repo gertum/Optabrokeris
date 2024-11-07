@@ -1,11 +1,9 @@
 <?php
 
-
 namespace Tests\Unit\Roster;
 
-
-use App\Data\SubjectData;
-use App\Data\SubjectsArray;
+use App\Domain\Roster\SubjectData;
+use App\Domain\Roster\SubjectsArray;
 use PHPUnit\Framework\TestCase;
 
 class UnpackSubjectsTest extends TestCase

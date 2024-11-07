@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Data;
+namespace App\Domain\Roster;
 
 use Spatie\DataTransferObject\DataTransferObject;
 
