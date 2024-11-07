@@ -42,7 +42,11 @@ class ParseSubjectsXlsxTest extends TestCase
                                 ]
                             ),
                             new SubjectData(
-                                ['name' => 'Eglė Politikaitė', 'position_amount' => 0.25, 'hours_in_day' => 1 + 51 / 60]
+                                [
+                                    'name' => 'Eglė Politikaitė',
+                                    'position_amount' => 0.25,
+                                    'hours_in_day' => 1 + 51 / 60
+                                ]
                             ),
                             new SubjectData(
                                 [
