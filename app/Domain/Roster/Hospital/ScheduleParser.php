@@ -108,8 +108,7 @@ class ScheduleParser
             $dateRecognizer->getMonth(),
             $dateFrom->daysInMonth,
             24
-        )->toImmutable()
-        ;
+        )->toImmutable();
         $shifts = ShiftsBuilder::buildShiftsOfBounds($dateFrom, $dateTill, $profile->getShiftBounds());
         $schedule->setShiftList($shifts);
 
@@ -133,8 +132,7 @@ class ScheduleParser
             $employees [] = (new Employee())
                 ->setName($employeeCell->value)
                 ->setExcelRow($employeeCell->r)
-                ->setRow($row)
-            ;
+                ->setRow($row);
 //                ->setMaxWorkingHours(floatval($workingHoursCell->value))
 //                ->setSequenceNumber($eilNr->getValue());
 
@@ -152,9 +150,10 @@ class ScheduleParser
      */
     public function parseAvailabilities(
         PreferencesExcelWrapper $wrapper,
-        CarbonInterface $startingDate,
-        array $employees
-    ): array {
+        CarbonInterface         $startingDate,
+        array                   $employees
+    ): array
+    {
         $availabilities = [];
         // 1) find a cell with value '1' at the row index 1, then use it as the marker of the column,
         // where availabilities starts from
@@ -233,8 +232,10 @@ class ScheduleParser
         $startingDateTime->setTime(20, 0);
 
 
-        $endDateTime = Carbon::create($startingDate->year, $startingDate->month, $maxDay, 20, 0);
-        $availabilities = $this->fillGaps($startingDateTime, $endDateTime, $availabilities);
+        $endDateTime = Carbon::create($startingDate->year, $startingDate->month, $maxDay);
+        $endDateTime = $endDateTime->modify('+1 day');
+        $endDateTime->setTime(8, 0); // we take next day morning
+        $availabilities = $this->fillGaps($startingDateTime, $endDateTime, $availabilities, Availability::UNDESIRED);
         // ---
 
         return $availabilities;
@@ -258,17 +259,13 @@ class ScheduleParser
 
         // TODO take hours from settings
         $nightStartStr = Carbon::create($previousDay->year, $previousDay->month, $previousDay->day, 20)
-            ->format(self::TARGET_DATE_FORMAT)
-        ;
+            ->format(self::TARGET_DATE_FORMAT);
         $dayStartStr = Carbon::create($currentDay->year, $currentDay->month, $currentDay->day, 8)
-            ->format(self::TARGET_DATE_FORMAT)
-        ;
+            ->format(self::TARGET_DATE_FORMAT);
         $dayEndStr = Carbon::create($currentDay->year, $currentDay->month, $currentDay->day, 20)
-            ->format(self::TARGET_DATE_FORMAT)
-        ;
+            ->format(self::TARGET_DATE_FORMAT);
         $nextDayStartStr = Carbon::create($nextDay->year, $nextDay->month, $nextDay->day, 8)
-            ->format(self::TARGET_DATE_FORMAT)
-        ;
+            ->format(self::TARGET_DATE_FORMAT);
 
         $availabilityValue = trim($availabilityValue);
 
@@ -347,9 +344,8 @@ class ScheduleParser
                     ->setDateTill($dayEndStr)
                     ->setAvailabilityType(Availability::UNDESIRED)
             ];
-        }
-        else {
-            throw new ExcelParseException( sprintf('Unknown value [%s] to parse', $availabilityValue));
+        } else {
+            throw new ExcelParseException(sprintf('Unknown value [%s] to parse', $availabilityValue));
         }
 
         return MapBuilder::buildMap(
@@ -391,7 +387,7 @@ class ScheduleParser
         return $result;
     }
 
-    public function fillGaps(Carbon $startDate, Carbon $endDate, array $availabilities): array
+    public function fillGaps(Carbon $startDate, Carbon $endDate, array $availabilities, string $defaultAvailabilityType): array
     {
         $currentDate = clone $startDate;
         $interval12 = new DateInterval('PT12H');
@@ -408,11 +404,13 @@ class ScheduleParser
             $availability = (new Availability())
                 ->setDate($currentDateStr)
                 ->setDateTill($nextDateStr)
-                ->setAvailabilityType(Availability::UNDESIRED)
-            ;
+                ->setAvailabilityType($defaultAvailabilityType);
 
             $availabilities[$currentDateStr] = $availability;
         }
+
+        // need to sort
+        usort($availabilities, fn(Availability $a, Availability $b) => $a->date <=> $b->date);
 
         return $availabilities;
     }

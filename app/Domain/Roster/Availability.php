@@ -6,10 +6,11 @@ use Spatie\DataTransferObject\DataTransferObject;
 
 class Availability extends DataTransferObject
 {
-    const     DESIRED = 'DESIRED',
-        AVAILABLE = 'AVAILABLE',
+    const
+        UNAVAILABLE = 'UNAVAILABLE',
+        DESIRED = 'DESIRED',
         UNDESIRED = 'UNDESIRED',
-        UNAVAILABLE = 'UNAVAILABLE';
+        AVAILABLE = 'AVAILABLE';
 
     const AVAILABILITY_PRIORITIES = [
         self::UNAVAILABLE => 4,
