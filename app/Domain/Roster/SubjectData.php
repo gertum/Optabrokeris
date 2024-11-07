@@ -19,6 +19,10 @@ class SubjectData extends DataTransferObject
     #[MapTo('hours_in_month')]
     public ?float $hoursInMonth;
 
+    #[MapFrom('hours_in_day')]
+    #[MapTo('hours_in_day')]
+    public ?float $hoursInDay;
+
     public function setName(?string $name): self
     {
         $this->name = $name;
@@ -36,6 +40,13 @@ class SubjectData extends DataTransferObject
     public function setHoursInMonth(?float $hoursInMonth): self
     {
         $this->hoursInMonth = $hoursInMonth;
+
+        return $this;
+    }
+
+    public function setHoursInDay(?float $hoursInDay): SubjectData
+    {
+        $this->hoursInDay = $hoursInDay;
 
         return $this;
     }
