@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Data\SubjectsArray;
 use App\Models\Subject;
+use App\Repositories\SubjectRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -59,8 +61,14 @@ class SubjectController
         return $subject;
     }
 
-    public function upsertJson(Request $request)
+    public function upsertJson(Request $request, SubjectRepository $subjectRepository)
     {
+        $json = $request->getContent();
+        $arrayData = json_decode($json, true);
+        $subjectsArray = new SubjectsArray($arrayData);
+        $count = $subjectRepository->upsertSubjectsDatas($subjectsArray->subjects);
+
+        return ["upserted fields" => $count];
     }
 
     public function upsertXslx(Request $request)
