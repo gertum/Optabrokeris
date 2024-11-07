@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\JobController;
+use App\Http\Controllers\Api\SubjectController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -29,4 +30,12 @@ Route::middleware('auth')->group(function () {
     Route::post('/job/{job}/stop', [JobController::class, 'stop']);
     Route::post('/job/{job}/upload', [JobController::class, 'upload']);
     Route::get('/job/{job}/download', [JobController::class, 'download']);
+
+
+    Route::get('/subject', [SubjectController::class, 'list']);
+    Route::get('/subject/{subject}', [SubjectController::class, 'view']);
+    Route::post('/subject', [SubjectController::class, 'create']);
+    Route::put('/subject/{subject}', [SubjectController::class, 'update']);
+    Route::delete('/subject/{subject}', [SubjectController::class, 'delete']);
+
 });

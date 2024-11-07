@@ -9,6 +9,12 @@ class Subject extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'name',
+        'position_amount',
+        'hours_in_month',
+    ];
+
     public function getName(): string
     {
         return $this->getAttribute('name');

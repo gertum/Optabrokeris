@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Exceptions\ValidateException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Job\JobRequest;
 use App\Http\Requests\Job\JobSolveRequest;
@@ -105,11 +104,12 @@ class JobController extends Controller
         ]);
 
 
-        $validated = $validator->validated();
-        // laravelis gaidys, nes nurodžiau kad name 'required' (žr 10 eilučių aukščiau :  'name' => ['required'] ) , o jis neduoda klaidos, jeigu nepaduodu 'name' per requestą.
-        if (!array_key_exists('name', $validated)) {
-            throw new ValidateException('Required job parameter "name" is missing.');
-        }
+        $validated = $validator->validate();
+//        // laravelis gaidys, nes nurodžiau kad name 'required' (žr 10 eilučių aukščiau :  'name' => ['required'] ) , o jis neduoda klaidos, jeigu nepaduodu 'name' per requestą.
+        // Išsiaiškinau, vietoj 'validated' reikia naudoti 'validate' (žr. eilutę aukščiau :) )
+//        if (!array_key_exists('name', $validated)) {
+//            throw new ValidateException('Required job parameter "name" is missing.');
+//        }
 
         $body = $request->getContent();
 
