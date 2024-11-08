@@ -3,7 +3,7 @@
 namespace Tests\Unit\Roster;
 
 use App\Domain\Roster\Hospital\ExcelWrapper;
-use App\Domain\Roster\Hospital\WorkingHoursTitle;
+use App\Domain\Roster\Hospital\WorkingHoursTitleCellMatcher;
 use Tests\TestCase;
 
 class HospitalExcelHoursLimitTest extends TestCase
@@ -11,7 +11,7 @@ class HospitalExcelHoursLimitTest extends TestCase
     /**
      * @dataProvider provideExcelFiles
      */
-    public function testParseExcel(string $file, WorkingHoursTitle $expectedWorkingHoursTitle)
+    public function testParseExcel(string $file, WorkingHoursTitleCellMatcher $expectedWorkingHoursTitle)
     {
         $wrapper = ExcelWrapper::parse($file);
 
@@ -25,27 +25,27 @@ class HospitalExcelHoursLimitTest extends TestCase
         return [
             'test vasaris' => [
                 'file' => __DIR__ . '/data/vasaris.xlsx',
-                'expectedWorkingHoursTitle' => (new WorkingHoursTitle())->setRow(8)->setColumn(38),
+                'expectedWorkingHoursTitle' => (new WorkingHoursTitleCellMatcher())->setRow(8)->setColumn(38),
             ],
             'test sausis' => [
                 'file' => __DIR__ . '/data/sausis.xlsx',
-                'expectedWorkingHoursTitle' => (new WorkingHoursTitle())->setRow(8)->setColumn(38),
+                'expectedWorkingHoursTitle' => (new WorkingHoursTitleCellMatcher())->setRow(8)->setColumn(38),
             ],
             'test birzelis' => [
                 'file' => __DIR__ . '/data/birželis.xlsx',
-                'expectedWorkingHoursTitle' => (new WorkingHoursTitle())->setRow(8)->setColumn(39),
+                'expectedWorkingHoursTitle' => (new WorkingHoursTitleCellMatcher())->setRow(8)->setColumn(39),
             ],
             'test birzelis bad' => [
                 'file' => __DIR__ . '/data/birželis_bad.xlsx',
-                'expectedWorkingHoursTitle' => (new WorkingHoursTitle())->setRow(8)->setColumn(38),
+                'expectedWorkingHoursTitle' => (new WorkingHoursTitleCellMatcher())->setRow(8)->setColumn(38),
             ],
             'test rugpjutis' => [
                 'file' => __DIR__ . '/data/rugpjūtis.xlsx',
-                'expectedWorkingHoursTitle' => (new WorkingHoursTitle())->setRow(8)->setColumn(38),
+                'expectedWorkingHoursTitle' => (new WorkingHoursTitleCellMatcher())->setRow(8)->setColumn(38),
             ],
             'test gruodis' => [
                 'file' => __DIR__ . '/data/gruodis.xlsx',
-                'expectedWorkingHoursTitle' => (new WorkingHoursTitle())->setRow(8)->setColumn(38),
+                'expectedWorkingHoursTitle' => (new WorkingHoursTitleCellMatcher())->setRow(8)->setColumn(38),
             ],
         ];
     }

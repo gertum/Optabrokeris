@@ -37,6 +37,11 @@ class ExcelWrapper
 
     protected int $availabilityId = 1;
 
+    /**
+     * @var CellMatcherInterface[] array key is a custom name for a matcher.
+     */
+    protected array $registeredMatchers = [];
+
     protected static function getInstance(): static {
         return new static();
     }
@@ -87,6 +92,7 @@ class ExcelWrapper
     }
 
 
+    // TODO use registered matchers
     public function findEilNrTitle(): ?EilNrTitle
     {
         for ($row = 0; $row < $this->getMaxRows(); $row++) {
@@ -271,6 +277,7 @@ class ExcelWrapper
     }
 
 
+    // TODO use registered matchers
     public function findYearMonth(): DateRecognizer
     {
         $dateRecognizer = new DateRecognizer();
@@ -287,9 +294,10 @@ class ExcelWrapper
         return $dateRecognizer;
     }
 
-    public function findWorkingHoursTitle(): WorkingHoursTitle
+    // TODO use registered matchers
+    public function findWorkingHoursTitle(): WorkingHoursTitleCellMatcher
     {
-        $workingHoursTitle = new WorkingHoursTitle();
+        $workingHoursTitle = new WorkingHoursTitleCellMatcher();
 
         for ($row = 0; $row < $this->getMaxRows(); $row++) {
             for ($column = 0; $column < $this->getMaxColumnsAtRow($row); $column++) {
@@ -314,6 +322,7 @@ class ExcelWrapper
         return $this->findCellWithValue('Darbo valandų priskirta');
     }
 
+    // TODO use cell matchers
     public function findCellWithValue(string $cellValue): ?Cell
     {
         for ($row = 0; $row < $this->getMaxRows(); $row++) {
@@ -363,4 +372,27 @@ class ExcelWrapper
         return count($this->rowsEx[$row]);
     }
 
+    public function registerMatcher(  string $name, CellMatcherInterface $cellMatcher) : self {
+        $this->registeredMatchers[$name] = $cellMatcher;
+
+        return $this;
+    }
+
+    public function getMatcher(string $name) : ?CellMatcherInterface {
+        return $this->registeredMatchers[$name] ?? null;
+    }
+
+    public function runMatchers() : void {
+        for ($row = 0; $row < $this->getMaxRows(); $row++) {
+            for ($column = 0; $column < $this->getMaxColumnsAtRow($row); $column++) {
+                $cell = $this->getCell($row, $column);
+                foreach ($this->registeredMatchers as $name => $matcher) {
+                    if ( $matcher->matchCell($cell, $row, $column) ) {
+                        // assume that all matchers are exclusive to each other
+                        break;
+                    }
+                }
+            }
+        }
+    }
 }

@@ -19,7 +19,7 @@ class ParseSubjectsXlsxTest extends TestCase
         $this->assertEquals($expectedSubjectsArray, $subjectsArray);
     }
 
-    public function provideSubjectsFiles(): array
+    public static function provideSubjectsFiles(): array
     {
         return [
             'test1' => [

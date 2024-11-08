@@ -2,7 +2,7 @@
 
 namespace App\Domain\Roster\Hospital;
 
-class WorkingHoursTitle implements CellMatcherInterface
+class WorkingHoursTitleCellMatcher implements CellMatcherInterface
 {
     /**
      * Will change to regexp if needed later.
@@ -17,7 +17,7 @@ class WorkingHoursTitle implements CellMatcherInterface
         return $this->row;
     }
 
-    public function setRow(int $row): WorkingHoursTitle
+    public function setRow(int $row): WorkingHoursTitleCellMatcher
     {
         $this->row = $row;
         return $this;
@@ -28,7 +28,7 @@ class WorkingHoursTitle implements CellMatcherInterface
         return $this->column;
     }
 
-    public function setColumn(int $column): WorkingHoursTitle
+    public function setColumn(int $column): WorkingHoursTitleCellMatcher
     {
         $this->column = $column;
         return $this;
