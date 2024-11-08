@@ -39,4 +39,5 @@ Route::middleware('auth')->group(function () {
     Route::delete('/subject/{subject}', [SubjectController::class, 'delete']);
 
     Route::post('/subject/upsert-json', [SubjectController::class, 'upsertJson']);
+    Route::post('/subject/upsert-xlsx', [SubjectController::class, 'upsertXslx']);
 });

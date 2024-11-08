@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Domain\Roster\SubjectsArray;
+use App\Domain\Roster\Hospital\SubjectsXslsParser;
+use App\Domain\Roster\SubjectsContainer;
 use App\Models\Subject;
 use App\Repositories\SubjectRepository;
 use Illuminate\Http\Request;
@@ -65,16 +66,22 @@ class SubjectController
     {
         $json = $request->getContent();
         $arrayData = json_decode($json, true);
-        $subjectsArray = new SubjectsArray($arrayData);
+        $subjectsArray = new SubjectsContainer($arrayData);
+
         $count = $subjectRepository->upsertSubjectsDatas($subjectsArray->subjects);
 
         return ["upserted fields" => $count];
     }
 
-    public function upsertXslx(Request $request)
+    public function upsertXslx(Request $request, SubjectRepository $subjectRepository)
     {
         $file = $request->file('file');
-//        file->getRealPath()
+        $subjectsXslParser = new SubjectsXslsParser();
+        $subjectsContainer = $subjectsXslParser->parse($file->getRealPath());
+        $subjectsContainer->recalculateMonthHours(20, true);
+
+        // calculate hours in month
+        return $subjectRepository->upsertSubjectsDatas($subjectsContainer->subjects);
     }
 
     public function upsertCsv(Request $request)

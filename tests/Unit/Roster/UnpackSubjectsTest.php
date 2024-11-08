@@ -3,7 +3,7 @@
 namespace Tests\Unit\Roster;
 
 use App\Domain\Roster\SubjectData;
-use App\Domain\Roster\SubjectsArray;
+use App\Domain\Roster\SubjectsContainer;
 use PHPUnit\Framework\TestCase;
 
 class UnpackSubjectsTest extends TestCase
@@ -11,10 +11,10 @@ class UnpackSubjectsTest extends TestCase
     /**
      * @dataProvider provideSubjectsDatas
      */
-    public function testUnpack(string $json, SubjectsArray $expectedSubjectsArray)
+    public function testUnpack(string $json, SubjectsContainer $expectedSubjectsArray)
     {
         $arrayData = json_decode($json, true);
-        $subjectsArray = new SubjectsArray($arrayData);
+        $subjectsArray = new SubjectsContainer($arrayData);
         $this->assertEquals($expectedSubjectsArray, $subjectsArray);
     }
 
@@ -24,7 +24,7 @@ class UnpackSubjectsTest extends TestCase
             'test1' => [
                 'json' => '{"subjects" :  [ { "name" : "Jonas", "position_amount": 0.75, "hours_in_month":73 }] }',
                 'expectedSubjectsArray' =>
-                    (new SubjectsArray())
+                    (new SubjectsContainer())
                         ->setSubjects(
                             [
                                 (new SubjectData())

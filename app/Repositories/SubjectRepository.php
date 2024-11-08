@@ -2,7 +2,7 @@
 
 namespace App\Repositories;
 
-use App\Data\SubjectData;
+use App\Domain\Roster\SubjectData;
 use App\Models\Subject;
 use App\Util\UpsertQueryBuilder;
 use Illuminate\Support\Facades\DB;

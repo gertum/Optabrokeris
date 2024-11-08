@@ -3,14 +3,14 @@
 namespace App\Domain\Roster\Hospital;
 
 use App\Domain\Roster\SubjectData;
-use App\Domain\Roster\SubjectsArray;
+use App\Domain\Roster\SubjectsContainer;
 use App\Exceptions\ExcelParseException;
 use Carbon\Carbon;
 
 class SubjectsXslsParser
 {
-    public function parse(string $xlsxFile ) : SubjectsArray {
-        $result = new SubjectsArray();
+    public function parse(string $xlsxFile ) : SubjectsContainer {
+        $result = new SubjectsContainer();
 
         // 1) parse xslx file
         $wrapper = ExcelWrapper::parse($xlsxFile);

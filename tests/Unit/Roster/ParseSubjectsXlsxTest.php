@@ -4,7 +4,7 @@ namespace Tests\Unit\Roster;
 
 use App\Domain\Roster\Hospital\SubjectsXslsParser;
 use App\Domain\Roster\SubjectData;
-use App\Domain\Roster\SubjectsArray;
+use App\Domain\Roster\SubjectsContainer;
 use PHPUnit\Framework\TestCase;
 
 class ParseSubjectsXlsxTest extends TestCase
@@ -12,7 +12,7 @@ class ParseSubjectsXlsxTest extends TestCase
     /**
      * @dataProvider provideSubjectsFiles
      */
-    public function testParse(string $file, SubjectsArray $expectedSubjectsArray)
+    public function testParse(string $file, SubjectsContainer $expectedSubjectsArray)
     {
         $parser = new SubjectsXslsParser();
         $subjectsArray = $parser->parse($file);
@@ -24,7 +24,7 @@ class ParseSubjectsXlsxTest extends TestCase
         return [
             'test1' => [
                 'file' => __DIR__ . '/data/VULSK_subjects_small.xlsx',
-                'expectedSubjectsArray' => (new SubjectsArray())
+                'expectedSubjectsArray' => (new SubjectsContainer())
                     ->setSubjects(
                         [
                             new SubjectData(

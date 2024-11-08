@@ -17,7 +17,7 @@ class SubjectData extends DataTransferObject
 
     #[MapFrom('hours_in_month')]
     #[MapTo('hours_in_month')]
-    public ?float $hoursInMonth;
+    public ?float $hoursInMonth=0;
 
     #[MapFrom('hours_in_day')]
     #[MapTo('hours_in_day')]
@@ -49,5 +49,12 @@ class SubjectData extends DataTransferObject
         $this->hoursInDay = $hoursInDay;
 
         return $this;
+    }
+
+    public function recalculateHoursInMonth(float $totalDaysInMonth, bool $onlyZeros = false): void {
+        if ( $onlyZeros && $this->hoursInMonth != 0  ) {
+            return;
+        }
+        $this->hoursInMonth = $this->hoursInDay * $totalDaysInMonth;
     }
 }

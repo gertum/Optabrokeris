@@ -2,12 +2,12 @@
 
 namespace App\Domain\Roster\Hospital;
 
-use App\Domain\Roster\SubjectsArray;
+use App\Domain\Roster\SubjectsContainer;
 
 class SubjectsCsvParser
 {
-    public function parse(string $csvFile ) : SubjectsArray {
-        $result = new SubjectsArray();
+    public function parse(string $csvFile ) : SubjectsContainer {
+        $result = new SubjectsContainer();
         // TODO
 
         return $result;
