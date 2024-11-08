@@ -2,7 +2,9 @@
 
 namespace App\Domain\Roster;
 
+use App\Exceptions\SolverDataException;
 use App\Util\BinarySearch;
+use App\Util\MapBuilder;
 use Spatie\DataTransferObject\Attributes\CastWith;
 use Spatie\DataTransferObject\Casters\ArrayCaster;
 use Spatie\DataTransferObject\DataTransferObject;
@@ -105,6 +107,32 @@ class Schedule extends DataTransferObject
         foreach ($this->shiftList as $shift) {
             $shift->setLocation($location);
         }
+        return $this;
+    }
+
+    public function getEmployeesNames(): array {
+        return array_map (fn(Employee $e)=>$e->name, $this->employeeList);
+    }
+
+    /**
+     * @param SubjectDataInterface[] $subjects
+     * @return self
+     */
+    public function fillEmployeesWithSubjectsData(array $subjects): self
+    {
+        /** @var SubjectDataInterface[] $subjectByName */
+        $subjectByName = MapBuilder::buildMap($subjects, fn(SubjectDataInterface $subject)=>$subject->getName());
+
+        foreach ( $this->employeeList as $employee ) {
+            if ( !array_key_exists( $employee->name, $subjectByName ) ) {
+                // error message , or exception
+                throw new SolverDataException(sprintf('could not find matching subject for %s employee', $employee->name));
+            }
+            $subject = $subjectByName[$employee->name];
+
+            $employee->setMaxWorkingHours($subject->getHoursInMonth());
+        }
+
         return $this;
     }
 

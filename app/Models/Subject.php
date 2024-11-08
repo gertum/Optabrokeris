@@ -2,10 +2,11 @@
 
 namespace App\Models;
 
+use App\Domain\Roster\SubjectDataInterface;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Subject extends Model
+class Subject extends Model implements SubjectDataInterface
 {
     use HasFactory;
 
@@ -20,7 +21,7 @@ class Subject extends Model
         return $this->getAttribute('name');
     }
 
-    public function setName(string $name): self
+    public function setName(?string $name): self
     {
         return $this->setAttribute('name', $name);
     }
@@ -34,16 +35,31 @@ class Subject extends Model
         return $this->getAttribute('position_amount');
     }
 
-    public function setPositionAmount(float $amount): self
+    public function setPositionAmount(?float $positionAmount): self
     {
-        return $this->setAttribute('position_amount', $amount);
+        return $this->setAttribute('position_amount', $positionAmount);
     }
 
-    public function getHoursInMonth(): float {
+    public function getHoursInMonth(): float
+    {
         return $this->getAttribute('hours_in_month');
     }
 
-    public function setHoursInMonth(float $hours): self {
-        return $this->setAttribute('hours_in_month', $hours);
+    public function setHoursInMonth(?float $hoursInMonth): self
+    {
+        return $this->setAttribute('hours_in_month', $hoursInMonth);
     }
+
+    public function setHoursInDay(?float $hoursInDay): self
+    {
+        $this->setAttribute('hours_in_day', $hoursInDay);
+
+        return $this;
+    }
+
+    public function getHoursInDay(): ?float
+    {
+        return $this->getAttribute('hours_in_day');
+    }
+
 }

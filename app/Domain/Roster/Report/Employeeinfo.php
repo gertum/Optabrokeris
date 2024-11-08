@@ -4,6 +4,9 @@ namespace App\Domain\Roster\Report;
 
 use App\Domain\Roster\Employee;
 
+/**
+ * This class should be used for a backend GUI, which is not implemented yet
+ */
 class Employeeinfo
 {
     private Employee $employee;

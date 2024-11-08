@@ -23,6 +23,7 @@ class AmbulanceOfficeDataHandler implements SpreadSheetDataHandler
 
     public function spreadSheetToArray(string $excelFile): array
     {
+        // TODO DI parser too
         $scheduleParser = new ScheduleParser();
 
         $schedule = $scheduleParser->parseScheduleXls($excelFile, ScheduleParser::createHospitalTimeSlices());

@@ -83,9 +83,4 @@ class SubjectController
         // calculate hours in month
         return $subjectRepository->upsertSubjectsDatas($subjectsContainer->subjects);
     }
-
-    public function upsertCsv(Request $request)
-    {
-    }
-
 }

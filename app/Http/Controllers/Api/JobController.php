@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Domain\Roster\Hospital\ScheduleParser;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Job\JobRequest;
 use App\Http\Requests\Job\JobSolveRequest;
 use App\Http\Requests\Job\JobUploadRequest;
 use App\Models\Job;
+use App\Models\User;
+use App\Repositories\SubjectRepository;
 use App\Solver\SolverClientFactory;
 use App\Transformers\SpreadSheetHandlerFactory;
 use Exception;
@@ -218,6 +221,29 @@ class JobController extends Controller
     public function delete(Job $job)
     {
         $job->delete();
+
+        return $job;
+    }
+
+    public function uploadPreferedXslx(Request $request, Job $job, ScheduleParser $scheduleParser, SubjectRepository $subjectRepository) {
+        $xslxFile = $request->file('file');
+        /** @var User $user */
+        $user = $request->user();
+
+        $schedule = $scheduleParser->parsePreferedScheduleXls($xslxFile->getRealPath(), $user->getProfileObj() );
+
+        $employeesNames = $schedule->getEmployeesNames();
+        $subjects = $subjectRepository->loadSubjectsByNames($employeesNames);
+        $schedule->fillEmployeesWithSubjectsData($subjects);
+
+        $dataArray = $schedule->toArray();
+        $job->setData(json_encode($dataArray));
+
+        $job->setFlagUploaded(true);
+        $job->setFlagSolving(false);
+        $job->setFlagSolved(false);
+
+        $job->save();
 
         return $job;
     }

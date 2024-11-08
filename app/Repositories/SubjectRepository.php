@@ -2,7 +2,7 @@
 
 namespace App\Repositories;
 
-use App\Domain\Roster\SubjectData;
+use App\Domain\Roster\SubjectDataInterface;
 use App\Models\Subject;
 use App\Util\UpsertQueryBuilder;
 use Illuminate\Support\Facades\DB;
@@ -10,12 +10,12 @@ use Illuminate\Support\Facades\DB;
 class SubjectRepository
 {
     /**
-     * @param Subject[] $subjects
+     * @param SubjectDataInterface[] $subjects
      */
     public function upsertSubjectsDatas(array $subjects) {
         $pdo = DB::getPdo();
 
-        $data = array_map ( fn(SubjectData $subject)=>$subject->toArray(), $subjects);
+        $data = array_map ( fn(SubjectDataInterface $subject)=>$subject->toArray(), $subjects);
         $query = UpsertQueryBuilder::buildUpsertQueryFromDataArraysForMysql(
             fn($str)=>$pdo->quote($str),
             $data,
@@ -25,5 +25,13 @@ class SubjectRepository
         );
 
         return $pdo->exec($query);
+    }
+
+    /**
+     * @param string[] $names
+     * @return Subject[]
+     */
+    public function loadSubjectsByNames(array $names): array {
+        return Subject::query()->whereIn('name', $names)->get();
     }
 }

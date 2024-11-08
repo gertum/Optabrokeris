@@ -7,7 +7,7 @@ use Spatie\DataTransferObject\Attributes\MapFrom;
 use Spatie\DataTransferObject\Attributes\MapTo;
 use Spatie\DataTransferObject\DataTransferObject;
 
-class SubjectData extends DataTransferObject
+class SubjectData extends DataTransferObject implements SubjectDataInterface
 {
     public ?string $name;
 
@@ -56,5 +56,25 @@ class SubjectData extends DataTransferObject
             return;
         }
         $this->hoursInMonth = $this->hoursInDay * $totalDaysInMonth;
+    }
+
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    public function getPositionAmount(): ?float
+    {
+        return $this->positionAmount;
+    }
+
+    public function getHoursInMonth(): ?float
+    {
+        return $this->hoursInMonth;
+    }
+
+    public function getHoursInDay(): ?float
+    {
+        return $this->hoursInDay;
     }
 }
