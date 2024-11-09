@@ -38,6 +38,7 @@ class AmbulanceOfficeDataHandler implements SpreadSheetDataHandler
 
     public function arrayToSpreadSheet(array $data, string $excelFile, string $originalFileContent = ''): void
     {
+        // TODO make choice here depending on how we want to output results
         $schedule = new Schedule($data);
 
         $originalFile = tempnam('/tmp', 'roster');

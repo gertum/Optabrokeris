@@ -182,4 +182,8 @@ class ScheduleWriter
             }
         }
     }
+
+    public function writeResultsUsingTemplate(Schedule $schedule, string $fileTemplate, string $outputFile) {
+        // TODO
+    }
 }
