@@ -2,6 +2,7 @@
 
 namespace Tests\Unit\Roster\Write;
 
+use App\Domain\Roster\Employee;
 use App\Domain\Roster\Hospital\ScheduleWriter;
 use App\Domain\Roster\Schedule;
 use Monolog\Logger;
@@ -29,7 +30,12 @@ class WriteWithTemplateTestSlow extends TestCase
     public static function provideDataForWrite() : array {
         return [
             'test1' => [
-                'schedule' => new Schedule(),
+                'schedule' => (new Schedule())->setEmployeeList(
+                    [
+                        (new Employee())->setName("Jonas Jonaitis"),
+                        (new Employee())->setName("Petras Petraitis"),
+                    ]
+                ),
                 'templateFile' => 'data/roster/template_for_roster_results.xlsx',
             ]
         ];

@@ -9,6 +9,10 @@ use App\Domain\Roster\Report\ScheduleReport;
 use App\Domain\Roster\Schedule;
 use App\Util\MapBuilder;
 use Carbon\Carbon;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Style\Fill;
+use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Psr\Log\LoggerInterface;
 
 class ScheduleWriter
@@ -46,9 +50,9 @@ class ScheduleWriter
 
         $flagNewVersion = true;
 
-        if ( $flagNewVersion) {
+        if ($flagNewVersion) {
             foreach ($occupations as $occupation) {
-                if ( $occupation->getEmployee() == null || $occupation->getEmployee()->name == null ) {
+                if ($occupation->getEmployee() == null || $occupation->getEmployee()->name == null) {
                     continue;
                 }
 
@@ -71,11 +75,10 @@ class ScheduleWriter
                 $cellFrom = $wrapper->getCell($row, $column);
                 $cellTill = $wrapper->getCell($row + 1, $column);
 
-                $xlsxFastEditor->writeFloat($worksheetId1, $cellFrom->name, $occupation->getStartHour()/24);
-                $xlsxFastEditor->writeFloat($worksheetId1, $cellTill->name, $occupation->getEndHour()/24);
+                $xlsxFastEditor->writeFloat($worksheetId1, $cellFrom->name, $occupation->getStartHour() / 24);
+                $xlsxFastEditor->writeFloat($worksheetId1, $cellTill->name, $occupation->getEndHour() / 24);
             }
-        }
-        else {
+        } else {
 // =========================== old version ==========================================================
             foreach ($schedule->shiftList as $shift) {
                 if ($shift->employee == null || $shift->employee->name == null) {
@@ -162,11 +165,12 @@ class ScheduleWriter
      * @param EilNr[] $eilNrs
      */
     public function clearAllTimings(
-        ExcelWrapper $wrapper,
-        EilNrTitle $eilNrTitle,
-        array $eilNrs,
+        ExcelWrapper   $wrapper,
+        EilNrTitle     $eilNrTitle,
+        array          $eilNrs,
         XlsxFastEditor $xlsxFastEditor
-    ) {
+    )
+    {
         $worksheetId1 = 1;
 
         foreach ($eilNrs as $eilNr) {
@@ -183,7 +187,51 @@ class ScheduleWriter
         }
     }
 
-    public function writeResultsUsingTemplate(Schedule $schedule, string $fileTemplate, string $outputFile) {
-        // TODO
+    public function writeResultsUsingTemplate(Schedule $schedule, string $fileTemplate, string $outputFile)
+    {
+        copy($fileTemplate, $outputFile);
+
+        $spreadsheet = IOFactory::load($outputFile);
+
+        $sheet = $spreadsheet->getActiveSheet();
+
+//        $xlsxFastEditor = new XlsxFastEditor($outputFile);
+        $worksheetId1 = 1;
+
+        // $wrapper must tell where is the cell we need to edit
+        $wrapper = ExcelWrapper::parse($fileTemplate);
+
+        $wrapper->registerMatcher('eilNr', new CustomValueCellMatcher(EilNrTitle::EIL_NR_MARKER));
+        $wrapper->runMatchers();
+        $eilNrMatcher = $wrapper->getMatcher('eilNr');
+        $row = $eilNrMatcher->getRow() + 2;
+        $nr = 1;
+        foreach ($schedule->employeeList as $employee) {
+            $eilnrCell = $wrapper->getCell($row, $eilNrMatcher->getColumn());
+
+            $sheet->setCellValue($eilnrCell->name, $nr++);
+
+            $row += 2;
+        }
+
+
+        // TODO remove after debug
+        // setting color for testing
+        $this->setCellColor($sheet, 'F10:F11', 'FF0000');
+        // --
+
+
+        $writer = new Xlsx($spreadsheet);
+        $writer->setPreCalculateFormulas(false);
+        $writer->save($outputFile);
+    }
+
+
+    function setCellColor(Worksheet $worksheet, string $cells, string $color)
+    {
+        $worksheet->getStyle($cells)
+            ->getFill()
+            ->setFillType(Fill::FILL_SOLID)
+            ->getStartColor()->setARGB($color);
     }
 }
