@@ -76,4 +76,14 @@ class Employee extends DataTransferObject
         $this->sequenceNumber = $sequenceNumber;
         return $this;
     }
+
+    public function getWorkingHoursPerDayFormatted() : string {
+        // TODO
+        return "3:55";
+    }
+
+    public function getPositionAmountFormatted() : string {
+        // TODO
+        return "0.5";
+    }
 }

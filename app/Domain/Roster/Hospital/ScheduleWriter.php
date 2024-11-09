@@ -195,21 +195,33 @@ class ScheduleWriter
 
         $sheet = $spreadsheet->getActiveSheet();
 
-//        $xlsxFastEditor = new XlsxFastEditor($outputFile);
-        $worksheetId1 = 1;
-
         // $wrapper must tell where is the cell we need to edit
         $wrapper = ExcelWrapper::parse($fileTemplate);
 
         $wrapper->registerMatcher('eilNr', new CustomValueCellMatcher(EilNrTitle::EIL_NR_MARKER));
+        $wrapper->registerMatcher('workingHoursPerDay', new CustomValueCellMatcher('/Darbo val.* .* dien.*/'));
+        $wrapper->registerMatcher('positionAmount', new CustomValueCellMatcher('/Etat.* skai.*ius/'));
+        $wrapper->registerMatcher('workingHoursPerMonth', new CustomValueCellMatcher('/Darbo valand.* per m.*nes.*/'));
+
         $wrapper->runMatchers();
         $eilNrMatcher = $wrapper->getMatcher('eilNr');
+        $workingHoursPerDayMatcher = $wrapper->getMatcher('workingHoursPerDay');
+        $positionAmountMatcher = $wrapper->getMatcher('positionAmount');
+        $workingHoursPerMonthMatcher = $wrapper->getMatcher('workingHoursPerMonth');
         $row = $eilNrMatcher->getRow() + 2;
         $nr = 1;
         foreach ($schedule->employeeList as $employee) {
             $eilnrCell = $wrapper->getCell($row, $eilNrMatcher->getColumn());
+            $nameCell = $wrapper->getCell($row, $eilNrMatcher->getColumn() + 1);
+            $workingHOursPerDayCell = $wrapper->getCell($row, $workingHoursPerDayMatcher->getColumn());
+            $positionAmountCell = $wrapper->getCell($row, $positionAmountMatcher->getColumn());
+            $workingHoursPerMonthCell = $wrapper->getCell($row, $workingHoursPerMonthMatcher->getColumn());
 
             $sheet->setCellValue($eilnrCell->name, $nr++);
+            $sheet->setCellValue($nameCell->name, $employee->name);
+            $sheet->setCellValue($workingHOursPerDayCell->name, $employee->getWorkingHoursPerDayFormatted());
+            $sheet->setCellValue($positionAmountCell->name, $employee->getPositionAmountFormatted());
+            $sheet->setCellValue($workingHoursPerMonthCell->name, $employee->getMaxWorkingHours());
 
             $row += 2;
         }
