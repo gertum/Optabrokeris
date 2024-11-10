@@ -39,7 +39,11 @@ class WriteWithTemplateTestSlow extends TestCase
                         (new Employee())->setName("Petras Petraitis")
                             ->setMaxWorkingHours(50),
                     ]
-                ),
+                )
+                ->setAvailabilityList([
+                    // TODO
+                ])
+                ,
                 'templateFile' => 'data/roster/template_for_roster_results.xlsx',
             ]
         ];
