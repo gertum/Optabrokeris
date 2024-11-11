@@ -12,11 +12,17 @@ class BinarySearch
      * @param callable $comparator Must be able to compare object from array to the given value: returns 0 if equal, -1 if the value is lesser, +1 if the value is greater than the compared object.
      * @return int Found index, -1 if not found.
      */
-    public static function search(array $array, mixed $value, callable $comparator): int
-    {
+    public static function search(
+        array $array,
+        mixed $value,
+        callable $comparator,
+        bool $nearestDown = false,
+        bool $nearestUp = false
+    ): int {
         if (count($array) === 0) {
             return false;
         }
+        $mid = 0;
         $low = 0;
         $high = count($array) - 1;
 
@@ -37,6 +43,14 @@ class BinarySearch
 
             // $comparedValue < 0
             $low = $mid + 1;
+        }
+
+        if ($nearestDown) {
+            return $mid;
+        }
+
+        if ( $nearestUp) {
+            return $mid+1;
         }
 
         return -1;

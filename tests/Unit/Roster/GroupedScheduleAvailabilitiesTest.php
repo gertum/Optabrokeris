@@ -25,7 +25,7 @@ class GroupedScheduleAvailabilitiesTest extends TestCase
         $groupedSchedule = new GroupedSchedule();
         $groupedSchedule->importSchedule($schedule);
 
-        for ( $i=0; $i < count($expectedAvailabilities); $i ++ ) {
+        for ($i = 0; $i < count($expectedAvailabilities); $i++) {
             $testEmployeeName = $testEmployeeNames[$i];
             $testDateFormatted = $testDatesFormatted[$i];
             $expectedAvailability = $expectedAvailabilities[$i];
@@ -114,13 +114,26 @@ class GroupedScheduleAvailabilitiesTest extends TestCase
                                 ->setAvailabilityType(Availability::AVAILABLE),
                         ]
                     ),
-                'testEmployeeNames' => ['Jonas Jonaitis'],
-                'testDatesFormatted' => ['2024-11-01T08:00:00'],
-                'expectedAvailabilities' => [(new Availability())
-                    ->setEmployee((new Employee())->setName("Jonas Jonaitis"))
-                    ->setDate('2024-11-01T08:00:00')
-                    ->setDateTill('2024-11-01T20:00:00')
-                    ->setAvailabilityType(Availability::UNAVAILABLE)]
+                'testEmployeeNames' => [
+                    'Jonas Jonaitis',
+                    'Petras Petraitis',
+                ],
+                'testDatesFormatted' => [
+                    '2024-11-01T08:00:00',
+                    '2024-11-02T00:00:00',
+                ],
+                'expectedAvailabilities' => [
+                    (new Availability())
+                        ->setEmployee((new Employee())->setName("Jonas Jonaitis"))
+                        ->setDate('2024-11-01T08:00:00')
+                        ->setDateTill('2024-11-01T20:00:00')
+                        ->setAvailabilityType(Availability::UNAVAILABLE),
+                    (new Availability())
+                        ->setEmployee((new Employee())->setName("Petras Petraitis"))
+                        ->setDate('2024-11-02T08:00:00')
+                        ->setDateTill('2024-11-03T20:00:00')
+                        ->setAvailabilityType(Availability::AVAILABLE),
+                ]
             ],
         ];
     }

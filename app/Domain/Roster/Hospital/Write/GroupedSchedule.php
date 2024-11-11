@@ -41,7 +41,9 @@ class GroupedSchedule
         $foundIndex = BinarySearch::search(
             $availabilities,
             $dateFormatted,
-            fn(Availability $a, string $date) => $a->date <=> $date
+            fn(Availability $a, string $date) => $a->date <=> $date,
+            nearestDown: false,
+            nearestUp: true
         );
 
         if ( $foundIndex >= 0 ) {
