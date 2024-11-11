@@ -189,6 +189,8 @@ class ScheduleWriter
 
     public function writeResultsUsingTemplate(Schedule $schedule, string $fileTemplate, string $outputFile)
     {
+        // TODO split function to parts.
+
         copy($fileTemplate, $outputFile);
 
         $spreadsheet = IOFactory::load($outputFile);
@@ -238,6 +240,10 @@ class ScheduleWriter
         // find first cell of the availabilities table
         $monthDaysMatcher = $wrapper->getMatcher('monthDays');
 
+        $this->markWeekends($sheet, $wrapper, $schedule, $monthDate);
+
+        // TODO put block to a separate function
+
         // for each employee
         // depending on the month date fill table with availability colors TODO
         // iterate given month days
@@ -273,6 +279,8 @@ class ScheduleWriter
             }
         }
 
+        //
+
 
         $writer = new Xlsx($spreadsheet);
         $writer->setPreCalculateFormulas(false);
@@ -287,5 +295,34 @@ class ScheduleWriter
             ->setFillType(Fill::FILL_SOLID)
             ->getStartColor()->setARGB($color)
         ;
+    }
+
+    // should be called before marking days
+    private function markWeekends(Worksheet $worksheet, ExcelWrapper $wrapper, Schedule $schedule, Carbon $monthDate)
+    {
+        $monthDaysMatcher = $wrapper->getMatcher('monthDays');
+
+        for ($day = 1; $day <= $monthDate->daysInMonth; $day++) {
+            $column = $monthDaysMatcher->getColumn() + $day - 1;
+            $row = $monthDaysMatcher->getRow();
+            foreach ($schedule->employeeList as $employee) {
+                $row += 2;
+
+                $dayDate = Carbon::create($monthDate->year, $monthDate->month, $day);
+
+                // 0 - sunday, 6 - saturday
+                if (in_array($dayDate->weekday(), [0, 6])) {
+                    $cell1 = $wrapper->getCell($row, $column);
+                    $cell2 = $wrapper->getCell($row + 1, $column);
+                    $range = $cell1->name . ':' . $cell2->name;
+
+                    $this->setCellColor($worksheet, $range, ExcelWrapper::WEEKEND_BACGROUND_UNHASHED);
+                }
+            }
+        }
+    }
+
+    private function putGreenSeparator() {
+        // TODO
     }
 }
