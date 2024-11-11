@@ -241,6 +241,7 @@ class ScheduleWriter
         $monthDaysMatcher = $wrapper->getMatcher('monthDays');
 
         $this->markWeekends($sheet, $wrapper, $schedule, $monthDate);
+        $this->putGreenSeparator($sheet, $wrapper, $schedule, $monthDate);
 
         // TODO put block to a separate function
 
@@ -322,7 +323,27 @@ class ScheduleWriter
         }
     }
 
-    private function putGreenSeparator() {
-        // TODO
+    private function putGreenSeparator(
+        Worksheet $worksheet,
+        ExcelWrapper $wrapper,
+        Schedule $schedule,
+        Carbon $monthDate
+    ) {
+        if ($monthDate->daysInMonth == 31) {
+            // do nothing
+            return;
+        }
+        $monthDaysMatcher = $wrapper->getMatcher('monthDays');
+        $column = $monthDaysMatcher->getColumn() + $monthDate->daysInMonth;
+        $row = $monthDaysMatcher->getRow();
+
+        foreach ($schedule->employeeList as $employee) {
+            $row += 2;
+
+            $cell1 = $wrapper->getCell($row, $column);
+            $cell2 = $wrapper->getCell($row + 1, $column);
+            $range = $cell1->name . ':' . $cell2->name;
+            $this->setCellColor($worksheet, $range, ExcelWrapper::SEPARATOR_BACKGROUND_UNHASHED);
+        }
     }
 }
