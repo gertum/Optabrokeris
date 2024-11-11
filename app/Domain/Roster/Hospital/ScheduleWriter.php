@@ -200,6 +200,7 @@ class ScheduleWriter
         $wrapper->registerMatcher('workingHoursPerDay', new CustomValueCellMatcher('/Darbo val.* .* dien.*/'));
         $wrapper->registerMatcher('positionAmount', new CustomValueCellMatcher('/Etat.* skai.*ius/'));
         $wrapper->registerMatcher('workingHoursPerMonth', new CustomValueCellMatcher('/Darbo valand.* per m.*nes.*/'));
+        $wrapper->registerMatcher('monthDays', new CustomValueCellMatcher('/M.*nesio dienos/'));
 
         $wrapper->runMatchers();
         $eilNrMatcher = $wrapper->getMatcher('eilNr');
@@ -232,8 +233,22 @@ class ScheduleWriter
 
         // detect month date
         $monthDate = $schedule->detectMonthDate();
+        // find first cell of the availabilities table
+        $monthDaysMatcher = $wrapper->getMatcher('monthDays');
 
+        // for each employee
         // depending on the month date fill table with availability colors TODO
+        // iterate given month days
+        // search corresponding availabilities for each day
+        // mark availability with the preselected color
+
+        foreach ($schedule->employeeList as $employee ) {
+            for ($day = 1; $day <= $monthDate->daysInMonth; $day++) {
+                $dayDate = Carbon::create($monthDate->year, $monthDate->month, $day);
+                // TODO
+                $schedule->findAvailabilityByStartDateAndEmployee();
+            }
+        }
 
 
         $writer = new Xlsx($spreadsheet);

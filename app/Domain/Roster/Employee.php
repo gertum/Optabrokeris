@@ -86,4 +86,12 @@ class Employee extends DataTransferObject
         // TODO
         return "0.5";
     }
+
+    /**
+     * Should be used in future
+     * @return mixed
+     */
+    public function getKey(): mixed {
+        return $this->name;
+    }
 }

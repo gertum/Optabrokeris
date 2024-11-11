@@ -16,9 +16,6 @@ use Shuchkin\SimpleXLSX;
  */
 class ExcelWrapper
 {
-//    const MAX_ROWS = 70;
-//    const MAX_COLUMNS = 40;
-
     const DISTANCE_BETWEEN_NO_AND_AVAILABILITIES = 4;
 
     const UNAVAILABLE_BACGROUND = '#FF0000';
@@ -386,7 +383,7 @@ class ExcelWrapper
         for ($row = 0; $row < $this->getMaxRows(); $row++) {
             for ($column = 0; $column < $this->getMaxColumnsAtRow($row); $column++) {
                 $cell = $this->getCell($row, $column);
-                foreach ($this->registeredMatchers as $name => $matcher) {
+                foreach ($this->registeredMatchers as $matcher) {
                     if ( $matcher->matchCell($cell, $row, $column) ) {
                         // assume that all matchers are exclusive to each other
                         break;
