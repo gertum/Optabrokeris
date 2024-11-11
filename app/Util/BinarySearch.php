@@ -45,12 +45,25 @@ class BinarySearch
             $low = $mid + 1;
         }
 
+        $comparedValue = call_user_func($comparator, $array[$mid], $value);
+
+
         if ($nearestDown) {
-            return $mid;
+            if ($comparedValue <= 0) {
+                return $mid;
+            }
+
+            return $mid - 1;
         }
 
-        if ( $nearestUp) {
-            return $mid+1;
+        if ($nearestUp) {
+            if ($comparedValue >= 0) {
+                return $mid;
+            }
+
+            if ($mid + 1 < count($array)) {
+                return $mid + 1;
+            }
         }
 
         return -1;

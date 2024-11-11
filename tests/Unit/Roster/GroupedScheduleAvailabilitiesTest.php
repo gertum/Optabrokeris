@@ -135,6 +135,14 @@ class GroupedScheduleAvailabilitiesTest extends TestCase
                         ->setAvailabilityType(Availability::AVAILABLE),
                 ]
             ],
+
+            // TODO more tests
+            // shuffled data
+            // different availabilities array with non standard dates bounds
+            // empty availabilities array
+            // search date out of range above and below
+            // non necessary? :
+            // gaped availabilities date intervals
         ];
     }
 
