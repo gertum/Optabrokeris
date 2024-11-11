@@ -3,7 +3,9 @@
 namespace App\Domain\Roster\Hospital;
 
 use alexandrainst\XlsxFastEditor\XlsxFastEditor;
+use App\Domain\Roster\Availability;
 use App\Domain\Roster\Employee;
+use App\Domain\Roster\Hospital\Write\GroupedSchedule;
 use App\Domain\Roster\Hospital\Write\ShiftsListTransformer;
 use App\Domain\Roster\Report\ScheduleReport;
 use App\Domain\Roster\Schedule;
@@ -228,7 +230,7 @@ class ScheduleWriter
 
 //        // TODO remove after debug
 //        // setting color for testing
-//        $this->setCellColor($sheet, 'F10:F11', 'FF0000');
+        $this->setCellColor($sheet, 'F2:F3', 'FF0000');
 //        // --
 
         // detect month date
@@ -242,11 +244,32 @@ class ScheduleWriter
         // search corresponding availabilities for each day
         // mark availability with the preselected color
 
-        foreach ($schedule->employeeList as $employee ) {
+        $groupedSchedule = new GroupedSchedule();
+        $groupedSchedule->importSchedule($schedule);
+
+        $row = $monthDaysMatcher->getRow();
+        foreach ($schedule->employeeList as $employee) {
+            $row += 2;
             for ($day = 1; $day <= $monthDate->daysInMonth; $day++) {
+                $column = $monthDaysMatcher->getColumn() + $day - 1;
+
+
                 $dayDate = Carbon::create($monthDate->year, $monthDate->month, $day);
-                // TODO
-                $schedule->findAvailabilityByStartDateAndEmployee();
+                $dayDateFormatted = $dayDate->format(Schedule::TARGET_DATE_FORMAT);
+
+                $availability = $groupedSchedule->findAvailability($employee->getKey(), $dayDateFormatted);
+                if ($availability == null) {
+                    continue;
+                }
+
+
+                $cell1 = $wrapper->getCell($row, $column);
+                $cell2 = $wrapper->getCell($row + 1, $column);
+
+                if ($availability->availabilityType == Availability::UNAVAILABLE) {
+                    $range = $cell1->name . ':' . $cell2->name;
+                    $this->setCellColor($sheet, $range, ExcelWrapper::UNAVAILABLE_BACGROUND_UNHASHED);
+                }
             }
         }
 

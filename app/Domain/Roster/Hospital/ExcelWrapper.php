@@ -20,6 +20,8 @@ class ExcelWrapper
 
     const UNAVAILABLE_BACGROUND = '#FF0000';
     const SEPARATOR_BACKGROUND = '#92D050';
+    const UNAVAILABLE_BACGROUND_UNHASHED = 'FF0000';
+    const SEPARATOR_BACKGROUND_UNHASHED = '92D050';
 
     const TARGET_DATE_FORMAT = 'Y-m-d\\TH:i:s';
 
