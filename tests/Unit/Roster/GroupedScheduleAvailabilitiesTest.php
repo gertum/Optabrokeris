@@ -12,18 +12,27 @@ class GroupedScheduleAvailabilitiesTest extends TestCase
 {
     /**
      * @dataProvider provideSchedules
+     * @param array $testEmployeeNames
+     * @param array $testDatesFormatted
+     * @param array $expectedAvailabilities
      */
     public function testGrouping(
         Schedule $schedule,
-        string $testEmployeeName,
-        string $testDateFormatted,
-        Availability $expectedAvailability
+        array $testEmployeeNames,
+        array $testDatesFormatted,
+        array $expectedAvailabilities
     ) {
         $groupedSchedule = new GroupedSchedule();
         $groupedSchedule->importSchedule($schedule);
 
-        $availability = $groupedSchedule->findAvailability($testEmployeeName, $testDateFormatted);
-        $this->assertEquals($expectedAvailability, $availability);
+        for ( $i=0; $i < count($expectedAvailabilities); $i ++ ) {
+            $testEmployeeName = $testEmployeeNames[$i];
+            $testDateFormatted = $testDatesFormatted[$i];
+            $expectedAvailability = $expectedAvailabilities[$i];
+
+            $availability = $groupedSchedule->findAvailability($testEmployeeName, $testDateFormatted);
+            $this->assertEquals($expectedAvailability, $availability);
+        }
     }
 
     public static function provideSchedules(): array
@@ -105,13 +114,13 @@ class GroupedScheduleAvailabilitiesTest extends TestCase
                                 ->setAvailabilityType(Availability::AVAILABLE),
                         ]
                     ),
-                'testEmployeeName' => 'Jonas Jonaitis',
-                'testDateFormatted' => '2024-11-01T08:00:00',
-                'expectedAvailability' => (new Availability())
+                'testEmployeeNames' => ['Jonas Jonaitis'],
+                'testDatesFormatted' => ['2024-11-01T08:00:00'],
+                'expectedAvailabilities' => [(new Availability())
                     ->setEmployee((new Employee())->setName("Jonas Jonaitis"))
                     ->setDate('2024-11-01T08:00:00')
                     ->setDateTill('2024-11-01T20:00:00')
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
+                    ->setAvailabilityType(Availability::UNAVAILABLE)]
             ],
         ];
     }
