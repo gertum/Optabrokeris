@@ -6,6 +6,7 @@ use App\Domain\Roster\Availability;
 use App\Domain\Roster\Schedule;
 use App\Util\BinarySearch;
 use App\Util\Grouper;
+use Carbon\Carbon;
 
 class GroupedSchedule
 {
@@ -35,9 +36,22 @@ class GroupedSchedule
         return $this->availabilitiesByEmployees[$employeeName];
     }
 
+//    public function findAvailability(string $employeeName, string $dateFormatted): ?Availability
+//    {
+//        $availability = $this->findAvailabilityInner($employeeName, $dateFormatted);
+//
+//        if ( )
+//
+//        return null;
+//    }
     public function findAvailability(string $employeeName, string $dateFormatted): ?Availability
     {
-        $availabilities = & $this->availabilitiesByEmployees[$employeeName];
+        $availabilities = &$this->availabilitiesByEmployees[$employeeName];
+
+        if ($availabilities == null) {
+            return null;
+        }
+
         $foundIndex = BinarySearch::search(
             $availabilities,
             $dateFormatted,
@@ -46,10 +60,27 @@ class GroupedSchedule
             nearestUp: true
         );
 
-        if ( $foundIndex >= 0 ) {
+        // special case to check bottom bound
+        if ($foundIndex == 0) {
+            $availability = $availabilities[$foundIndex];
+
+            $searchDate = Carbon::parse($dateFormatted);
+            $availabilityDate = Carbon::parse($availability->date);
+
+            $difference = $searchDate->diff($availabilityDate);
+            if ($difference->days > 0 || $difference->m > 0 || $difference->y > 0) {
+                return null;
+            }
+
+            return $availability;
+        }
+
+        if ($foundIndex > 0) {
             return $availabilities[$foundIndex];
         }
 
         return null;
     }
+
+
 }
