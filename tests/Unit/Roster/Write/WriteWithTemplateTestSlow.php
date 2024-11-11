@@ -2,9 +2,11 @@
 
 namespace Tests\Unit\Roster\Write;
 
+use App\Domain\Roster\Availability;
 use App\Domain\Roster\Employee;
 use App\Domain\Roster\Hospital\ScheduleWriter;
 use App\Domain\Roster\Schedule;
+use App\Domain\Roster\Shift;
 use Monolog\Logger;
 use PHPUnit\Framework\TestCase;
 
@@ -40,9 +42,64 @@ class WriteWithTemplateTestSlow extends TestCase
                             ->setMaxWorkingHours(50),
                     ]
                 )
-                ->setAvailabilityList([
-                    // TODO
-                ])
+                    ->setAvailabilityList(
+                        [
+                            (new Availability())
+                                ->setDate('2024-10-30T20:00:00')
+                                ->setDate('2024-11-01T08:00:00')
+                                ->setAvailabilityType(Availability::AVAILABLE)
+                                ->setEmployee((new Employee())->setName("Jonas Jonaitis")),
+                            (new Availability())
+                                ->setDate('2024-11-01T08:00:00')
+                                ->setDate('2024-11-01T20:00:00')
+                                ->setAvailabilityType(Availability::AVAILABLE)
+                                ->setEmployee((new Employee())->setName("Jonas Jonaitis")),
+                            (new Availability())
+                                ->setDate('2024-11-01T20:00:00')
+                                ->setDate('2024-11-02T08:00:00')
+                                ->setAvailabilityType(Availability::UNAVAILABLE)
+                                ->setEmployee((new Employee())->setName("Jonas Jonaitis")),
+                            (new Availability())
+                                ->setDate('2024-11-02T08:00:00')
+                                ->setDate('2024-11-02T20:00:00')
+                                ->setAvailabilityType(Availability::UNAVAILABLE)
+                                ->setEmployee((new Employee())->setName("Jonas Jonaitis")),
+                            // ---
+                            (new Availability())
+                                ->setDate('2024-10-30T20:00:00')
+                                ->setDate('2024-11-01T08:00:00')
+                                ->setAvailabilityType(Availability::UNAVAILABLE)
+                                ->setEmployee((new Employee())->setName("Petras Petraitis")),
+                            (new Availability())
+                                ->setDate('2024-11-01T08:00:00')
+                                ->setDate('2024-11-01T20:00:00')
+                                ->setAvailabilityType(Availability::UNAVAILABLE)
+                                ->setEmployee((new Employee())->setName("Petras Petraitis")),
+                            (new Availability())
+                                ->setDate('2024-11-01T20:00:00')
+                                ->setDate('2024-11-02T08:00:00')
+                                ->setAvailabilityType(Availability::AVAILABLE)
+                                ->setEmployee((new Employee())->setName("Petras Petraitis")),
+                            (new Availability())
+                                ->setDate('2024-11-02T08:00:00')
+                                ->setDate('2024-11-02T20:00:00')
+                                ->setAvailabilityType(Availability::AVAILABLE)
+                                ->setEmployee((new Employee())->setName("Petras Petraitis")),
+                        ]
+                    )
+                    ->setShiftList(
+                        [
+                            (new Shift())
+                                ->setStart('2024-10-30T20:00:00')
+                                ->setEnd('2024-11-01T08:00:00'),
+                            (new Shift())
+                                ->setStart('2024-11-01T08:00:00')
+                                ->setEnd('2024-11-01T20:00:00'),
+                            (new Shift())
+                                ->setStart('2024-11-01T20:00:00')
+                                ->setEnd('2024-11-02T08:00:00'),
+                        ]
+                    )
                 ,
                 'templateFile' => 'data/roster/template_for_roster_results.xlsx',
             ]

@@ -5,12 +5,15 @@ namespace App\Domain\Roster;
 use App\Exceptions\SolverDataException;
 use App\Util\BinarySearch;
 use App\Util\MapBuilder;
+use Carbon\Carbon;
 use Spatie\DataTransferObject\Attributes\CastWith;
 use Spatie\DataTransferObject\Casters\ArrayCaster;
 use Spatie\DataTransferObject\DataTransferObject;
 
 class Schedule extends DataTransferObject
 {
+    const TARGET_DATE_FORMAT = 'Y-m-d\\TH:i:s';
+
     /** @var Availability[] */
     #[CastWith(ArrayCaster::class, itemType: Availability::class)]
     public ?array $availabilityList = [];
@@ -110,8 +113,9 @@ class Schedule extends DataTransferObject
         return $this;
     }
 
-    public function getEmployeesNames(): array {
-        return array_map (fn(Employee $e)=>$e->name, $this->employeeList);
+    public function getEmployeesNames(): array
+    {
+        return array_map(fn(Employee $e) => $e->name, $this->employeeList);
     }
 
     /**
@@ -121,12 +125,14 @@ class Schedule extends DataTransferObject
     public function fillEmployeesWithSubjectsData(array $subjects): self
     {
         /** @var SubjectDataInterface[] $subjectByName */
-        $subjectByName = MapBuilder::buildMap($subjects, fn(SubjectDataInterface $subject)=>$subject->getName());
+        $subjectByName = MapBuilder::buildMap($subjects, fn(SubjectDataInterface $subject) => $subject->getName());
 
-        foreach ( $this->employeeList as $employee ) {
-            if ( !array_key_exists( $employee->name, $subjectByName ) ) {
+        foreach ($this->employeeList as $employee) {
+            if (!array_key_exists($employee->name, $subjectByName)) {
                 // error message , or exception
-                throw new SolverDataException(sprintf('could not find matching subject for %s employee', $employee->name));
+                throw new SolverDataException(
+                    sprintf('could not find matching subject for %s employee', $employee->name)
+                );
             }
             $subject = $subjectByName[$employee->name];
 
@@ -136,4 +142,39 @@ class Schedule extends DataTransferObject
         return $this;
     }
 
+    public function detectMonthDate(): ?Carbon
+    {
+        // go through shifts list if we find 2 shifts in the same month, then the month date is found
+        $localFormat = 'Y-m';
+        $yearMonthSet = [];
+        foreach ($this->shiftList as $shift) {
+            $date = Carbon::createFromFormat(self::TARGET_DATE_FORMAT, $shift->start);
+            $yearMonth = $date->format($localFormat);
+
+            if (!array_key_exists($yearMonth, $yearMonthSet)) {
+                $yearMonthSet[$yearMonth] = 0;
+            }
+
+            $yearMonthSet[$yearMonth] = $yearMonthSet[$yearMonth] + 1;
+
+            if ($yearMonthSet[$yearMonth] >= 2) {
+                break;
+            }
+        }
+
+        $dateSelected = null;
+        foreach ($yearMonthSet as $formattedDate => $count) {
+            $dateSelected = Carbon::createFromFormat($localFormat, $formattedDate);
+            if ($count >= 2) {
+                break;
+            }
+        }
+
+        if ($dateSelected == null) {
+            return $dateSelected;
+        }
+
+        // leave only year and month
+        return Carbon::create($dateSelected->year, $dateSelected->month);
+    }
 }

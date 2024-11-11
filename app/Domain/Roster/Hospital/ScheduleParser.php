@@ -16,6 +16,10 @@ use DateTimeInterface;
 class ScheduleParser
 {
 
+    /**
+     * @var string
+     * @deprecated use Schedule::TARGET_DATE_FORMAT instead
+     */
     const TARGET_DATE_FORMAT = 'Y-m-d\\TH:i:s';
 
     /**
@@ -108,7 +112,8 @@ class ScheduleParser
             $dateRecognizer->getMonth(),
             $dateFrom->daysInMonth,
             24
-        )->toImmutable();
+        )->toImmutable()
+        ;
         $shifts = ShiftsBuilder::buildShiftsOfBounds($dateFrom, $dateTill, $profile->getShiftBounds());
         $schedule->setShiftList($shifts);
 
@@ -132,7 +137,8 @@ class ScheduleParser
             $employees [] = (new Employee())
                 ->setName($employeeCell->value)
                 ->setExcelRow($employeeCell->r)
-                ->setRow($row);
+                ->setRow($row)
+            ;
 //                ->setMaxWorkingHours(floatval($workingHoursCell->value))
 //                ->setSequenceNumber($eilNr->getValue());
 
@@ -150,10 +156,9 @@ class ScheduleParser
      */
     public function parseAvailabilities(
         PreferencesExcelWrapper $wrapper,
-        CarbonInterface         $startingDate,
-        array                   $employees
-    ): array
-    {
+        CarbonInterface $startingDate,
+        array $employees
+    ): array {
         $availabilities = [];
         // 1) find a cell with value '1' at the row index 1, then use it as the marker of the column,
         // where availabilities starts from
@@ -197,7 +202,6 @@ class ScheduleParser
 
         $availabilityId = 1;
         array_walk($availabilities, fn(Availability $availability) => $availability->setId($availabilityId++));
-
 
         return $availabilities;
     }
@@ -259,20 +263,31 @@ class ScheduleParser
 
         // TODO take hours from settings
         $nightStartStr = Carbon::create($previousDay->year, $previousDay->month, $previousDay->day, 20)
-            ->format(self::TARGET_DATE_FORMAT);
+            ->format(self::TARGET_DATE_FORMAT)
+        ;
         $dayStartStr = Carbon::create($currentDay->year, $currentDay->month, $currentDay->day, 8)
-            ->format(self::TARGET_DATE_FORMAT);
+            ->format(self::TARGET_DATE_FORMAT)
+        ;
         $dayEndStr = Carbon::create($currentDay->year, $currentDay->month, $currentDay->day, 20)
-            ->format(self::TARGET_DATE_FORMAT);
+            ->format(self::TARGET_DATE_FORMAT)
+        ;
         $nextDayStartStr = Carbon::create($nextDay->year, $nextDay->month, $nextDay->day, 8)
-            ->format(self::TARGET_DATE_FORMAT);
+            ->format(self::TARGET_DATE_FORMAT)
+        ;
 
         $availabilityValue = trim($availabilityValue);
 
         // be aware: these two X are not the same!!
-        if (in_array($availabilityValue, [
-            'Х', // different encoding!
-            'X', 'x', 'a', 'A'])) {
+        if (in_array(
+            $availabilityValue,
+            [
+                'Х', // different encoding!
+                'X',
+                'x',
+                'a',
+                'A'
+            ]
+        )) {
             $availabilities = [
                 (new Availability())
                     ->setDate($nightStartStr)
@@ -387,8 +402,12 @@ class ScheduleParser
         return $result;
     }
 
-    public function fillGaps(Carbon $startDate, Carbon $endDate, array $availabilities, string $defaultAvailabilityType): array
-    {
+    public function fillGaps(
+        Carbon $startDate,
+        Carbon $endDate,
+        array $availabilities,
+        string $defaultAvailabilityType
+    ): array {
         $currentDate = clone $startDate;
         $interval12 = new DateInterval('PT12H');
 
@@ -404,7 +423,8 @@ class ScheduleParser
             $availability = (new Availability())
                 ->setDate($currentDateStr)
                 ->setDateTill($nextDateStr)
-                ->setAvailabilityType($defaultAvailabilityType);
+                ->setAvailabilityType($defaultAvailabilityType)
+            ;
 
             $availabilities[$currentDateStr] = $availability;
         }

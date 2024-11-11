@@ -112,8 +112,6 @@ class ScheduleWriter
                 $xlsxFastEditor->writeFloat($worksheetId1, $cellFrom->name, $dayPartFrom);
                 $xlsxFastEditor->writeFloat($worksheetId1, $cellTill->name, $dayPartTill);
             }
-
-
             // ================== end of old version ================================================
         }
 
@@ -129,7 +127,9 @@ class ScheduleWriter
         if ($workingHoursAssignedCell != null) {
             foreach ($scheduleReport->getEmployeesInfos() as $employeeinfo) {
                 if (!array_key_exists($employeeinfo->getEmployee()->name, $employeesByName)) {
-                    $this->logger->error(sprintf('There is no employee by name [%s]', $employeeinfo->getEmployee()->name));
+                    $this->logger->error(
+                        sprintf('There is no employee by name [%s]', $employeeinfo->getEmployee()->name)
+                    );
                     continue;
                 }
                 $parsedEmployee = $employeesByName[$employeeinfo->getEmployee()->name];
@@ -158,19 +158,17 @@ class ScheduleWriter
 
         // ===================== storing results =====================
         $xlsxFastEditor->save();
-
     }
 
     /**
      * @param EilNr[] $eilNrs
      */
     public function clearAllTimings(
-        ExcelWrapper   $wrapper,
-        EilNrTitle     $eilNrTitle,
-        array          $eilNrs,
+        ExcelWrapper $wrapper,
+        EilNrTitle $eilNrTitle,
+        array $eilNrs,
         XlsxFastEditor $xlsxFastEditor
-    )
-    {
+    ) {
         $worksheetId1 = 1;
 
         foreach ($eilNrs as $eilNr) {
@@ -227,10 +225,15 @@ class ScheduleWriter
         }
 
 
-        // TODO remove after debug
-        // setting color for testing
-        $this->setCellColor($sheet, 'F10:F11', 'FF0000');
-        // --
+//        // TODO remove after debug
+//        // setting color for testing
+//        $this->setCellColor($sheet, 'F10:F11', 'FF0000');
+//        // --
+
+        // detect month date
+        $monthDate = $schedule->detectMonthDate();
+
+        // depending on the month date fill table with availability colors TODO
 
 
         $writer = new Xlsx($spreadsheet);
@@ -244,6 +247,7 @@ class ScheduleWriter
         $worksheet->getStyle($cells)
             ->getFill()
             ->setFillType(Fill::FILL_SOLID)
-            ->getStartColor()->setARGB($color);
+            ->getStartColor()->setARGB($color)
+        ;
     }
 }
