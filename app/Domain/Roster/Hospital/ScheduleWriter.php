@@ -11,6 +11,7 @@ use App\Domain\Roster\Report\ScheduleReport;
 use App\Domain\Roster\Schedule;
 use App\Util\MapBuilder;
 use Carbon\Carbon;
+use PhpOffice\PhpSpreadsheet\Cell\DataType;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
@@ -19,6 +20,7 @@ use Psr\Log\LoggerInterface;
 
 class ScheduleWriter
 {
+    const EPSILON = 0.0001;
     private LoggerInterface $logger;
 
     public function __construct(LoggerInterface $logger)
@@ -166,11 +168,12 @@ class ScheduleWriter
      * @param EilNr[] $eilNrs
      */
     public function clearAllTimings(
-        ExcelWrapper $wrapper,
-        EilNrTitle $eilNrTitle,
-        array $eilNrs,
+        ExcelWrapper   $wrapper,
+        EilNrTitle     $eilNrTitle,
+        array          $eilNrs,
         XlsxFastEditor $xlsxFastEditor
-    ) {
+    )
+    {
         $worksheetId1 = 1;
 
         foreach ($eilNrs as $eilNr) {
@@ -232,7 +235,7 @@ class ScheduleWriter
 
 //        // TODO remove after debug
 //        // setting color for testing
-        $this->setCellColor($sheet, 'F2:F3', 'FF0000');
+//        $this->setCellColor($sheet, 'F2:F3', 'FF0000');
 //        // --
 
         // detect month date
@@ -280,8 +283,7 @@ class ScheduleWriter
             }
         }
 
-        //
-
+        $this->writeAssignedShifts($sheet, $wrapper, $schedule);
 
         $writer = new Xlsx($spreadsheet);
         $writer->setPreCalculateFormulas(false);
@@ -294,8 +296,7 @@ class ScheduleWriter
         $worksheet->getStyle($cells)
             ->getFill()
             ->setFillType(Fill::FILL_SOLID)
-            ->getStartColor()->setARGB($color)
-        ;
+            ->getStartColor()->setARGB($color);
     }
 
     // should be called before marking days
@@ -324,11 +325,12 @@ class ScheduleWriter
     }
 
     private function putGreenSeparator(
-        Worksheet $worksheet,
+        Worksheet    $worksheet,
         ExcelWrapper $wrapper,
-        Schedule $schedule,
-        Carbon $monthDate
-    ) {
+        Schedule     $schedule,
+        Carbon       $monthDate
+    )
+    {
         if ($monthDate->daysInMonth == 31) {
             // do nothing
             return;
@@ -344,6 +346,54 @@ class ScheduleWriter
             $cell2 = $wrapper->getCell($row + 1, $column);
             $range = $cell1->name . ':' . $cell2->name;
             $this->setCellColor($worksheet, $range, ExcelWrapper::SEPARATOR_BACKGROUND_UNHASHED);
+        }
+    }
+
+    private function writeAssignedShifts(
+        Worksheet    $worksheet,
+        ExcelWrapper $wrapper,
+        Schedule     $schedule,
+    )
+    {
+        $eilNrMatcher = $wrapper->getMatcher('eilNr');
+
+        // assign rows to employees
+        $row = $eilNrMatcher->getRow();
+        foreach ($schedule->employeeList as $employee) {
+            $row += 2;
+            $employee->setRow($row);
+        }
+
+        /** @var Employee[] $employeesByName */
+        $employeesByName = MapBuilder::buildMap($schedule->employeeList, fn(Employee $e) => $e->name);
+
+        $occupations = ShiftsListTransformer::transform($schedule->shiftList);
+
+        foreach ($occupations as $occupation) {
+            if ($occupation->getEmployee() == null || $occupation->getEmployee()->name == null) {
+                continue;
+            }
+
+            if (!array_key_exists($occupation->getEmployee()->name, $employeesByName)) {
+                $this->logger->warning(
+                    sprintf(
+                        'Could not find employee by name [%s]',
+                        $occupation->getEmployee()->name
+                    )
+                );
+                continue;
+            }
+
+            $foundEmployee = $employeesByName[$occupation->getEmployee()->name];
+            $row = $foundEmployee->getRow();
+
+            $column = $wrapper->getColumnByDay($eilNrMatcher->getColumn(), $occupation->getDay());
+
+            $cellFrom = $wrapper->getCell($row, $column);
+            $cellTill = $wrapper->getCell($row + 1, $column);
+
+            $worksheet->getCell($cellFrom->name)->setValueExplicit( $occupation->getStartHour() / 24 + self::EPSILON, DataType::TYPE_NUMERIC );
+            $worksheet->getCell($cellTill->name)->setValueExplicit( $occupation->getEndHour() / 24 + self::EPSILON, DataType::TYPE_NUMERIC );
         }
     }
 }

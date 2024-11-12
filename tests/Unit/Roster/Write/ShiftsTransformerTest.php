@@ -165,6 +165,7 @@ class ShiftsTransformerTest extends TestCase
                 ],
             ],
 
+            // TODO make cut of shift through two days
         ];
     }
 }
