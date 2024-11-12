@@ -8,6 +8,7 @@ interface SpreadSheetDataHandler
 
     public function spreadSheetToArray(string $excelFile): array;
 
+    // TODO refactor last parameter as Job
     public function arrayToSpreadSheet(array $data, string $excelFile, string $originalFileContent=''): void;
 
     public function validateDataArray(array $data): void;
