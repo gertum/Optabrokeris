@@ -9,10 +9,16 @@ use Spatie\DataTransferObject\DataTransferObject;
  */
 class Profile extends DataTransferObject
 {
+    const WRITE_TYPE_ORIGINAL_FILE = 'original_file';
+    const WRITE_TYPE_TEMPLATE_FILE = 'template_file';
+
+
     /**
      * @var float[] Hour value.
      */
-    public array $shiftBounds=[];
+    public array $shiftBounds = [];
+
+    public string $writeType = self::WRITE_TYPE_ORIGINAL_FILE;
 
     public function getShiftBounds(): array
     {

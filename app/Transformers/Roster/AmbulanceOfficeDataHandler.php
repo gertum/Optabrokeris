@@ -4,7 +4,9 @@ namespace App\Transformers\Roster;
 
 use App\Domain\Roster\Hospital\ScheduleParser;
 use App\Domain\Roster\Hospital\ScheduleWriter;
+use App\Domain\Roster\Profile;
 use App\Domain\Roster\Schedule;
+use App\Exceptions\SolverDataException;
 use App\Models\Job;
 use App\Transformers\SpreadSheetDataHandler;
 
@@ -12,6 +14,8 @@ class AmbulanceOfficeDataHandler implements SpreadSheetDataHandler
 {
 
     private ScheduleWriter $scheduleWriter;
+
+    private string $templateFile='';
 
     /**
      * @param ScheduleWriter $scheduleWriter
@@ -39,13 +43,22 @@ class AmbulanceOfficeDataHandler implements SpreadSheetDataHandler
 
     public function arrayToSpreadSheet(array $data, string $excelFile, ?Job $job): void
     {
-        // TODO make choice here depending on how we want to output results
         $schedule = new Schedule($data);
 
-        $originalFile = tempnam('/tmp', 'roster');
-        file_put_contents($originalFile, $job->getOriginalFileContent());
+        $profile = $job->getProfileObj();
+        if ( $profile->writeType == Profile::WRITE_TYPE_ORIGINAL_FILE ) {
 
-        $this->scheduleWriter->writeSchedule($originalFile, $schedule, $excelFile);
+            $originalFile = tempnam('/tmp', 'roster');
+            file_put_contents($originalFile, $job->getOriginalFileContent());
+
+            $this->scheduleWriter->writeSchedule($originalFile, $schedule, $excelFile);
+        }
+        elseif ($profile->writeType == Profile::WRITE_TYPE_TEMPLATE_FILE) {
+            $this->scheduleWriter->writeResultsUsingTemplate($schedule, $this->templateFile, $excelFile);
+        }
+        else {
+            throw new SolverDataException(sprintf('Unknown write type %s', $profile->writeType));
+        }
     }
 
     public function validateDataArray(array $data): void
@@ -53,4 +66,10 @@ class AmbulanceOfficeDataHandler implements SpreadSheetDataHandler
         // not implemented yet
     }
 
+    public function setTemplateFile(string $templateFile): AmbulanceOfficeDataHandler
+    {
+        $this->templateFile = $templateFile;
+
+        return $this;
+    }
 }

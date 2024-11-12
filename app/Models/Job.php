@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Data\Profile;
+use App\Domain\Roster\Profile;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 

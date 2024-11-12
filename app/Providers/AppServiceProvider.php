@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Domain\Roster\Hospital\ScheduleWriter;
+use App\Transformers\Roster\AmbulanceOfficeDataHandler;
 use App\Transformers\SpreadSheetHandlerFactory;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
@@ -15,6 +17,11 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->app->singleton(SpreadSheetHandlerFactory::class, function (Application $app) {
             return new SpreadSheetHandlerFactory(config('features.excel_headers'));
+        });
+
+        $this->app->singleton(AmbulanceOfficeDataHandler::class, function (Application $app) {
+            return (new AmbulanceOfficeDataHandler($app->get(ScheduleWriter::class)))
+                ->setTemplateFile(config('features.hospital_template_file'));
         });
     }
 

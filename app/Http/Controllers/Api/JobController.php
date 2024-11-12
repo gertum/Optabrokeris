@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Domain\Roster\Hospital\ScheduleParser;
+use App\Domain\Roster\Profile;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Job\JobRequest;
 use App\Http\Requests\Job\JobSolveRequest;
@@ -173,6 +174,9 @@ class JobController extends Controller
 
         $fileHandler->validateDataArray($dataArray);
         $job->setData(json_encode($dataArray));
+        $profileObj = $job->getProfileObj();
+        $profileObj->writeType = Profile::WRITE_TYPE_ORIGINAL_FILE;
+        $job->setProfile(json_encode($profileObj));
 
         $job->setFlagUploaded(true);
         $job->setFlagSolving(false);
@@ -238,6 +242,10 @@ class JobController extends Controller
 
         $dataArray = $schedule->toArray();
         $job->setData(json_encode($dataArray));
+        $profileObj = $job->getProfileObj();
+        $profileObj->writeType = Profile::WRITE_TYPE_TEMPLATE_FILE;
+        $job->setProfile(json_encode($profileObj));
+
 
         $job->setFlagUploaded(true);
         $job->setFlagSolving(false);
