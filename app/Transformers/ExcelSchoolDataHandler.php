@@ -4,6 +4,7 @@ namespace App\Transformers;
 
 use App\Exceptions\ExcelParseException;
 use App\Exceptions\SolverDataException;
+use App\Models\Job;
 use Illuminate\Support\Carbon;
 use Shuchkin\SimpleXLSX;
 use Shuchkin\SimpleXLSXGen;
@@ -88,7 +89,7 @@ class ExcelSchoolDataHandler implements SpreadSheetDataHandler
         throw new ExcelParseException(SimpleXLSX::parseError());
     }
 
-    public function arrayToSpreadSheet(array $data, string $excelFile, string $originalFileContent = ''): void
+    public function arrayToSpreadSheet(array $data, string $excelFile, ?Job $job=null): void
     {
         $this->validateData($data);
 

@@ -2,14 +2,15 @@
 
 namespace App\Transformers;
 
+use App\Models\Job;
+
 interface SpreadSheetDataHandler
 {
     // may be these two methods should be separated in to two classes
 
     public function spreadSheetToArray(string $excelFile): array;
 
-    // TODO refactor last parameter as Job
-    public function arrayToSpreadSheet(array $data, string $excelFile, string $originalFileContent=''): void;
+    public function arrayToSpreadSheet(array $data, string $excelFile, ?Job $job): void;
 
     public function validateDataArray(array $data): void;
 }

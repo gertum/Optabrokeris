@@ -213,7 +213,7 @@ class JobController extends Controller
         }
 
         $dataArray = Utils::jsonDecode($data, true);
-        $fileHandler->arrayToSpreadSheet($dataArray, $file, $job->getOriginalFileContent());
+        $fileHandler->arrayToSpreadSheet($dataArray, $file, $job);
 
         return response()->download($file, $fileName);
     }

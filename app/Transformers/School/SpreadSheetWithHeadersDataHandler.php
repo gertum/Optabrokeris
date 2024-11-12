@@ -2,6 +2,7 @@
 
 namespace App\Transformers\School;
 
+use App\Models\Job;
 use App\Transformers\ExcelParser;
 use App\Transformers\ExcelWriter;
 use App\Transformers\SpreadSheetDataHandler;
@@ -16,7 +17,7 @@ class SpreadSheetWithHeadersDataHandler implements SpreadSheetDataHandler
         return $schoolDataTransformer->excelToJson($sheetsRows);
     }
 
-    public function arrayToSpreadSheet(array $data, string $excelFile, string $originalFileContent=''): void
+    public function arrayToSpreadSheet(array $data, string $excelFile, ?Job $job): void
     {
         $schoolDataTransformer = new SchoolDataTransformer();
         $excelData = $schoolDataTransformer->jsonToExcel($data);
