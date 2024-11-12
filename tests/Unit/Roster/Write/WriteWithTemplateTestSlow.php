@@ -4,7 +4,10 @@ namespace Tests\Unit\Roster\Write;
 
 use App\Domain\Roster\Availability;
 use App\Domain\Roster\Employee;
+use App\Domain\Roster\Hospital\ScheduleParser;
 use App\Domain\Roster\Hospital\ScheduleWriter;
+use App\Domain\Roster\Hospital\ShiftsBuilder;
+use App\Domain\Roster\Profile;
 use App\Domain\Roster\Schedule;
 use App\Domain\Roster\Shift;
 use Monolog\Logger;
@@ -15,7 +18,7 @@ class WriteWithTemplateTestSlow extends TestCase
     /**
      * @dataProvider provideDataForWrite
      */
-    public function testWrite(Schedule $schedule, string $templateFile)
+    public function testWrite(Schedule $schedule, string $templateFile, Profile $profile)
     {
         $logger = new Logger('test');
 
@@ -27,7 +30,13 @@ class WriteWithTemplateTestSlow extends TestCase
 
         $scheduleWriter->writeResultsUsingTemplate($schedule, $templateFile, $resultFile);
         $this->assertTrue(true);
-        // TODO assert later by parsing additional time
+
+        $scheduleParser = new ScheduleParser();
+        $timeSlices = ShiftsBuilder::transformBoundsToTimeSlices($profile->getShiftBounds());
+        $schedule2 = $scheduleParser->parseScheduleXls($resultFile, $timeSlices);
+
+        $this->assertEquals($schedule->getEmployeesNames(),$schedule2->getEmployeesNames());
+        // TODO assert the particular availability and a particular shift
     }
 
     public static function provideDataForWrite(): array
@@ -105,6 +114,7 @@ class WriteWithTemplateTestSlow extends TestCase
                     )
                 ,
                 'templateFile' => 'data/roster/template_for_roster_results.xlsx',
+                'profile' => (new Profile())->setShiftBounds([8,20])
             ]
         ];
     }

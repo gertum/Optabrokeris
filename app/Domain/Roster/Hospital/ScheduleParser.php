@@ -81,6 +81,7 @@ class ScheduleParser
 
     /**
      * @return DateInterval[]
+     * @deprecated deprecated in a new version, where time bounds from profile should be used
      */
     public static function createHospitalTimeSlices(): array
     {
@@ -95,9 +96,7 @@ class ScheduleParser
     {
         $schedule = new Schedule();
 
-
         $wrapper = PreferencesExcelWrapper::parse($file);
-
 
         // parse employees
 

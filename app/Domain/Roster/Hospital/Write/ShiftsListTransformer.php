@@ -12,6 +12,7 @@ use Carbon\Carbon;
  */
 class ShiftsListTransformer
 {
+    const EPSILON = 0.0001;
     /**
      * @param Shift[] $shifts
      * @return DayOccupation[]
@@ -32,8 +33,10 @@ class ShiftsListTransformer
             $dayOccupation->setStartHour($startDate->hour + $startDate->minute / 60);
 
             // if hour is in another day, add 24 hour to it
+
             $addition = ($endDate->day - $startDate->day) * 24;
-            $dayOccupation->setEndHour( $addition +$endDate->hour + $endDate->minute / 60);
+
+            $dayOccupation->setEndHour( $addition +$endDate->hour + $endDate->minute / 60 );
 
             $occupations[] = $dayOccupation;
         }
@@ -55,15 +58,26 @@ class ShiftsListTransformer
         $resultOccupations = [];
 
         foreach ($groupedOccupations as $oGroup) {
-            if (count($oGroup) == 1) {
-                $resultOccupations[] = current($oGroup);
-                continue;
-            }
+
+            // still need to split between two days
+//            if (count($oGroup) == 1) {
+//                $resultOccupations[] = current($oGroup);
+//                continue;
+//            }
 
             // > 1
 
             $startHour = $oGroup[0]->getStartHour();
             $startDay = $oGroup[0]->getDay();
+            $endDay = last($oGroup)->getDay();
+            $endHour = last($oGroup)->getEndHour();
+
+            if ( $endHour > 24 ) {
+                $endDay += floor($endHour / 24);
+                $endHour = $endHour % 24;
+            }
+
+            // gap detecting block
             $gap = 0;
             for ( $i = 1; $i < count($oGroup); $i++ ) {
                 $previousOccupation = $oGroup[$i-1];
@@ -79,18 +93,17 @@ class ShiftsListTransformer
 
             // we will decide what to do with a gap later
 
-            $endDay = last($oGroup)->getDay();
-            $endHour = last($oGroup)->getEndHour();
-
             if ( $startDay == $endDay) {
                 $resultOccupations[] = (new DayOccupation())
                     ->setEmployee($oGroup[0]->getEmployee())
                     ->setDay($startDay)
-                    // instead of throwing exception, we put 2 seconds for the start date, to show that the situation is not ok
+                    // instead of throwing exception, we put few seconds for the start date, to show that the situation is not ok
                     ->setStartHour($startHour + $gap / 1000 )
                     ->setEndHour($endHour);
                 continue;
             }
+            // -- end of gap detecting block
+
 
             $resultOccupations[] = (new DayOccupation())
                 ->setEmployee($oGroup[0]->getEmployee())
@@ -98,7 +111,7 @@ class ShiftsListTransformer
                 ->setStartHour($startHour)
                 ->setEndHour(24);
 
-            // in between
+            // in between ( case when start and end date differs by more than 2 days
             for ( $day = $startDay+1; $day <= $endDay-1; $day++ ) {
                 $resultOccupations[] = (new DayOccupation())
                     ->setEmployee($oGroup[0]->getEmployee())

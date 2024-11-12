@@ -165,7 +165,26 @@ class ShiftsTransformerTest extends TestCase
                 ],
             ],
 
-            // TODO make cut of shift through two days
+            'two day shits' => [
+                'shifts' => [
+                    (new Shift())
+                        ->setStart('2024-02-01T20:00:00')
+                        ->setEnd('2024-02-02T08:00:00')
+                        ->setEmployee((new Employee())->setName('Peter')),
+                ],
+                'expectedOccupations' => [
+                    (new DayOccupation())
+                        ->setDay(1)
+                        ->setStartHour(20.0)
+                        ->setEndHour(24.0)
+                        ->setEmployee((new Employee())->setName('Peter')),
+                    (new DayOccupation())
+                        ->setDay(2)
+                        ->setStartHour(0.0)
+                        ->setEndHour(8.0)
+                        ->setEmployee((new Employee())->setName('Peter')),
+                ],
+            ],
         ];
     }
 }

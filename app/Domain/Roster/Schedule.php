@@ -177,4 +177,11 @@ class Schedule extends DataTransferObject
         // leave only year and month
         return Carbon::create($dateSelected->year, $dateSelected->month);
     }
+
+    /**
+     * @return AvailabilityRepresentation[]
+     */
+    public function getAvailabilitiesRepresentations() : array {
+        return array_map (fn(Availability $a)=>$a->getRepresentation(), $this->availabilityList);
+    }
 }

@@ -9,6 +9,9 @@ use App\Domain\Roster\Hospital\Write\GroupedSchedule;
 use App\Domain\Roster\Hospital\Write\ShiftsListTransformer;
 use App\Domain\Roster\Report\ScheduleReport;
 use App\Domain\Roster\Schedule;
+use App\Exceptions\ExcelParseException;
+use App\Exceptions\SolverDataException;
+use App\Util\DateRecognizer;
 use App\Util\MapBuilder;
 use Carbon\Carbon;
 use PhpOffice\PhpSpreadsheet\Cell\DataType;
@@ -192,24 +195,51 @@ class ScheduleWriter
 
     public function writeResultsUsingTemplate(Schedule $schedule, string $fileTemplate, string $outputFile)
     {
-        // TODO split function to parts.
+        // detect month date
+        $monthDate = $schedule->detectMonthDate();
+
+        if ($monthDate == null) {
+            throw new SolverDataException(sprintf('Could not detect month date when writing schedule to file %s', $outputFile));
+        }
 
         copy($fileTemplate, $outputFile);
 
-        $spreadsheet = IOFactory::load($outputFile);
-
-        $sheet = $spreadsheet->getActiveSheet();
-
         // $wrapper must tell where is the cell we need to edit
         $wrapper = ExcelWrapper::parse($fileTemplate);
-
-        $wrapper->registerMatcher('eilNr', new CustomValueCellMatcher(EilNrTitle::EIL_NR_MARKER));
+        $wrapper->registerMatcher('datePlaceholder', new CustomValueCellMatcher('/DATE_PLACEHOLDER/'));
+        $wrapper->registerMatcher('eilNr', new CustomValueCellMatcher('/eil.\s*nr/'));
         $wrapper->registerMatcher('workingHoursPerDay', new CustomValueCellMatcher('/Darbo val.* .* dien.*/'));
         $wrapper->registerMatcher('positionAmount', new CustomValueCellMatcher('/Etat.* skai.*ius/'));
         $wrapper->registerMatcher('workingHoursPerMonth', new CustomValueCellMatcher('/Darbo valand.* per m.*nes.*/'));
         $wrapper->registerMatcher('monthDays', new CustomValueCellMatcher('/M.*nesio dienos/'));
 
         $wrapper->runMatchers();
+
+        $spreadsheet = IOFactory::load($outputFile);
+        $sheet = $spreadsheet->getActiveSheet();
+
+        $this->writeHeaderDate($sheet, $wrapper, $monthDate);
+        $this->writeEmployees($sheet, $wrapper, $schedule);
+        $this->markWeekends($sheet, $wrapper, $schedule, $monthDate);
+        $this->putGreenSeparator($sheet, $wrapper, $schedule, $monthDate);
+        $this->writeAvailabilities($sheet, $wrapper, $schedule, $monthDate);
+        $this->writeAssignedShifts($sheet, $wrapper, $schedule);
+
+        $writer = new Xlsx($spreadsheet);
+        $writer->setPreCalculateFormulas(false);
+        $writer->save($outputFile);
+    }
+
+    function setCellColor(Worksheet $worksheet, string $cells, string $color)
+    {
+        $worksheet->getStyle($cells)
+            ->getFill()
+            ->setFillType(Fill::FILL_SOLID)
+            ->getStartColor()->setARGB($color);
+    }
+
+    private function writeEmployees(Worksheet $sheet, ExcelWrapper $wrapper, Schedule $schedule)
+    {
         $eilNrMatcher = $wrapper->getMatcher('eilNr');
         $workingHoursPerDayMatcher = $wrapper->getMatcher('workingHoursPerDay');
         $positionAmountMatcher = $wrapper->getMatcher('positionAmount');
@@ -231,25 +261,69 @@ class ScheduleWriter
 
             $row += 2;
         }
+    }
 
 
-//        // TODO remove after debug
-//        // setting color for testing
-//        $this->setCellColor($sheet, 'F2:F3', 'FF0000');
-//        // --
+    // should be called before marking days
+    private function markWeekends(Worksheet $worksheet, ExcelWrapper $wrapper, Schedule $schedule, Carbon $monthDate)
+    {
+        $monthDaysMatcher = $wrapper->getMatcher('monthDays');
 
-        // detect month date
-        $monthDate = $schedule->detectMonthDate();
+        for ($day = 1; $day <= $monthDate->daysInMonth; $day++) {
+            $dayDate = Carbon::create($monthDate->year, $monthDate->month, $day);
+            if (in_array($dayDate->weekday(), [0, 6])) {
+                $column = $monthDaysMatcher->getColumn() + $day - 1;
+                $row = $monthDaysMatcher->getRow();
+                for ($i = 0; $i <= count($schedule->employeeList); $i++) {
+                    // 0 - sunday, 6 - saturday
+                    $cell1 = $wrapper->getCell($row, $column);
+                    $cell2 = $wrapper->getCell($row + 1, $column);
+                    $range = $cell1->name . ':' . $cell2->name;
+
+                    $this->setCellColor($worksheet, $range, ExcelWrapper::WEEKEND_BACGROUND_UNHASHED);
+                    $row += 2;
+                }
+            }
+        }
+    }
+
+    private function putGreenSeparator(
+        Worksheet    $worksheet,
+        ExcelWrapper $wrapper,
+        Schedule     $schedule,
+        Carbon       $monthDate
+    )
+    {
+        if ($monthDate->daysInMonth == 31) {
+            // do nothing
+            return;
+        }
+        $monthDaysMatcher = $wrapper->getMatcher('monthDays');
+        $column = $monthDaysMatcher->getColumn() + $monthDate->daysInMonth;
+        $row = $monthDaysMatcher->getRow();
+
+        foreach ($schedule->employeeList as $employee) {
+            $row += 2;
+
+            $cell1 = $wrapper->getCell($row, $column);
+            $cell2 = $wrapper->getCell($row + 1, $column);
+            $range = $cell1->name . ':' . $cell2->name;
+            $this->setCellColor($worksheet, $range, ExcelWrapper::SEPARATOR_BACKGROUND_UNHASHED);
+        }
+    }
+
+    private function writeAvailabilities(
+        Worksheet    $sheet,
+        ExcelWrapper $wrapper,
+        Schedule     $schedule,
+        Carbon       $monthDate
+    )
+    {
         // find first cell of the availabilities table
         $monthDaysMatcher = $wrapper->getMatcher('monthDays');
 
-        $this->markWeekends($sheet, $wrapper, $schedule, $monthDate);
-        $this->putGreenSeparator($sheet, $wrapper, $schedule, $monthDate);
-
-        // TODO put block to a separate function
-
         // for each employee
-        // depending on the month date fill table with availability colors TODO
+        // depending on the month date fill table with availability colors
         // iterate given month days
         // search corresponding availabilities for each day
         // mark availability with the preselected color
@@ -283,70 +357,6 @@ class ScheduleWriter
             }
         }
 
-        $this->writeAssignedShifts($sheet, $wrapper, $schedule);
-
-        $writer = new Xlsx($spreadsheet);
-        $writer->setPreCalculateFormulas(false);
-        $writer->save($outputFile);
-    }
-
-
-    function setCellColor(Worksheet $worksheet, string $cells, string $color)
-    {
-        $worksheet->getStyle($cells)
-            ->getFill()
-            ->setFillType(Fill::FILL_SOLID)
-            ->getStartColor()->setARGB($color);
-    }
-
-    // should be called before marking days
-    private function markWeekends(Worksheet $worksheet, ExcelWrapper $wrapper, Schedule $schedule, Carbon $monthDate)
-    {
-        $monthDaysMatcher = $wrapper->getMatcher('monthDays');
-
-        for ($day = 1; $day <= $monthDate->daysInMonth; $day++) {
-            $column = $monthDaysMatcher->getColumn() + $day - 1;
-            $row = $monthDaysMatcher->getRow();
-            foreach ($schedule->employeeList as $employee) {
-                $row += 2;
-
-                $dayDate = Carbon::create($monthDate->year, $monthDate->month, $day);
-
-                // 0 - sunday, 6 - saturday
-                if (in_array($dayDate->weekday(), [0, 6])) {
-                    $cell1 = $wrapper->getCell($row, $column);
-                    $cell2 = $wrapper->getCell($row + 1, $column);
-                    $range = $cell1->name . ':' . $cell2->name;
-
-                    $this->setCellColor($worksheet, $range, ExcelWrapper::WEEKEND_BACGROUND_UNHASHED);
-                }
-            }
-        }
-    }
-
-    private function putGreenSeparator(
-        Worksheet    $worksheet,
-        ExcelWrapper $wrapper,
-        Schedule     $schedule,
-        Carbon       $monthDate
-    )
-    {
-        if ($monthDate->daysInMonth == 31) {
-            // do nothing
-            return;
-        }
-        $monthDaysMatcher = $wrapper->getMatcher('monthDays');
-        $column = $monthDaysMatcher->getColumn() + $monthDate->daysInMonth;
-        $row = $monthDaysMatcher->getRow();
-
-        foreach ($schedule->employeeList as $employee) {
-            $row += 2;
-
-            $cell1 = $wrapper->getCell($row, $column);
-            $cell2 = $wrapper->getCell($row + 1, $column);
-            $range = $cell1->name . ':' . $cell2->name;
-            $this->setCellColor($worksheet, $range, ExcelWrapper::SEPARATOR_BACKGROUND_UNHASHED);
-        }
     }
 
     private function writeAssignedShifts(
@@ -392,8 +402,24 @@ class ScheduleWriter
             $cellFrom = $wrapper->getCell($row, $column);
             $cellTill = $wrapper->getCell($row + 1, $column);
 
-            $worksheet->getCell($cellFrom->name)->setValueExplicit( $occupation->getStartHour() / 24 + self::EPSILON, DataType::TYPE_NUMERIC );
-            $worksheet->getCell($cellTill->name)->setValueExplicit( $occupation->getEndHour() / 24 + self::EPSILON, DataType::TYPE_NUMERIC );
+            $worksheet->getCell($cellFrom->name)->setValueExplicit($occupation->getStartHour() / 24 + self::EPSILON, DataType::TYPE_NUMERIC);
+            $worksheet->getCell($cellTill->name)->setValueExplicit($occupation->getEndHour() / 24 + self::EPSILON, DataType::TYPE_NUMERIC);
         }
+    }
+
+    private function writeHeaderDate(
+        Worksheet    $worksheet,
+        ExcelWrapper $wrapper,
+        Carbon       $monthDate
+    )
+    {
+        $headerDateMatcher = $wrapper->getMatcher('datePlaceholder');
+        if ($headerDateMatcher == null) {
+            throw new ExcelParseException('could not find the header date placeholder when writing schedule to xlsx file');
+        }
+        $monthName = ucfirst(DateRecognizer::LT_BELONG_TO_MONTH[$monthDate->month]);
+        $value = sprintf('%sm. %s mėn.', $monthDate->year, $monthName);
+        $cell = $wrapper->getCell($headerDateMatcher->getRow(), $headerDateMatcher->getColumn());
+        $worksheet->setCellValue($cell->name, $value);
     }
 }

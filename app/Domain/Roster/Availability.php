@@ -66,4 +66,15 @@ class Availability extends DataTransferObject
     {
         return self::AVAILABILITY_PRIORITIES[$availabilityTYpe];
     }
+
+    public function getRepresentation(): AvailabilityRepresentation
+    {
+        $r = new AvailabilityRepresentation();
+        $r->date = $this->date;
+        $r->availabilityType = $this->availabilityType;
+        $r->dateTill = $this->dateTill;
+        $r->employeeName = $this->employee->name;
+
+        return $r;
+    }
 }
