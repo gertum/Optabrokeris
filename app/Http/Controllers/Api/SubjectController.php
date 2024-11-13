@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Domain\Roster\Hospital\SubjectsXslsParser;
 use App\Domain\Roster\SubjectsContainer;
+use App\Exceptions\SolverDataException;
 use App\Models\Subject;
 use App\Repositories\SubjectRepository;
 use Illuminate\Http\Request;
@@ -76,6 +77,10 @@ class SubjectController
     public function upsertXslx(Request $request, SubjectRepository $subjectRepository)
     {
         $file = $request->file('file');
+
+        if ( $file == null ) {
+            throw new SolverDataException('In http request missing "file" parameter with xlsx file containing subjects');
+        }
         $subjectsXslParser = new SubjectsXslsParser();
         $subjectsContainer = $subjectsXslParser->parse($file->getRealPath());
         $subjectsContainer->recalculateMonthHours(20, true);

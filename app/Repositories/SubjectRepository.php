@@ -32,6 +32,6 @@ class SubjectRepository
      * @return Subject[]
      */
     public function loadSubjectsByNames(array $names): array {
-        return Subject::query()->whereIn('name', $names)->get();
+        return Subject::query()->whereIn('name', $names)->get()->all();
     }
 }

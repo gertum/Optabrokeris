@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
-use Spatie\DataTransferObject\DataTransferObject;
 
 class User extends Authenticatable
 {
@@ -45,21 +44,24 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-    public function getProfile(): string
+    public function getProfile(): ?string
     {
         return $this->getAttribute('profile');
     }
 
-    public function setProfile(string $profile): string
+    public function setProfile(?string $profile): string
     {
         return $this->setAttribute('profile', $profile);
     }
 
-    public function getProfileObj(): Profile {
-        return new Profile($this->getProfile());
+    public function getProfileObj(): Profile
+    {
+        $data = json_decode($this->getProfile(), true);
+        return new Profile($data);
     }
 
-    public function setProfileObj(Profile $profile) {
+    public function setProfileObj(Profile $profile)
+    {
         $this->setProfile(json_encode($profile));
     }
 }

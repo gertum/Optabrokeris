@@ -117,11 +117,19 @@ class JobController extends Controller
 
         $body = $request->getContent();
 
+        /** @var User $user */
+        $user = $request->user();
+
+        $profile = $user->getProfile();
+        // TODO default profile if null
+
         $validated['data'] = $body;
-        $validated['user_id'] = $request->user()->id;
+        $validated['user_id'] = $user->getKey();
         $validated['solver_id'] = 0;
         $validated['status'] = '';
         $validated['result'] = '';
+        $validated['profile'] = $profile;
+
         $job = Job::query()->newModelInstance();
         $createdJob = $job->create($validated);
 
@@ -229,12 +237,13 @@ class JobController extends Controller
         return $job;
     }
 
-    public function uploadPreferedXslx(Request $request, Job $job, ScheduleParser $scheduleParser, SubjectRepository $subjectRepository) {
+    public function uploadPreferredXslx(Request $request, Job $job, ScheduleParser $scheduleParser, SubjectRepository $subjectRepository) {
         $xslxFile = $request->file('file');
         /** @var User $user */
         $user = $request->user();
 
-        $schedule = $scheduleParser->parsePreferedScheduleXls($xslxFile->getRealPath(), $user->getProfileObj() );
+        $profileObj = $job->getProfileObj();
+        $schedule = $scheduleParser->parsePreferedScheduleXls($xslxFile->getRealPath(), $profileObj );
 
         $employeesNames = $schedule->getEmployeesNames();
         $subjects = $subjectRepository->loadSubjectsByNames($employeesNames);

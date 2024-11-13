@@ -2,10 +2,10 @@
 
 namespace App\Domain\Roster;
 
-use App\Exceptions\SolverDataException;
 use App\Util\BinarySearch;
 use App\Util\MapBuilder;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
 use Spatie\DataTransferObject\Attributes\CastWith;
 use Spatie\DataTransferObject\Casters\ArrayCaster;
 use Spatie\DataTransferObject\DataTransferObject;
@@ -130,9 +130,11 @@ class Schedule extends DataTransferObject
         foreach ($this->employeeList as $employee) {
             if (!array_key_exists($employee->name, $subjectByName)) {
                 // error message , or exception
-                throw new SolverDataException(
-                    sprintf('could not find matching subject for %s employee', $employee->name)
-                );
+//                throw new SolverDataException(
+//                    sprintf('could not find matching subject for %s employee', $employee->name)
+//                );
+                Log::warning(sprintf('could not find matching subject for %s employee', $employee->name));
+                continue;
             }
             $subject = $subjectByName[$employee->name];
 

@@ -31,4 +31,10 @@ class Profile extends DataTransferObject
 
         return $this;
     }
+
+    public function setWriteType(string $writeType): Profile
+    {
+        $this->writeType = $writeType;
+        return $this;
+    }
 }

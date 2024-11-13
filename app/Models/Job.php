@@ -110,11 +110,14 @@ class Job extends Model
         return $this->setAttribute('profile', $profile);
     }
 
-    public function getProfileObj(): Profile {
-        return new Profile($this->getProfile());
+    public function getProfileObj(): Profile
+    {
+        $data = json_decode($this->getProfile(), true);
+        return new Profile($data);
     }
 
-    public function setProfileObj(Profile $profile) {
+    public function setProfileObj(Profile $profile)
+    {
         $this->setProfile(json_encode($profile));
     }
 }
