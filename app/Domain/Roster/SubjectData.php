@@ -77,4 +77,9 @@ class SubjectData extends DataTransferObject implements SubjectDataInterface
     {
         return $this->hoursInDay;
     }
+
+    public function toArray(): array
+    {
+        return parent::toArray();
+    }
 }

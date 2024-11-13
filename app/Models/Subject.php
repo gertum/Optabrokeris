@@ -62,4 +62,8 @@ class Subject extends Model implements SubjectDataInterface
         return $this->getAttribute('hours_in_day');
     }
 
+    public function toArray(): array
+    {
+        return parent::toArray();
+    }
 }

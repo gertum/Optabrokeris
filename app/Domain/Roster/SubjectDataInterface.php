@@ -19,4 +19,7 @@ interface SubjectDataInterface
     public function getHoursInMonth(): ?float;
 
     public function getHoursInDay(): ?float;
+
+
+    public function toArray() : array;
 }
