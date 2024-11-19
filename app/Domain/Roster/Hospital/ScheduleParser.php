@@ -15,12 +15,20 @@ use DateTimeInterface;
 
 class ScheduleParser
 {
-
-    /**
-     * @var string
-     * @deprecated use Schedule::TARGET_DATE_FORMAT instead
-     */
-    const TARGET_DATE_FORMAT = 'Y-m-d\\TH:i:s';
+    const SYMBOLS_TO_AVAILABILITIES_MAP = [
+        [['Х', // different encoding!
+            'X',
+            'x',
+            'a',
+            'A'], [Availability::UNAVAILABLE, Availability::UNAVAILABLE]],
+        // we will use both lowercase on the tested data
+        [['', 'dn', 'd2'], [Availability::AVAILABLE, Availability::AVAILABLE]],
+        [['p'], [Availability::DESIRED, Availability::DESIRED]],
+        [['d'], [Availability::UNDESIRED, Availability::DESIRED]],
+        [['n'], [Availability::DESIRED, Availability::UNDESIRED]],
+        [['xd'], [Availability::AVAILABLE, Availability::UNAVAILABLE]],
+        [['xn'], [Availability::UNAVAILABLE, Availability::AVAILABLE]],
+    ];
 
     /**
      * @param DateInterval[] $timeSlices
@@ -111,8 +119,7 @@ class ScheduleParser
             $dateRecognizer->getMonth(),
             $dateFrom->daysInMonth,
             24
-        )->toImmutable()
-        ;
+        )->toImmutable();
         $shifts = ShiftsBuilder::buildShiftsOfBounds($dateFrom, $dateTill, $profile->getShiftBounds());
         $schedule->setShiftList($shifts);
 
@@ -136,8 +143,7 @@ class ScheduleParser
             $employees [] = (new Employee())
                 ->setName($employeeCell->value)
                 ->setExcelRow($employeeCell->r)
-                ->setRow($row)
-            ;
+                ->setRow($row);
 //                ->setMaxWorkingHours(floatval($workingHoursCell->value))
 //                ->setSequenceNumber($eilNr->getValue());
 
@@ -155,9 +161,10 @@ class ScheduleParser
      */
     public function parseAvailabilities(
         PreferencesExcelWrapper $wrapper,
-        CarbonInterface $startingDate,
-        array $employees
-    ): array {
+        CarbonInterface         $startingDate,
+        array                   $employees
+    ): array
+    {
         $availabilities = [];
         // 1) find a cell with value '1' at the row index 1, then use it as the marker of the column,
         // where availabilities starts from
@@ -248,7 +255,7 @@ class ScheduleParser
      * We are going to set availabilities independent on profile.
      * @return Availability[]
      */
-    public function createAvailabilitiesForOneDay(?string $availabilityValue, Carbon $currentDay): array
+    public function createAvailabilitiesForOneDay(?string $availabilitySymbols, Carbon $currentDay): array
     {
         $availabilities = [];
 
@@ -260,57 +267,18 @@ class ScheduleParser
         $nextDay = clone($currentDay);
         $nextDay = $nextDay->modify('+1 day');
 
-        // TODO take hours from settings
         $nightStartStr = Carbon::create($previousDay->year, $previousDay->month, $previousDay->day, 20)
-            ->format(self::TARGET_DATE_FORMAT)
-        ;
+            ->format(Schedule::TARGET_DATE_FORMAT);
         $dayStartStr = Carbon::create($currentDay->year, $currentDay->month, $currentDay->day, 8)
-            ->format(self::TARGET_DATE_FORMAT)
-        ;
+            ->format(Schedule::TARGET_DATE_FORMAT);
         $dayEndStr = Carbon::create($currentDay->year, $currentDay->month, $currentDay->day, 20)
-            ->format(self::TARGET_DATE_FORMAT)
-        ;
+            ->format(Schedule::TARGET_DATE_FORMAT);
         $nextDayStartStr = Carbon::create($nextDay->year, $nextDay->month, $nextDay->day, 8)
-            ->format(self::TARGET_DATE_FORMAT)
-        ;
+            ->format(Schedule::TARGET_DATE_FORMAT);
 
-        $availabilityValue = trim($availabilityValue);
+        $availabilitySymbols = strtolower(trim($availabilitySymbols));
 
-        // be aware: these two X are not the same!!
-        if (in_array(
-            $availabilityValue,
-            [
-                'Х', // different encoding!
-                'X',
-                'x',
-                'a',
-                'A'
-            ]
-        )) {
-            $availabilities = [
-                (new Availability())
-                    ->setDate($nightStartStr)
-                    ->setDateTill($dayStartStr)
-                    ->setAvailabilityType(Availability::UNAVAILABLE),
-
-                (new Availability())
-                    ->setDate($dayStartStr)
-                    ->setDateTill($dayEndStr)
-                    ->setAvailabilityType(Availability::UNAVAILABLE)
-            ];
-        } elseif ($availabilityValue == '') {
-            $availabilities = [
-                (new Availability())
-                    ->setDate($nightStartStr)
-                    ->setDateTill($dayStartStr)
-                    ->setAvailabilityType(Availability::AVAILABLE),
-
-                (new Availability())
-                    ->setDate($dayStartStr)
-                    ->setDateTill($dayEndStr)
-                    ->setAvailabilityType(Availability::AVAILABLE)
-            ];
-        } elseif (in_array($availabilityValue, ['8-8', '8-8r.']) || str_contains($availabilityValue, '08-08')) {
+        if (in_array($availabilitySymbols, ['8-8', '8-8r.']) || str_contains($availabilitySymbols, '08-08')) { // TODO special case!!!
             $availabilities = [
                 (new Availability())
                     ->setDate($dayStartStr)
@@ -322,50 +290,116 @@ class ScheduleParser
                     ->setDateTill($nextDayStartStr)
                     ->setAvailabilityType(Availability::DESIRED)
             ];
-        } elseif (in_array($availabilityValue, ['P', 'p'])) {
-            $availabilities = [
-                (new Availability())
-                    ->setDate($nightStartStr)
-                    ->setDateTill($dayStartStr)
-                    ->setAvailabilityType(Availability::DESIRED),
-
-                (new Availability())
-                    ->setDate($dayStartStr)
-                    ->setDateTill($dayEndStr)
-                    ->setAvailabilityType(Availability::DESIRED)
-            ];
-        } elseif (in_array($availabilityValue, ['D', 'd'])) {
-            $availabilities = [
-                (new Availability())
-                    ->setDate($nightStartStr)
-                    ->setDateTill($dayStartStr)
-                    ->setAvailabilityType(Availability::UNDESIRED),
-
-                (new Availability())
-                    ->setDate($dayStartStr)
-                    ->setDateTill($dayEndStr)
-                    ->setAvailabilityType(Availability::DESIRED)
-            ];
-        } elseif (in_array($availabilityValue, ['N', 'n'])) {
-            $availabilities = [
-                (new Availability())
-                    ->setDate($nightStartStr)
-                    ->setDateTill($dayStartStr)
-                    ->setAvailabilityType(Availability::DESIRED),
-
-                (new Availability())
-                    ->setDate($dayStartStr)
-                    ->setDateTill($dayEndStr)
-                    ->setAvailabilityType(Availability::UNDESIRED)
-            ];
         } else {
-            throw new ExcelParseException(sprintf('Unknown value [%s] to parse', $availabilityValue));
+            foreach (self::SYMBOLS_TO_AVAILABILITIES_MAP as list($symbolsArray, list($availabilityNight, $availabilityDay))) {
+                if (in_array($availabilitySymbols, $symbolsArray)) {
+                    $availabilities = [
+                        (new Availability())
+                            ->setDate($nightStartStr)
+                            ->setDateTill($dayStartStr)
+                            ->setAvailabilityType($availabilityNight),
+
+                        (new Availability())
+                            ->setDate($dayStartStr)
+                            ->setDateTill($dayEndStr)
+                            ->setAvailabilityType($availabilityDay)
+                    ];
+                }
+            }
         }
+
+//        // be aware: these two X are not the same!!
+//        if (in_array(
+//            $availabilityValue,
+//            [
+//                'Х', // different encoding!
+//                'X',
+//                'x',
+//                'a',
+//                'A'
+//            ]
+//        )) {
+//            $availabilities = [
+//                (new Availability())
+//                    ->setDate($nightStartStr)
+//                    ->setDateTill($dayStartStr)
+//                    ->setAvailabilityType(Availability::UNAVAILABLE),
+//
+//                (new Availability())
+//                    ->setDate($dayStartStr)
+//                    ->setDateTill($dayEndStr)
+//                    ->setAvailabilityType(Availability::UNAVAILABLE)
+//            ];
+//        } elseif ($availabilityValue == '') {
+//            $availabilities = [
+//                (new Availability())
+//                    ->setDate($nightStartStr)
+//                    ->setDateTill($dayStartStr)
+//                    ->setAvailabilityType(Availability::AVAILABLE),
+//
+//                (new Availability())
+//                    ->setDate($dayStartStr)
+//                    ->setDateTill($dayEndStr)
+//                    ->setAvailabilityType(Availability::AVAILABLE)
+//            ];
+//
+//            // This block whole is a special case
+//        } elseif (in_array($availabilityValue, ['8-8', '8-8r.']) || str_contains($availabilityValue, '08-08')) { // TODO special case!!!
+//            $availabilities = [
+//                (new Availability())
+//                    ->setDate($dayStartStr)
+//                    ->setDateTill($dayEndStr)
+//                    ->setAvailabilityType(Availability::DESIRED),
+//
+//                (new Availability())
+//                    ->setDate($dayEndStr)
+//                    ->setDateTill($nextDayStartStr)
+//                    ->setAvailabilityType(Availability::DESIRED)
+//            ];
+//        } elseif (in_array($availabilityValue, ['P', 'p'])) {
+//            $availabilities = [
+//                (new Availability())
+//                    ->setDate($nightStartStr)
+//                    ->setDateTill($dayStartStr)
+//                    ->setAvailabilityType(Availability::DESIRED),
+//
+//                (new Availability())
+//                    ->setDate($dayStartStr)
+//                    ->setDateTill($dayEndStr)
+//                    ->setAvailabilityType(Availability::DESIRED)
+//            ];
+//        } elseif (in_array($availabilityValue, ['D', 'd'])) {
+//            $availabilities = [
+//                (new Availability())
+//                    ->setDate($nightStartStr)
+//                    ->setDateTill($dayStartStr)
+//                    ->setAvailabilityType(Availability::UNDESIRED),
+//
+//                (new Availability())
+//                    ->setDate($dayStartStr)
+//                    ->setDateTill($dayEndStr)
+//                    ->setAvailabilityType(Availability::DESIRED)
+//            ];
+//        } elseif (in_array($availabilityValue, ['N', 'n'])) {
+//            $availabilities = [
+//                (new Availability())
+//                    ->setDate($nightStartStr)
+//                    ->setDateTill($dayStartStr)
+//                    ->setAvailabilityType(Availability::DESIRED),
+//
+//                (new Availability())
+//                    ->setDate($dayStartStr)
+//                    ->setDateTill($dayEndStr)
+//                    ->setAvailabilityType(Availability::UNDESIRED)
+//            ];
+//        } else {
+//            throw new ExcelParseException(sprintf('Unknown value [%s] to parse', $availabilityValue));
+//        }
 
         return MapBuilder::buildMap(
             $availabilities,
             fn(Availability $a) => $a->date instanceof DateTimeInterface ?
-                $a->date->format(self::TARGET_DATE_FORMAT) : $a->date
+                $a->date->format(Schedule::TARGET_DATE_FORMAT) : $a->date
         );
     }
 
@@ -404,26 +438,26 @@ class ScheduleParser
     public function fillGaps(
         Carbon $startDate,
         Carbon $endDate,
-        array $availabilities,
+        array  $availabilities,
         string $defaultAvailabilityType
-    ): array {
+    ): array
+    {
         $currentDate = clone $startDate;
         $interval12 = new DateInterval('PT12H');
 
         while ($currentDate < $endDate) {
-            $currentDateStr = $currentDate->format(self::TARGET_DATE_FORMAT);
+            $currentDateStr = $currentDate->format(Schedule::TARGET_DATE_FORMAT);
             $currentDate = $currentDate->add($interval12);
 
             if (array_key_exists($currentDateStr, $availabilities)) {
                 continue;
             }
-            $nextDateStr = $currentDate->format(self::TARGET_DATE_FORMAT);
+            $nextDateStr = $currentDate->format(Schedule::TARGET_DATE_FORMAT);
 
             $availability = (new Availability())
                 ->setDate($currentDateStr)
                 ->setDateTill($nextDateStr)
-                ->setAvailabilityType($defaultAvailabilityType)
-            ;
+                ->setAvailabilityType($defaultAvailabilityType);
 
             $availabilities[$currentDateStr] = $availability;
         }
