@@ -136,7 +136,7 @@ class ScheduleParser
         $employees = [];
         $skippedLines = 0;
         $sequenceNumber = 1;
-        while ($row < 200 ) {
+        while ($row < $wrapper->getMaxRows() ) {
             $employeeCell = $wrapper->getCell($row, 0);
             if ($employeeCell->value == null) {
                 $skippedLines++;

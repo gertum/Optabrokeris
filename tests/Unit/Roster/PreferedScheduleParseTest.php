@@ -55,168 +55,188 @@ class PreferedScheduleParseTest extends TestCase
     public static function provideFiles(): array
     {
         return [
-//            'test1' => [
-//                'file' => __DIR__ . '/data/VULSK SPS budėjimų pageidavimai.xlsx',
-//                'profile' => (new Profile())->setShiftBounds([8, 20]),
-//                'checkEmployeeIndex' => 0,
-//                'checkShiftIndex' => 0,
-//                'expectedEmployee' => (new Employee())
-//                    ->setName('Aleksandras Briedis')
-//                    ->setRow(2)
-//                    ->setExcelRow(3),
-//                'expectedShift' => (new Shift())
-//                    ->setId(1)
-//                    ->setStart('2022-12-01T08:00:00')
-//                    ->setEnd('2022-12-01T20:00:00')
-//                ,
-//                'checkAvailabilityIndexes' => [0],
-//                'expectedAvailabilities' => [
-//                    (new Availability())
-//                        ->setDate('2022-11-30T20:00:00')
-//                        ->setDateTill('2022-12-01T08:00:00')
-//                        ->setAvailabilityType(Availability::AVAILABLE)
-//                        ->setEmployee(
-//                            (new Employee())
-//                                ->setName('Aleksandras Briedis')
-//                                ->setRow(2)
-//                                ->setExcelRow(3)
-//                        )
-//                    ]
-//            ],
-//            'test2' => [
-//                'file' => __DIR__ . '/data/VULSK SPS budėjimų pageidavimai.xlsx',
-//                'profile' => (new Profile())
-//                    ->setShiftBounds([8, 20])
-//                ,
-//                'checkEmployeeIndex' => 30,
-//                'checkShiftIndex' => 1,
-//                'expectedEmployee' => (new Employee())
-//                    ->setName('Linas Rinkūnas')
-//                    ->setRow(32)
-//                    ->setExcelRow(33),
-//                'expectedShift' => (new Shift())
-//                    ->setId(2)
-//                    ->setStart('2022-12-01T20:00:00')
-//                    ->setEnd('2022-12-02T08:00:00'),
-//                'checkAvailabilityIndexes' => [],
-//                'expectedAvailabilities' => []
-//            ],
-//            'test3 medium far availability ' => [
-//                'file' => __DIR__ . '/data/VULSK SPS budėjimų pageidavimai.xlsx',
-//                'profile' => (new Profile())
-//                    ->setShiftBounds([8, 20])
-//                ,
-//                'checkEmployeeIndex' => 30,
-//                'checkShiftIndex' => 1,
-//                'expectedEmployee' => (new Employee())
-//                    ->setName('Linas Rinkūnas')
-//                    ->setRow(32)
-//                    ->setExcelRow(33),
-//                'expectedShift' => (new Shift())
-//                    ->setId(2)
-//                    ->setStart('2022-12-01T20:00:00')
-//                    ->setEnd('2022-12-02T08:00:00'),
-//
-//                'checkAvailabilityIndexes' => [60, 61, 62, 63],
-//                'expectedAvailabilities' => [
-//                    (new Availability())
-//                        ->setDate('2022-12-30T20:00:00')
-//                        ->setDateTill('2022-12-31T08:00:00')
-//                        ->setAvailabilityType(Availability::UNDESIRED)
-//                        ->setEmployee(
-//                            (new Employee())
-//                                ->setName('Aleksandras Briedis')
-//                                ->setRow(2)
-//                                ->setExcelRow(3)
-//                        ),
-//                    (new Availability())
-//                        ->setDate('2022-12-31T08:00:00')
-//                        ->setDateTill('2022-12-31T20:00:00')
-//                        ->setAvailabilityType(Availability::DESIRED)
-//                        ->setEmployee(
-//                            (new Employee())
-//                                ->setName('Aleksandras Briedis')
-//                                ->setRow(2)
-//                                ->setExcelRow(3)
-//                        ),
-//                    (new Availability())
-//                        ->setDate('2022-12-31T20:00:00')
-//                        ->setDateTill('2023-01-01T08:00:00')
-//                        ->setAvailabilityType(Availability::DESIRED)
-//                        ->setEmployee(
-//                            (new Employee())
-//                                ->setName('Aleksandras Briedis')
-//                                ->setRow(2)
-//                                ->setExcelRow(3)
-//                        ),
-//                    (new Availability())
-//                        ->setDate('2022-11-30T20:00:00')
-//                        ->setDateTill('2022-12-01T08:00:00')
-//                        ->setAvailabilityType(Availability::UNAVAILABLE)
-//                        ->setEmployee(
-//                            (new Employee())
-//                                ->setName('Andrius Černauskas')
-//                                ->setRow(3)
-//                                ->setExcelRow(4)
-//                        ),
-//                ]
-//            ],
-//            'test3 far availability ' => [
-//                'file' => __DIR__ . '/data/VULSK SPS budėjimų pageidavimai.xlsx',
-//                'profile' => (new Profile())
-//                    ->setShiftBounds([8, 20])
-//                ,
-//                'checkEmployeeIndex' => 30,
-//                'checkShiftIndex' => 1,
-//                'expectedEmployee' => (new Employee())
-//                    ->setName('Linas Rinkūnas')
-//                    ->setRow(32)
-//                    ->setExcelRow(33),
-//                'expectedShift' => (new Shift())
-//                    ->setId(2)
-//                    ->setStart('2022-12-01T20:00:00')
-//                    ->setEnd('2022-12-02T08:00:00'),
-//                'checkAvailabilityIndexes' => [
-//                    // 25th (24 = 25-1, 63 availabilities for one row) employee , 30 day (30*2-1)
-//                    (24*63)+59,
-//                    // 23th (22 = 23-1, 63 availabilities for one row) employee , 10 day (10*2-1)
-//                    (22*63)+19,
-//                    // 23th (22 = 23-1, 63 availabilities for one row) employee , 10 day night (10*2-2)
-//                    (22*63)+18,
-//                    ],
-//                'expectedAvailabilities' => [
-//                    (new Availability())
-//                    ->setDate('2022-12-30T08:00:00')
-//                    ->setDateTill('2022-12-30T20:00:00')
-//                    ->setAvailabilityType(Availability::DESIRED)
-//                    ->setEmployee(
-//                        (new Employee())
-//                            ->setName('Beatričė Raščiūtė')
-//                            ->setRow(26)
-//                            ->setExcelRow(27)
-//                    ),
-//                    (new Availability())
-//                    ->setDate('2022-12-10T08:00:00')
-//                    ->setDateTill('2022-12-10T20:00:00')
-//                    ->setAvailabilityType(Availability::UNDESIRED)
-//                    ->setEmployee(
-//                        (new Employee())
-//                            ->setName('Aurelija Krikštaponienė')
-//                            ->setRow(24)
-//                            ->setExcelRow(25)
-//                    ),
-//                    (new Availability())
-//                    ->setDate('2022-12-09T20:00:00')
-//                    ->setDateTill('2022-12-10T08:00:00')
-//                    ->setAvailabilityType(Availability::DESIRED)
-//                    ->setEmployee(
-//                        (new Employee())
-//                            ->setName('Aurelija Krikštaponienė')
-//                            ->setRow(24)
-//                            ->setExcelRow(25)
-//                    ),
-//                ]
-//            ],
+            'test1' => [
+                'file' => __DIR__ . '/data/VULSK SPS budėjimų pageidavimai.xlsx',
+                'profile' => (new Profile())->setShiftBounds([8, 20]),
+                'checkEmployeeIndex' => 0,
+                'checkShiftIndex' => 0,
+                'expectedEmployee' => (new Employee())
+                    ->setName('Aleksandras Briedis')
+                    ->setRow(2)
+                    ->setExcelRow(3)
+                    ->setSequenceNumber(1)
+                ,
+                'expectedShift' => (new Shift())
+                    ->setId(1)
+                    ->setStart('2022-12-01T08:00:00')
+                    ->setEnd('2022-12-01T20:00:00')
+                ,
+                'checkAvailabilityParams' => [
+                    ['name' => 'Aleksandras Briedis', 'date' => '2022-11-30T20:00:00'],
+                ],
+                'expectedAvailabilities' => [
+                    (new Availability())
+                        ->setDate('2022-11-30T20:00:00')
+                        ->setDateTill('2022-12-01T08:00:00')
+                        ->setAvailabilityType(Availability::AVAILABLE)
+                        ->setEmployee(
+                            (new Employee())
+                                ->setName('Aleksandras Briedis')
+                                ->setRow(2)
+                                ->setExcelRow(3)
+                                ->setSequenceNumber(1)
+                        )
+                    ]
+            ],
+            'test2' => [
+                'file' => __DIR__ . '/data/VULSK SPS budėjimų pageidavimai.xlsx',
+                'profile' => (new Profile())
+                    ->setShiftBounds([8, 20])
+                ,
+                'checkEmployeeIndex' => 30,
+                'checkShiftIndex' => 1,
+                'expectedEmployee' => (new Employee())
+                    ->setName('Linas Rinkūnas')
+                    ->setRow(32)
+                    ->setExcelRow(33)
+                    ->setSequenceNumber(31)
+                ,
+                'expectedShift' => (new Shift())
+                    ->setId(2)
+                    ->setStart('2022-12-01T20:00:00')
+                    ->setEnd('2022-12-02T08:00:00'),
+                'checkAvailabilityParams' => [],
+                'expectedAvailabilities' => []
+            ],
+            'test3 medium far availability ' => [
+                'file' => __DIR__ . '/data/VULSK SPS budėjimų pageidavimai.xlsx',
+                'profile' => (new Profile())
+                    ->setShiftBounds([8, 20])
+                ,
+                'checkEmployeeIndex' => 30,
+                'checkShiftIndex' => 1,
+                'expectedEmployee' => (new Employee())
+                    ->setName('Linas Rinkūnas')
+                    ->setRow(32)
+                    ->setExcelRow(33)
+                    ->setSequenceNumber(31)
+                ,
+                'expectedShift' => (new Shift())
+                    ->setId(2)
+                    ->setStart('2022-12-01T20:00:00')
+                    ->setEnd('2022-12-02T08:00:00'),
+
+                'checkAvailabilityParams' => [
+                    ['name' => 'Aleksandras Briedis', 'date' => '2022-12-30T20:00:00'],
+                    ['name' => 'Aleksandras Briedis', 'date' => '2022-12-31T08:00:00'],
+                    ['name' => 'Aleksandras Briedis', 'date' => '2022-12-31T20:00:00'],
+                    ['name' => 'Andrius Černauskas', 'date' => '2022-11-30T20:00:00'],
+                ],
+                'expectedAvailabilities' => [
+                    (new Availability())
+                        ->setDate('2022-12-30T20:00:00')
+                        ->setDateTill('2022-12-31T08:00:00')
+                        ->setAvailabilityType(Availability::UNDESIRED)
+                        ->setEmployee(
+                            (new Employee())
+                                ->setName('Aleksandras Briedis')
+                                ->setRow(2)
+                                ->setExcelRow(3)
+                                ->setSequenceNumber(1)
+                        ),
+                    (new Availability())
+                        ->setDate('2022-12-31T08:00:00')
+                        ->setDateTill('2022-12-31T20:00:00')
+                        ->setAvailabilityType(Availability::DESIRED)
+                        ->setEmployee(
+                            (new Employee())
+                                ->setName('Aleksandras Briedis')
+                                ->setRow(2)
+                                ->setExcelRow(3)
+                                ->setSequenceNumber(1)
+                        ),
+                    (new Availability())
+                        ->setDate('2022-12-31T20:00:00')
+                        ->setDateTill('2023-01-01T08:00:00')
+                        ->setAvailabilityType(Availability::DESIRED)
+                        ->setEmployee(
+                            (new Employee())
+                                ->setName('Aleksandras Briedis')
+                                ->setRow(2)
+                                ->setExcelRow(3)
+                                ->setSequenceNumber(1)
+                        ),
+                    (new Availability())
+                        ->setDate('2022-11-30T20:00:00')
+                        ->setDateTill('2022-12-01T08:00:00')
+                        ->setAvailabilityType(Availability::UNAVAILABLE)
+                        ->setEmployee(
+                            (new Employee())
+                                ->setName('Andrius Černauskas')
+                                ->setRow(3)
+                                ->setExcelRow(4)
+                                ->setSequenceNumber(2)
+                        ),
+                ]
+            ],
+            'test3 far availability ' => [
+                'file' => __DIR__ . '/data/VULSK SPS budėjimų pageidavimai.xlsx',
+                'profile' => (new Profile())
+                    ->setShiftBounds([8, 20])
+                ,
+                'checkEmployeeIndex' => 30,
+                'checkShiftIndex' => 1,
+                'expectedEmployee' => (new Employee())
+                    ->setName('Linas Rinkūnas')
+                    ->setRow(32)
+                    ->setExcelRow(33)
+                    ->setSequenceNumber(31)
+                ,
+                'expectedShift' => (new Shift())
+                    ->setId(2)
+                    ->setStart('2022-12-01T20:00:00')
+                    ->setEnd('2022-12-02T08:00:00'),
+                'checkAvailabilityParams' => [
+                    ['name' => 'Beatričė Raščiūtė', 'date' => '2022-12-30T08:00:00'],
+                    ['name' => 'Aurelija Krikštaponienė', 'date' => '2022-12-10T08:00:00'],
+                    ['name' => 'Aurelija Krikštaponienė', 'date' => '2022-12-09T20:00:00'],
+                ],
+                'expectedAvailabilities' => [
+                    (new Availability())
+                    ->setDate('2022-12-30T08:00:00')
+                    ->setDateTill('2022-12-30T20:00:00')
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee(
+                        (new Employee())
+                            ->setName('Beatričė Raščiūtė')
+                            ->setRow(26)
+                            ->setExcelRow(27)
+                            ->setSequenceNumber(25)
+                    ),
+                    (new Availability())
+                    ->setDate('2022-12-10T08:00:00')
+                    ->setDateTill('2022-12-10T20:00:00')
+                    ->setAvailabilityType(Availability::UNDESIRED)
+                    ->setEmployee(
+                        (new Employee())
+                            ->setName('Aurelija Krikštaponienė')
+                            ->setRow(24)
+                            ->setExcelRow(25)
+                            ->setSequenceNumber(23)
+                    ),
+                    (new Availability())
+                    ->setDate('2022-12-09T20:00:00')
+                    ->setDateTill('2022-12-10T08:00:00')
+                    ->setAvailabilityType(Availability::DESIRED)
+                    ->setEmployee(
+                        (new Employee())
+                            ->setName('Aurelija Krikštaponienė')
+                            ->setRow(24)
+                            ->setExcelRow(25)
+                            ->setSequenceNumber(23)
+                    ),
+                ]
+            ],
 
             'test4 other file' => [
                 'file' => __DIR__ . '/data/Clinic Roster Template kopija.xlsx',
@@ -228,19 +248,32 @@ class PreferedScheduleParseTest extends TestCase
                 'expectedEmployee' => (new Employee())
                     ->setName('Martynas Judickas')
                     ->setRow(30)
-                    ->setExcelRow(31),
+                    ->setExcelRow(31)
+                    ->setSequenceNumber(27),
                 'expectedShift' => (new Shift())
                     ->setId(2)
                     ->setStart('2024-11-01T20:00:00')
                     ->setEnd('2024-11-02T08:00:00'),
                 'checkAvailabilityParams' => [
-                    ['name' => 'Martynas Judickas', 'date' => '2024-11-04T20:00:00']
+                    ['name' => 'Martynas Judickas', 'date' => '2024-11-04T20:00:00'],
+                    ['name' => 'Martynas Judickas', 'date' => '2024-11-05T08:00:00'],
                 ],
                 'expectedAvailabilities' => [
                     (new Availability())
                         ->setDate('2024-11-04T20:00:00')
                         ->setDateTill('2024-11-05T08:00:00')
                         ->setAvailabilityType(Availability::AVAILABLE)
+                        ->setEmployee(
+                            (new Employee())
+                                ->setName('Martynas Judickas')
+                                ->setRow(30)
+                                ->setExcelRow(31)
+                                ->setSequenceNumber(27)
+                        ),
+                    (new Availability())
+                        ->setDate('2024-11-05T08:00:00')
+                        ->setDateTill('2024-11-05T20:00:00')
+                        ->setAvailabilityType(Availability::UNAVAILABLE)
                         ->setEmployee(
                             (new Employee())
                                 ->setName('Martynas Judickas')
