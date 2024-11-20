@@ -134,20 +134,29 @@ class ScheduleParser
         $row = 2;
 
         $employees = [];
-        while (true) {
+        $skippedLines = 0;
+        $sequenceNumber = 1;
+        while ($row < 200 ) {
             $employeeCell = $wrapper->getCell($row, 0);
             if ($employeeCell->value == null) {
-                break;
+                $skippedLines++;
+                if ($skippedLines > 2) {
+                    break;
+                }
+
+                $row++;
+                continue;
             }
+
+            $skippedLines = 0;
 
             $employees [] = (new Employee())
                 ->setName($employeeCell->value)
                 ->setExcelRow($employeeCell->r)
-                ->setRow($row);
-//                ->setMaxWorkingHours(floatval($workingHoursCell->value))
-//                ->setSequenceNumber($eilNr->getValue());
-
-            // TODO max working hours later
+                ->setRow($row)
+                ->setSequenceNumber($sequenceNumber++)
+            ;
+            // max working hours are taken from subjects
 
             $row++;
         }

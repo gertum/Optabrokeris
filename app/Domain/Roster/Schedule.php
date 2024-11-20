@@ -183,7 +183,61 @@ class Schedule extends DataTransferObject
     /**
      * @return AvailabilityRepresentation[]
      */
-    public function getAvailabilitiesRepresentations() : array {
-        return array_map (fn(Availability $a)=>$a->getRepresentation(), $this->availabilityList);
+    public function getAvailabilitiesRepresentations(): array
+    {
+        return array_map(fn(Availability $a) => $a->getRepresentation(), $this->availabilityList);
+    }
+
+    public function assignEmployeesSequenceNumbers()
+    {
+        for ($i = 0; $i < count($this->employeeList); $i++) {
+            $this->employeeList[$i]->setSequenceNumber($i + 1);
+        }
+    }
+
+    public function sortAvailabilities()
+    {
+        usort(
+            $this->availabilityList,
+            fn(Availability $a, Availability $b) => (
+                    $a->employee->getSequenceNumber() <=> $b->employee->getSequenceNumber()
+                ) * 2 + ($a->date <=> $b->date)
+        );
+    }
+
+    /**
+     * Works only when all employees have assigned sequence number and availabilities array is sorted.
+     * For example after assignEmployeesSequenceNumbers and sortAvailabilities are called.
+     */
+    public function findAvailability(string $employeeName, string $startDate): ?Availability
+    {
+        $employee = $this->findEmployee($employeeName);
+        if ($employee == null) {
+            return null;
+        }
+
+        $availabilityIndex = BinarySearch::search(
+            $this->availabilityList,
+            ['seq' => $employee->getSequenceNumber(), 'date' => $startDate],
+            fn(Availability $availability, $searchParams) => (
+                    $availability->employee->getSequenceNumber() <=> $searchParams['seq']
+                ) * 2 + ($availability->date <=> $searchParams['date'])
+        );
+
+        if ($availabilityIndex < 0) {
+            return null;
+        }
+
+        return $this->availabilityList[$availabilityIndex];
+    }
+
+    public function findEmployee(string $employeeName): ?Employee
+    {
+        foreach ($this->employeeList as $employee) {
+            if ($employee->name == $employeeName) {
+                return $employee;
+            }
+        }
+        return null;
     }
 }
