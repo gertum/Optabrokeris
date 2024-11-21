@@ -212,11 +212,15 @@ class ScheduleParser
             array_walk($employeeAvailabilities, fn(Availability $a) => $a->setEmployee($employee));
 
             // We remove key indexes, because else the following merge is impossible.
+            /** @var Availability[] $availabilities */
             $availabilities = array_merge($availabilities, array_values($employeeAvailabilities));
         }
 
         $availabilityId = 1;
-        array_walk($availabilities, fn(Availability $availability) => $availability->setId($availabilityId++));
+//        array_walk($availabilities, fn(Availability $availability) => $availability->setId($availabilityId++));
+        foreach ($availabilities as $availability) {
+            $availability->setId($availabilityId++);
+        }
 
         return $availabilities;
     }
