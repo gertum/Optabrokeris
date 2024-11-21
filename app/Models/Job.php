@@ -100,12 +100,12 @@ class Job extends Model
         return $this->getAttribute('name');
     }
 
-    public function getProfile(): string
+    public function getProfile(): ?string
     {
         return $this->getAttribute('profile');
     }
 
-    public function setProfile(string $profile): string
+    public function setProfile(?string $profile): string
     {
         return $this->setAttribute('profile', $profile);
     }

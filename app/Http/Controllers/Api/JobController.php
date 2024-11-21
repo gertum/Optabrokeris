@@ -243,6 +243,11 @@ class JobController extends Controller
         $user = $request->user();
 
         $profileObj = $job->getProfileObj();
+        if ( count($profileObj->getShiftBounds()) == 0) {
+            // setting default values for bounds, when bounds are not given
+            $profileObj->setShiftBounds([8,20]);
+        }
+
         $schedule = $scheduleParser->parsePreferedScheduleXls($xslxFile->getRealPath(), $profileObj );
 
         $employeesNames = $schedule->getEmployeesNames();
