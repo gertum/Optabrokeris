@@ -2,6 +2,7 @@
 
 namespace App\Domain\Roster\Report;
 
+use App\Domain\Roster\Employee;
 use App\Domain\Roster\Schedule;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
@@ -68,5 +69,12 @@ class ScheduleReport
     public function getEmployeesInfos(): array
     {
         return $this->employeesInfos;
+    }
+
+    public function findEmployeeInfo(string $employeeName) : Employeeinfo {
+        if ( !array_key_exists($employeeName, $this->employeesInfos)) {
+            return new Employeeinfo(new Employee(), 0);
+        }
+        return $this->employeesInfos[$employeeName];
     }
 }

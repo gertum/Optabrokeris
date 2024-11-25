@@ -212,14 +212,19 @@ class ScheduleWriter
         $wrapper->registerMatcher('positionAmount', new CustomValueCellMatcher('/Etat.* skai.*ius/'));
         $wrapper->registerMatcher('workingHoursPerMonth', new CustomValueCellMatcher('/Darbo valand.* per m.*nes.*/'));
         $wrapper->registerMatcher('monthDays', new CustomValueCellMatcher('/M.*nesio dienos/'));
+        $wrapper->registerMatcher('assignedHours', new CustomValueCellMatcher('/Darbo valand.* priskirta/'));
 
         $wrapper->runMatchers();
 
         $spreadsheet = IOFactory::load($outputFile);
         $sheet = $spreadsheet->getActiveSheet();
 
+        $scheduleReport = new ScheduleReport();
+
+        $scheduleReport->fillFromSchedule($schedule, $this->logger);
+
         $this->writeHeaderDate($sheet, $wrapper, $monthDate);
-        $this->writeEmployees($sheet, $wrapper, $schedule);
+        $this->writeEmployees($sheet, $wrapper, $schedule, $scheduleReport);
         $this->markWeekends($sheet, $wrapper, $schedule, $monthDate);
         $this->putGreenSeparator($sheet, $wrapper, $schedule, $monthDate);
         $this->writeAvailabilities($sheet, $wrapper, $schedule, $monthDate);
@@ -238,12 +243,14 @@ class ScheduleWriter
             ->getStartColor()->setARGB($color);
     }
 
-    private function writeEmployees(Worksheet $sheet, ExcelWrapper $wrapper, Schedule $schedule)
+    private function writeEmployees(Worksheet $sheet, ExcelWrapper $wrapper, Schedule $schedule, ScheduleReport $scheduleReport)
     {
         $eilNrMatcher = $wrapper->getMatcher('eilNr');
         $workingHoursPerDayMatcher = $wrapper->getMatcher('workingHoursPerDay');
         $positionAmountMatcher = $wrapper->getMatcher('positionAmount');
         $workingHoursPerMonthMatcher = $wrapper->getMatcher('workingHoursPerMonth');
+        $assignedHoursMatcher = $wrapper->getMatcher('assignedHours');
+
         $row = $eilNrMatcher->getRow() + 2;
         $nr = 1;
         foreach ($schedule->employeeList as $employee) {
@@ -252,12 +259,16 @@ class ScheduleWriter
             $workingHOursPerDayCell = $wrapper->getCell($row, $workingHoursPerDayMatcher->getColumn());
             $positionAmountCell = $wrapper->getCell($row, $positionAmountMatcher->getColumn());
             $workingHoursPerMonthCell = $wrapper->getCell($row, $workingHoursPerMonthMatcher->getColumn());
+            $assignedHoursCell = $wrapper->getCell($row, $assignedHoursMatcher->getColumn());
 
             $sheet->setCellValue($eilnrCell->name, $nr++);
             $sheet->setCellValue($nameCell->name, $employee->name);
             $sheet->setCellValue($workingHOursPerDayCell->name, $employee->getWorkingHoursPerDayFormatted());
             $sheet->setCellValue($positionAmountCell->name, $employee->getPositionAmountFormatted());
             $sheet->setCellValue($workingHoursPerMonthCell->name, $employee->getMaxWorkingHours());
+
+            $employeeInfo = $scheduleReport->findEmployeeInfo($employee->name);
+            $sheet->setCellValue($assignedHoursCell->name, $employeeInfo->getHoursTotal());
 
             $row += 2;
         }
