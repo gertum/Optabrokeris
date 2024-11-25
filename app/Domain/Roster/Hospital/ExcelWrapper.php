@@ -18,10 +18,12 @@ class ExcelWrapper
 {
     const DISTANCE_BETWEEN_NO_AND_AVAILABILITIES = 4;
 
-    const UNAVAILABLE_BACGROUND = '#FF0000';
+    const UNAVAILABLE_BACKGROUND = '#FF0000';
     const SEPARATOR_BACKGROUND = '#92D050';
-    const UNAVAILABLE_BACGROUND_UNHASHED = 'FF0000';
-    const WEEKEND_BACGROUND_UNHASHED = 'BFBFBF';
+    const UNAVAILABLE_BACKGROUND_UNHASHED = 'FF0000';
+    const UNAVAILABLE_DAY_BACKGROUND_UNHASHED = 'FF8080';
+    const UNAVAILABLE_NIGHT_BACKGROUND_UNHASHED = 'AA0000';
+    const WEEKEND_BACKGROUND_UNHASHED = 'BFBFBF';
     const SEPARATOR_BACKGROUND_UNHASHED = '92D050';
 
     const TARGET_DATE_FORMAT = 'Y-m-d\\TH:i:s';
@@ -233,7 +235,7 @@ class ExcelWrapper
 
             $availabilityType = Availability::AVAILABLE;
 
-            if ($availabilityCell->getBackgroundColor() == self::UNAVAILABLE_BACGROUND) {
+            if ($availabilityCell->getBackgroundColor() == self::UNAVAILABLE_BACKGROUND) {
                 $availabilityType = Availability::UNAVAILABLE;
             }
 

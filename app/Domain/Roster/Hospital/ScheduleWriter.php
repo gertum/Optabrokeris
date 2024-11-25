@@ -280,7 +280,7 @@ class ScheduleWriter
                     $cell2 = $wrapper->getCell($row + 1, $column);
                     $range = $cell1->name . ':' . $cell2->name;
 
-                    $this->setCellColor($worksheet, $range, ExcelWrapper::WEEKEND_BACGROUND_UNHASHED);
+                    $this->setCellColor($worksheet, $range, ExcelWrapper::WEEKEND_BACKGROUND_UNHASHED);
                     $row += 2;
                 }
             }
@@ -338,21 +338,39 @@ class ScheduleWriter
                 $column = $monthDaysMatcher->getColumn() + $day - 1;
 
 
-                $dayDate = Carbon::create($monthDate->year, $monthDate->month, $day);
+                $nightDate = Carbon::create($monthDate->year, $monthDate->month, $day, 0);
+                $dayDate = Carbon::create($monthDate->year, $monthDate->month, $day, 12);
                 $dayDateFormatted = $dayDate->format(Schedule::TARGET_DATE_FORMAT);
+                $nightDateFormatted = $nightDate->format(Schedule::TARGET_DATE_FORMAT);
 
                 $availability = $groupedSchedule->findAvailability($employee->getKey(), $dayDateFormatted);
+                $availabilityNight = $groupedSchedule->findAvailability($employee->getKey(), $nightDateFormatted);
                 if ($availability == null) {
-                    continue;
+                    $availability = (new Availability())->setAvailabilityType(Availability::UNAVAILABLE);
+                }
+                if ($availabilityNight == null) {
+                    $availabilityNight = (new Availability())->setAvailabilityType(Availability::UNAVAILABLE);
                 }
 
 
                 $cell1 = $wrapper->getCell($row, $column);
                 $cell2 = $wrapper->getCell($row + 1, $column);
+                $range = $cell1->name . ':' . $cell2->name;
 
-                if ($availability->availabilityType == Availability::UNAVAILABLE) {
-                    $range = $cell1->name . ':' . $cell2->name;
-                    $this->setCellColor($sheet, $range, ExcelWrapper::UNAVAILABLE_BACGROUND_UNHASHED);
+                if ($availability->availabilityType == Availability::UNAVAILABLE
+                    && $availabilityNight->availabilityType == Availability::UNAVAILABLE
+                ) {
+                    $this->setCellColor($sheet, $range, ExcelWrapper::UNAVAILABLE_BACKGROUND_UNHASHED);
+                }
+                if ($availability->availabilityType == Availability::UNAVAILABLE
+                    && $availabilityNight->availabilityType != Availability::UNAVAILABLE
+                ) {
+                    $this->setCellColor($sheet, $range, ExcelWrapper::UNAVAILABLE_DAY_BACKGROUND_UNHASHED);
+                }
+                if ($availability->availabilityType != Availability::UNAVAILABLE
+                    && $availabilityNight->availabilityType == Availability::UNAVAILABLE
+                ) {
+                    $this->setCellColor($sheet, $range, ExcelWrapper::UNAVAILABLE_NIGHT_BACKGROUND_UNHASHED);
                 }
             }
         }
