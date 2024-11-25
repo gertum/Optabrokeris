@@ -139,6 +139,8 @@ class Schedule extends DataTransferObject
             $subject = $subjectByName[$employee->name];
 
             $employee->setMaxWorkingHours($subject->getHoursInMonth());
+            $employee->setPositionAmount($subject->getPositionAmount());
+            $employee->setWorkingHoursPerDay($subject->getHoursInDay());
         }
 
         return $this;
