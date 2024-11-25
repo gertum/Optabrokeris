@@ -339,7 +339,7 @@ class ScheduleWriter
 
 
                 $nightDate = Carbon::create($monthDate->year, $monthDate->month, $day, 0);
-                $dayDate = Carbon::create($monthDate->year, $monthDate->month, $day, 12);
+                $dayDate = Carbon::create($monthDate->year, $monthDate->month, $day, 8);
                 $dayDateFormatted = $dayDate->format(Schedule::TARGET_DATE_FORMAT);
                 $nightDateFormatted = $nightDate->format(Schedule::TARGET_DATE_FORMAT);
 
@@ -365,12 +365,12 @@ class ScheduleWriter
                 if ($availability->availabilityType == Availability::UNAVAILABLE
                     && $availabilityNight->availabilityType != Availability::UNAVAILABLE
                 ) {
-                    $this->setCellColor($sheet, $range, ExcelWrapper::UNAVAILABLE_DAY_BACKGROUND_UNHASHED);
+                    $this->setCellColor($sheet, $cell2->name, ExcelWrapper::UNAVAILABLE_DAY_BACKGROUND_UNHASHED);
                 }
                 if ($availability->availabilityType != Availability::UNAVAILABLE
                     && $availabilityNight->availabilityType == Availability::UNAVAILABLE
                 ) {
-                    $this->setCellColor($sheet, $range, ExcelWrapper::UNAVAILABLE_NIGHT_BACKGROUND_UNHASHED);
+                    $this->setCellColor($sheet, $cell1->name, ExcelWrapper::UNAVAILABLE_NIGHT_BACKGROUND_UNHASHED);
                 }
             }
         }

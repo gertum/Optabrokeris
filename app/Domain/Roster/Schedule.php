@@ -139,8 +139,8 @@ class Schedule extends DataTransferObject
             $subject = $subjectByName[$employee->name];
 
             $employee->setMaxWorkingHours($subject->getHoursInMonth());
-            $employee->setPositionAmount($subject->getPositionAmount());
-            $employee->setWorkingHoursPerDay($subject->getHoursInDay());
+            $employee->setPositionAmount($subject->getPositionAmount() ?? 0);
+            $employee->setWorkingHoursPerDay($subject->getHoursInDay() ?? 0);
         }
 
         return $this;
@@ -211,8 +211,12 @@ class Schedule extends DataTransferObject
      * Works only when all employees have assigned sequence number and availabilities array is sorted.
      * For example after assignEmployeesSequenceNumbers and sortAvailabilities are called.
      */
-    public function findAvailability(string $employeeName, string $startDate): ?Availability
-    {
+    public function findAvailability(
+        string $employeeName,
+        string $startDate,
+        bool $nearestDown = false,
+        bool $nearestUp = false
+    ): ?Availability {
         $employee = $this->findEmployee($employeeName);
         if ($employee == null) {
             return null;
@@ -223,7 +227,9 @@ class Schedule extends DataTransferObject
             ['seq' => $employee->getSequenceNumber(), 'date' => $startDate],
             fn(Availability $availability, $searchParams) => (
                     $availability->employee->getSequenceNumber() <=> $searchParams['seq']
-                ) * 2 + ($availability->date <=> $searchParams['date'])
+                ) * 2 + ($availability->date <=> $searchParams['date']),
+            $nearestDown,
+            $nearestUp
         );
 
         if ($availabilityIndex < 0) {
