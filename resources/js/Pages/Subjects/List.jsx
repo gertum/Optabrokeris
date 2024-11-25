@@ -16,6 +16,37 @@ const { Content } = Layout;
 
 export default function List({ auth }) {
     const { t } = useTranslation();
+    const [subjects, setSubjects] = useState([]);
+    const [token, setToken] = useState('');
+
+    const fetchSubjects = async () => {
+        try {
+            // setLoadingJobs(true);
+            const subjectsResponse = await axios.get('/api/subject');
+            setSubjects(subjectsResponse.data);
+        } catch (error) {
+            // setErrorJobs(error.message);
+            message.error(`Subjects load error: ${error.message}`, 5);
+
+        } finally {
+            // setLoadingJobs(false);
+        }
+    };
+
+    const fetchToken = async () => {
+        try {
+            const tokenResponse = await axios.get('/login');
+            setToken(tokenResponse.data);
+        } catch (error) {
+            message.error(`Login error: ${error.message}`, 5);
+        }
+    };
+
+    useEffect(() => {
+        fetchToken();
+        fetchSubjects();
+    }, []);
+
     return (
         <AuthenticatedLayout
             user={auth.user}
@@ -38,6 +69,14 @@ export default function List({ auth }) {
                         <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                             <div className="p-6 text-gray-900">
                                 <p>Test Subjects</p>
+
+                                {subjects.map((subject, index) => (
+                                    <div className="job-info">
+                                        <div className="job-text">
+                                            <p> {subject.name}</p>
+                                        </div>
+                                    </div>
+                                ))}
                             </div>
                         </div>
                     </div>
