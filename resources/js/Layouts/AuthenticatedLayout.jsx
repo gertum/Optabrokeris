@@ -1,11 +1,10 @@
-import ApplicationLogo from '@/Components/ApplicationLogo';
 import Logo from '../../images/Logo.png';
 import LanguageSwitch from '@/Components/LanguageSwitch';
 import Dropdown from '@/Components/Dropdown';
 import NavLink from '@/Components/NavLink';
-import { Link } from '@inertiajs/react';
-import { Avatar, Col, Row, Space, Layout } from 'antd'; // Make sure you import Menu from Ant Design
-import { useTranslation } from 'react-i18next';
+import {Link} from '@inertiajs/react';
+import {Avatar, Col, Layout, Row, Space} from 'antd'; // Make sure you import Menu from Ant Design
+import {useTranslation} from 'react-i18next';
 
 const { Header } = Layout;
 
@@ -38,6 +37,12 @@ export default function Authenticated({ user, header, children }) {
                   active={route().current('jobs.form')}
                 >
                   {t('Create Profile')}
+                </NavLink>
+                <NavLink
+                    href={route('subjects.list')}
+                    active={route().current('subjects.list')}
+                >
+                  {t('Subjects')}
                 </NavLink>
               </Space>
             </Col>
