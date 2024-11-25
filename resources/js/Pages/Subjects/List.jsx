@@ -12,13 +12,16 @@ import { format, parseISO } from 'date-fns';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 
+const { Content } = Layout;
+
 export default function List({ auth }) {
+    const { t } = useTranslation();
     return (
         <AuthenticatedLayout
             user={auth.user}
             header={
                 <h2 className="font-semibold text-xl text-gray-800 leading-tight">
-                    {t('jobs.createdJobs')}
+                    {t('subjects.list')}
                 </h2>
             }
         >
@@ -34,7 +37,7 @@ export default function List({ auth }) {
                     <div className="mx-auto sm:px-6 lg:px-8">
                         <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                             <div className="p-6 text-gray-900">
-                                Test Subjects
+                                <p>Test Subjects</p>
                             </div>
                         </div>
                     </div>
