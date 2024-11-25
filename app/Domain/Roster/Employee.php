@@ -18,18 +18,18 @@ class Employee extends DataTransferObject
 
     private int $row = 0;
 
-    private int $sequenceNumber;
+    private int $sequenceNumber=0;
 
 
     /**
      * Darbo valandų per dieną.
      */
-    private float $workingHoursPerDay = 8.0;
+    public float $workingHoursPerDay = 8.0;
 
     /**
      * Etatų skaičius.
      */
-    private float $positionAmount = 1.0;
+    public float $positionAmount = 1.0;
 
     public function setName(string $name): Employee
     {
