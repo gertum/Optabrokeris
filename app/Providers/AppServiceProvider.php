@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Domain\Roster\Hospital\ScheduleWriter;
+use App\Repositories\SubjectRepository;
 use App\Transformers\Roster\AmbulanceOfficeDataHandler;
 use App\Transformers\SpreadSheetHandlerFactory;
 use Illuminate\Foundation\Application;
@@ -20,7 +21,7 @@ class AppServiceProvider extends ServiceProvider
         });
 
         $this->app->singleton(AmbulanceOfficeDataHandler::class, function (Application $app) {
-            return (new AmbulanceOfficeDataHandler($app->get(ScheduleWriter::class)))
+            return (new AmbulanceOfficeDataHandler($app->get(ScheduleWriter::class), $app->get(SubjectRepository::class)))
                 ->setTemplateFile(config('features.hospital_template_file'));
         });
     }

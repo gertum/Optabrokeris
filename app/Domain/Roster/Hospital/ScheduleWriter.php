@@ -372,6 +372,15 @@ class ScheduleWriter
                 ) {
                     $this->setCellColor($sheet, $cell1->name, ExcelWrapper::UNAVAILABLE_NIGHT_BACKGROUND_UNHASHED);
                 }
+
+
+                if ($availability->availabilityType == Availability::DESIRED) {
+                    $this->setCellColor($sheet, $cell1->name, ExcelWrapper::DESIRED_BACGROUND_UNHASHED);
+                }
+                if ($availabilityNight->availabilityType == Availability::DESIRED) {
+                    $this->setCellColor($sheet, $cell2->name, ExcelWrapper::DESIRED_BACGROUND_UNHASHED);
+                }
+
             }
         }
 

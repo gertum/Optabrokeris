@@ -26,6 +26,8 @@ class ExcelWrapper
     const WEEKEND_BACKGROUND_UNHASHED = 'BFBFBF';
     const SEPARATOR_BACKGROUND_UNHASHED = '92D050';
 
+    const DESIRED_BACGROUND_UNHASHED = 'DDFFDD';
+
     const TARGET_DATE_FORMAT = 'Y-m-d\\TH:i:s';
 
     protected array $rowsEx = [];

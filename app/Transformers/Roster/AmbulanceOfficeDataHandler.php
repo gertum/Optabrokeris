@@ -8,21 +8,24 @@ use App\Domain\Roster\Profile;
 use App\Domain\Roster\Schedule;
 use App\Exceptions\SolverDataException;
 use App\Models\Job;
+use App\Repositories\SubjectRepository;
 use App\Transformers\SpreadSheetDataHandler;
 
 class AmbulanceOfficeDataHandler implements SpreadSheetDataHandler
 {
 
     private ScheduleWriter $scheduleWriter;
+    private SubjectRepository $subjectRepository;
 
     private string $templateFile='';
 
     /**
      * @param ScheduleWriter $scheduleWriter
      */
-    public function __construct(ScheduleWriter $scheduleWriter)
+    public function __construct(ScheduleWriter $scheduleWriter, SubjectRepository $subjectRepository)
     {
         $this->scheduleWriter = $scheduleWriter;
+        $this->subjectRepository = $subjectRepository;
     }
 
 
@@ -44,6 +47,9 @@ class AmbulanceOfficeDataHandler implements SpreadSheetDataHandler
     public function arrayToSpreadSheet(array $data, string $excelFile, ?Job $job): void
     {
         $schedule = new Schedule($data);
+
+        $subjects = $this->subjectRepository->loadSubjectsByNames( $schedule->getEmployeesNames() );
+        $schedule->fillEmployeesWithSubjectsData($subjects);
 
         $profile = $job->getProfileObj();
         if ( $profile->writeType == Profile::WRITE_TYPE_ORIGINAL_FILE ) {
