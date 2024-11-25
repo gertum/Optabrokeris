@@ -35,7 +35,7 @@ class WriteWithTemplateTestSlow extends TestCase
         $timeSlices = ShiftsBuilder::transformBoundsToTimeSlices($profile->getShiftBounds());
         $schedule2 = $scheduleParser->parseScheduleXls($resultFile, $timeSlices);
 
-        $this->assertEquals($schedule->getEmployeesNames(),$schedule2->getEmployeesNames());
+        $this->assertEquals($schedule->getEmployeesNames(), $schedule2->getEmployeesNames());
         // TODO assert the particular availability and a particular shift
     }
 
@@ -46,9 +46,16 @@ class WriteWithTemplateTestSlow extends TestCase
                 'schedule' => (new Schedule())->setEmployeeList(
                     [
                         (new Employee())->setName("Jonas Jonaitis")
-                            ->setMaxWorkingHours(75),
+                            ->setMaxWorkingHours(75)
+                            ->setWorkingHoursPerDay(7.5)
+                            ->setPositionAmount(0.9)
+                        ,
+
                         (new Employee())->setName("Petras Petraitis")
-                            ->setMaxWorkingHours(50),
+                            ->setMaxWorkingHours(50)
+                            ->setWorkingHoursPerDay(3.5)
+                            ->setPositionAmount(0.45)
+                        ,
                     ]
                 )
                     ->setAvailabilityList(
@@ -114,7 +121,7 @@ class WriteWithTemplateTestSlow extends TestCase
                     )
                 ,
                 'templateFile' => 'data/roster/template_for_roster_results.xlsx',
-                'profile' => (new Profile())->setShiftBounds([8,20])
+                'profile' => (new Profile())->setShiftBounds([8, 20])
             ]
         ];
     }

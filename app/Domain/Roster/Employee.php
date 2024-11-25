@@ -9,16 +9,27 @@ class Employee extends DataTransferObject
     public ?string $name;
     public ?array $skillSet;
 
-    public float $maxWorkingHours=0;
+    public float $maxWorkingHours = 0;
 
     /**
      * @deprecated use $row instead
      */
-    private int $excelRow=0;
+    private int $excelRow = 0;
 
-    private int $row=0;
+    private int $row = 0;
 
     private int $sequenceNumber;
+
+
+    /**
+     * Darbo valandų per dieną.
+     */
+    private float $workingHoursPerDay = 8.0;
+
+    /**
+     * Etatų skaičius.
+     */
+    private float $positionAmount = 1.0;
 
     public function setName(string $name): Employee
     {
@@ -77,21 +88,49 @@ class Employee extends DataTransferObject
         return $this;
     }
 
-    public function getWorkingHoursPerDayFormatted() : string {
-        // TODO
-        return "3:55";
+    public function getWorkingHoursPerDayFormatted(): string
+    {
+        $hours = floor($this->workingHoursPerDay);
+        $minutes = round(($this->workingHoursPerDay - floor($this->workingHoursPerDay)) * 60);
+
+        return sprintf( "%d:%d", $hours, $minutes );
     }
 
-    public function getPositionAmountFormatted() : string {
-        // TODO
-        return "0.5";
+    public function getPositionAmountFormatted(): string
+    {
+        return sprintf("%0.2f", $this->positionAmount);
     }
 
     /**
      * Should be used in future
      * @return mixed
      */
-    public function getKey(): mixed {
+    public function getKey(): mixed
+    {
         return $this->name;
+    }
+
+    public function getWorkingHoursPerDay(): float
+    {
+        return $this->workingHoursPerDay;
+    }
+
+    public function setWorkingHoursPerDay(float $workingHoursPerDay): Employee
+    {
+        $this->workingHoursPerDay = $workingHoursPerDay;
+
+        return $this;
+    }
+
+    public function getPositionAmount(): float
+    {
+        return $this->positionAmount;
+    }
+
+    public function setPositionAmount(float $positionAmount): Employee
+    {
+        $this->positionAmount = $positionAmount;
+
+        return $this;
     }
 }
