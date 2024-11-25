@@ -9,7 +9,8 @@ use Carbon\Carbon;
 
 class SubjectsXslsParser
 {
-    public function parse(string $xlsxFile ) : SubjectsContainer {
+    public function parse(string $xlsxFile): SubjectsContainer
+    {
         $result = new SubjectsContainer();
 
         // 1) parse xslx file
@@ -24,29 +25,29 @@ class SubjectsXslsParser
         $wrapper->registerMatcher('workingHours', $workingHoursMatcher);
         $wrapper->runMatchers();
 
-        if ( $positionAmountMatcher->getColumn() < 0 ) {
+        if ($positionAmountMatcher->getColumn() < 0) {
             throw new ExcelParseException('Nepavyko rasti etatų stulpelio');
         }
-        if ( $workingHoursMatcher->getColumn() < 0 ) {
+        if ($workingHoursMatcher->getColumn() < 0) {
             throw new ExcelParseException('Nepavyko rasti darbo valandų stulpelio');
         }
         // 3) read row after row, until two empty consequite rows found
         $subjectsColumn = 0;
-        $subjectsRow = $positionAmountMatcher->getRow()+1;
+        $subjectsRow = $positionAmountMatcher->getRow() + 1;
 
         // 4) read name, position amount, and hours in a day values and create SubjectData element; put it to results array.
         /** @var SubjectData[] $subjects */
         $subjects = [];
         $emptyConsequitiveRows = 0;
-        while ( $subjectsRow < $wrapper->getMaxRows() ) {
+        while ($subjectsRow < $wrapper->getMaxRows()) {
             $subjectCell = $wrapper->getCell($subjectsRow, $subjectsColumn);
             $positionAmountCell = $wrapper->getCell($subjectsRow, $positionAmountMatcher->getColumn());
             $workingHoursCell = $wrapper->getCell($subjectsRow, $workingHoursMatcher->getColumn());
 
             $subjectsRow++;
-            if ( $subjectCell->value == '' ) {
+            if ($subjectCell->value == '') {
                 $emptyConsequitiveRows++;
-                if ( $emptyConsequitiveRows >= 3 ) {
+                if ($emptyConsequitiveRows >= 3) {
                     break;
                 }
                 continue;
@@ -54,11 +55,23 @@ class SubjectsXslsParser
 
             $emptyConsequitiveRows = 0;
 
-            $workingHoursObject = Carbon::create( $workingHoursCell->value);
+            $hour = 8;
+            $minute = 0;
+            if ($workingHoursCell->value != null) {
+                $workingHoursObject = Carbon::create($workingHoursCell->value);
+
+                $hour = $workingHoursObject->hour;
+                $minute = $workingHoursObject->minute;
+            }
+
+            $positionAmount = floatval($positionAmountCell->value);
+            if ($positionAmount == 0) {
+                $positionAmount = 1;
+            }
             $subjects[] = (new SubjectData())
                 ->setName($subjectCell->value)
-                ->setPositionAmount(floatval( $positionAmountCell->value))
-                ->setHoursInDay($workingHoursObject->hour + (float) $workingHoursObject->minute /  60)
+                ->setPositionAmount($positionAmount)
+                ->setHoursInDay($hour + (float)$minute / 60)
             ;
         }
 

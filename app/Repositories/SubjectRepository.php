@@ -20,8 +20,8 @@ class SubjectRepository
             fn($str)=>$pdo->quote($str),
             $data,
             'subjects',
-            ['name','position_amount','hours_in_month'],
-            ['position_amount','hours_in_month'],
+            ['name','position_amount','hours_in_month', 'hours_in_day'],
+            ['position_amount','hours_in_month', 'hours_in_day'],
         );
 
         return $pdo->exec($query);
