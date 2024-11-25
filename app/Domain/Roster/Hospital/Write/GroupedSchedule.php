@@ -56,8 +56,8 @@ class GroupedSchedule
             $availabilities,
             $dateFormatted,
             fn(Availability $a, string $date) => $a->date <=> $date,
-            nearestDown: false,
-            nearestUp: true
+            nearestDown: true,
+            nearestUp: false
         );
 
         // special case to check bottom bound

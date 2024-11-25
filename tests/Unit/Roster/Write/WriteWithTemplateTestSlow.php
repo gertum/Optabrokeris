@@ -99,7 +99,7 @@ class WriteWithTemplateTestSlow extends TestCase
                             (new Availability())
                                 ->setDate('2024-11-02T08:00:00')
                                 ->setDate('2024-11-02T20:00:00')
-                                ->setAvailabilityType(Availability::AVAILABLE)
+                                ->setAvailabilityType(Availability::UNAVAILABLE)
                                 ->setEmployee((new Employee())->setName("Petras Petraitis")),
                         ]
                     )

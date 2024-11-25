@@ -130,9 +130,9 @@ class GroupedScheduleAvailabilitiesTest extends TestCase
                         ->setAvailabilityType(Availability::UNAVAILABLE),
                     (new Availability())
                         ->setEmployee((new Employee())->setName("Petras Petraitis"))
-                        ->setDate('2024-11-02T08:00:00')
-                        ->setDateTill('2024-11-02T20:00:00')
-                        ->setAvailabilityType(Availability::DESIRED),
+                        ->setDate('2024-11-01T20:00:00')
+                        ->setDateTill('2024-11-02T08:00:00')
+                        ->setAvailabilityType(Availability::UNDESIRED),
                 ]
             ],
 
@@ -229,9 +229,9 @@ class GroupedScheduleAvailabilitiesTest extends TestCase
                         ->setAvailabilityType(Availability::UNAVAILABLE),
                     (new Availability())
                         ->setEmployee((new Employee())->setName("Petras Petraitis"))
-                        ->setDate('2024-11-02T08:00:00')
-                        ->setDateTill('2024-11-02T20:00:00')
-                        ->setAvailabilityType(Availability::DESIRED),
+                        ->setDate('2024-11-01T20:00:00')
+                        ->setDateTill('2024-11-02T08:00:00')
+                        ->setAvailabilityType(Availability::UNDESIRED),
                 ]
             ],
 
@@ -345,17 +345,17 @@ class GroupedScheduleAvailabilitiesTest extends TestCase
                 'testDatesFormatted' => [
                     '2024-12-10T00:00:00',
                     '2024-10-29T00:00:00',
-                    // very near
+//                    // very near
                     '2024-10-31T13:00:00'
                 ],
                 'expectedAvailabilities' => [
-                    null,
-                    null,
                     (new Availability())
                         ->setEmployee((new Employee())->setName("Jonas Jonaitis"))
-                        ->setDate('2024-11-01T00:00:00')
-                        ->setDateTill('2024-11-02T00:00:00')
-                        ->setAvailabilityType(Availability::AVAILABLE),
+                        ->setDate('2024-11-03T00:00:00')
+                        ->setDateTill('2024-11-04T00:00:00')
+                        ->setAvailabilityType(Availability::DESIRED),
+                    null,
+                    null,
                 ]
             ],
 

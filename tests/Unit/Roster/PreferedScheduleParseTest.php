@@ -261,6 +261,9 @@ class PreferedScheduleParseTest extends TestCase
                     ['name' => 'Edgaras Baliūnas', 'date' => '2024-11-04T12:00:00'],
                     ['name' => 'Edgaras Baliūnas', 'date' => '2024-11-05T00:00:00'],
                     ['name' => 'Edgaras Baliūnas', 'date' => '2024-11-07T08:00:00'],
+
+                    ['name' => 'Mantė Šmigelskaitė', 'date' => '2024-11-08T00:00:00'],
+                    ['name' => 'Mantė Šmigelskaitė', 'date' => '2024-11-08T08:00:00'],
                 ],
                 'expectedAvailabilities' => [
 //                    (new Availability())
@@ -328,6 +331,28 @@ class PreferedScheduleParseTest extends TestCase
                                 ->setRow(16)
                                 ->setExcelRow(17)
                                 ->setSequenceNumber(14)
+                        ),
+                    (new Availability())
+                        ->setDate('2024-11-07T20:00:00')
+                        ->setDateTill('2024-11-08T08:00:00')
+                        ->setAvailabilityType(Availability::AVAILABLE)
+                        ->setEmployee(
+                            (new Employee())
+                                ->setName('Mantė Šmigelskaitė')
+                                ->setRow(32)
+                                ->setExcelRow(33)
+                                ->setSequenceNumber(29)
+                        ),
+                    (new Availability())
+                        ->setDate('2024-11-08T08:00:00')
+                        ->setDateTill('2024-11-08T20:00:00')
+                        ->setAvailabilityType(Availability::UNAVAILABLE)
+                        ->setEmployee(
+                            (new Employee())
+                                ->setName('Mantė Šmigelskaitė')
+                                ->setRow(32)
+                                ->setExcelRow(33)
+                                ->setSequenceNumber(29)
                         ),
                 ]
             ],
