@@ -11,7 +11,7 @@ import { useTranslation } from 'react-i18next';
 import { format, parseISO } from 'date-fns';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import JobsForm from '@/Pages/Jobs/Form.jsx';
+// import JobsForm from '@/Pages/Jobs/Form.jsx';
 
 const { Content } = Layout;
 
@@ -208,7 +208,7 @@ export default function List({ auth }) {
                                             </div>
                                             <Space className="job-actions">
                                                 <Link
-                                                    href={route('jobs.form', {
+                                                    href={route('jobs.view', {
                                                         id: job.id,
                                                     })}
                                                     className="ant-btn ant-btn-lg"

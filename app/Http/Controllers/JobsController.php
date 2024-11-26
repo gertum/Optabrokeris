@@ -19,11 +19,11 @@ class JobsController extends Controller
     }
 
     // G.T. testuoju, ar šitas padės refreshinimui... kol kas nepadeda
-    public function form(int $job): Response
+    public function view(int $job): Response
     {
         $jobObj = Job::query()->findOrFail(['id'=>$job])->first();
 
-        return Inertia::render('Jobs/Form', [
+        return Inertia::render('Jobs/View', [
             'job' => $jobObj,
         ]);
     }

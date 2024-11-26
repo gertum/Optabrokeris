@@ -1,6 +1,6 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import {Head, router} from '@inertiajs/react';
-import {Button, Col, Divider, Layout, Row, Space} from 'antd';
+import {Button, Col, Divider, Layout, Row, Space, Form} from 'antd';
 import {useEffect, useState} from 'react';
 import {FileUploadForm, FinalForm, NamingForm, SolverForm,} from '@/Components/NewJobSteps';
 import {useTranslation} from 'react-i18next';
@@ -10,7 +10,7 @@ import {useConfirmation} from '@/Providers/ConfirmationProvider.jsx';
 
 const {Content} = Layout;
 
-export default function Form({auth, job: initialJob}) {
+export default function View({auth, job: initialJob}) {
     const {t} = useTranslation();
     const {notifySuccess, notifyError} = useNotification();
     const {requestConfirmation} = useConfirmation();
@@ -46,7 +46,7 @@ export default function Form({auth, job: initialJob}) {
             setJob(response.data);
             notifySuccess(`Job ${job?.id ? 'updated' : 'created'} successfully`);
             if (creating) {
-                router.visit(route('jobs.form', {job: response.data.id}));
+                router.visit(route('jobs.view', {job: response.data.id}));
             }
         });
     };
@@ -160,9 +160,9 @@ export default function Form({auth, job: initialJob}) {
                                     {/*</Upload.Dragger>*/}
                                 {/*</Form>*/}
 
-                        {/*<Form>*/}
-                        {/*    <Button>todo upload</Button>*/}
-                        {/*</Form>*/}
+                        <Form>
+                            <Button>todo upload</Button>
+                        </Form>
                         <p>TODO</p>
                     </Col>
                 </Row>

@@ -29,7 +29,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/jobs', [JobsController::class, 'list'])->name('jobs.list');
 
     // other routes
-    Route::get('/job/{job?}', [JobsController::class, 'form'])->name('jobs.form');
+    Route::get('/job/{job?}', [JobsController::class, 'view'])->name('jobs.view');
     Route::get('/subjects', [SubjectController::class, 'list'])->name('subjects.list');
 
     Route::get('/download/school-example', [DownloadController::class, 'downloadSchoolExample'])->name('download.school.example');
