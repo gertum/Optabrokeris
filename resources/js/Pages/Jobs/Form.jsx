@@ -1,18 +1,12 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import {Head} from '@inertiajs/react';
+import {Head, router} from '@inertiajs/react';
 import {Button, Col, Divider, Layout, Row, Space} from 'antd';
-import {useState, useEffect} from 'react';
-import {
-    SolverForm,
-    NamingForm,
-    FileUploadForm,
-    FinalForm,
-} from '@/Components/NewJobSteps';
+import {useEffect, useState} from 'react';
+import {FileUploadForm, FinalForm, NamingForm, SolverForm,} from '@/Components/NewJobSteps';
 import {useTranslation} from 'react-i18next';
 import axios from 'axios';
 import {useNotification} from "@/Providers/NotificationProvider.jsx";
 import {useConfirmation} from '@/Providers/ConfirmationProvider.jsx';
-import {router} from '@inertiajs/react'
 
 const {Content} = Layout;
 
@@ -77,6 +71,11 @@ export default function Form({auth, job: initialJob}) {
         reloadJob();
     };
 
+    const onPreferedUploadFinish = () => {
+        // setCurrent(current + 1);
+        reloadJob();
+    };
+
     const fetchToken = async () => {
         try {
             const tokenResponse = await axios.get('/login');
@@ -112,7 +111,7 @@ export default function Form({auth, job: initialJob}) {
                 </h2>
             }
         >
-            <Head title={job?.id ? `` : "New profile form"} />
+            <Head title={job?.id ? `` : "New profile form"}/>
             <Content
                 style={{
                     textAlign: 'center',
@@ -121,13 +120,13 @@ export default function Form({auth, job: initialJob}) {
             >
                 <Row>
                     <Col xs={24}>
-                        <SolverForm defaultType={job?.type} readonly={!!job} onSelect={handleSolverSelect} />
-                        <NamingForm defaultValue={job?.name} onChange={handleValuesChange} creating={creating} />
+                        <SolverForm defaultType={job?.type} readonly={!!job} onSelect={handleSolverSelect}/>
+                        <NamingForm defaultValue={job?.name} onChange={handleValuesChange} creating={creating}/>
                         {
                             job?.id && <FileUploadForm disabled={!!job}
                                                        onFinish={onFileUploadFinish}
                                                        newJob={job}
-                                                       token={token} />
+                                                       token={token}/>
                         }
                         {
                             job?.id && <FinalForm token={token}
@@ -135,11 +134,39 @@ export default function Form({auth, job: initialJob}) {
                                                   disabled={!!job}
                                                   solving={job && job.flag_solving && !job.flag_solved}
                                                   onStop={() => reloadJob()}
-                                                  onSolve={() => reloadJob()} />
+                                                  onSolve={() => reloadJob()}/>
                         }
                     </Col>
                 </Row>
-                <Divider />
+                <Divider/>
+                <Row>
+                    <Col>
+                        <Divider orientation="left">Upload preferred timings xlsx file</Divider>
+                                {/*<Form*/}
+                                {/*    onFinish={() => onPreferedUploadFinish()} className="mt-4"*/}
+                                {/*      name={"prefered-upload-form"} >*/}
+                                    {/*<Upload.Dragger*/}
+                                    {/*    action={`/api/job/${job.id}/upload-preferred?_token=${token}`}*/}
+                                    {/*    maxCount={1}*/}
+                                    {/*    listType="picture"*/}
+                                    {/*    accept=".xlsx"*/}
+                                    {/*    onChange={() => onPreferedUploadFinish()}*/}
+                                    {/*>*/}
+                                    {/*    {t('step.fileUploadForm.dragFiles')}*/}
+                                    {/*    <br />*/}
+                                    {/*    <Space>*/}
+                                    {/*        <Button>{t('upload.preferred')}</Button>*/}
+                                    {/*    </Space>*/}
+                                    {/*</Upload.Dragger>*/}
+                                {/*</Form>*/}
+
+                        {/*<Form>*/}
+                        {/*    <Button>todo upload</Button>*/}
+                        {/*</Form>*/}
+                        <p>TODO</p>
+                    </Col>
+                </Row>
+                <Divider/>
                 <Row justify="space-between">
                     <Col>
                         <Space>

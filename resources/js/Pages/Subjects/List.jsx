@@ -92,15 +92,12 @@ export default function List({auth}) {
                                     </Upload.Dragger>
                                 </Form>
 
-
-
                                 <h1>Subjects</h1>
                                 <TextInput
                                     value={searchName || ""}
                                     onChange={(e) => setSearchName(e.target.value)}
                                     placeholder="Search by name..."
                                 />
-
 
                                 <table>
                                     <thead>
