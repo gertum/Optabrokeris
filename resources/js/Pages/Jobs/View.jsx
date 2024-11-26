@@ -1,6 +1,6 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import {Head, router} from '@inertiajs/react';
-import {Button, Col, Divider, Layout, Row, Space, Form} from 'antd';
+import {Button, Col, Divider, Layout, Row, Space, Form, Upload} from 'antd';
 import {useEffect, useState} from 'react';
 import {FileUploadForm, FinalForm, NamingForm, SolverForm,} from '@/Components/NewJobSteps';
 import {useTranslation} from 'react-i18next';
@@ -142,28 +142,24 @@ export default function View({auth, job: initialJob}) {
                 <Row>
                     <Col>
                         <Divider orientation="left">Upload preferred timings xlsx file</Divider>
-                                {/*<Form*/}
-                                {/*    onFinish={() => onPreferedUploadFinish()} className="mt-4"*/}
-                                {/*      name={"prefered-upload-form"} >*/}
-                                    {/*<Upload.Dragger*/}
-                                    {/*    action={`/api/job/${job.id}/upload-preferred?_token=${token}`}*/}
-                                    {/*    maxCount={1}*/}
-                                    {/*    listType="picture"*/}
-                                    {/*    accept=".xlsx"*/}
-                                    {/*    onChange={() => onPreferedUploadFinish()}*/}
-                                    {/*>*/}
-                                    {/*    {t('step.fileUploadForm.dragFiles')}*/}
-                                    {/*    <br />*/}
-                                    {/*    <Space>*/}
-                                    {/*        <Button>{t('upload.preferred')}</Button>*/}
-                                    {/*    </Space>*/}
-                                    {/*</Upload.Dragger>*/}
-                                {/*</Form>*/}
+                                <Form
+                                    onFinish={() => onPreferedUploadFinish()} className="mt-4"
+                                      name={"prefered-upload-form"} >
+                                    <Upload.Dragger
+                                        action={`/api/job/${job.id}/upload-preferred?_token=${token}`}
+                                        maxCount={1}
+                                        listType="picture"
+                                        accept=".xlsx"
+                                        onChange={() => onPreferedUploadFinish()}
+                                    >
+                                        {t('step.fileUploadForm.dragFiles')}
+                                        <br />
+                                        <Space>
+                                            <Button>{t('upload.preferred')}</Button>
+                                        </Space>
+                                    </Upload.Dragger>
+                                </Form>
 
-                        <Form>
-                            <Button>todo upload</Button>
-                        </Form>
-                        <p>TODO</p>
                     </Col>
                 </Row>
                 <Divider/>

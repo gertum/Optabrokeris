@@ -11,7 +11,7 @@ import { useTranslation } from 'react-i18next';
 import { format, parseISO } from 'date-fns';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-// import JobsForm from '@/Pages/Jobs/Form.jsx';
+// import JobsForm from '@/Pages/Jobs/View.jsx';
 
 const { Content } = Layout;
 
