@@ -30,6 +30,7 @@ Route::middleware('auth')->group(function () {
 
     // other routes
     Route::get('/job/{job?}', [JobsController::class, 'view'])->name('jobs.view');
+    Route::get('/job-create', [JobsController::class, 'create'])->name('jobs.create');
     Route::get('/subjects', [SubjectController::class, 'list'])->name('subjects.list');
 
     Route::get('/download/school-example', [DownloadController::class, 'downloadSchoolExample'])->name('download.school.example');

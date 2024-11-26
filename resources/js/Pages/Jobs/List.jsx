@@ -48,7 +48,7 @@ export default function List({ auth }) {
         }
     };
 
-    const handleResolve = async ({ id, name }) => {
+    const solveJob = async ({ id, name }) => {
         try {
             await axios.post(`/api/job/${id}/solve?_token=${token}`);
             message.success(`${name ? name : 'No Name'} is solving`, 5);
@@ -244,7 +244,7 @@ export default function List({ auth }) {
                                                     size="large"
                                                     disabled={!job.flag_uploaded}
                                                     onClick={() =>
-                                                        handleResolve({id: job.id, name: job.name})
+                                                        solveJob({id: job.id, name: job.name})
                                                     }
                                                 >
                                                     Rerun

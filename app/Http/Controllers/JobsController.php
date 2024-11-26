@@ -32,4 +32,9 @@ class JobsController extends Controller
             'job' => $jobObj,
         ]);
     }
+
+    public function create(): Response {
+        return Inertia::render('Jobs/Create', [
+        ]);
+    }
 }
