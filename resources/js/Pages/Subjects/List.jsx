@@ -1,28 +1,23 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Head, Link } from '@inertiajs/react';
-import {Layout, Button, Avatar, Card, message, Spin, Space, Divider} from 'antd';
-import {
-    EyeOutlined,
-    ReloadOutlined,
-    EyeInvisibleOutlined,
-    DownloadOutlined,
-} from '@ant-design/icons';
-import { useTranslation } from 'react-i18next';
-import { format, parseISO } from 'date-fns';
+import {Head} from '@inertiajs/react';
+import {Layout, message} from 'antd';
+import {useTranslation} from 'react-i18next';
 import axios from 'axios';
-import { useEffect, useState } from 'react';
+import {useEffect, useState} from 'react';
+import TextInput from '@/Components/TextInput';
 
-const { Content } = Layout;
+const {Content} = Layout;
 
-export default function List({ auth }) {
-    const { t } = useTranslation();
+export default function List({auth}) {
+    const {t} = useTranslation();
     const [subjects, setSubjects] = useState([]);
+    const [searchName, setSearchName] = useState([]);
     const [token, setToken] = useState('');
 
     const fetchSubjects = async () => {
         try {
             // setLoadingJobs(true);
-            const subjectsResponse = await axios.get('/api/subject');
+            const subjectsResponse = await axios.get('/api/subject', {params: {name: searchName}});
             setSubjects(subjectsResponse.data);
         } catch (error) {
             // setErrorJobs(error.message);
@@ -47,6 +42,12 @@ export default function List({ auth }) {
         fetchSubjects();
     }, []);
 
+
+    useEffect(() => {
+        fetchSubjects();
+        },
+        [searchName]
+    );
     return (
         <AuthenticatedLayout
             user={auth.user}
@@ -56,7 +57,7 @@ export default function List({ auth }) {
                 </h2>
             }
         >
-            <Head title="Subjects" />
+            <Head title="Subjects"/>
             <Content
                 style={{
                     textAlign: 'center',
@@ -68,15 +69,31 @@ export default function List({ auth }) {
                     <div className="mx-auto sm:px-6 lg:px-8">
                         <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                             <div className="p-6 text-gray-900">
-                                <p>Test Subjects</p>
+                                <h1>Subjects</h1>
 
-                                {subjects.map((subject, index) => (
-                                    <div className="job-info">
-                                        <div className="job-text">
-                                            <p> {subject.name}</p>
-                                        </div>
-                                    </div>
-                                ))}
+                                <TextInput
+                                    value={searchName || ""}
+                                    onChange={(e) => setSearchName(e.target.value)}
+                                    placeholder="Search by name..."
+                                />
+
+
+                                <table>
+                                    <thead>
+                                    <th>Name</th>
+                                    <th>Hours per day</th>
+                                    <th>Hours per month</th>
+                                    <th>Position amount</th>
+                                    </thead>
+                                    {subjects.map((subject, index) => (
+                                        <tr>
+                                            <td>{subject.name}</td>
+                                            <td>{subject.hours_in_day}</td>
+                                            <td>{subject.hours_in_month}</td>
+                                            <td>{subject.position_amount}</td>
+                                        </tr>
+                                    ))}
+                                </table>
                             </div>
                         </div>
                     </div>

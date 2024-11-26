@@ -21,7 +21,13 @@ class SubjectController
     {
         $offset = $request->get('offset', 0);
         $limit = $request->get('limit', 50);
-        return Subject::query()->offset($offset)->limit($limit)->get()->all();
+        $name = $request->get("name");
+        return Subject::query()
+            ->filterByName($name)
+            ->offset($offset)
+            ->limit($limit)
+            ->get()
+            ->all();
     }
 
     public function create(Request $request)
@@ -78,8 +84,10 @@ class SubjectController
     {
         $file = $request->file('file');
 
-        if ( $file == null ) {
-            throw new SolverDataException('In http request missing "file" parameter with xlsx file containing subjects');
+        if ($file == null) {
+            throw new SolverDataException(
+                'In http request missing "file" parameter with xlsx file containing subjects'
+            );
         }
         $subjectsXslParser = new SubjectsXslsParser();
         $subjectsContainer = $subjectsXslParser->parse($file->getRealPath());

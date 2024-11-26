@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Domain\Roster\SubjectDataInterface;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Query\Builder;
 
 class Subject extends Model implements SubjectDataInterface
 {
@@ -65,5 +66,18 @@ class Subject extends Model implements SubjectDataInterface
     public function toArray(): array
     {
         return parent::toArray();
+    }
+
+    /**
+     * @param Builder $builder
+     * @param string|null $name
+     * @return mixed
+     */
+    public function scopeFilterByName($builder, ?string $name ) {
+        if ( $name == null ) {
+            return $builder;
+        }
+
+        return $builder->where('name', 'LIKE', '%'.$name.'%');
     }
 }
