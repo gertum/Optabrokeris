@@ -8,6 +8,10 @@ export default defineConfig({
             input: 'resources/js/app.jsx',
             refresh: true,
         }),
+        laravel({
+            input: 'resources/js/Pages/Jobs/Form.jsx',
+            refresh: true,
+        }),
         react(),
     ],
 });

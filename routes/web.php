@@ -6,6 +6,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ResultsReportController;
 use App\Http\Controllers\SubjectController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\DashboardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,14 +24,16 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
+    Route::get('/', [DashboardController::class, 'home'])->name('home');
     // Render Jobs component as main page
-    Route::get('/', [JobsController::class, 'list'])->name('jobs.list');
+    Route::get('/jobs', [JobsController::class, 'list'])->name('jobs.list');
 
     // other routes
-    Route::get('/jobs/{job?}', [JobsController::class, 'form'])->name('jobs.form');
+    Route::get('/job/{job?}', [JobsController::class, 'form'])->name('jobs.form');
     Route::get('/subjects', [SubjectController::class, 'list'])->name('subjects.list');
 
     Route::get('/download/school-example', [DownloadController::class, 'downloadSchoolExample'])->name('download.school.example');
+
     Route::get('/report-results', [ResultsReportController::class, 'getResults'])->name('report.results');
 
 });

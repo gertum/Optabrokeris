@@ -9,6 +9,8 @@ use Inertia\Response;
 
 class JobsController extends Controller
 {
+    // kažkodėl šitas pradėjo refreshintis, kai atkūriau DashboardController, kuris ima route /
+    // o šitas prijungtas prie /jobs
     public function list(Request $request): Response
     {
         return Inertia::render('Jobs/List', [
@@ -16,10 +18,13 @@ class JobsController extends Controller
         ]);
     }
 
-    public function form(Job $job = null)
+    // G.T. testuoju, ar šitas padės refreshinimui... kol kas nepadeda
+    public function form(int $job): Response
     {
+        $jobObj = Job::query()->findOrFail(['id'=>$job])->first();
+
         return Inertia::render('Jobs/Form', [
-            'job' => $job  ? $job->toArray() : null,
+            'job' => $jobObj,
         ]);
     }
 }
