@@ -1,6 +1,6 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import {Head} from '@inertiajs/react';
-import {Layout, message} from 'antd';
+import {Button, Divider, Form, Layout, message, Space, Upload} from 'antd';
 import {useTranslation} from 'react-i18next';
 import axios from 'axios';
 import {useEffect, useState} from 'react';
@@ -37,6 +37,10 @@ export default function List({auth}) {
         }
     };
 
+    const onFileUploadFinish = () => {
+        fetchSubjects();
+    };
+
     useEffect(() => {
         fetchToken();
         fetchSubjects();
@@ -69,8 +73,28 @@ export default function List({auth}) {
                     <div className="mx-auto sm:px-6 lg:px-8">
                         <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                             <div className="p-6 text-gray-900">
-                                <h1>Subjects</h1>
 
+
+                                <Divider orientation="left">Upload subjects file</Divider>
+                                <Form onFinish={() => onFileUploadFinish()} className="mt-4">
+                                    <Upload.Dragger
+                                        action={`/api/subject/upsert-xlsx?_token=${token}`}
+                                        maxCount={1}
+                                        listType="picture"
+                                        accept=".xlsx"
+                                        onChange={() => onFileUploadFinish()}
+                                    >
+                                        {t('step.fileUploadForm.dragFiles')}
+                                        <br />
+                                        <Space>
+                                            <Button>{t('upload')}</Button>
+                                        </Space>
+                                    </Upload.Dragger>
+                                </Form>
+
+
+
+                                <h1>Subjects</h1>
                                 <TextInput
                                     value={searchName || ""}
                                     onChange={(e) => setSearchName(e.target.value)}
@@ -80,6 +104,7 @@ export default function List({auth}) {
 
                                 <table>
                                     <thead>
+                                    <th>No.</th>
                                     <th>Name</th>
                                     <th>Hours per day</th>
                                     <th>Hours per month</th>
@@ -87,6 +112,7 @@ export default function List({auth}) {
                                     </thead>
                                     {subjects.map((subject, index) => (
                                         <tr>
+                                            <td>{index}</td>
                                             <td>{subject.name}</td>
                                             <td>{subject.hours_in_day}</td>
                                             <td>{subject.hours_in_month}</td>
