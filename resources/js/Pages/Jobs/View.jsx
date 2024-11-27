@@ -80,13 +80,24 @@ export default function View({auth, job: initialJob}) {
     // };
 
     const handleSolve = async () => {
-        const response = await axios.post(`/api/job/${job.id}/solve?_token=${token}`);
+        // const response = await
+        await axios.post(`/api/job/${job.id}/solve?_token=${token}`)
+            .catch((error) => {
+                console.log ( 'error response:', error);
+                notifyError(error.message);
+            })
+            .then((response) => {
+                if  ( response !== undefined ) {
+                    notifySuccess(`Solving started`);
+                    // setJobs([response.data, ...jobs]);
+                }
+            });
 
         // onSolve();
         // setSolving(true);
         // setTimeLeft(20);
 
-        return response.data;
+        // return response.data;
     };
 
     const handleStop = async () => {
@@ -200,11 +211,11 @@ export default function View({auth, job: initialJob}) {
                                 <Divider orientation="left">Solution</Divider>
                                 <div className="my-2">
                                     <Space>
-                                        <Button size="large" danger onClick={handleStop}>
-                                            Stop solving
-                                        </Button>
                                         <Button size="large" onClick={handleSolve}>
                                             Solve
+                                        </Button>
+                                        <Button size="large" danger onClick={handleStop}>
+                                            Stop solving
                                         </Button>
                                     </Space>
                                 </div>
