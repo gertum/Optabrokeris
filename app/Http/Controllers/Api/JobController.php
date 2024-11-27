@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Domain\Roster\Hospital\ScheduleParser;
 use App\Domain\Roster\Profile;
+use App\Exceptions\SolverException;
 use App\Exceptions\ValidateException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Job\JobRequest;
@@ -173,22 +174,46 @@ class JobController extends Controller
         $solverClient = $this->solverClientFactory->createClient($job->type);
         $repeat = $request->get('repeat', false);
 
-        if (!$repeat) {
-            $data = $job->getData();
-            $solverId = $solverClient->registerData($data);
-            $job->update(['solver_id' => $solverId]);
+        try {
+            if (!$repeat) {
+                $data = $job->getData();
+                $solverId = $solverClient->registerData($data);
+                $job->update(['solver_id' => $solverId]);
+            }
+
+            $solvingResult = $solverClient->startSolving($job->solver_id);
+            $job->update(['flag_solving' => true, 'flag_solved' => false]);
+        } catch (GuzzleException $e) {
+            $message = $e->getMessage();
+
+            if (str_contains($message, 'cURL error')) {
+                $message = "Can't connect to solver";
+            }
+
+            throw new SolverException($message);
         }
 
-        $solvingResult = $solverClient->startSolving($job->solver_id);
-        $job->update(['flag_solving' => true, 'flag_solved' => false]);
 
         return $solvingResult;
     }
 
     public function stop(Request $request, Job $job)
     {
+        // TODO build getter for type
         $solverClient = $this->solverClientFactory->createClient($job->type);
-        $solvingResult = $solverClient->stopSolving($job->solver_id);
+        try {
+            // TODO build getter for solver_id
+            $solvingResult = $solverClient->stopSolving($job->solver_id);
+        } catch (GuzzleException $e) {
+            $message = $e->getMessage();
+
+            if (str_contains($message, 'cURL error')) {
+                $message = "Can't connect to solver";
+            }
+
+            throw new SolverException($message);
+        }
+
 
         $job->setFlagSolved(true);
         $job->save();

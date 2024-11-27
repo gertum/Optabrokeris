@@ -26,9 +26,12 @@ class SolverClientRoster implements SolverClient
         $client = new Client();
 
         $url = $this->url . self::URI_SCHEDULE;
-        $response = $client->get($url, [
-            'headers' => ['Content-Type' => 'application/json'],
-        ]);
+        $response = $client->get(
+            $url,
+            [
+                'headers' => ['Content-Type' => 'application/json'],
+            ]
+        );
 
         $responseData = $response->getBody()->getContents();
 
@@ -40,9 +43,12 @@ class SolverClientRoster implements SolverClient
         $client = new Client();
 
         $url = $this->url . sprintf(self::URI_SCHEDULE_ID, $id);
-        $response = $client->get($url, [
-            'headers' => ['Content-Type' => 'application/json'],
-        ]);
+        $response = $client->get(
+            $url,
+            [
+                'headers' => ['Content-Type' => 'application/json'],
+            ]
+        );
 
         return $response->getBody()->getContents();
     }
@@ -52,10 +58,13 @@ class SolverClientRoster implements SolverClient
         $client = new Client();
 
         $url = $this->url . self::URI_SCHEDULE;
-        $response = $client->post($url, [
-            'headers' => ['Content-Type' => 'application/json'],
-            'body' => $data,
-        ]);
+        $response = $client->post(
+            $url,
+            [
+                'headers' => ['Content-Type' => 'application/json'],
+                'body' => $data,
+            ]
+        );
 
         $responseData = $response->getBody()->getContents();
 
@@ -68,9 +77,12 @@ class SolverClientRoster implements SolverClient
         $client = new Client();
 
         $url = $this->url . sprintf(self::URI_SOLVE, $id);
-        $response = $client->post($url, [
-            'headers' => ['Content-Type' => 'application/json'],
-        ]);
+        $response = $client->post(
+            $url,
+            [
+                'headers' => ['Content-Type' => 'application/json'],
+            ]
+        );
 
         return $response->getBody()->getContents();
     }
@@ -80,14 +92,16 @@ class SolverClientRoster implements SolverClient
         $client = new Client();
 
         $url = $this->url . sprintf(self::URI_STOP_SOLVING, $solverId);
-        $response = $client->post($url, [
-            'headers' => ['Content-Type' => 'application/json'],
-        ]);
+        $response = $client->post(
+            $url,
+            [
+                'headers' => ['Content-Type' => 'application/json'],
+            ]
+        );
 
         $responseData = $response->getBody()->getContents();
 
         return $responseData;
-
 //        return json_decode($responseData, true);
     }
 

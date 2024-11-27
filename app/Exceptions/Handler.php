@@ -33,6 +33,9 @@ class Handler extends ExceptionHandler
         $this->renderable(function (ValidateException $e, Request $request) {
             return new Response($e->getMessage(), 400);
         });
+        $this->renderable(function (SolverException $e, Request $request) {
+            return new Response($e->getMessage(), 502);
+        });
         $this->reportable(function (Throwable $e) {
             //
         });

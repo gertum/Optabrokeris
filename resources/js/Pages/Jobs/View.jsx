@@ -7,6 +7,7 @@ import axios from 'axios';
 import {useNotification} from "@/Providers/NotificationProvider.jsx";
 import {useConfirmation} from '@/Providers/ConfirmationProvider.jsx';
 import {DownloadOutlined} from "@ant-design/icons";
+// import {isStr} from "react-toastify/dist/utils";
 
 const {Content} = Layout;
 
@@ -84,7 +85,12 @@ export default function View({auth, job: initialJob}) {
         await axios.post(`/api/job/${job.id}/solve?_token=${token}`)
             .catch((error) => {
                 console.log ( 'error response:', error);
-                notifyError(error.message);
+
+                let errorMessage = error.response.data;
+                if (errorMessage === undefined ||  typeof errorMessage !== 'string' ) {
+                    errorMessage = error.message;
+                }
+                notifyError(errorMessage);
             })
             .then((response) => {
                 if  ( response !== undefined ) {
@@ -101,13 +107,30 @@ export default function View({auth, job: initialJob}) {
     };
 
     const handleStop = async () => {
-        const response = await axios.post(`/api/job/${job.id}/stop?_token=${token}`);
+        // const response =
+
+        await axios.post(`/api/job/${job.id}/stop?_token=${token}`)
+            .catch((error) => {
+                console.log ( 'error response:', error);
+
+                let errorMessage = error.response.data;
+                if (errorMessage === undefined ||  typeof errorMessage !== 'string' ) {
+                    errorMessage = error.message;
+                }
+                notifyError(errorMessage);
+            })
+            .then((response) => {
+                if  ( response !== undefined ) {
+                    notifySuccess(`Solving stop signal sent`);
+                    // setJobs([response.data, ...jobs]);
+                }
+            });
 
         // onStop();
         // setSolving(false);
         // setTimerStarted(false);
 
-        return response.data;
+        // return response.data;
     };
 
 
