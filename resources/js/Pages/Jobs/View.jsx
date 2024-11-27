@@ -1,7 +1,7 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import {Head, router} from '@inertiajs/react';
-import {Button, Col, Divider, Layout, Row, Space, Form, Upload} from 'antd';
-import {useEffect, useState} from 'react';
+import {Button, Col, Divider, Layout, Row, Space, Form, Upload, Avatar} from 'antd';
+import React, {useEffect, useState} from 'react';
 import {FileUploadForm, FinalForm, NamingForm, SolverForm,} from '@/Components/NewJobSteps';
 import {useTranslation} from 'react-i18next';
 import axios from 'axios';
@@ -50,25 +50,6 @@ export default function View({auth, job: initialJob}) {
             }
         });
     };
-
-    // const handleDelete = async () => {
-    //     let confirmed = await requestConfirmation(
-    //         'Confirm Delete',
-    //         'Are you sure you want to delete this profile? Once deleted, this job cannot be recovered.'
-    //     );
-    //
-    //     if ( !confirmed) {
-    //         return;
-    //     }
-    //
-    //     axios.delete(`/api/job/${job.id}?_token=${token}`).then(() => {
-    //         notifySuccess('Job deleted successfully');
-    //
-    //         setJob(null);
-    //
-    //         router.visit(route('jobs.list'));
-    //     });
-    // };
 
     const onFileUploadFinish = () => {
         setCurrent(current + 1);
@@ -124,40 +105,62 @@ export default function View({auth, job: initialJob}) {
             >
 
                 <Row>
-                    <Col>
-                        <Divider orientation="left">Upload preferred timings xlsx file</Divider>
-                        <Form
-                            onFinish={() => onPreferedUploadFinish()} className="mt-4"
-                            name={"prefered-upload-form"} >
-                            <Upload.Dragger
-                                action={`/api/job/${job.id}/upload-preferred?_token=${token}`}
-                                maxCount={1}
-                                listType="picture"
-                                accept=".xlsx"
-                                onChange={() => onPreferedUploadFinish()}
-                            >
-                                {t('step.fileUploadForm.dragFiles')}
-                                <br />
-                                <Space>
-                                    <Button>{t('upload.preferred')}</Button>
-                                </Space>
-                            </Upload.Dragger>
-                        </Form>
-
-                    </Col>
-                </Row>
-
-                <Row>
                     <Col xs={24}>
-                        <SolverForm defaultType={job?.type} readonly={!!job} onSelect={handleSolverSelect}/>
+                        {/*<SolverForm defaultType={job?.type} readonly={!!job} onSelect={handleSolverSelect}/>*/}
 
-                         {/*TODO iškelti iš tų komponentų nes nichrina neįmanoma kodo skaityti*/}
-                        {
-                            job?.id && <FileUploadForm disabled={!!job}
-                                                       onFinish={onFileUploadFinish}
-                                                       newJob={job}
-                                                       token={token}/>
-                        }
+                        <Row align="middle" gutter={16}>
+                            <Col>
+                                <Avatar className="bg-blue-500 text-bold" size={48}>
+                                    {job.type}
+                                </Avatar>
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col>
+                                <Divider orientation="left">Upload preferred timings xlsx file</Divider>
+                                <Form
+                                    onFinish={() => onPreferedUploadFinish()} className="mt-4"
+                                    name={"prefered-upload-form"} >
+                                    <Upload.Dragger
+                                        action={`/api/job/${job.id}/upload-preferred?_token=${token}`}
+                                        maxCount={1}
+                                        listType="picture"
+                                        accept=".xlsx"
+                                        onChange={() => onPreferedUploadFinish()}
+                                    >
+                                        {t('step.fileUploadForm.dragFiles')}
+                                        <br />
+                                        <Space>
+                                            <Button>{t('upload.preferred')}</Button>
+                                        </Space>
+                                    </Upload.Dragger>
+                                </Form>
+
+                            </Col>
+                            <Col>
+                                <Divider orientation="left">Upload half solved sheet xlsx file</Divider>
+
+                                <Form onFinish={() => onFinish()} className="mt-4">
+
+                                    {/*TODO padaryti backe download example pagal paduotą tipą*/}
+                                    {/*<p>Need a sample file? <a href="/download/school-example" target={'_blank'}>Click here</a></p>*/}
+                                    <Upload.Dragger
+                                        action={`/api/job/${job.id}/upload?_token=${token}`}
+                                        maxCount={1}
+                                        listType="picture"
+                                        accept=".xlsx"
+                                        onChange={() => onFinish()}
+                                    >
+                                        {t('step.fileUploadForm.dragFiles')}
+                                        <br />
+                                        <Space>
+                                            <Button>{t('upload')}</Button>
+                                        </Space>
+                                    </Upload.Dragger>
+                                </Form>
+
+                            </Col>
+                        </Row>
 
                         {
                             job?.id && <FinalForm token={token}
@@ -170,30 +173,6 @@ export default function View({auth, job: initialJob}) {
                     </Col>
                 </Row>
                 <Divider/>
-                {/*<Divider/>*/}
-                {/*<Row justify="space-between">*/}
-                {/*    <Col>*/}
-                {/*        <Space>*/}
-                {/*            <Button size="large" href={route('jobs.list')}>*/}
-                {/*                Cancel*/}
-                {/*            </Button>*/}
-                {/*            {job?.id && (*/}
-                {/*                <Button size="large" danger onClick={handleDelete}>*/}
-                {/*                    {"Delete job"}*/}
-                {/*                </Button>*/}
-                {/*            )}*/}
-                {/*        </Space>*/}
-                {/*    </Col>*/}
-                {/*    <Col>*/}
-                {/*        <Space>*/}
-                {/*            {!job && (*/}
-                {/*                <Button size="large" type="primary" onClick={() => handleSubmit(values)}>*/}
-                {/*                    {"Create new profile"}*/}
-                {/*                </Button>*/}
-                {/*            )}*/}
-                {/*        </Space>*/}
-                {/*    </Col>*/}
-                {/*</Row>*/}
             </Content>
         </AuthenticatedLayout>
     );
