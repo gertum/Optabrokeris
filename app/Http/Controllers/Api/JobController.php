@@ -33,13 +33,11 @@ class JobController extends Controller
         $this->solverClientFactory = $solverClientFactory;
     }
 
-    public function list(Request $request)
+    public function list(Request $request, JobRepository $jobRepository)
     {
         $userId = $request->user()->id;
 
-        $jobs = Job::query()->orderByDesc('created_at')->user($userId)->get();
-
-        return $jobs;
+        return $jobRepository->getJobList($userId);
     }
 
     public function view(Request $request, Job $job)

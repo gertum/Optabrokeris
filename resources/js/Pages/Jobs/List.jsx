@@ -9,6 +9,7 @@ import {useEffect, useState} from 'react';
 // import JobsForm from '@/Pages/Jobs/View.jsx';
 import {useNotification} from "@/Providers/NotificationProvider.jsx";
 import {useConfirmation} from '@/Providers/ConfirmationProvider.jsx';
+import di from "../../../../public/build/assets/List-6adec10f";
 
 
 const {Content} = Layout;
@@ -22,6 +23,7 @@ export default function List({auth}) {
     const [loadingJobs, setLoadingJobs] = useState(true);
     const [errorJobs, setErrorJobs] = useState(null);
 
+    // TODO daryti backendinį puslapiavimą
     const jobsPerPage = 6;
     const startIndex = (currentPage - 1) * jobsPerPage;
     const endIndex = startIndex + jobsPerPage;
@@ -30,6 +32,8 @@ export default function List({auth}) {
 
     const fetchJobs = async () => {
         try {
+
+            // TODO paging in backend
             setLoadingJobs(true);
             const jobsResponse = await axios.get('/api/job');
             setJobs(jobsResponse.data);
@@ -233,7 +237,6 @@ export default function List({auth}) {
                                     </Form.Item>
 
                                 </Form>
-
 
                                 {displayedJobs.map((job, index) => (
                                     <Card
