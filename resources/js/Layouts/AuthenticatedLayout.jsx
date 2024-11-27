@@ -33,12 +33,12 @@ export default function Authenticated({ user, header, children }) {
                   {t('Jobs')}
                 </NavLink>
 
-                <NavLink
-                  href={route('jobs.create')}
-                  active={route().current('jobs.create')}
-                >
-                  {t('Create Job')}
-                </NavLink>
+                {/*<NavLink*/}
+                {/*  href={route('jobs.create')}*/}
+                {/*  active={route().current('jobs.create')}*/}
+                {/*>*/}
+                {/*  {t('Create Job')}*/}
+                {/*</NavLink>*/}
 
                 <NavLink
                     href={route('subjects.list')}

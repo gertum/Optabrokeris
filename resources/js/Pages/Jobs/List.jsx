@@ -1,14 +1,18 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import {Head, Link} from '@inertiajs/react';
-import {Avatar, Button, Card, Form, Input, Layout, message, Space, Spin} from 'antd';
+import {Avatar, Button, Card, Form, Input, Layout, message, Select, Space} from 'antd';
 import {DownloadOutlined, EyeInvisibleOutlined, EyeOutlined, ReloadOutlined,} from '@ant-design/icons';
 import {useTranslation} from 'react-i18next';
 import {format, parseISO} from 'date-fns';
 import axios from 'axios';
 import {useEffect, useState} from 'react';
 // import JobsForm from '@/Pages/Jobs/View.jsx';
+import {useNotification} from "@/Providers/NotificationProvider.jsx";
+import {useConfirmation} from '@/Providers/ConfirmationProvider.jsx';
+
 
 const {Content} = Layout;
+const {Option} = Select;
 
 export default function List({auth}) {
     const {t} = useTranslation();
@@ -21,6 +25,8 @@ export default function List({auth}) {
     const jobsPerPage = 6;
     const startIndex = (currentPage - 1) * jobsPerPage;
     const endIndex = startIndex + jobsPerPage;
+    const {notifySuccess, notifyError} = useNotification();
+
 
     const fetchJobs = async () => {
         try {
@@ -53,7 +59,20 @@ export default function List({auth}) {
     };
 
     const createJob = async (values) => {
-        console.log('create job clicked with values', values )
+        console.log('create job clicked with values', values);
+
+        const data = {
+            ...values,
+        };
+
+        axios.request({
+            method: 'POST',
+            url: `/api/job?_token=${token}`,
+            data: data,
+        }).then((response) => {
+            notifySuccess(`Job created successfully`);
+            setJobs([ response.data, ...jobs]);
+        });
     }
 
     const displayedJobs = jobs.slice(startIndex, endIndex);
@@ -63,92 +82,94 @@ export default function List({auth}) {
         fetchJobs();
     }, []);
 
-    // TODO kam šitas reikalingas ?
-    if (loadingJobs) {
-        return (
-            <AuthenticatedLayout
-                user={auth.user}
-                header={
-                    <h2 className="font-semibold text-xl text-gray-800 leading-tight">
-                        {t('jobs.createdJobs')}
-                    </h2>
-                }
-            >
-                <Head title="Jobs"/>
-                <Content
-                    style={{
-                        textAlign: 'center',
-                        minHeight: 'calc(100vh - 128px)',
-                        lineHeight: 4,
-                    }}
-                >
-                    <div className="py-6">
-                        <div className="mx-auto sm:px-6 lg:px-8">
-                            <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                                <div className="p-6 text-gray-900">
-                                    <Spin
-                                        size="large"
-                                        style={{
-                                            textAlign: 'center',
-                                            minHeight: 'calc(100vh - 128px)',
-                                            lineHeight: 4,
-                                        }}
-                                    />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </Content>
-            </AuthenticatedLayout>
-        );
-    }
+    // // TODO kam šitas reikalingas ?
+    // if (loadingJobs) {
+    //     return (
+    //         <AuthenticatedLayout
+    //             user={auth.user}
+    //             header={
+    //                 <h2 className="font-semibold text-xl text-gray-800 leading-tight">
+    //                     {t('jobs.createdJobs')}
+    //                 </h2>
+    //             }
+    //         >
+    //             <Head title="Jobs"/>
+    //             <Content
+    //                 style={{
+    //                     textAlign: 'center',
+    //                     minHeight: 'calc(100vh - 128px)',
+    //                     lineHeight: 4,
+    //                 }}
+    //             >
+    //                 <div className="py-6">
+    //                     <div className="mx-auto sm:px-6 lg:px-8">
+    //                         <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+    //                             <div className="p-6 text-gray-900">
+    //                                 <Spin
+    //                                     size="large"
+    //                                     style={{
+    //                                         textAlign: 'center',
+    //                                         minHeight: 'calc(100vh - 128px)',
+    //                                         lineHeight: 4,
+    //                                     }}
+    //                                 />
+    //                             </div>
+    //                         </div>
+    //                     </div>
+    //                 </div>
+    //             </Content>
+    //         </AuthenticatedLayout>
+    //     );
+    // }
+    //
+    // // TODO kam šitas reikalingas?
+    // if (errorJobs) {
+    //     return (
+    //         <AuthenticatedLayout
+    //             user={auth.user}
+    //             header={
+    //                 <h2 className="font-semibold text-xl text-gray-800 leading-tight">
+    //                     {t('jobs.createdJobs')}
+    //                 </h2>
+    //             }
+    //         >
+    //             <Head title="Jobs"/>
+    //             <Content
+    //                 style={{
+    //                     textAlign: 'center',
+    //                     minHeight: 'calc(100vh - 128px)',
+    //                     lineHeight: 4,
+    //                 }}
+    //             >
+    //                 <div className="py-6">
+    //                     <div className="mx-auto sm:px-6 lg:px-8">
+    //                         <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+    //                             <div className="p-6 text-gray-900">
+    //                                 <div
+    //                                     style={{
+    //                                         textAlign: 'center',
+    //                                         minHeight: 'calc(100vh - 128px)',
+    //                                         lineHeight: 4,
+    //                                     }}
+    //                                 >
+    //                                     <div>Error: {errorJobs}</div>
+    //                                 </div>
+    //                             </div>
+    //                         </div>
+    //                     </div>
+    //                 </div>
+    //             </Content>
+    //         </AuthenticatedLayout>
+    //     );
+    // }
+    //
+    // // TODO kam šitas reikalingas ?
+    // if (!jobs.length) {
+    //     return <JobsForm auth={auth}/>;
+    // }
 
-    // TODO kam šitas reikalingas?
-    if (errorJobs) {
-        return (
-            <AuthenticatedLayout
-                user={auth.user}
-                header={
-                    <h2 className="font-semibold text-xl text-gray-800 leading-tight">
-                        {t('jobs.createdJobs')}
-                    </h2>
-                }
-            >
-                <Head title="Jobs"/>
-                <Content
-                    style={{
-                        textAlign: 'center',
-                        minHeight: 'calc(100vh - 128px)',
-                        lineHeight: 4,
-                    }}
-                >
-                    <div className="py-6">
-                        <div className="mx-auto sm:px-6 lg:px-8">
-                            <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                                <div className="p-6 text-gray-900">
-                                    <div
-                                        style={{
-                                            textAlign: 'center',
-                                            minHeight: 'calc(100vh - 128px)',
-                                            lineHeight: 4,
-                                        }}
-                                    >
-                                        <div>Error: {errorJobs}</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </Content>
-            </AuthenticatedLayout>
-        );
-    }
 
-    // TODO kam šitas reikalingas ?
-    if (!jobs.length) {
-        return <JobsForm auth={auth}/>;
-    }
-
+    // ОК
     return (
         <AuthenticatedLayout
             user={auth.user}
@@ -182,6 +203,17 @@ export default function List({auth}) {
                                         ]}
                                     >
                                         <Input size="medium"/>
+                                    </Form.Item>
+
+                                    <Form.Item
+                                        label="Job type"
+                                        name="type"
+                                        rules={[{required: true, message: 'Please input!'}]}
+                                    >
+                                        <Select>
+                                            <Option value={"roster"}>Roster</Option>
+                                            <Option value={"school"}>School</Option>
+                                        </Select>
                                     </Form.Item>
 
                                     <Form.Item label={null}>
