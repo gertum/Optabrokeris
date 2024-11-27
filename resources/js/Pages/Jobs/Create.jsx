@@ -1,3 +1,5 @@
+// DEPRECATED : new jobs will be created inside the list view
+
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import {Head, router} from '@inertiajs/react';
 import {Button, Col, Divider, Layout, Row, Space, Form, Upload} from 'antd';
@@ -24,7 +26,7 @@ export default function Create({auth}) {
             >
                 <Row>
                     <Col xs={24}>
-                        TODO create job
+                        TODO deprecated, moved to jobs list.
                     </Col>
                 </Row>
             </Content>

@@ -1,22 +1,17 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Head, Link } from '@inertiajs/react';
-import {Layout, Button, Avatar, Card, message, Spin, Space, Divider} from 'antd';
-import {
-    EyeOutlined,
-    ReloadOutlined,
-    EyeInvisibleOutlined,
-    DownloadOutlined,
-} from '@ant-design/icons';
-import { useTranslation } from 'react-i18next';
-import { format, parseISO } from 'date-fns';
+import {Head, Link} from '@inertiajs/react';
+import {Avatar, Button, Card, Form, Input, Layout, message, Space, Spin} from 'antd';
+import {DownloadOutlined, EyeInvisibleOutlined, EyeOutlined, ReloadOutlined,} from '@ant-design/icons';
+import {useTranslation} from 'react-i18next';
+import {format, parseISO} from 'date-fns';
 import axios from 'axios';
-import { useEffect, useState } from 'react';
+import {useEffect, useState} from 'react';
 // import JobsForm from '@/Pages/Jobs/View.jsx';
 
-const { Content } = Layout;
+const {Content} = Layout;
 
-export default function List({ auth }) {
-    const { t } = useTranslation();
+export default function List({auth}) {
+    const {t} = useTranslation();
     const [token, setToken] = useState('');
     const [jobs, setJobs] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
@@ -48,7 +43,7 @@ export default function List({ auth }) {
         }
     };
 
-    const solveJob = async ({ id, name }) => {
+    const solveJob = async ({id, name}) => {
         try {
             await axios.post(`/api/job/${id}/solve?_token=${token}`);
             message.success(`${name ? name : 'No Name'} is solving`, 5);
@@ -57,6 +52,10 @@ export default function List({ auth }) {
         }
     };
 
+    const createJob = async (values) => {
+        console.log('create job clicked with values', values )
+    }
+
     const displayedJobs = jobs.slice(startIndex, endIndex);
 
     useEffect(() => {
@@ -64,6 +63,7 @@ export default function List({ auth }) {
         fetchJobs();
     }, []);
 
+    // TODO kam šitas reikalingas ?
     if (loadingJobs) {
         return (
             <AuthenticatedLayout
@@ -74,7 +74,7 @@ export default function List({ auth }) {
                     </h2>
                 }
             >
-                <Head title="Jobs" />
+                <Head title="Jobs"/>
                 <Content
                     style={{
                         textAlign: 'center',
@@ -103,6 +103,7 @@ export default function List({ auth }) {
         );
     }
 
+    // TODO kam šitas reikalingas?
     if (errorJobs) {
         return (
             <AuthenticatedLayout
@@ -113,7 +114,7 @@ export default function List({ auth }) {
                     </h2>
                 }
             >
-                <Head title="Jobs" />
+                <Head title="Jobs"/>
                 <Content
                     style={{
                         textAlign: 'center',
@@ -143,8 +144,9 @@ export default function List({ auth }) {
         );
     }
 
+    // TODO kam šitas reikalingas ?
     if (!jobs.length) {
-        return <JobsForm auth={auth} />;
+        return <JobsForm auth={auth}/>;
     }
 
     return (
@@ -156,7 +158,7 @@ export default function List({ auth }) {
                 </h2>
             }
         >
-            <Head title="Jobs" />
+            <Head title="Jobs"/>
             <Content
                 style={{
                     textAlign: 'center',
@@ -168,6 +170,29 @@ export default function List({ auth }) {
                     <div className="mx-auto sm:px-6 lg:px-8">
                         <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                             <div className="p-6 text-gray-900">
+                                <Form onFinish={(values) => createJob(values)}>
+                                    <Form.Item
+                                        label={"New Job name"}
+                                        name="name"
+                                        rules={[
+                                            {
+                                                required: true,
+                                                message: "Input job name",
+                                            },
+                                        ]}
+                                    >
+                                        <Input size="medium"/>
+                                    </Form.Item>
+
+                                    <Form.Item label={null}>
+                                        <Button type="primary" htmlType="submit">
+                                            Create
+                                        </Button>
+                                    </Form.Item>
+
+                                </Form>
+
+
                                 {displayedJobs.map((job, index) => (
                                     <Card
                                         key={job.id}
@@ -216,9 +241,9 @@ export default function List({ auth }) {
                                                     <Button
                                                         icon={
                                                             !job.flag_uploaded ? (
-                                                                <EyeInvisibleOutlined />
+                                                                <EyeInvisibleOutlined/>
                                                             ) : (
-                                                                <EyeOutlined />
+                                                                <EyeOutlined/>
                                                             )
                                                         }
                                                         size="large"
@@ -227,7 +252,7 @@ export default function List({ auth }) {
                                                     </Button>
                                                 </Link>
                                                 <Button
-                                                    icon={<DownloadOutlined />}
+                                                    icon={<DownloadOutlined/>}
                                                     size="large"
                                                     disabled={!job.flag_uploaded}
                                                     onClick={() =>
@@ -240,7 +265,7 @@ export default function List({ auth }) {
                                                     Download
                                                 </Button>
                                                 <Button
-                                                    icon={<ReloadOutlined />}
+                                                    icon={<ReloadOutlined/>}
                                                     size="large"
                                                     disabled={!job.flag_uploaded}
                                                     onClick={() =>
