@@ -25,13 +25,16 @@ class Handler extends ExceptionHandler
      */
     public function register(): void
     {
-        $this->reportable(function (Throwable $e) {
-            //
-        });
 
         $this->renderable(function (SolverDataException $e, Request $request) {
             // may be more user friendly rendering with a view ?
             return new Response($e->getMessage(), 400);
+        });
+        $this->renderable(function (ValidateException $e, Request $request) {
+            return new Response($e->getMessage(), 400);
+        });
+        $this->reportable(function (Throwable $e) {
+            //
         });
     }
 }

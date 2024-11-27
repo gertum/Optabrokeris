@@ -4,15 +4,18 @@ namespace App\Http\Controllers\Api;
 
 use App\Domain\Roster\Hospital\ScheduleParser;
 use App\Domain\Roster\Profile;
+use App\Exceptions\ValidateException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Job\JobRequest;
 use App\Http\Requests\Job\JobSolveRequest;
 use App\Http\Requests\Job\JobUploadRequest;
 use App\Models\Job;
 use App\Models\User;
+use App\Repositories\JobRepository;
 use App\Repositories\SubjectRepository;
 use App\Solver\SolverClientFactory;
 use App\Transformers\SpreadSheetHandlerFactory;
+use DateTime;
 use Exception;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Utils;
@@ -20,7 +23,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
-use DateTime;
 
 class JobController extends Controller
 {
@@ -51,7 +53,8 @@ class JobController extends Controller
     }
 
 
-    protected  function tryToGetResultFromSolver(Job $job) {
+    protected function tryToGetResultFromSolver(Job $job)
+    {
         try {
             $type = $job->getAttribute('type');
 
@@ -70,9 +73,10 @@ class JobController extends Controller
             } catch (GuzzleException $e) {
                 Log::warning($e->getMessage());
                 $status = 'error';
-                $job->update(['result' => $result, 'status' => $status, 'flag_solved' => $flagSolved, 'flag_solving'=>0]);
+                $job->update(
+                    ['result' => $result, 'status' => $status, 'flag_solved' => $flagSolved, 'flag_solving' => 0]
+                );
             }
-
         } catch (Exception $e) {
             $job->setResult(null);
             $job->error_message = $e->getMessage();
@@ -80,40 +84,40 @@ class JobController extends Controller
         }
 
         return $job;
-
     }
-    public function prepareForBautifulJson(Job $job) {
+
+    public function prepareForBautifulJson(Job $job)
+    {
         $data = $job->getData();
-        $result  = $job->getResult();
+        $result = $job->getResult();
 
         // for beautifull json
-        if ( $data != null ) {
+        if ($data != null) {
             $job->setData(json_decode($data));
         }
 
-        if ($result != null ) {
+        if ($result != null) {
             $job->setResult(json_decode($result));
         }
     }
 
-    public function create(Request $request)
+    public function create(Request $request, JobRepository $jobRepository)
     {
-        $validator = Validator::make($request->all(), [
-            'name' => ['required'],
-            'type' => [
-                'required',
-                Rule::in(SolverClientFactory::TYPES),
-            ],
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'name' => ['required'],
+                'type' => [
+                    'required',
+                    Rule::in(SolverClientFactory::TYPES),
+                ],
 
-        ]);
+            ]
+        );
 
 
         $validated = $validator->validate();
-//        // laravelis gaidys, nes nurodžiau kad name 'required' (žr 10 eilučių aukščiau :  'name' => ['required'] ) , o jis neduoda klaidos, jeigu nepaduodu 'name' per requestą.
-        // Išsiaiškinau, vietoj 'validated' reikia naudoti 'validate' (žr. eilutę aukščiau :) )
-//        if (!array_key_exists('name', $validated)) {
-//            throw new ValidateException('Required job parameter "name" is missing.');
-//        }
+        // Vietoj 'validated' reikia naudoti 'validate', kitaip nemeta exceptiono
 
         $body = $request->getContent();
 
@@ -121,7 +125,13 @@ class JobController extends Controller
         $user = $request->user();
 
         $profile = $user->getProfile();
-        // TODO default profile if null
+
+        // default profile if null
+        if ($profile == null) {
+            $profileObj = new Profile();
+            $profileObj->setShiftBounds([8, 20]);
+            $profile = json_encode($profileObj);
+        }
 
         $validated['data'] = $body;
         $validated['user_id'] = $user->getKey();
@@ -129,6 +139,20 @@ class JobController extends Controller
         $validated['status'] = '';
         $validated['result'] = '';
         $validated['profile'] = $profile;
+
+        /** @var Job $existingJob */
+        $existingJob = $jobRepository->findJobByName($validated['name']);
+
+        if ($existingJob != null) {
+            throw new ValidateException(
+                sprintf(
+                    'There already is a job with the same name %s, with id %s',
+                    $existingJob->getName(),
+                    $existingJob->getKey()
+                )
+            );
+        }
+
 
         $job = Job::query()->newModelInstance();
         $createdJob = $job->create($validated);
@@ -237,18 +261,23 @@ class JobController extends Controller
         return $job;
     }
 
-    public function uploadPreferredXslx(Request $request, Job $job, ScheduleParser $scheduleParser, SubjectRepository $subjectRepository) {
+    public function uploadPreferredXslx(
+        Request $request,
+        Job $job,
+        ScheduleParser $scheduleParser,
+        SubjectRepository $subjectRepository
+    ) {
         $xslxFile = $request->file('file');
         /** @var User $user */
         $user = $request->user();
 
         $profileObj = $job->getProfileObj();
-        if ( count($profileObj->getShiftBounds()) == 0) {
+        if (count($profileObj->getShiftBounds()) == 0) {
             // setting default values for bounds, when bounds are not given
-            $profileObj->setShiftBounds([8,20]);
+            $profileObj->setShiftBounds([8, 20]);
         }
 
-        $schedule = $scheduleParser->parsePreferedScheduleXls($xslxFile->getRealPath(), $profileObj );
+        $schedule = $scheduleParser->parsePreferedScheduleXls($xslxFile->getRealPath(), $profileObj);
 
         $employeesNames = $schedule->getEmployeesNames();
         $subjects = $subjectRepository->loadSubjectsByNames($employeesNames);

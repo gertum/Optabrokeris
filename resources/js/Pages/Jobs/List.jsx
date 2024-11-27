@@ -34,7 +34,8 @@ export default function List({auth}) {
             const jobsResponse = await axios.get('/api/job');
             setJobs(jobsResponse.data);
         } catch (error) {
-            setErrorJobs(error.message);
+            // setErrorJobs(error.message);
+            notifyError(error.message);
         } finally {
             setLoadingJobs(false);
         }
@@ -65,14 +66,23 @@ export default function List({auth}) {
             ...values,
         };
 
-        axios.request({
-            method: 'POST',
-            url: `/api/job?_token=${token}`,
-            data: data,
-        }).then((response) => {
-            notifySuccess(`Job created successfully`);
-            setJobs([ response.data, ...jobs]);
-        });
+        try {
+            axios.request({
+                method: 'POST',
+                url: `/api/job?_token=${token}`,
+                data: data,
+            }).catch((error) => {
+                console.log ( 'error response:', error.response.data);
+                notifyError(error.response.data);
+            }).then((response) => {
+                if  ( response !== undefined ) {
+                    notifySuccess(`Job created successfully`);
+                    setJobs([response.data, ...jobs]);
+                }
+            });
+        } catch (error) {
+            notifyError(error.message);
+        }
     }
 
     const displayedJobs = jobs.slice(startIndex, endIndex);
