@@ -9,11 +9,12 @@ import {useEffect, useState} from 'react';
 // import JobsForm from '@/Pages/Jobs/View.jsx';
 import {useNotification} from "@/Providers/NotificationProvider.jsx";
 import {useConfirmation} from '@/Providers/ConfirmationProvider.jsx';
-import di from "../../../../public/build/assets/List-6adec10f";
+// import di from "../../../../public/build/assets/List-6adec10f";
 
 
 const {Content} = Layout;
 const {Option} = Select;
+const {Title} = Head;
 
 export default function List({auth}) {
     const {t} = useTranslation();
@@ -219,7 +220,9 @@ export default function List({auth}) {
                 </h2>
             }
         >
-            <Head title="Jobs"/>
+            <Head>
+                <Title>Jobs</Title>
+            </Head>
             <Content
                 style={{
                     textAlign: 'center',

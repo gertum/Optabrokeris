@@ -1,12 +1,12 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import {Head, router} from '@inertiajs/react';
-import {Button, Col, Divider, Layout, Row, Space, Form, Upload, Avatar} from 'antd';
+import {Avatar, Button, Col, Divider, Form, Layout, Row, Space, Upload} from 'antd';
 import React, {useEffect, useState} from 'react';
-import {FileUploadForm, FinalForm, NamingForm, SolverForm,} from '@/Components/NewJobSteps';
 import {useTranslation} from 'react-i18next';
 import axios from 'axios';
 import {useNotification} from "@/Providers/NotificationProvider.jsx";
 import {useConfirmation} from '@/Providers/ConfirmationProvider.jsx';
+import {DownloadOutlined} from "@ant-design/icons";
 
 const {Content} = Layout;
 
@@ -15,52 +15,54 @@ export default function View({auth, job: initialJob}) {
     const {notifySuccess, notifyError} = useNotification();
     const {requestConfirmation} = useConfirmation();
     const [job, setJob] = useState(initialJob);
-    const [values, setValues] = useState({});
-    const [current, setCurrent] = useState(0);
-    const [solver, setSolver] = useState(job?.type);
+    // const [values, setValues] = useState({});
+    // const [current, setCurrent] = useState(0);
+    // const [solver, setSolver] = useState(job?.type);
     const [token, setToken] = useState('');
-    const [creating, setCreating] = useState(!job);
+    // const [creating, setCreating] = useState(!job);
 
-    const handleValuesChange = (allValues) => {
-        setValues(allValues);
-        if (!creating) {
-            handleSubmit(allValues);
-        }
-    };
+    // const handleValuesChange = (allValues) => {
+    //     setValues(allValues);
+    //     if (!creating) {
+    //         handleSubmit(allValues);
+    //     }
+    // };
+    //
+    // const handleSolverSelect = (index) => {
+    //     setSolver(index);
+    // };
 
-    const handleSolverSelect = (index) => {
-        setSolver(index);
-    };
+    // const handleSubmit = (values) => {
+    //     const data = {
+    //         ...values,
+    //         type: solver,
+    //     };
+    //
+    //     axios.request({
+    //         method: job?.id ? 'PUT' : 'POST',
+    //         url: job?.id ? `/api/job/${job.id}?_token=${token}` : `/api/job?_token=${token}`,
+    //         data: data,
+    //     }).then((response) => {
+    //         setJob(response.data);
+    //         notifySuccess(`Job ${job?.id ? 'updated' : 'created'} successfully`);
+    //         if (creating) {
+    //             router.visit(route('jobs.view', {job: response.data.id}));
+    //         }
+    //     });
+    // };
 
-    const handleSubmit = (values) => {
-        const data = {
-            ...values,
-            type: solver,
-        };
+    // const onFileUploadFinish = () => {
+    //     setCurrent(current + 1);
+    //     reloadJob();
+    // };
 
-        axios.request({
-            method: job?.id ? 'PUT' : 'POST',
-            url: job?.id ? `/api/job/${job.id}?_token=${token}` : `/api/job?_token=${token}`,
-            data: data,
-        }).then((response) => {
-            setJob(response.data);
-            notifySuccess(`Job ${job?.id ? 'updated' : 'created'} successfully`);
-            if (creating) {
-                router.visit(route('jobs.view', {job: response.data.id}));
-            }
-        });
-    };
+    // const onPreferedUploadFinish = () => {
+    //     // setCurrent(current + 1);
+    //     reloadJob();
+    // };
 
-    const onFileUploadFinish = () => {
-        setCurrent(current + 1);
-        reloadJob();
-    };
 
-    const onPreferedUploadFinish = () => {
-        // setCurrent(current + 1);
-        reloadJob();
-    };
-
+    // TODO use in component this function
     const fetchToken = async () => {
         try {
             const tokenResponse = await axios.get('/login');
@@ -70,29 +72,50 @@ export default function View({auth, job: initialJob}) {
         }
     };
 
-    const reloadJob = async () => {
-        console.log('Reloading job...');
-        axios.get(`/api/job/${job.id}`).then((response) => {
-            setJob(response.data);
-        });
+    // const reloadJob = async () => {
+    //     // console.log('Reloading job...');
+    //     axios.get(`/api/job/${job.id}`).then((response) => {
+    //         setJob(response.data);
+    //     });
+    // };
+
+    const handleSolve = async () => {
+        const response = await axios.post(`/api/job/${job.id}/solve?_token=${token}`);
+
+        // onSolve();
+        // setSolving(true);
+        // setTimeLeft(20);
+
+        return response.data;
     };
+
+    const handleStop = async () => {
+        const response = await axios.post(`/api/job/${job.id}/stop?_token=${token}`);
+
+        // onStop();
+        // setSolving(false);
+        // setTimerStarted(false);
+
+        return response.data;
+    };
+
 
     useEffect(() => {
         fetchToken();
     }, []);
 
-    useEffect(() => {
-        if (job) {
-            setCreating(false);
-        }
-    }, [job]);
+    // useEffect(() => {
+    //     if (job) {
+    //         setCreating(false);
+    //     }
+    // }, [job]);
 
     return (
         <AuthenticatedLayout
             user={auth.user}
             header={
                 <h2 className="font-semibold text-xl text-gray-800 leading-tight">
-                    {`Job "${job.name}"` }
+                    {`Job "${job.name}"`}
                 </h2>
             }
         >
@@ -120,7 +143,7 @@ export default function View({auth, job: initialJob}) {
                                 <Divider orientation="left">Upload preferred timings xlsx file</Divider>
                                 <Form
                                     onFinish={() => onPreferedUploadFinish()} className="mt-4"
-                                    name={"prefered-upload-form"} >
+                                    name={"prefered-upload-form"}>
                                     <Upload.Dragger
                                         action={`/api/job/${job.id}/upload-preferred?_token=${token}`}
                                         maxCount={1}
@@ -129,7 +152,7 @@ export default function View({auth, job: initialJob}) {
                                         onChange={() => onPreferedUploadFinish()}
                                     >
                                         {t('step.fileUploadForm.dragFiles')}
-                                        <br />
+                                        <br/>
                                         <Space>
                                             <Button>{t('upload.preferred')}</Button>
                                         </Space>
@@ -152,7 +175,7 @@ export default function View({auth, job: initialJob}) {
                                         onChange={() => onFinish()}
                                     >
                                         {t('step.fileUploadForm.dragFiles')}
-                                        <br />
+                                        <br/>
                                         <Space>
                                             <Button>{t('upload')}</Button>
                                         </Space>
@@ -162,14 +185,41 @@ export default function View({auth, job: initialJob}) {
                             </Col>
                         </Row>
 
-                        {
-                            job?.id && <FinalForm token={token}
-                                                  job={job}
-                                                  disabled={!!job}
-                                                  solving={job && job.flag_solving && !job.flag_solved}
-                                                  onStop={() => reloadJob()}
-                                                  onSolve={() => reloadJob()}/>
-                        }
+                        {/*{*/}
+                        {/*    job?.id && <FinalForm token={token}*/}
+                        {/*                          job={job}*/}
+                        {/*                          disabled={!!job}*/}
+                        {/*                          solving={job && job.flag_solving && !job.flag_solved}*/}
+                        {/*                          onStop={() => reloadJob()}*/}
+                        {/*                          onSolve={() => reloadJob()}/>*/}
+                        {/*}*/}
+
+
+                        <Row>
+                            <Col>
+                                <Divider orientation="left">Solution</Divider>
+                                <div className="my-2">
+                                    <Space>
+                                        <Button size="large" danger onClick={handleStop}>
+                                            Stop solving
+                                        </Button>
+                                        <Button size="large" onClick={handleSolve}>
+                                            Solve
+                                        </Button>
+                                    </Space>
+                                </div>
+                                <Button
+                                    type="primary"
+                                    shape="round"
+                                    icon={<DownloadOutlined/>}
+                                    size="large"
+                                    href={`/api/job/${job.id}/download?_token=${token}`}
+                                    target="_blank"
+                                >
+                                    Download
+                                </Button>
+                            </Col>
+                        </Row>
                     </Col>
                 </Row>
                 <Divider/>
