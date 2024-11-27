@@ -36,8 +36,10 @@ class JobController extends Controller
     public function list(Request $request, JobRepository $jobRepository)
     {
         $userId = $request->user()->id;
+        $offset = $request->get('offset', 0);
+        $limit = $request->get('limit', 20);
 
-        return $jobRepository->getJobList($userId);
+        return $jobRepository->getJobList($userId, $offset, $limit);
     }
 
     public function view(Request $request, Job $job)

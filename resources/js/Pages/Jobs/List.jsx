@@ -28,7 +28,7 @@ export default function List({auth}) {
     const startIndex = (currentPage - 1) * jobsPerPage;
     const endIndex = startIndex + jobsPerPage;
     const {notifySuccess, notifyError} = useNotification();
-
+    const {requestConfirmation} = useConfirmation();
 
     const fetchJobs = async () => {
         try {
@@ -54,14 +54,14 @@ export default function List({auth}) {
         }
     };
 
-    const solveJob = async ({id, name}) => {
-        try {
-            await axios.post(`/api/job/${id}/solve?_token=${token}`);
-            message.success(`${name ? name : 'No Name'} is solving`, 5);
-        } catch (error) {
-            message.error(`HandleSolve error: ${error.message}`, 5);
-        }
-    };
+    // const solveJob = async ({id, name}) => {
+    //     try {
+    //         await axios.post(`/api/job/${id}/solve?_token=${token}`);
+    //         message.success(`${name ? name : 'No Name'} is solving`, 5);
+    //     } catch (error) {
+    //         message.error(`HandleSolve error: ${error.message}`, 5);
+    //     }
+    // };
 
     const createJob = async (values) => {
         console.log('create job clicked with values', values);
@@ -70,7 +70,7 @@ export default function List({auth}) {
             ...values,
         };
 
-        try {
+        // try {
             axios.request({
                 method: 'POST',
                 url: `/api/job?_token=${token}`,
@@ -84,9 +84,35 @@ export default function List({auth}) {
                     setJobs([response.data, ...jobs]);
                 }
             });
-        } catch (error) {
-            notifyError(error.message);
+        // } catch (error) {
+        //     notifyError(error.message);
+        // }
+    }
+
+    const deleteJob = async (jobId) => {
+        let confirmed = await requestConfirmation(
+            'Confirm Delete',
+            'Are you sure you want to delete this profile? Once deleted, this job cannot be recovered.'
+        );
+
+        console.log('confirmed:', confirmed);
+
+        if ( !confirmed) {
+            return;
         }
+
+        axios.request({
+            method: 'DELETE',
+            url: `/api/job/${jobId}/?_token=${token}`,
+        }).catch((error) => {
+            console.log ( 'error response:', error.response.data);
+            notifyError(error.response.data);
+        }).then((response) => {
+            if  ( response !== undefined ) {
+                notifySuccess(`Job deleted successfully`);
+                fetchJobs();
+            }
+        });
     }
 
     const displayedJobs = jobs.slice(startIndex, endIndex);
@@ -259,12 +285,7 @@ export default function List({auth}) {
                                             </div>
                                             <div className="job-info">
                                                 <div className="job-text">
-                                                    <h3>
-                                                        {job?.name && job?.id
-                                                            ? job.name[0].toUpperCase() +
-                                                            job.name.substring(1)
-                                                            : 'No Name'}
-                                                    </h3>
+                                                    <h3>{job.name }</h3>
                                                     <p>
                                                         Created at:
                                                         {job?.created_at
@@ -293,32 +314,41 @@ export default function List({auth}) {
                                                         }
                                                         size="large"
                                                     >
-                                                        {!job.flag_uploaded ? 'Edit' : 'View'}
+                                                        {'View'}
                                                     </Button>
                                                 </Link>
+                                                {/*<Button*/}
+                                                {/*    icon={<DownloadOutlined/>}*/}
+                                                {/*    size="large"*/}
+                                                {/*    disabled={!job.flag_uploaded}*/}
+                                                {/*    onClick={() =>*/}
+                                                {/*        window.open(*/}
+                                                {/*            `/api/job/${job.id}/download`,*/}
+                                                {/*            '_blank'*/}
+                                                {/*        )*/}
+                                                {/*    }*/}
+                                                {/*>*/}
+                                                {/*    Download*/}
+                                                {/*</Button>*/}
+                                                {/*<Button*/}
+                                                {/*    icon={<ReloadOutlined/>}*/}
+                                                {/*    size="large"*/}
+                                                {/*    disabled={!job.flag_uploaded}*/}
+                                                {/*    onClick={() =>*/}
+                                                {/*        solveJob({id: job.id, name: job.name})*/}
+                                                {/*    }*/}
+                                                {/*>*/}
+                                                {/*    Rerun*/}
+                                                {/*</Button>*/}
+
                                                 <Button
-                                                    icon={<DownloadOutlined/>}
+                                                    // icon={<>}
                                                     size="large"
-                                                    disabled={!job.flag_uploaded}
-                                                    onClick={() =>
-                                                        window.open(
-                                                            `/api/job/${job.id}/download`,
-                                                            '_blank'
-                                                        )
-                                                    }
+                                                    onClick={() => deleteJob(job.id)}
                                                 >
-                                                    Download
+                                                    Delete
                                                 </Button>
-                                                <Button
-                                                    icon={<ReloadOutlined/>}
-                                                    size="large"
-                                                    disabled={!job.flag_uploaded}
-                                                    onClick={() =>
-                                                        solveJob({id: job.id, name: job.name})
-                                                    }
-                                                >
-                                                    Rerun
-                                                </Button>
+
                                             </Space>
                                         </div>
                                     </Card>
