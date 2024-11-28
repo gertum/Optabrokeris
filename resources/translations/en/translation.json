@@ -41,7 +41,8 @@
     "main": "Jobs",
     "createdJobs": "Created jobs",
     "createNewJob": "Create new Job",
-    "noJobs": "You have no jobs yet, please start by creating new job"
+    "noJobs": "You have no jobs yet, please start by creating new job",
+    "uploadPreferred": "Upload preferred"
   },
   "dashboard": "Dashboard",
   "newJob": "New Job",
@@ -50,5 +51,9 @@
   "English": "English",
   "Lithuanian": "Lithuanian",
   "forgotPassword": "Forgot your password? No problem. Just let us know your email address and we will email you a password reset link that will allow you to choose a new one.",
-  "upload": "Upload"
+  "upload": "Upload",
+
+  "subjects" : {
+    "list" : "Subjects"
+  }
 }

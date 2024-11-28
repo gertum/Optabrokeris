@@ -131,7 +131,7 @@ export default function View({auth, job: initialJob}) {
                                         {t('step.fileUploadForm.dragFiles')}
                                         <br/>
                                         <Space>
-                                            <Button>{t('upload.preferred')}</Button>
+                                            <Button>{t('jobs.uploadPreferred')}</Button>
                                         </Space>
                                     </Upload.Dragger>
                                 </Form>

@@ -7,6 +7,7 @@ import {useEffect, useState} from 'react';
 import TextInput from '@/Components/TextInput';
 
 const {Content} = Layout;
+const {Title} = Head;
 
 export default function List({auth}) {
     const {t} = useTranslation();
@@ -61,7 +62,9 @@ export default function List({auth}) {
                 </h2>
             }
         >
-            <Head title="Subjects"/>
+            <Head>
+                <Title>{t('subjects.list')}</Title>
+            </Head>
             <Content
                 style={{
                     textAlign: 'center',
@@ -109,7 +112,7 @@ export default function List({auth}) {
                                     </thead>
                                     {subjects.map((subject, index) => (
                                         <tr>
-                                            <td>{index}</td>
+                                            <td>{index+1}</td>
                                             <td>{subject.name}</td>
                                             <td>{subject.hours_in_day}</td>
                                             <td>{subject.hours_in_month}</td>
