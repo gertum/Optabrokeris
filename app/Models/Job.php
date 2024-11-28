@@ -155,6 +155,7 @@ class Job extends Model
     }
 
     /**
+     * Laravel magic attribute using  $appends ( look above at the top of this class body )
      * @return Schedule|mixed we leave possibility to solver other problems.
      */
     public function getResultObjAttribute() {
@@ -166,7 +167,7 @@ class Job extends Model
             return $schedule;
         }
 
-        // other tasks transformations
+        // other tasks transformations, may be schedules, may be transport assignments, may be auditories assignments etc.
         return null;
     }
 }
