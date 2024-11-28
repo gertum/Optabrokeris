@@ -17,7 +17,6 @@ use App\Repositories\SubjectRepository;
 use App\Solver\SolverClientFactory;
 use App\Transformers\SpreadSheetHandlerFactory;
 use DateTime;
-use Exception;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Utils;
 use Illuminate\Http\Request;
@@ -47,69 +46,23 @@ class JobController extends Controller
     public function view(Request $request, Job $job)
     {
         $this->tryToGetResultFromSolver($job);
-
-//        $this->prepareForBautifulJson($job);
-
-        // lets try to put the parsed result content
-
-
         return $job;
     }
 
 
     protected function tryToGetResultFromSolver(Job $job)
     {
+        $errorMessage = '';
+        $result = '';
         try {
-            $type = $job->getAttribute('type');
-
-            $solverClient = $this->solverClientFactory->createClient($type);
+            $solverClient = $this->solverClientFactory->createClient($job->getType());
             $result = $solverClient->getResult($job->getSolverId());
-            $job->setResult($result);
-
-
-            // TODO move the following part to a separate function
-//          like $job->handleResultFromSolver($result);
-
-            // method 'save' should remain in this function, this way we may be able to cover handleResultFromSolver with unit test.
-
-            $flagSolved = false;
-            try {
-                $resultDataArray = Utils::jsonDecode($result, true);
-                $status = $resultDataArray['solverStatus'];
-
-                if ($job->getFlagSolving() && $status == 'NOT_SOLVING') {
-                    $flagSolved = true;
-                }
-
-                $job->setFlagSolved($flagSolved);
-                $job->setFlagSolving(0 );
-                $job->setStatus($status);
-
-//                $job->update(['result' => $result, 'status' => $status, 'flag_solved' => $flagSolved]);
-
-                $job->save();
-
-            } catch (GuzzleException $e) {
-                Log::warning($e->getMessage());
-                $status = 'error';
-
-                $job->setFlagSolved($flagSolved);
-                $job->setFlagSolving(0 );
-                $job->setStatus($status);
-//
-//
-//                // TODO refactor with setStatus setter and same with flags: use setters to navigate code easier
-//                $job->update(
-//                    ['result' => $result, 'status' => $status, 'flag_solved' => $flagSolved, 'flag_solving' => 0]
-//                );
-
-                $job->save();
-            }
-        } catch (Exception $e) {
-            $job->setResult(null);
-            $job->setErrorMessage($e->getMessage());
-            Log::error($e->getMessage());
+        } catch (GuzzleException $e) {
+            $errorMessage = $e->getMessage();
+            Log::warning($e->getMessage());
         }
+        $job->handleResultFromSolver($result, $errorMessage);
+        $job->save();
 
         return $job;
     }
@@ -325,7 +278,7 @@ class JobController extends Controller
         /** @var User $user */
         $user = $request->user();
 
-        if ( $job->getUserId() != $user->getKey() ) {
+        if ($job->getUserId() != $user->getKey()) {
             throw new AccessDeniedHttpException('Current user is not allowed to access this job');
         }
 

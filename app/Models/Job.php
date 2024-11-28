@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Domain\Roster\Profile;
 use App\Domain\Roster\Schedule;
+use GuzzleHttp\Utils;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -179,5 +180,20 @@ class Job extends Model
         $this->setAttribute('status', $status);
 
         return $this;
+    }
+
+    public function handleResultFromSolver(string $result, string $errorMessage) {
+        $this->setErrorMessage($errorMessage);
+        // TODO make correct decisions in case of a bad result and error message.
+
+        $resultDataArray = Utils::jsonDecode($result, true);
+        $status = $resultDataArray['solverStatus'] ?? '';
+        $flagSolved = false;
+        if ($this->getFlagSolving() && $status == 'NOT_SOLVING') {
+            $flagSolved = true;
+        }
+        $this->setFlagSolved($flagSolved);
+        $this->setFlagSolving(0 );
+        $this->setStatus($status);
     }
 }
