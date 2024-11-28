@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Domain\Roster\Profile;
+use App\Domain\Roster\Schedule;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -21,6 +22,10 @@ class Job extends Model
         'flag_uploaded',
         'flag_solving',
         'flag_solved',
+    ];
+
+    protected $appends = [
+        'result_obj',
     ];
 
     protected $hidden = ['original_file_content'];
@@ -147,5 +152,21 @@ class Job extends Model
         $this->setAttribute('error_message', $message);
 
         return $this;
+    }
+
+    /**
+     * @return Schedule|mixed we leave possibility to solver other problems.
+     */
+    public function getResultObjAttribute() {
+        // TODO use constant instead of 'roster'
+        if ( $this->getType() == 'roster') {
+            $resultArray = json_decode( $this->getResult(), true );
+            $schedule = new Schedule($resultArray);
+
+            return $schedule;
+        }
+
+        // other tasks transformations
+        return null;
     }
 }

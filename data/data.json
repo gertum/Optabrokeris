@@ -1,252 +1,69 @@
 {
-
-
-  "timeslotList": [
+  "id": 1,
+  "availabilityList": [
     {
       "id": 1,
-      "dayOfWeek": "MONDAY",
-      "startTime": "08:31:00",
-      "endTime": "09:30:00"
-    },
-    {
-      "id": 2,
-      "dayOfWeek": "MONDAY",
-      "startTime": "09:30:00",
-      "endTime": "10:30:00"
-    },
-    {
-      "id": 3,
-      "dayOfWeek": "MONDAY",
-      "startTime": "10:30:00",
-      "endTime": "11:30:00"
-    },
-    {
-      "id": 4,
-      "dayOfWeek": "MONDAY",
-      "startTime": "13:30:00",
-      "endTime": "14:30:00"
-    },
-    {
-      "id": 5,
-      "dayOfWeek": "MONDAY",
-      "startTime": "14:30:00",
-      "endTime": "15:30:00"
-    },
-    {
-      "id": 6,
-      "dayOfWeek": "TUESDAY",
-      "startTime": "08:30:00",
-      "endTime": "09:30:00"
-    },
-    {
-      "id": 7,
-      "dayOfWeek": "TUESDAY",
-      "startTime": "09:30:00",
-      "endTime": "10:30:00"
-    },
-    {
-      "id": 8,
-      "dayOfWeek": "TUESDAY",
-      "startTime": "10:30:00",
-      "endTime": "11:30:00"
-    },
-    {
-      "id": 9,
-      "dayOfWeek": "TUESDAY",
-      "startTime": "13:30:00",
-      "endTime": "14:30:00"
-    },
-    {
-      "id": 10,
-      "dayOfWeek": "TUESDAY",
-      "startTime": "14:30:00",
-      "endTime": "15:30:00"
-    }
-  ],
-  "roomList": [
-    {
-      "id": 1,
-      "name": "Room A"
-    },
-    {
-      "id": 2,
-      "name": "Room B"
-    },
-    {
-      "id": 3,
-      "name": "Room C"
-    }
-  ],
-  "lessonList": [
-    {
-      "id": 1,
-      "subject": "Math",
-      "teacher": "A. Turing",
-      "studentGroup": "9th grade",
-      "timeslot": {
-        "id": 1,
-        "dayOfWeek": "MONDAY",
-        "startTime": "08:30:00",
-        "endTime": "09:30:00"
+      "employee": {
+        "name": "Marry",
+        "skillSet": [],
+        "maxWorkingHours": 80.0,
+        "maxWorkingMinutes": 4800
       },
-      "room": {
-        "id": 1,
-        "name": "Room A"
-      }
+      "dateFrom": "2024-11-01T08:00:00",
+      "date": "2024-11-01T08:00:00",
+      "dateTill": "2024-11-01T20:00:00",
+      "availabilityType": "AVAILABLE"
     },
     {
       "id": 2,
-      "subject": "Math",
-      "teacher": "A. Turing",
-      "studentGroup": "9th grade",
-      "timeslot": null,
-      "room": null
-    },
-    {
-      "id": 3,
-      "subject": "Physics",
-      "teacher": "M. Curie",
-      "studentGroup": "9th grade",
-      "timeslot": null,
-      "room": null
-    },
-    {
-      "id": 4,
-      "subject": "Chemistry",
-      "teacher": "M. Curie",
-      "studentGroup": "9th grade",
-      "timeslot": null,
-      "room": null
-    },
-    {
-      "id": 5,
-      "subject": "Biology",
-      "teacher": "C. Darwin",
-      "studentGroup": "9th grade",
-      "timeslot": null,
-      "room": null
-    },
-    {
-      "id": 6,
-      "subject": "History",
-      "teacher": "I. Jones",
-      "studentGroup": "9th grade",
-      "timeslot": null,
-      "room": null
-    },
-    {
-      "id": 7,
-      "subject": "English",
-      "teacher": "I. Jones",
-      "studentGroup": "9th grade",
-      "timeslot": null,
-      "room": null
-    },
-    {
-      "id": 8,
-      "subject": "English",
-      "teacher": "I. Jones",
-      "studentGroup": "9th grade",
-      "timeslot": null,
-      "room": null
-    },
-    {
-      "id": 9,
-      "subject": "Spanish",
-      "teacher": "P. Cruz",
-      "studentGroup": "9th grade",
-      "timeslot": null,
-      "room": null
-    },
-    {
-      "id": 10,
-      "subject": "Spanish",
-      "teacher": "P. Cruz",
-      "studentGroup": "9th grade",
-      "timeslot": null,
-      "room": null
-    },
-    {
-      "id": 11,
-      "subject": "Math",
-      "teacher": "A. Turing",
-      "studentGroup": "10th grade",
-      "timeslot": null,
-      "room": null
-    },
-    {
-      "id": 12,
-      "subject": "Math",
-      "teacher": "A. Turing",
-      "studentGroup": "10th grade",
-      "timeslot": null,
-      "room": null
-    },
-    {
-      "id": 13,
-      "subject": "Math",
-      "teacher": "A. Turing",
-      "studentGroup": "10th grade",
-      "timeslot": null,
-      "room": null
-    },
-    {
-      "id": 14,
-      "subject": "Physics",
-      "teacher": "M. Curie",
-      "studentGroup": "10th grade",
-      "timeslot": null,
-      "room": null
-    },
-    {
-      "id": 15,
-      "subject": "Chemistry",
-      "teacher": "M. Curie",
-      "studentGroup": "10th grade",
-      "timeslot": null,
-      "room": null
-    },
-    {
-      "id": 16,
-      "subject": "French",
-      "teacher": "M. Curie",
-      "studentGroup": "10th grade",
-      "timeslot": null,
-      "room": null
-    },
-    {
-      "id": 17,
-      "subject": "Geography",
-      "teacher": "C. Darwin",
-      "studentGroup": "10th grade",
-      "timeslot": null,
-      "room": null
-    },
-    {
-      "id": 18,
-      "subject": "History",
-      "teacher": "I. Jones",
-      "studentGroup": "10th grade",
-      "timeslot": null,
-      "room": null
-    },
-    {
-      "id": 19,
-      "subject": "English",
-      "teacher": "P. Cruz",
-      "studentGroup": "10th grade",
-      "timeslot": null,
-      "room": null
-    },
-    {
-      "id": 20,
-      "subject": "Spanish",
-      "teacher": "P. Cruz",
-      "studentGroup": "10th grade",
-      "timeslot": null,
-      "room": null
+      "employee": {
+        "name": "Marry",
+        "skillSet": [],
+        "maxWorkingHours": 80.0,
+        "maxWorkingMinutes": 4800
+      },
+      "dateFrom": "2024-11-01T20:00:00",
+      "date": "2024-11-01T20:00:00",
+      "dateTill": "2024-11-02T08:00:00",
+      "availabilityType": "AVAILABLE"
     }
   ],
-  "score": "-38init/0hard/0soft",
+  "employeeList": [
+    {
+      "name": "Marry",
+      "skillSet": [],
+      "maxWorkingHours": 80.0,
+      "maxWorkingMinutes": 4800
+    }
+  ],
+  "shiftList": [
+    {
+      "id": 1,
+      "start": "2024-11-01T08:00:00",
+      "end": "2024-11-01T20:00:00",
+      "location": "acceptance office",
+      "requiredSkill": "nurse",
+      "employee": null
+    },
+    {
+      "id": 1,
+      "start": "2024-11-01T20:00:00",
+      "end": "2024-11-02T08:00:00",
+      "location": "acceptance office",
+      "requiredSkill": "nurse",
+      "employee": null
+    }
+  ],
+  "score": "-2init/0hard/0soft",
+  "scheduleState": {
+    "tenantId": 1,
+    "publishLength": 7,
+    "draftLength": 14,
+    "firstDraftDate": "2024-10-31",
+    "lastHistoricDate": "2024-12-01",
+    "errorMessage": "The workingObjects (acceptance office 2024-11-01T08:00-2024-11-01T20:00 nurse null, acceptance office 2024-11-01T20:00-2024-11-02T08:00 nurse null) have the same planningId ((class lt.inkodus.roster.acceptance.data.Shift, 1)). Working objects must be unique.",
+    "errorClass": "java.lang.IllegalStateException",
+    "firstUnplannedDate": "2024-11-14"
+  },
   "solverStatus": "NOT_SOLVING"
 }

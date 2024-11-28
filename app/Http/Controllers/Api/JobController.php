@@ -50,6 +50,8 @@ class JobController extends Controller
 
 //        $this->prepareForBautifulJson($job);
 
+        // lets try to put the parsed result content
+
 
         return $job;
     }
@@ -88,6 +90,10 @@ class JobController extends Controller
         return $job;
     }
 
+    /**
+     * @param Job $job
+     * @deprecated same properties used both for string and object data
+     */
     public function prepareForBautifulJson(Job $job)
     {
         $data = $job->getData();
