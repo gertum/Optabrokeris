@@ -9,6 +9,8 @@ import {useConfirmation} from '@/Providers/ConfirmationProvider.jsx';
 import {DownloadOutlined} from "@ant-design/icons";
 
 const {Content} = Layout;
+const {Title} = Head;
+
 
 export default function View({auth, job: initialJob}) {
     const {t} = useTranslation();
@@ -16,6 +18,7 @@ export default function View({auth, job: initialJob}) {
     const {requestConfirmation} = useConfirmation();
     const [job, setJob] = useState(initialJob);
     const [token, setToken] = useState('');
+
 
 
     // TODO use in component this function
@@ -84,7 +87,10 @@ export default function View({auth, job: initialJob}) {
                 </h2>
             }
         >
-            <Head title={`Job ${job.name}`}/>
+            <Head>
+                <Title>{`Job ${job.name}`}</Title>
+            </Head>
+
             <Content
                 style={{
                     textAlign: 'center',
