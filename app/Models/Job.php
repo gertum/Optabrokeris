@@ -170,4 +170,14 @@ class Job extends Model
         // other tasks transformations, may be schedules, may be transport assignments, may be auditories assignments etc.
         return null;
     }
+
+    public function getStatus() {
+        return $this->getAttribute('status');
+    }
+
+    public function setStatus(string $status) : self {
+        $this->setAttribute('status', $status);
+
+        return $this;
+    }
 }

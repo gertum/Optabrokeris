@@ -64,6 +64,13 @@ class JobController extends Controller
 
             $solverClient = $this->solverClientFactory->createClient($type);
             $result = $solverClient->getResult($job->getSolverId());
+            $job->setResult($result);
+
+
+            // TODO move the following part to a separate function
+//          like $job->handleResultFromSolver($result);
+
+            // method 'save' should remain in this function, this way we may be able to cover handleResultFromSolver with unit test.
 
             $flagSolved = false;
             try {
@@ -73,15 +80,30 @@ class JobController extends Controller
                 if ($job->getFlagSolving() && $status == 'NOT_SOLVING') {
                     $flagSolved = true;
                 }
-                $job->update(['result' => $result, 'status' => $status, 'flag_solved' => $flagSolved]);
+
+                $job->setFlagSolved($flagSolved);
+                $job->setFlagSolving(0 );
+                $job->setStatus($status);
+
+//                $job->update(['result' => $result, 'status' => $status, 'flag_solved' => $flagSolved]);
+
+                $job->save();
+
             } catch (GuzzleException $e) {
                 Log::warning($e->getMessage());
                 $status = 'error';
 
-                // TODO refactor with setStatus setter and same with flags: use setters to navigate code easier
-                $job->update(
-                    ['result' => $result, 'status' => $status, 'flag_solved' => $flagSolved, 'flag_solving' => 0]
-                );
+                $job->setFlagSolved($flagSolved);
+                $job->setFlagSolving(0 );
+                $job->setStatus($status);
+//
+//
+//                // TODO refactor with setStatus setter and same with flags: use setters to navigate code easier
+//                $job->update(
+//                    ['result' => $result, 'status' => $status, 'flag_solved' => $flagSolved, 'flag_solving' => 0]
+//                );
+
+                $job->save();
             }
         } catch (Exception $e) {
             $job->setResult(null);
