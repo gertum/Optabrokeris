@@ -73,6 +73,13 @@ export default function View({auth, job: initialJob}) {
 
     };
 
+    const handleUploadPreferred = async () => {
+        // TODO
+    }
+    const handleUploadStandard = async () => {
+        // TODO
+    }
+
 
     useEffect(() => {
         fetchToken();
@@ -112,14 +119,14 @@ export default function View({auth, job: initialJob}) {
                             <Col>
                                 <Divider orientation="left">Upload preferred timings xlsx file</Divider>
                                 <Form
-                                    onFinish={() => onPreferedUploadFinish()} className="mt-4"
+                                    onFinish={() => handleUploadPreferred()} className="mt-4"
                                     name={"prefered-upload-form"}>
                                     <Upload.Dragger
                                         action={`/api/job/${job.id}/upload-preferred?_token=${token}`}
                                         maxCount={1}
                                         listType="picture"
                                         accept=".xlsx"
-                                        onChange={() => onPreferedUploadFinish()}
+                                        // onChange={() => handleUploadPreferred()}
                                     >
                                         {t('step.fileUploadForm.dragFiles')}
                                         <br/>
@@ -133,7 +140,7 @@ export default function View({auth, job: initialJob}) {
                             <Col>
                                 <Divider orientation="left">Upload half solved sheet xlsx file</Divider>
 
-                                <Form onFinish={() => onFinish()} className="mt-4">
+                                <Form onFinish={() => handleUploadStandard()} className="mt-4">
 
                                     {/*TODO padaryti backe download example pagal paduotą tipą*/}
                                     {/*<p>Need a sample file? <a href="/download/school-example" target={'_blank'}>Click here</a></p>*/}
@@ -142,12 +149,12 @@ export default function View({auth, job: initialJob}) {
                                         maxCount={1}
                                         listType="picture"
                                         accept=".xlsx"
-                                        onChange={() => onFinish()}
+                                        // onChange={() => onFinish()}
                                     >
                                         {t('step.fileUploadForm.dragFiles')}
                                         <br/>
                                         <Space>
-                                            <Button>{t('upload')}</Button>
+                                            <Button>{t('Upload')}</Button>
                                         </Space>
                                     </Upload.Dragger>
                                 </Form>
