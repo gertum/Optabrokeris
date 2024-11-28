@@ -24,6 +24,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 class JobController extends Controller
 {
@@ -199,10 +200,8 @@ class JobController extends Controller
 
     public function stop(Request $request, Job $job)
     {
-        // TODO build getter for type
-        $solverClient = $this->solverClientFactory->createClient($job->type);
+        $solverClient = $this->solverClientFactory->createClient($job->getType());
         try {
-            // TODO build getter for solver_id
             $solvingResult = $solverClient->stopSolving($job->solver_id);
         } catch (GuzzleException $e) {
             $message = $e->getMessage();
@@ -295,6 +294,10 @@ class JobController extends Controller
         $xslxFile = $request->file('file');
         /** @var User $user */
         $user = $request->user();
+
+        if ( $job->getUserId() != $user->getKey() ) {
+            throw new AccessDeniedHttpException('Current user is not allowed to access this job');
+        }
 
         $profileObj = $job->getProfileObj();
         if (count($profileObj->getShiftBounds()) == 0) {

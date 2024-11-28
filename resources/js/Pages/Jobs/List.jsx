@@ -6,11 +6,8 @@ import {useTranslation} from 'react-i18next';
 import {format, parseISO} from 'date-fns';
 import axios from 'axios';
 import {useEffect, useState} from 'react';
-// import JobsForm from '@/Pages/Jobs/View.jsx';
 import {useNotification} from "@/Providers/NotificationProvider.jsx";
 import {useConfirmation} from '@/Providers/ConfirmationProvider.jsx';
-// import di from "../../../../public/build/assets/List-6adec10f";
-
 
 const {Content} = Layout;
 const {Option} = Select;
@@ -22,7 +19,6 @@ export default function List({auth}) {
     const [jobs, setJobs] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [loadingJobs, setLoadingJobs] = useState(true);
-    const [errorJobs, setErrorJobs] = useState(null);
 
     // TODO daryti backendinį puslapiavimą
     const jobsPerPage = 6;
@@ -55,15 +51,6 @@ export default function List({auth}) {
         }
     };
 
-    // const solveJob = async ({id, name}) => {
-    //     try {
-    //         await axios.post(`/api/job/${id}/solve?_token=${token}`);
-    //         message.success(`${name ? name : 'No Name'} is solving`, 5);
-    //     } catch (error) {
-    //         message.error(`HandleSolve error: ${error.message}`, 5);
-    //     }
-    // };
-
     const createJob = async (values) => {
         console.log('create job clicked with values', values);
 
@@ -71,7 +58,6 @@ export default function List({auth}) {
             ...values,
         };
 
-        // try {
             axios.request({
                 method: 'POST',
                 url: `/api/job?_token=${token}`,
@@ -85,9 +71,6 @@ export default function List({auth}) {
                     setJobs([response.data, ...jobs]);
                 }
             });
-        // } catch (error) {
-        //     notifyError(error.message);
-        // }
     }
 
     const deleteJob = async (jobId) => {
@@ -122,93 +105,6 @@ export default function List({auth}) {
         fetchToken();
         fetchJobs();
     }, []);
-
-    // // TODO kam šitas reikalingas ?
-    // if (loadingJobs) {
-    //     return (
-    //         <AuthenticatedLayout
-    //             user={auth.user}
-    //             header={
-    //                 <h2 className="font-semibold text-xl text-gray-800 leading-tight">
-    //                     {t('jobs.createdJobs')}
-    //                 </h2>
-    //             }
-    //         >
-    //             <Head title="Jobs"/>
-    //             <Content
-    //                 style={{
-    //                     textAlign: 'center',
-    //                     minHeight: 'calc(100vh - 128px)',
-    //                     lineHeight: 4,
-    //                 }}
-    //             >
-    //                 <div className="py-6">
-    //                     <div className="mx-auto sm:px-6 lg:px-8">
-    //                         <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-    //                             <div className="p-6 text-gray-900">
-    //                                 <Spin
-    //                                     size="large"
-    //                                     style={{
-    //                                         textAlign: 'center',
-    //                                         minHeight: 'calc(100vh - 128px)',
-    //                                         lineHeight: 4,
-    //                                     }}
-    //                                 />
-    //                             </div>
-    //                         </div>
-    //                     </div>
-    //                 </div>
-    //             </Content>
-    //         </AuthenticatedLayout>
-    //     );
-    // }
-    //
-    // // TODO kam šitas reikalingas?
-    // if (errorJobs) {
-    //     return (
-    //         <AuthenticatedLayout
-    //             user={auth.user}
-    //             header={
-    //                 <h2 className="font-semibold text-xl text-gray-800 leading-tight">
-    //                     {t('jobs.createdJobs')}
-    //                 </h2>
-    //             }
-    //         >
-    //             <Head title="Jobs"/>
-    //             <Content
-    //                 style={{
-    //                     textAlign: 'center',
-    //                     minHeight: 'calc(100vh - 128px)',
-    //                     lineHeight: 4,
-    //                 }}
-    //             >
-    //                 <div className="py-6">
-    //                     <div className="mx-auto sm:px-6 lg:px-8">
-    //                         <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-    //                             <div className="p-6 text-gray-900">
-    //                                 <div
-    //                                     style={{
-    //                                         textAlign: 'center',
-    //                                         minHeight: 'calc(100vh - 128px)',
-    //                                         lineHeight: 4,
-    //                                     }}
-    //                                 >
-    //                                     <div>Error: {errorJobs}</div>
-    //                                 </div>
-    //                             </div>
-    //                         </div>
-    //                     </div>
-    //                 </div>
-    //             </Content>
-    //         </AuthenticatedLayout>
-    //     );
-    // }
-    //
-    // // TODO kam šitas reikalingas ?
-    // if (!jobs.length) {
-    //     return <JobsForm auth={auth}/>;
-    // }
-
 
     // ОК
     return (
@@ -320,32 +216,7 @@ export default function List({auth}) {
                                                         {'View'}
                                                     </Button>
                                                 </Link>
-                                                {/*<Button*/}
-                                                {/*    icon={<DownloadOutlined/>}*/}
-                                                {/*    size="large"*/}
-                                                {/*    disabled={!job.flag_uploaded}*/}
-                                                {/*    onClick={() =>*/}
-                                                {/*        window.open(*/}
-                                                {/*            `/api/job/${job.id}/download`,*/}
-                                                {/*            '_blank'*/}
-                                                {/*        )*/}
-                                                {/*    }*/}
-                                                {/*>*/}
-                                                {/*    Download*/}
-                                                {/*</Button>*/}
-                                                {/*<Button*/}
-                                                {/*    icon={<ReloadOutlined/>}*/}
-                                                {/*    size="large"*/}
-                                                {/*    disabled={!job.flag_uploaded}*/}
-                                                {/*    onClick={() =>*/}
-                                                {/*        solveJob({id: job.id, name: job.name})*/}
-                                                {/*    }*/}
-                                                {/*>*/}
-                                                {/*    Rerun*/}
-                                                {/*</Button>*/}
-
                                                 <Button
-                                                    // icon={<>}
                                                     size="large"
                                                     onClick={() => deleteJob(job.id)}
                                                 >

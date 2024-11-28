@@ -7,7 +7,6 @@ import axios from 'axios';
 import {useNotification} from "@/Providers/NotificationProvider.jsx";
 import {useConfirmation} from '@/Providers/ConfirmationProvider.jsx';
 import {DownloadOutlined} from "@ant-design/icons";
-// import {isStr} from "react-toastify/dist/utils";
 
 const {Content} = Layout;
 
@@ -16,51 +15,7 @@ export default function View({auth, job: initialJob}) {
     const {notifySuccess, notifyError} = useNotification();
     const {requestConfirmation} = useConfirmation();
     const [job, setJob] = useState(initialJob);
-    // const [values, setValues] = useState({});
-    // const [current, setCurrent] = useState(0);
-    // const [solver, setSolver] = useState(job?.type);
     const [token, setToken] = useState('');
-    // const [creating, setCreating] = useState(!job);
-
-    // const handleValuesChange = (allValues) => {
-    //     setValues(allValues);
-    //     if (!creating) {
-    //         handleSubmit(allValues);
-    //     }
-    // };
-    //
-    // const handleSolverSelect = (index) => {
-    //     setSolver(index);
-    // };
-
-    // const handleSubmit = (values) => {
-    //     const data = {
-    //         ...values,
-    //         type: solver,
-    //     };
-    //
-    //     axios.request({
-    //         method: job?.id ? 'PUT' : 'POST',
-    //         url: job?.id ? `/api/job/${job.id}?_token=${token}` : `/api/job?_token=${token}`,
-    //         data: data,
-    //     }).then((response) => {
-    //         setJob(response.data);
-    //         notifySuccess(`Job ${job?.id ? 'updated' : 'created'} successfully`);
-    //         if (creating) {
-    //             router.visit(route('jobs.view', {job: response.data.id}));
-    //         }
-    //     });
-    // };
-
-    // const onFileUploadFinish = () => {
-    //     setCurrent(current + 1);
-    //     reloadJob();
-    // };
-
-    // const onPreferedUploadFinish = () => {
-    //     // setCurrent(current + 1);
-    //     reloadJob();
-    // };
 
 
     // TODO use in component this function
@@ -72,13 +27,6 @@ export default function View({auth, job: initialJob}) {
             notifyError(`Login error: ${error.message}`);
         }
     };
-
-    // const reloadJob = async () => {
-    //     // console.log('Reloading job...');
-    //     axios.get(`/api/job/${job.id}`).then((response) => {
-    //         setJob(response.data);
-    //     });
-    // };
 
     const handleSolve = async () => {
         // const response = await
@@ -98,12 +46,6 @@ export default function View({auth, job: initialJob}) {
                     // setJobs([response.data, ...jobs]);
                 }
             });
-
-        // onSolve();
-        // setSolving(true);
-        // setTimeLeft(20);
-
-        // return response.data;
     };
 
     const handleStop = async () => {
@@ -126,23 +68,12 @@ export default function View({auth, job: initialJob}) {
                 }
             });
 
-        // onStop();
-        // setSolving(false);
-        // setTimerStarted(false);
-
-        // return response.data;
     };
 
 
     useEffect(() => {
         fetchToken();
     }, []);
-
-    // useEffect(() => {
-    //     if (job) {
-    //         setCreating(false);
-    //     }
-    // }, [job]);
 
     return (
         <AuthenticatedLayout
@@ -163,7 +94,6 @@ export default function View({auth, job: initialJob}) {
 
                 <Row>
                     <Col xs={24}>
-                        {/*<SolverForm defaultType={job?.type} readonly={!!job} onSelect={handleSolverSelect}/>*/}
 
                         <Row align="middle" gutter={16}>
                             <Col>
@@ -218,16 +148,6 @@ export default function View({auth, job: initialJob}) {
 
                             </Col>
                         </Row>
-
-                        {/*{*/}
-                        {/*    job?.id && <FinalForm token={token}*/}
-                        {/*                          job={job}*/}
-                        {/*                          disabled={!!job}*/}
-                        {/*                          solving={job && job.flag_solving && !job.flag_solved}*/}
-                        {/*                          onStop={() => reloadJob()}*/}
-                        {/*                          onSolve={() => reloadJob()}/>*/}
-                        {/*}*/}
-
 
                         <Row>
                             <Col>

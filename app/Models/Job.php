@@ -120,4 +120,23 @@ class Job extends Model
     {
         $this->setProfile(json_encode($profile));
     }
+
+    public function getSolverId() {
+        return $this->getAttribute('solver_id');
+    }
+
+    public function setSolverId($solverId) : self {
+        $this->setAttribute('solver_id', $solverId);
+        return $this;
+    }
+
+    public function getUserId() {
+        return $this->getAttribute('user_id');
+    }
+
+    public function setUserId($userId) : self {
+        $this->setAttribute('user_id', $userId);
+
+        return $this;
+    }
 }
