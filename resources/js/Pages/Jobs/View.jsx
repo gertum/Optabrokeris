@@ -117,6 +117,20 @@ export default function View({auth, job: initialJob}) {
                         </Row>
                         <Row>
                             <Col>
+                                <h3>Flags</h3>
+                                Flag uploaded: {job.flag_uploaded? "yes":"no"};
+                                Flag solving started: {job.flag_solving? "yes":"no"};
+                                Flags solving done: {job.flag_solved? "yes":"no"};
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col>
+                                <h3>Data statuses</h3>
+                                Solver status:  TODO
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col>
                                 <Divider orientation="left">Upload preferred timings xlsx file</Divider>
                                 <Form
                                     onFinish={() => handleUploadPreferred()} className="mt-4"

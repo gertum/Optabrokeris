@@ -29,7 +29,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/job/{job}/solve', [JobController::class, 'solve']);
     Route::post('/job/{job}/stop', [JobController::class, 'stop']);
     Route::post('/job/{job}/upload', [JobController::class, 'upload']);
-    Route::post('/job/{job}/upload-preferred', [JobController::class, 'uploadPreferredXslx']);
+    Route::post('/job/{job}/upload-preferred', [JobController::class, 'uploadPreferredXlsx']);
     Route::get('/job/{job}/download', [JobController::class, 'download']);
 
 

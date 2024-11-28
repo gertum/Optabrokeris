@@ -139,4 +139,13 @@ class Job extends Model
 
         return $this;
     }
+    public function getErrorMessage() {
+        return $this->getAttribute('error_message');
+    }
+
+    public function setErrorMessage($message) : self {
+        $this->setAttribute('error_message', $message);
+
+        return $this;
+    }
 }

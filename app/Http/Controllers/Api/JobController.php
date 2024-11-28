@@ -61,7 +61,7 @@ class JobController extends Controller
             $type = $job->getAttribute('type');
 
             $solverClient = $this->solverClientFactory->createClient($type);
-            $result = $solverClient->getResult($job->solver_id);
+            $result = $solverClient->getResult($job->getSolverId());
 
             $flagSolved = false;
             try {
@@ -81,7 +81,7 @@ class JobController extends Controller
             }
         } catch (Exception $e) {
             $job->setResult(null);
-            $job->error_message = $e->getMessage();
+            $job->setErrorMessage($e->getMessage());
             Log::error($e->getMessage());
         }
 
@@ -285,7 +285,7 @@ class JobController extends Controller
         return $job;
     }
 
-    public function uploadPreferredXslx(
+    public function uploadPreferredXlsx(
         Request $request,
         Job $job,
         ScheduleParser $scheduleParser,
