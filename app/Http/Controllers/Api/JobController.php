@@ -77,6 +77,8 @@ class JobController extends Controller
             } catch (GuzzleException $e) {
                 Log::warning($e->getMessage());
                 $status = 'error';
+
+                // TODO refactor with setStatus setter and same with flags: use setters to navigate code easier
                 $job->update(
                     ['result' => $result, 'status' => $status, 'flag_solved' => $flagSolved, 'flag_solving' => 0]
                 );
