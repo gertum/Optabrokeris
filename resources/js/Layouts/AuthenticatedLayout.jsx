@@ -46,6 +46,13 @@ export default function Authenticated({ user, header, children }) {
                 >
                   {t('Subjects')}
                 </NavLink>
+
+                <NavLink
+                    href={route('downloads.view')}
+                    active={route().current('downloads.view')}
+                >
+                  {t('Downloads')}
+                </NavLink>
               </Space>
             </Col>
             <Col span={16} style={{ textAlign: 'right' }}>

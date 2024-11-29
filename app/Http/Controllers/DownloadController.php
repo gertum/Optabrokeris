@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use Inertia\Inertia;
+use Inertia\Response;
+
 class DownloadController extends Controller
 {
     public function downloadSchoolExample()
@@ -15,5 +18,10 @@ class DownloadController extends Controller
         }
 
         return sprintf('%s/data/SchoolData.xlsx', base_path());
+    }
+
+    public function view() : Response {
+        return Inertia::render('Downloads/View', [
+        ]);
     }
 }

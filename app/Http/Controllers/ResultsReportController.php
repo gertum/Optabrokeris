@@ -6,6 +6,9 @@ use App\Repositories\JobRepository;
 use App\Transformers\Roster\AmbulanceJobReportTransformer;
 use Illuminate\Http\Request;
 
+/**
+ * @deprecated this is a backend GUI controller, not finished.
+ */
 class ResultsReportController  extends Controller
 {
     public function getResults(Request $request, JobRepository $jobRepository, AmbulanceJobReportTransformer $transformer) {

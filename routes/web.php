@@ -35,7 +35,10 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/download/school-example', [DownloadController::class, 'downloadSchoolExample'])->name('download.school.example');
 
-    Route::get('/report-results', [ResultsReportController::class, 'getResults'])->name('report.results');
+//    Route::get('/report-results', [ResultsReportController::class, 'getResults'])->name('report.results');
+
+    Route::get('/downloads', [DownloadController::class, 'view'])->name('downloads.view');
+
 
 });
 
