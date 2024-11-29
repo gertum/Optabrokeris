@@ -155,7 +155,7 @@ class JobController extends Controller
 
     public function solve(JobSolveRequest $request, Job $job)
     {
-        $solverClient = $this->solverClientFactory->createClient($job->type);
+        $solverClient = $this->solverClientFactory->createClient($job->getType());
         $repeat = $request->get('repeat', false);
 
         try {
@@ -165,8 +165,14 @@ class JobController extends Controller
                 $job->update(['solver_id' => $solverId]);
             }
 
-            $solvingResult = $solverClient->startSolving($job->solver_id);
-            $job->update(['flag_solving' => true, 'flag_solved' => false]);
+            $solvingResult = $solverClient->startSolving($job->getSolverId());
+            $job->setFlagSolving(true);
+            $job->setFlagSolved(false);
+
+            $this->tryToGetResultFromSolver($job);
+
+            return $job;
+//            $job->update(['flag_solving' => true, 'flag_solved' => false]);
         } catch (GuzzleException $e) {
             $message = $e->getMessage();
 
@@ -176,9 +182,6 @@ class JobController extends Controller
 
             throw new SolverException($message);
         }
-
-
-        return $solvingResult;
     }
 
     public function stop(Request $request, Job $job)

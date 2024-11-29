@@ -43,10 +43,12 @@ export default function View({auth, job: initialJob}) {
                 notifyError(errorMessage);
             })
             .then((response) => {
+                console.log('solve start response', response);
                 if (response !== undefined) {
                     notifySuccess(`Solving started`);
 
-                    if ( response.data.id !== undefined) {
+                    // be sure the response is a job object
+                    if (response.data.id !== undefined) {
                         setJob(response.data);
                     }
                 }
@@ -112,6 +114,7 @@ export default function View({auth, job: initialJob}) {
 
     useEffect(() => {
         fetchToken();
+        reloadJobContent();
     }, []);
 
     return (

@@ -220,4 +220,10 @@ class Job extends Model
         $this->setFlagSolved($flagSolved);
         $this->setStatus($status);
     }
+
+    public function setId(int $id) : self {
+        $this->setAttribute('id', $id);
+
+        return $this;
+    }
 }

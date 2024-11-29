@@ -21,13 +21,15 @@ class JobsController extends Controller
     // G.T. testuoju, ar šitas padės refreshinimui... kol kas nepadeda
     public function view(?int $job=null): Response
     {
-        if ($job == null ) {
-            $jobObj = null;
-        }
-        else {
-            $jobObj = Job::query()->findOrFail(['id' => $job])->first();
-        }
+        // the job content is loaded through API
+//        if ($job == null ) {
+//            $jobObj = null;
+//        }
+//        else {
+//            $jobObj = Job::query()->findOrFail(['id' => $job])->first();
+//        }
 
+        $jobObj = (new Job())->setId($job);
         return Inertia::render('Jobs/View', [
             'job' => $jobObj,
         ]);
