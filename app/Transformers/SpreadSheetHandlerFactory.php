@@ -3,6 +3,7 @@
 namespace App\Transformers;
 
 use App\Exceptions\ValidateException;
+use App\Models\Job;
 use App\Solver\SolverClientFactory;
 use App\Transformers\Roster\AmbulanceOfficeDataHandler;
 use App\Transformers\School\SpreadSheetWithHeadersDataHandler;
@@ -20,7 +21,7 @@ class SpreadSheetHandlerFactory
 
     public function createHandler($type, $fileName): SpreadSheetDataHandler
     {
-        if ($type == SolverClientFactory::TYPE_SCHOOL) {
+        if ($type == Job::TYPE_SCHOOL) {
             if (!str_ends_with($fileName, '.xlsx')) {
                 throw new ValidateException('We currently only handle xlsx file extensions for %s', $type);
             }
@@ -32,7 +33,7 @@ class SpreadSheetHandlerFactory
             return new ExcelSchoolDataHandler();
         }
 
-        if ($type == SolverClientFactory::TYPE_ROSTER) {
+        if ($type == Job::TYPE_ROSTER) {
             if (!str_ends_with($fileName, '.xlsx')) {
                 throw new ValidateException('We currently only handle xlsx file extensions for %s', $type);
             }

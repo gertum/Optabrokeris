@@ -206,6 +206,10 @@ class JobController extends Controller
     public function upload(JobUploadRequest $request, Job $job, SpreadSheetHandlerFactory $fileHandlerFactory)
     {
         $file = $request->file('file');
+        if ( $file == null ) {
+            throw new ValidateException('Upload file was not received');
+        }
+
         $fileHandler = $fileHandlerFactory->createHandler($job->getType(), $file->getClientOriginalName());
 
         $dataArray = $fileHandler->spreadSheetToArray($file->getRealPath());
@@ -274,7 +278,12 @@ class JobController extends Controller
         ScheduleParser $scheduleParser,
         SubjectRepository $subjectRepository
     ) {
-        $xslxFile = $request->file('file');
+        $xlsxFile = $request->file('file');
+
+        if ( $xlsxFile == null ) {
+            throw new ValidateException('Upload file was not received');
+        }
+
         /** @var User $user */
         $user = $request->user();
 
@@ -288,7 +297,7 @@ class JobController extends Controller
             $profileObj->setShiftBounds([8, 20]);
         }
 
-        $schedule = $scheduleParser->parsePreferedScheduleXls($xslxFile->getRealPath(), $profileObj);
+        $schedule = $scheduleParser->parsePreferedScheduleXls($xlsxFile->getRealPath(), $profileObj);
 
         $employeesNames = $schedule->getEmployeesNames();
         $subjects = $subjectRepository->loadSubjectsByNames($employeesNames);

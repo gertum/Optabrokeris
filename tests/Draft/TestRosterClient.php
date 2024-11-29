@@ -2,6 +2,7 @@
 
 namespace Draft;
 
+use App\Models\Job;
 use App\Solver\SolverClientFactory;
 use App\Solver\SolverClientRoster;
 use Tests\TestCase;
@@ -76,7 +77,7 @@ class TestRosterClient extends TestCase
         /** @var SolverClientFactory $factory */
         $factory = app(SolverClientFactory::class);
 
-        $client = $factory->createClient('roster');
+        $client = $factory->createClient(Job::TYPE_ROSTER);
         $this->assertTrue($client instanceof SolverClientRoster);
 
 

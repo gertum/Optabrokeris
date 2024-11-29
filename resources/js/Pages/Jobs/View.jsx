@@ -1,5 +1,5 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import {Head, router} from '@inertiajs/react';
+import {Head} from '@inertiajs/react';
 import {Avatar, Button, Col, Divider, Form, Layout, Row, Space, Upload} from 'antd';
 import React, {useEffect, useState} from 'react';
 import {useTranslation} from 'react-i18next';
@@ -20,7 +20,6 @@ export default function View({auth, job: initialJob}) {
     const [token, setToken] = useState('');
 
 
-
     // TODO use in component this function
     const fetchToken = async () => {
         try {
@@ -35,18 +34,21 @@ export default function View({auth, job: initialJob}) {
         // const response = await
         await axios.post(`/api/job/${job.id}/solve?_token=${token}`)
             .catch((error) => {
-                console.log ( 'error response:', error);
+                console.log('error response:', error);
 
                 let errorMessage = error.response.data;
-                if (errorMessage === undefined ||  typeof errorMessage !== 'string' ) {
+                if (errorMessage === undefined || typeof errorMessage !== 'string') {
                     errorMessage = error.message;
                 }
                 notifyError(errorMessage);
             })
             .then((response) => {
-                if  ( response !== undefined ) {
+                if (response !== undefined) {
                     notifySuccess(`Solving started`);
-                    // setJobs([response.data, ...jobs]);
+
+                    if ( response.data.id !== undefined) {
+                        setJob(response.data);
+                    }
                 }
             });
     };
@@ -56,16 +58,16 @@ export default function View({auth, job: initialJob}) {
 
         await axios.post(`/api/job/${job.id}/stop?_token=${token}`)
             .catch((error) => {
-                console.log ( 'error response:', error);
+                console.log('error response:', error);
 
                 let errorMessage = error.response.data;
-                if (errorMessage === undefined ||  typeof errorMessage !== 'string' ) {
+                if (errorMessage === undefined || typeof errorMessage !== 'string') {
                     errorMessage = error.message;
                 }
                 notifyError(errorMessage);
             })
             .then((response) => {
-                if  ( response !== undefined ) {
+                if (response !== undefined) {
                     notifySuccess(`Solving stop signal sent`);
                     // setJobs([response.data, ...jobs]);
                 }
@@ -73,13 +75,40 @@ export default function View({auth, job: initialJob}) {
 
     };
 
-    const handleUploadPreferred = async () => {
-        // TODO
-    }
-    const handleUploadStandard = async () => {
-        // TODO
+    const reloadJobContent = async () => {
+        await axios.request({
+                method: 'GET',
+                url: `/api/job/${job.id}?_token=${token}`,
+            }
+        )
+            .catch((error) => {
+                console.log('error response:', error);
+
+                let errorMessage = error.response.data;
+                if (errorMessage === undefined || typeof errorMessage !== 'string') {
+                    errorMessage = error.message;
+                }
+                notifyError(errorMessage);
+            })
+            .then((response) => {
+                if (response !== undefined) {
+                    // notifySuccess(`Reload job successful`);
+                    setJob(response.data);
+                }
+            });
+
     }
 
+    const handleUploadPreferred = async () => {
+        console.log('handleUploadPreferred called');
+        // yet we didn't find a way to get upload result, so we make additional request to get job content
+        await reloadJobContent();
+    }
+
+    const handleUploadStandard = async () => {
+        // yet we didn't find a way to get upload result, so we make additional request to get job content
+        await reloadJobContent();
+    }
 
     useEffect(() => {
         fetchToken();
@@ -87,15 +116,15 @@ export default function View({auth, job: initialJob}) {
 
     return (
         <AuthenticatedLayout
-            user={auth.user}
+            user={auth?.user}
             header={
                 <h2 className="font-semibold text-xl text-gray-800 leading-tight">
-                    {`Job "${job.name}"`}
+                    {`Job "${job?.name}"`}
                 </h2>
             }
         >
             <Head>
-                <Title>{`Job ${job.name}`}</Title>
+                <Title>{`Job ${job?.name}`}</Title>
             </Head>
 
             <Content
@@ -117,30 +146,27 @@ export default function View({auth, job: initialJob}) {
                         </Row>
                         <Row>
                             <Col>
-                                <h3>Flags</h3>
-                                Flag uploaded: {job.flag_uploaded? "yes":"no"};
-                                Flag solving started: {job.flag_solving? "yes":"no"};
-                                Flags solving done: {job.flag_solved? "yes":"no"};
-                            </Col>
-                        </Row>
-                        <Row>
-                            <Col>
-                                <h3>Data statuses</h3>
-                                Solver status:  TODO
+                                <h3>Status</h3>
+                                Flag uploaded: {job.flag_uploaded ? "yes" : "no"};<br/>
+                                Flag solving started: {job.flag_solving ? "yes" : "no"};<br/>
+                                Flags solving done: {job.flag_solved ? "yes" : "no"};<br/>
+                                Solver status: {job.status} <br/>
                             </Col>
                         </Row>
                         <Row>
                             <Col>
                                 <Divider orientation="left">Upload preferred timings xlsx file</Divider>
                                 <Form
-                                    onFinish={() => handleUploadPreferred()} className="mt-4"
+                                    onFinish={(response) => handleUploadPreferred(response)}
+                                    className="mt-4"
                                     name={"prefered-upload-form"}>
                                     <Upload.Dragger
                                         action={`/api/job/${job.id}/upload-preferred?_token=${token}`}
                                         maxCount={1}
                                         listType="picture"
                                         accept=".xlsx"
-                                        // onChange={() => handleUploadPreferred()}
+                                        name={'file'}
+                                        onChange={(response) => handleUploadPreferred(response)}
                                     >
                                         {t('step.fileUploadForm.dragFiles')}
                                         <br/>

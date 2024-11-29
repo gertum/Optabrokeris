@@ -10,6 +10,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Job extends Model
 {
+    public const TYPE_ROSTER = 'roster';
+    public const TYPE_SCHOOL = 'school';
+
     use HasFactory;
 
     protected $fillable = [
@@ -170,10 +173,14 @@ class Job extends Model
      */
     public function getResultObjAttribute()
     {
-        // TODO use constant instead of 'roster'
-        if ($this->getType() == 'roster') {
+        if ($this->getType() ==  self::TYPE_ROSTER) {
             $resultArray = json_decode($this->getResult(), true);
             $schedule = new Schedule($resultArray);
+
+            // clear json_last_error()
+            if ( json_last_error() != 0 ) {
+                json_decode('{}');
+            }
 
             return $schedule;
         }
@@ -198,7 +205,7 @@ class Job extends Model
     {
         $this->setErrorMessage($errorMessage);
 
-        $resultDataArray = Utils::jsonDecode($result, true);
+        $resultDataArray = json_decode($result, true);
         $status = $resultDataArray['solverStatus'] ?? '';
 
         if ($errorMessage != '' || !is_array($resultDataArray)) {

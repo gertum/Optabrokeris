@@ -58,19 +58,19 @@ export default function List({auth}) {
             ...values,
         };
 
-            axios.request({
-                method: 'POST',
-                url: `/api/job?_token=${token}`,
-                data: data,
-            }).catch((error) => {
-                console.log ( 'error response:', error.response.data);
-                notifyError(error.response.data);
-            }).then((response) => {
-                if  ( response !== undefined ) {
-                    notifySuccess(`Job created successfully`);
-                    setJobs([response.data, ...jobs]);
-                }
-            });
+        axios.request({
+            method: 'POST',
+            url: `/api/job?_token=${token}`,
+            data: data,
+        }).catch((error) => {
+            console.log('error response:', error.response.data);
+            notifyError(error.response.data);
+        }).then((response) => {
+            if (response !== undefined) {
+                notifySuccess(`Job created successfully`);
+                setJobs([response.data, ...jobs]);
+            }
+        });
     }
 
     const deleteJob = async (jobId) => {
@@ -81,7 +81,7 @@ export default function List({auth}) {
 
         console.log('confirmed:', confirmed);
 
-        if ( !confirmed) {
+        if (!confirmed) {
             return;
         }
 
@@ -89,10 +89,10 @@ export default function List({auth}) {
             method: 'DELETE',
             url: `/api/job/${jobId}/?_token=${token}`,
         }).catch((error) => {
-            console.log ( 'error response:', error.response.data);
+            console.log('error response:', error.response.data);
             notifyError(error.response.data);
         }).then((response) => {
-            if  ( response !== undefined ) {
+            if (response !== undefined) {
                 notifySuccess(`Job deleted successfully`);
                 fetchJobs();
             }
@@ -184,7 +184,7 @@ export default function List({auth}) {
                                             </div>
                                             <div className="job-info">
                                                 <div className="job-text">
-                                                    <h3>{job.name }</h3>
+                                                    <h3>{job.name}</h3>
                                                     <p>
                                                         Created at:
                                                         {job?.created_at
