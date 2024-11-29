@@ -28,10 +28,11 @@ export default function View({auth}) {
             >
                 <Row>
                     <Col xs={24}>
-                        <p>School example: </p>
-                        <p>Hospital schedule example: </p>
-                        <p>Hospital preferences example: </p>
-                        <p>Subjects list example: </p>
+                        <p><a href={route('download.school.example')} target={'_blank'}>School example</a></p>
+                        <p><a href={route('download.roster.subjects.example')} target={'_blank'}>Subjects list example</a></p>
+                        <p><a href={route('download.roster.schedule.example')} target={'_blank'}>Hospital schedule example</a></p>
+                        <p><a href={route('download.roster.preferred1.example')} target={'_blank'}>Hospital preferred times example 1</a></p>
+                        <p><a href={route('download.roster.preferred2.example')} target={'_blank'}>Hospital preferred times example 2</a></p>
                     </Col>
                 </Row>
                 <Divider/>
