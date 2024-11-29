@@ -172,7 +172,6 @@ class JobController extends Controller
             $this->tryToGetResultFromSolver($job);
 
             return $job;
-//            $job->update(['flag_solving' => true, 'flag_solved' => false]);
         } catch (GuzzleException $e) {
             $message = $e->getMessage();
 
