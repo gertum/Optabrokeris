@@ -199,7 +199,8 @@ class JobController extends Controller
         }
 
 
-        $job->setFlagSolved(true);
+        $job->setFlagSolved(false);
+        $job->setFlagSolving(false);
         $job->save();
 
         return $solvingResult;

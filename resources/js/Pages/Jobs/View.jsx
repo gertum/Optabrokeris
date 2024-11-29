@@ -50,6 +50,7 @@ export default function View({auth, job: initialJob}) {
                     // be sure the response is a job object
                     if (response.data.id !== undefined) {
                         setJob(response.data);
+                        reloadAfterSomeTime(31);
                     }
                 }
             });
@@ -71,7 +72,7 @@ export default function View({auth, job: initialJob}) {
             .then((response) => {
                 if (response !== undefined) {
                     notifySuccess(`Solving stop signal sent`);
-                    // setJobs([response.data, ...jobs]);
+                    reloadJobContent();
                 }
             });
 
@@ -110,6 +111,14 @@ export default function View({auth, job: initialJob}) {
     const handleUploadStandard = async () => {
         // yet we didn't find a way to get upload result, so we make additional request to get job content
         await reloadJobContent();
+    }
+
+    const reloadAfterSomeTime = async (time) => {
+        console.log('Page will be reloaded in ' + time);
+        setTimeout(() => {
+            reloadJobContent();
+            console.log('Page reloaded');
+        }, time * 1000);
     }
 
     useEffect(() => {
@@ -152,7 +161,7 @@ export default function View({auth, job: initialJob}) {
                                 <h3>Status</h3>
                                 Flag uploaded: {job.flag_uploaded ? "yes" : "no"};<br/>
                                 Flag solving started: {job.flag_solving ? "yes" : "no"};<br/>
-                                Flags solving done: {job.flag_solved ? "yes" : "no"};<br/>
+                                Flags solving done: {job.flag_solved ? <span style={{ color: 'green' }}>YES</span> : "no"};<br/>
                                 Solver status: {job.status} <br/>
                             </Col>
                         </Row>
@@ -210,14 +219,19 @@ export default function View({auth, job: initialJob}) {
                                 <Divider orientation="left">Solution</Divider>
                                 <div className="my-2">
                                     <Space>
-                                        <Button size="large" onClick={handleSolve}>
-                                            Solve
-                                        </Button>
-                                        <Button size="large" danger onClick={handleStop}>
-                                            Stop solving
-                                        </Button>
+                                        {
+                                            job.status !== 'SOLVING_ACTIVE' ?
+                                                <Button size="large" onClick={handleSolve}>
+                                                    Solve
+                                                </Button>
+                                                :
+                                                <Button size="large" danger onClick={handleStop}>
+                                                    Stop solving
+                                                </Button>
+                                        }
                                     </Space>
                                 </div>
+
                                 <Button
                                     type="primary"
                                     shape="round"
