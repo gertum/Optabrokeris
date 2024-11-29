@@ -76,22 +76,22 @@ class Job extends Model
         return $this->getAttribute('flag_uploaded');
     }
 
-    public function setFlagSolving(bool $flag)
+    public function setFlagSolving(bool $flag): self
     {
         return $this->setAttribute('flag_solving', $flag);
     }
 
-    public function setFlagSolved(bool $flag)
+    public function setFlagSolved(bool $flag): self
     {
         return $this->setAttribute('flag_solved', $flag);
     }
 
-    public function setFlagUploaded(bool $flag)
+    public function setFlagUploaded(bool $flag): self
     {
         return $this->setAttribute('flag_uploaded', $flag);
     }
 
-    public function setOriginalFileContent(string $content)
+    public function setOriginalFileContent(string $content): self
     {
         return $this->setAttribute('original_file_content', base64_encode($content));
     }
@@ -122,34 +122,43 @@ class Job extends Model
         return new Profile($data);
     }
 
-    public function setProfileObj(Profile $profile)
+    public function setProfileObj(Profile $profile): self
     {
         $this->setProfile(json_encode($profile));
+
+        return $this;
     }
 
-    public function getSolverId() {
+    public function getSolverId()
+    {
         return $this->getAttribute('solver_id');
     }
 
-    public function setSolverId($solverId) : self {
+    public function setSolverId($solverId): self
+    {
         $this->setAttribute('solver_id', $solverId);
         return $this;
     }
 
-    public function getUserId() {
+    public function getUserId()
+    {
         return $this->getAttribute('user_id');
     }
 
-    public function setUserId($userId) : self {
+    public function setUserId($userId): self
+    {
         $this->setAttribute('user_id', $userId);
 
         return $this;
     }
-    public function getErrorMessage() {
+
+    public function getErrorMessage()
+    {
         return $this->getAttribute('error_message');
     }
 
-    public function setErrorMessage($message) : self {
+    public function setErrorMessage($message): self
+    {
         $this->setAttribute('error_message', $message);
 
         return $this;
@@ -159,10 +168,11 @@ class Job extends Model
      * Laravel magic attribute using  $appends ( look above at the top of this class body )
      * @return Schedule|mixed we leave possibility to solver other problems.
      */
-    public function getResultObjAttribute() {
+    public function getResultObjAttribute()
+    {
         // TODO use constant instead of 'roster'
-        if ( $this->getType() == 'roster') {
-            $resultArray = json_decode( $this->getResult(), true );
+        if ($this->getType() == 'roster') {
+            $resultArray = json_decode($this->getResult(), true);
             $schedule = new Schedule($resultArray);
 
             return $schedule;
@@ -172,28 +182,35 @@ class Job extends Model
         return null;
     }
 
-    public function getStatus() {
+    public function getStatus()
+    {
         return $this->getAttribute('status');
     }
 
-    public function setStatus(string $status) : self {
+    public function setStatus(string $status): self
+    {
         $this->setAttribute('status', $status);
 
         return $this;
     }
 
-    public function handleResultFromSolver(string $result, string $errorMessage) {
+    public function handleResultFromSolver(string $result, string $errorMessage)
+    {
         $this->setErrorMessage($errorMessage);
-        // TODO make correct decisions in case of a bad result and error message.
 
         $resultDataArray = Utils::jsonDecode($result, true);
         $status = $resultDataArray['solverStatus'] ?? '';
+
+        if ($errorMessage != '' || !is_array($resultDataArray)) {
+            $this->setFlagSolving(false);
+        }
+
+
         $flagSolved = false;
         if ($this->getFlagSolving() && $status == 'NOT_SOLVING') {
             $flagSolved = true;
         }
         $this->setFlagSolved($flagSolved);
-        $this->setFlagSolving(0 );
         $this->setStatus($status);
     }
 }
