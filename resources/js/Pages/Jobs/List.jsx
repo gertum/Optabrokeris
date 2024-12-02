@@ -1,9 +1,8 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import {Head, Link} from '@inertiajs/react';
-import {Avatar, Button, Card, Form, Input, Layout, message, Select, Space} from 'antd';
-import {DownloadOutlined, EyeInvisibleOutlined, EyeOutlined, ReloadOutlined,} from '@ant-design/icons';
+import {Head} from '@inertiajs/react';
+import {Avatar, Button, Col, Form, Input, Layout, message, Modal, Row, Select, Skeleton, List} from 'antd';
+import {DeleteOutlined, EyeInvisibleOutlined, EyeOutlined, FileAddOutlined} from '@ant-design/icons';
 import {useTranslation} from 'react-i18next';
-import {format, parseISO} from 'date-fns';
 import axios from 'axios';
 import {useEffect, useState} from 'react';
 import {useNotification} from "@/Providers/NotificationProvider.jsx";
@@ -13,19 +12,15 @@ const {Content} = Layout;
 const {Option} = Select;
 const {Title} = Head;
 
-export default function List({auth}) {
+export default function JobList({auth}) {
     const {t} = useTranslation();
     const [token, setToken] = useState('');
     const [jobs, setJobs] = useState([]);
-    const [currentPage, setCurrentPage] = useState(1);
     const [loadingJobs, setLoadingJobs] = useState(true);
-
-    // TODO daryti backendinį puslapiavimą
-    const jobsPerPage = 6;
-    const startIndex = (currentPage - 1) * jobsPerPage;
-    const endIndex = startIndex + jobsPerPage;
+    const [isModalOpen, setIsModalOpen] = useState(false);
     const {notifySuccess, notifyError} = useNotification();
     const {requestConfirmation} = useConfirmation();
+    const [form] = Form.useForm();
 
     const fetchJobs = async () => {
         try {
@@ -99,154 +94,138 @@ export default function List({auth}) {
         });
     }
 
-    const displayedJobs = jobs.slice(startIndex, endIndex);
-
     useEffect(() => {
         fetchToken();
         fetchJobs();
     }, []);
 
-    // ОК
+    const showModal = () => {
+        setIsModalOpen(true);
+    };
+    const handleOk = () => {
+        form.submit();
+        setIsModalOpen(false);
+    };
+    const handleCancel = () => {
+        setIsModalOpen(false);
+    };
+
     return (
         <AuthenticatedLayout
             user={auth.user}
             header={
-                <h2 className="font-semibold text-xl text-gray-800 leading-tight">
-                    {t('jobs.createdJobs')}
-                </h2>
+                <Row align={"middle"}>
+                    <Col span={4}></Col>
+                    <Col span={16}>
+                        <h2 className="font-semibold text-xl text-gray-800 leading-tight">
+                            {t('Profiles')}
+                        </h2>
+                    </Col>
+                    <Col span={4} className={"text-right"}>
+                        <Button type="primary" icon={<FileAddOutlined />} onClick={showModal}>
+                            Create
+                        </Button>
+                    </Col>
+                </Row>
             }
         >
             <Head>
-                <Title>Jobs</Title>
+                <Title>Profiles</Title>
             </Head>
             <Content
                 style={{
-                    textAlign: 'center',
                     minHeight: 'calc(100vh - 128px)',
                     lineHeight: 4,
                 }}
             >
-                <div className="py-6">
-                    <div className="mx-auto sm:px-6 lg:px-8">
-                        <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                            <div className="p-6 text-gray-900">
-                                <Form onFinish={(values) => createJob(values)}>
-                                    <Form.Item
-                                        label={"New Job name"}
-                                        name="name"
-                                        rules={[
-                                            {
-                                                required: true,
-                                                message: "Input job name",
-                                            },
-                                        ]}
-                                    >
-                                        <Input size="medium"/>
-                                    </Form.Item>
+                <Modal title="Create new profile" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
+                    <Form
+                        form={form}
+                        labelCol={{
+                            span: 8,
+                        }}
+                        wrapperCol={{
+                            span: 16,
+                        }}
+                        style={{
+                            maxWidth: 600,
+                        }}
+                        onFinish={(values) => createJob(values)}>
+                        <Form.Item
+                            label={"New Job name"}
+                            name="name"
+                            rules={[
+                                {
+                                    required: true,
+                                    message: "Input job name",
+                                },
+                            ]}
+                        >
+                            <Input size="medium"/>
+                        </Form.Item>
 
-                                    <Form.Item
-                                        label="Job type"
-                                        name="type"
-                                        rules={[{required: true, message: 'Please input!'}]}
-                                    >
-                                        <Select>
-                                            <Option value={"roster"}>Roster</Option>
-                                            <Option value={"school"}>School</Option>
-                                        </Select>
-                                    </Form.Item>
-
-                                    <Form.Item label={null}>
-                                        <Button type="primary" htmlType="submit">
-                                            Create
-                                        </Button>
-                                    </Form.Item>
-
-                                </Form>
-
-                                {displayedJobs.map((job, index) => (
-                                    <Card
-                                        key={job.id}
-                                        style={{marginBottom: jobs.length - 1 !== index ? '1.5rem' : '0'}}
-                                    >
-                                        <div
-                                            style={{
-                                                display: 'flex',
-                                                justifyContent: 'space-between',
-                                                alignItems: 'center',
-                                            }}
-                                        >
-                                            <div className="job-icon">
-                                                <Avatar className="bg-blue-500 text-bold" size={64}>
-                                                    {job?.type
-                                                        ? job.type[0].toUpperCase() + job.type.substring(1)
-                                                        : '-'}
-                                                </Avatar>
-                                            </div>
-                                            <div className="job-info">
-                                                <div className="job-text">
-                                                    <h3>{job.name}</h3>
-                                                    <p>
-                                                        Created at:
-                                                        {job?.created_at
-                                                            ? format(
-                                                                parseISO(job.created_at),
-                                                                'yyyy-MM-dd HH:mm:ss'
-                                                            )
-                                                            : '-'}
-                                                    </p>
-                                                </div>
-                                            </div>
-                                            <Space className="job-actions">
-                                                <Link
-                                                    href={route('jobs.view', {
-                                                        id: job.id,
-                                                    })}
-                                                    className="ant-btn ant-btn-lg"
-                                                >
-                                                    <Button
-                                                        icon={
-                                                            !job.flag_uploaded ? (
-                                                                <EyeInvisibleOutlined/>
-                                                            ) : (
-                                                                <EyeOutlined/>
-                                                            )
-                                                        }
-                                                        size="large"
-                                                    >
-                                                        {'View'}
-                                                    </Button>
-                                                </Link>
-                                                <Button
-                                                    size="large"
-                                                    onClick={() => deleteJob(job.id)}
-                                                >
-                                                    Delete
-                                                </Button>
-
-                                            </Space>
-                                        </div>
-                                    </Card>
-                                ))}
-                            </div>
-                            <div className="p-6 text-gray-900">
-                                <Space>
-                                    <Button
-                                        disabled={currentPage === 1}
-                                        onClick={() => setCurrentPage(currentPage - 1)}
-                                    >
-                                        Previous
-                                    </Button>
-                                    <Button
-                                        disabled={endIndex >= jobs.length}
-                                        onClick={() => setCurrentPage(currentPage + 1)}
-                                    >
-                                        Next
-                                    </Button>
-                                </Space>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                        <Form.Item
+                            label="Job type"
+                            name="type"
+                            rules={[{required: true, message: 'Please input!'}]}
+                        >
+                            <Select>
+                                <Option value={"roster"}>Roster</Option>
+                                <Option value={"school"}>School</Option>
+                            </Select>
+                        </Form.Item>
+                    </Form>
+                </Modal>
+                <List
+                    loading={loadingJobs}
+                    itemLayout="horizontal"
+                    dataSource={jobs}
+                    renderItem={(job) => (
+                        <List.Item
+                            actions={[
+                                <Button
+                                    href={route('jobs.view', {
+                                        id: job.id,
+                                    })}
+                                    icon={
+                                        !job.flag_uploaded ? (
+                                            <EyeInvisibleOutlined/>
+                                        ) : (
+                                            <EyeOutlined/>
+                                        )
+                                    }
+                                    type="link"
+                                    size="small"
+                                >
+                                    {'View'}
+                                </Button>,
+                                <Button
+                                    danger
+                                    type="link"
+                                    size="small"
+                                    icon={<DeleteOutlined/>}
+                                    onClick={() => deleteJob(job.id)}
+                                >
+                                    Delete
+                                </Button>
+                            ]}
+                        >
+                            <Skeleton avatar title={false} loading={loadingJobs} active>
+                                <List.Item.Meta
+                                    avatar={
+                                        <Avatar className="bg-blue-500 text-bold" size={64}>
+                                            {job?.type
+                                                ? job.type[0].toUpperCase() + job.type.substring(1)
+                                                : '-'}
+                                        </Avatar>
+                                    }
+                                    title={job.name}
+                                    description="Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+                                />
+                            </Skeleton>
+                        </List.Item>
+                    )}
+                />
             </Content>
         </AuthenticatedLayout>
     );

@@ -30,7 +30,7 @@ export default function Authenticated({ user, header, children }) {
                   href={route('jobs.list')}
                   active={route().current('jobs.list')}
                 >
-                  {t('Jobs')}
+                  {t('Profiles')}
                 </NavLink>
 
                 {/*<NavLink*/}
@@ -51,7 +51,7 @@ export default function Authenticated({ user, header, children }) {
                     href={route('downloads.view')}
                     active={route().current('downloads.view')}
                 >
-                  {t('Downloads')}
+                  {t('Examples')}
                 </NavLink>
               </Space>
             </Col>
@@ -97,7 +97,7 @@ export default function Authenticated({ user, header, children }) {
         </header>
       )}
 
-      <main className={'max-w-5xl mx-auto'}>{children}</main>
+      <main className={'max-w-7xl mx-auto'}>{children}</main>
     </div>
   );
 }
