@@ -51,13 +51,11 @@ class ScheduleWriter
 
         $this->clearAllTimings($wrapper, $eilNrTitle, $eilNrs, $xlsxFastEditor);
 
-        // use SiftsListTransformer.
-
         $occupations = ShiftsListTransformer::transform($schedule->shiftList);
 
-        $flagNewVersion = true;
+//        $flagNewVersion = true;
 
-        if ($flagNewVersion) {
+//        if ($flagNewVersion) {
             foreach ($occupations as $occupation) {
                 if ($occupation->getEmployee() == null || $occupation->getEmployee()->name == null) {
                     continue;
@@ -85,42 +83,44 @@ class ScheduleWriter
                 $xlsxFastEditor->writeFloat($worksheetId1, $cellFrom->name, $occupation->getStartHour() / 24);
                 $xlsxFastEditor->writeFloat($worksheetId1, $cellTill->name, $occupation->getEndHour() / 24);
             }
-        } else {
-// =========================== old version ==========================================================
-            foreach ($schedule->shiftList as $shift) {
-                if ($shift->employee == null || $shift->employee->name == null) {
-                    continue;
-                }
-
-                if (!array_key_exists($shift->employee->name, $employeesByName)) {
-                    $this->logger->warning(
-                        sprintf(
-                            'Could not find employee by name [%s] in excel file [%s]',
-                            $shift->employee->name,
-                            $fileTemplate
-                        )
-                    );
-                    continue;
-                }
-
-                $parsedEmployee = $employeesByName[$shift->employee->name];
-                $row = $parsedEmployee->getRow();
-
-                $startDate = Carbon::parse($shift->start);
-                $endDate = Carbon::parse($shift->end);
-                $column = $wrapper->getColumnByDay($eilNrTitle->getColumn(), $startDate->day);
-
-                $cellFrom = $wrapper->getCell($row, $column);
-                $cellTill = $wrapper->getCell($row + 1, $column);
-
-
-                $dayPartFrom = $startDate->hour / 24;
-                $dayPartTill = $endDate->hour / 24;
-                $xlsxFastEditor->writeFloat($worksheetId1, $cellFrom->name, $dayPartFrom);
-                $xlsxFastEditor->writeFloat($worksheetId1, $cellTill->name, $dayPartTill);
-            }
-            // ================== end of old version ================================================
-        }
+//        }
+//        else {
+//// =========================== old version ==========================================================
+//            // TODO remove the old version code
+//            foreach ($schedule->shiftList as $shift) {
+//                if ($shift->employee == null || $shift->employee->name == null) {
+//                    continue;
+//                }
+//
+//                if (!array_key_exists($shift->employee->name, $employeesByName)) {
+//                    $this->logger->warning(
+//                        sprintf(
+//                            'Could not find employee by name [%s] in excel file [%s]',
+//                            $shift->employee->name,
+//                            $fileTemplate
+//                        )
+//                    );
+//                    continue;
+//                }
+//
+//                $parsedEmployee = $employeesByName[$shift->employee->name];
+//                $row = $parsedEmployee->getRow();
+//
+//                $startDate = Carbon::parse($shift->start);
+//                $endDate = Carbon::parse($shift->end);
+//                $column = $wrapper->getColumnByDay($eilNrTitle->getColumn(), $startDate->day);
+//
+//                $cellFrom = $wrapper->getCell($row, $column);
+//                $cellTill = $wrapper->getCell($row + 1, $column);
+//
+//
+//                $dayPartFrom = $startDate->hour / 24;
+//                $dayPartTill = $endDate->hour / 24;
+//                $xlsxFastEditor->writeFloat($worksheetId1, $cellFrom->name, $dayPartFrom);
+//                $xlsxFastEditor->writeFloat($worksheetId1, $cellTill->name, $dayPartTill);
+//            }
+//            // ================== end of old version ================================================
+//        }
 
 
         // ================ Write summaries ==========================
@@ -206,13 +206,8 @@ class ScheduleWriter
 
         // $wrapper must tell where is the cell we need to edit
         $wrapper = ExcelWrapper::parse($fileTemplate);
-        $wrapper->registerMatcher('datePlaceholder', new CustomValueCellMatcher('/DATE_PLACEHOLDER/'));
-        $wrapper->registerMatcher('eilNr', new CustomValueCellMatcher('/eil.\s*nr/'));
-        $wrapper->registerMatcher('workingHoursPerDay', new CustomValueCellMatcher('/Darbo val.* .* dien.*/'));
-        $wrapper->registerMatcher('positionAmount', new CustomValueCellMatcher('/Etat.* skai.*ius/'));
-        $wrapper->registerMatcher('workingHoursPerMonth', new CustomValueCellMatcher('/Darbo valand.* per m.*nes.*/'));
-        $wrapper->registerMatcher('monthDays', new CustomValueCellMatcher('/M.*nesio dienos/'));
-        $wrapper->registerMatcher('assignedHours', new CustomValueCellMatcher('/Darbo valand.* priskirta/'));
+
+        ScheduleParser::registerStandardMatchers($wrapper);
 
         $wrapper->runMatchers();
 

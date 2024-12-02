@@ -16,11 +16,16 @@ use DateTimeInterface;
 class ScheduleParser
 {
     const SYMBOLS_TO_AVAILABILITIES_MAP = [
-        [['Х', // different encoding!
-            'X',
-            'x',
-            'a',
-            'A'], [Availability::UNAVAILABLE, Availability::UNAVAILABLE]],
+        [
+            [
+                'Х', // different encoding!
+                'X',
+                'x',
+                'a',
+                'A'
+            ],
+            [Availability::UNAVAILABLE, Availability::UNAVAILABLE]
+        ],
         // we will use both lowercase on the tested data
         [['', 'dn', 'd2'], [Availability::AVAILABLE, Availability::AVAILABLE]],
         [['p'], [Availability::DESIRED, Availability::DESIRED]],
@@ -28,6 +33,26 @@ class ScheduleParser
         [['n'], [Availability::DESIRED, Availability::UNDESIRED]],
         [['xd'], [Availability::AVAILABLE, Availability::UNAVAILABLE]],
         [['xn'], [Availability::UNAVAILABLE, Availability::AVAILABLE]],
+    ];
+
+    const AVAILABILITIES_MATCHERS_KEYS = [
+        'x',
+        'xn',
+        'xd',
+        'a',
+        'p',
+        'd',
+        'n',
+        'd2',
+        'dn',
+    ];
+
+    const SUBJECTS_MATCHERS_CRITICAL_KEYS = ['etatas', 'workingHours'];
+
+    const SCHEDULE_MATCHERS_CRITICAL_KEYS = [
+        'eilNr',
+        'monthDays',
+        'nameAndLastname',
     ];
 
     /**
@@ -119,7 +144,8 @@ class ScheduleParser
             $dateRecognizer->getMonth(),
             $dateFrom->daysInMonth,
             24
-        )->toImmutable();
+        )->toImmutable()
+        ;
         $shifts = ShiftsBuilder::buildShiftsOfBounds($dateFrom, $dateTill, $profile->getShiftBounds());
         $schedule->setShiftList($shifts);
 
@@ -136,7 +162,7 @@ class ScheduleParser
         $employees = [];
         $skippedLines = 0;
         $sequenceNumber = 1;
-        while ($row < $wrapper->getMaxRows() ) {
+        while ($row < $wrapper->getMaxRows()) {
             $employeeCell = $wrapper->getCell($row, 0);
             if ($employeeCell->value == null) {
                 $skippedLines++;
@@ -170,10 +196,9 @@ class ScheduleParser
      */
     public function parseAvailabilities(
         PreferencesExcelWrapper $wrapper,
-        CarbonInterface         $startingDate,
-        array                   $employees
-    ): array
-    {
+        CarbonInterface $startingDate,
+        array $employees
+    ): array {
         $availabilities = [];
         // 1) find a cell with value '1' at the row index 1, then use it as the marker of the column,
         // where availabilities starts from
@@ -281,17 +306,24 @@ class ScheduleParser
         $nextDay = $nextDay->modify('+1 day');
 
         $nightStartStr = Carbon::create($previousDay->year, $previousDay->month, $previousDay->day, 20)
-            ->format(Schedule::TARGET_DATE_FORMAT);
+            ->format(Schedule::TARGET_DATE_FORMAT)
+        ;
         $dayStartStr = Carbon::create($currentDay->year, $currentDay->month, $currentDay->day, 8)
-            ->format(Schedule::TARGET_DATE_FORMAT);
+            ->format(Schedule::TARGET_DATE_FORMAT)
+        ;
         $dayEndStr = Carbon::create($currentDay->year, $currentDay->month, $currentDay->day, 20)
-            ->format(Schedule::TARGET_DATE_FORMAT);
+            ->format(Schedule::TARGET_DATE_FORMAT)
+        ;
         $nextDayStartStr = Carbon::create($nextDay->year, $nextDay->month, $nextDay->day, 8)
-            ->format(Schedule::TARGET_DATE_FORMAT);
+            ->format(Schedule::TARGET_DATE_FORMAT)
+        ;
 
         $availabilitySymbols = strtolower(trim($availabilitySymbols));
 
-        if (in_array($availabilitySymbols, ['8-8', '8-8r.']) || str_contains($availabilitySymbols, '08-08')) { // TODO special case!!!
+        if (in_array($availabilitySymbols, ['8-8', '8-8r.']) || str_contains(
+                $availabilitySymbols,
+                '08-08'
+            )) { // special case!!!
             $availabilities = [
                 (new Availability())
                     ->setDate($dayStartStr)
@@ -363,10 +395,9 @@ class ScheduleParser
     public function fillGaps(
         Carbon $startDate,
         Carbon $endDate,
-        array  $availabilities,
+        array $availabilities,
         string $defaultAvailabilityType
-    ): array
-    {
+    ): array {
         $currentDate = clone $startDate;
         $interval12 = new DateInterval('PT12H');
 
@@ -382,7 +413,8 @@ class ScheduleParser
             $availability = (new Availability())
                 ->setDate($currentDateStr)
                 ->setDateTill($nextDateStr)
-                ->setAvailabilityType($defaultAvailabilityType);
+                ->setAvailabilityType($defaultAvailabilityType)
+            ;
 
             $availabilities[$currentDateStr] = $availability;
         }
@@ -391,5 +423,36 @@ class ScheduleParser
         usort($availabilities, fn(Availability $a, Availability $b) => $a->date <=> $b->date);
 
         return $availabilities;
+    }
+
+    public static function registerStandardMatchers(ExcelWrapper $wrapper)
+    {
+        $wrapper->registerMatcher('datePlaceholder', new CustomValueCellMatcher('/DATE_PLACEHOLDER/'));
+        $wrapper->registerMatcher('eilNr', new CustomValueCellMatcher('/eil.\s*nr/'));
+        $wrapper->registerMatcher('workingHoursPerDay', new CustomValueCellMatcher('/Darbo val.* .* dien.*/'));
+        $wrapper->registerMatcher('positionAmount', new CustomValueCellMatcher('/Etat.* skai.*ius/'));
+        $wrapper->registerMatcher('workingHoursPerMonth', new CustomValueCellMatcher('/Darbo valand.* per m.*nes.*/'));
+        $wrapper->registerMatcher('monthDays', new CustomValueCellMatcher('/M.*nesio dienos/'));
+        $wrapper->registerMatcher('assignedHours', new CustomValueCellMatcher('/Darbo valand.* priskirta/'));
+        $wrapper->registerMatcher('nameAndLastname', new CustomValueCellMatcher('/Vardas.*pavard.*/'));
+    }
+
+    public static function registerSubjectMatchers(ExcelWrapper $wrapper)
+    {
+        $wrapper->registerMatcher('etatas', new CustomValueCellMatcher('/etatas/'));
+        $wrapper->registerMatcher('workingHours', new CustomValueCellMatcher('/darbo valandos/'));
+    }
+
+    public static function registerAvailabilitiesMatchers(ExcelWrapper $wrapper)
+    {
+        $wrapper->registerMatcher('x', new CustomValueCellMatcher('/^x$/i'));
+        $wrapper->registerMatcher('xn', new CustomValueCellMatcher('/^xn$/i'));
+        $wrapper->registerMatcher('xd', new CustomValueCellMatcher('/^xd$/i'));
+        $wrapper->registerMatcher('a', new CustomValueCellMatcher('/^a$/i'));
+        $wrapper->registerMatcher('p', new CustomValueCellMatcher('/^p$/i'));
+        $wrapper->registerMatcher('d', new CustomValueCellMatcher('/^d$/i'));
+        $wrapper->registerMatcher('n', new CustomValueCellMatcher('/^n$/i'));
+        $wrapper->registerMatcher('d2', new CustomValueCellMatcher('/^d2$/i'));
+        $wrapper->registerMatcher('dn', new CustomValueCellMatcher('/^dn$/i'));
     }
 }

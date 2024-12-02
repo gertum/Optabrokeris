@@ -326,7 +326,9 @@ class ExcelWrapper
         return $this->findCellWithValue('Darbo valandų priskirta');
     }
 
-    // TODO use cell matchers
+    /**
+     * @deprecated use cell matchers
+     */
     public function findCellWithValue(string $cellValue): ?Cell
     {
         for ($row = 0; $row < $this->getMaxRows(); $row++) {

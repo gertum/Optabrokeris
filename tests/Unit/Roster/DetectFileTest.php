@@ -37,7 +37,6 @@ class DetectFileTest extends TestCase
                 'expectedType' => null,
             ],
             // school nedarom kol kas
-
         ];
     }
 }

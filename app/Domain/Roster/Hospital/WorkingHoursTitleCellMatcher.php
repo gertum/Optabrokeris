@@ -9,8 +9,8 @@ class WorkingHoursTitleCellMatcher implements CellMatcherInterface
      */
     public const COLUMN_TITLE = 'Darbo valandų per mėnesį';
 
-    private int $row;
-    private int $column;
+    private int $row = -1;
+    private int $column = -1;
 
     public function getRow(): int
     {
