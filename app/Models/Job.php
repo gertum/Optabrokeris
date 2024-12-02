@@ -203,7 +203,20 @@ class Job extends Model
 
     public function handleResultFromSolver(string $result, string $errorMessage)
     {
-        $this->setErrorMessage($errorMessage);
+        if ( $errorMessage == '' ) {
+            // hacky
+            if ( str_starts_with( $this->getErrorMessage(), '-' )) {
+                $this->setErrorMessage($errorMessage);
+            }
+            elseif ($this->getErrorMessage() != '' )  {
+                $this->setErrorMessage( '-'.$this->getErrorMessage());
+            }
+        }
+        else {
+            $this->setErrorMessage($errorMessage);
+        }
+
+        $this->setResult($result);
 
         $resultDataArray = json_decode($result, true);
         $status = $resultDataArray['solverStatus'] ?? '';

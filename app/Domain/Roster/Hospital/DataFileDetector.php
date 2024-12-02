@@ -15,9 +15,11 @@ class DataFileDetector
 
     public function detectExcelType(string $file): ?string
     {
-        if (!str_ends_with($file, '.xlsx')) {
-            return null;
-        }
+
+        // this is not valid for uploaded files!
+//        if (!str_ends_with($file, '.xlsx')) {
+//            return null;
+//        }
 
         try {
             $wrapper = ExcelWrapper::parse($file);

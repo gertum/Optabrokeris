@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Domain\Roster\Hospital\ScheduleParser;
 use App\Domain\Roster\Profile;
+use App\Exceptions\ExcelParseException;
 use App\Exceptions\SolverException;
 use App\Exceptions\ValidateException;
 use App\Http\Controllers\Controller;
@@ -221,7 +222,14 @@ class JobController extends Controller
             $profileObj->setShiftBounds([8, 20]);
         }
 
-        $dataArray = $fileHandler->spreadSheetToArray($file->getRealPath(), $profileObj);
+        try {
+            $dataArray = $fileHandler->spreadSheetToArray($file->getRealPath(), $profileObj);
+        } catch (ExcelParseException $e) {
+            $job->setErrorMessage($e->getMessage());
+            $job->save();
+
+            throw new ValidateException($e->getMessage());
+        }
         $job->setOriginalFileContent(file_get_contents($file->getRealPath()));
 
         $fileHandler->validateDataArray($dataArray);

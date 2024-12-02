@@ -163,45 +163,43 @@ export default function View({auth, job: initialJob}) {
                                 Flag solving started: {job.flag_solving ? "yes" : "no"};<br/>
                                 Flags solving done: {job.flag_solved ? <span style={{ color: 'green' }}>YES</span> : "no"};<br/>
                                 Solver status: {job.status} <br/>
+                                Last error:  <span style={{ color: 'red' }}>{job.error_message}</span> <br/>
                             </Col>
                         </Row>
                         <Row>
-                            <Col>
-                                <Divider orientation="left">Upload preferred timings xlsx file</Divider>
-                                <Form
-                                    onFinish={(response) => handleUploadPreferred(response)}
-                                    className="mt-4"
-                                    name={"prefered-upload-form"}>
-                                    <Upload.Dragger
-                                        action={`/api/job/${job.id}/upload-preferred?_token=${token}`}
-                                        maxCount={1}
-                                        listType="picture"
-                                        accept=".xlsx"
-                                        name={'file'}
-                                        onChange={(response) => handleUploadPreferred(response)}
-                                    >
-                                        {t('step.fileUploadForm.dragFiles')}
-                                        <br/>
-                                        <Space>
-                                            <Button>{t('jobs.uploadPreferred')}</Button>
-                                        </Space>
-                                    </Upload.Dragger>
-                                </Form>
+                            {/*<Col>*/}
+                            {/*    <Divider orientation="left">Upload preferred timings xlsx file</Divider>*/}
+                            {/*    <Form*/}
+                            {/*        onFinish={() => handleUploadPreferred()}*/}
+                            {/*        className="mt-4"*/}
+                            {/*        name={"prefered-upload-form"}>*/}
+                            {/*        <Upload.Dragger*/}
+                            {/*            action={`/api/job/${job.id}/upload-preferred?_token=${token}`}*/}
+                            {/*            maxCount={1}*/}
+                            {/*            listType="picture"*/}
+                            {/*            accept=".xlsx"*/}
+                            {/*            name={'file'}*/}
+                            {/*            onChange={() => handleUploadPreferred()}*/}
+                            {/*        >*/}
+                            {/*            {t('step.fileUploadForm.dragFiles')}*/}
+                            {/*            <br/>*/}
+                            {/*            <Space>*/}
+                            {/*                <Button>{t('jobs.uploadPreferred')}</Button>*/}
+                            {/*            </Space>*/}
+                            {/*        </Upload.Dragger>*/}
+                            {/*    </Form>*/}
 
-                            </Col>
+                            {/*</Col>*/}
                             <Col>
-                                <Divider orientation="left">Upload half solved sheet xlsx file</Divider>
+                                <Divider orientation="left">Upload schedule or preferences xlsx file</Divider>
 
                                 <Form onFinish={() => handleUploadStandard()} className="mt-4">
-
-                                    {/*TODO padaryti backe download example pagal paduotą tipą*/}
-                                    {/*<p>Need a sample file? <a href="/download/school-example" target={'_blank'}>Click here</a></p>*/}
                                     <Upload.Dragger
                                         action={`/api/job/${job.id}/upload?_token=${token}`}
                                         maxCount={1}
                                         listType="picture"
                                         accept=".xlsx"
-                                        // onChange={() => onFinish()}
+                                        onChange={() => handleUploadStandard()}
                                     >
                                         {t('step.fileUploadForm.dragFiles')}
                                         <br/>

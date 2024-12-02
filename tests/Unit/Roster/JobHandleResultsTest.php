@@ -24,6 +24,7 @@ class JobHandleResultsTest extends TestCase
         $this->assertEquals($expectedJobWithAttributes->getFlagUploaded(), $job->getFlagUploaded());
         $this->assertEquals($expectedJobWithAttributes->getFlagSolved(), $job->getFlagSolved());
         $this->assertEquals($expectedJobWithAttributes->getErrorMessage(), $job->getErrorMessage());
+        $this->assertEquals($expectedJobWithAttributes->getResult(), $job->getResult());
     }
 
     public static function provideDataForJobResults(): array
@@ -33,12 +34,10 @@ class JobHandleResultsTest extends TestCase
                 'result' => '{}',
                 'errorMessage' => '',
                 'job' => new Job(),
-                'expectedJob' => new Job(),
+                'expectedJob' => (new Job())->setResult('{}'),
             ],
             'test error variant' => [
-                'result' => '{
-                  "solverStatus": "NOT_SOLVING"
-                }',
+                'result' => '{"solverStatus": "NOT_SOLVING"}',
                 'errorMessage' => 'abc',
                 'job' => (new Job())
                     ->setFlagUploaded(true)
@@ -51,12 +50,11 @@ class JobHandleResultsTest extends TestCase
                     ->setFlagSolving(false)
                     ->setFlagSolved(false)
                     ->setStatus('NOT_SOLVING')
+                    ->setResult('{"solverStatus": "NOT_SOLVING"}')
                 ,
             ],
             'test solving not started' => [
-                'result' => '{
-                  "solverStatus": "NOT_SOLVING"
-                }',
+                'result' => '{"solverStatus": "NOT_SOLVING"}',
                 'errorMessage' => '',
                 'job' => (new Job())
                     ->setFlagUploaded(true)
@@ -69,12 +67,11 @@ class JobHandleResultsTest extends TestCase
                     ->setFlagSolving(false)
                     ->setFlagSolved(false)
                     ->setStatus('NOT_SOLVING')
+                    ->setResult('{"solverStatus": "NOT_SOLVING"}')
                 ,
             ],
             'test solving started' => [
-                'result' => '{
-                  "solverStatus": "SOLVING"
-                }',
+                'result' => '{"solverStatus": "SOLVING"}',
                 'errorMessage' => '',
                 'job' => (new Job())
                     ->setFlagUploaded(true)
@@ -87,12 +84,11 @@ class JobHandleResultsTest extends TestCase
                     ->setFlagSolving(true)
                     ->setFlagSolved(false)
                     ->setStatus('SOLVING')
+                    ->setResult('{"solverStatus": "SOLVING"}')
                 ,
             ],
             'test solfing finished successfully' => [
-                'result' => '{
-                  "solverStatus": "NOT_SOLVING"
-                }',
+                'result' => '{"solverStatus": "NOT_SOLVING"}',
                 'errorMessage' => '',
                 'job' => (new Job())
                     ->setFlagUploaded(true)
@@ -105,6 +101,8 @@ class JobHandleResultsTest extends TestCase
                     ->setFlagSolving(true)
                     ->setFlagSolved(true)
                     ->setStatus('NOT_SOLVING')
+                    ->setResult('{"solverStatus": "NOT_SOLVING"}'
+                    )
                 ,
             ],
         ];
