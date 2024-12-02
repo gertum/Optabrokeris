@@ -2,6 +2,7 @@
 
 namespace App\Transformers;
 
+use App\Domain\Roster\Profile;
 use App\Exceptions\ExcelParseException;
 use App\Exceptions\SolverDataException;
 use App\Models\Job;
@@ -11,7 +12,7 @@ use Shuchkin\SimpleXLSXGen;
 
 class ExcelSchoolDataHandler implements SpreadSheetDataHandler
 {
-    public function spreadSheetToArray(string $excelFile): array
+    public function spreadSheetToArray(string $excelFile, ?Profile $profileObj=null): array
     {
         if ($xlsx = SimpleXLSX::parse($excelFile)) {
             $timeslotList = $xlsx->rows(0);

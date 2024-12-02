@@ -5,6 +5,7 @@ namespace App\Domain\Roster;
 use Spatie\DataTransferObject\DataTransferObject;
 
 /**
+ * TODO move to a more common namespace ( not only Roster )
  * Used to parse json data, stored in Job and in User
  */
 class Profile extends DataTransferObject

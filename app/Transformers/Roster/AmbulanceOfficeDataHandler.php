@@ -2,10 +2,12 @@
 
 namespace App\Transformers\Roster;
 
+use App\Domain\Roster\Hospital\DataFileDetector;
 use App\Domain\Roster\Hospital\ScheduleParser;
 use App\Domain\Roster\Hospital\ScheduleWriter;
 use App\Domain\Roster\Profile;
 use App\Domain\Roster\Schedule;
+use App\Exceptions\ExcelParseException;
 use App\Exceptions\SolverDataException;
 use App\Models\Job;
 use App\Repositories\SubjectRepository;
@@ -13,34 +15,64 @@ use App\Transformers\SpreadSheetDataHandler;
 
 class AmbulanceOfficeDataHandler implements SpreadSheetDataHandler
 {
-
     private ScheduleWriter $scheduleWriter;
     private SubjectRepository $subjectRepository;
+    private ScheduleParser $scheduleParser;
+    private DataFileDetector $dataFileDetector;
 
-    private string $templateFile='';
+    private string $templateFile = '';
 
-    /**
-     * @param ScheduleWriter $scheduleWriter
-     */
-    public function __construct(ScheduleWriter $scheduleWriter, SubjectRepository $subjectRepository)
-    {
+    public function __construct(
+        ScheduleWriter $scheduleWriter,
+        SubjectRepository $subjectRepository,
+        ScheduleParser $scheduleParser,
+        DataFileDetector $dataFileDetector
+    ) {
         $this->scheduleWriter = $scheduleWriter;
         $this->subjectRepository = $subjectRepository;
+        $this->scheduleParser = $scheduleParser;
+        $this->dataFileDetector = $dataFileDetector;
     }
 
-
-    public function spreadSheetToArray(string $excelFile): array
+    /**
+     *
+     */
+    public function spreadSheetToArray(string $excelFile, ?Profile $profileObj = null): array
     {
-        // TODO DI parser too
-        $scheduleParser = new ScheduleParser();
+        $type = $this->dataFileDetector->detectExcelType($excelFile);
 
-        $schedule = $scheduleParser->parseScheduleXls($excelFile, ScheduleParser::createHospitalTimeSlices());
+        $schedule = null;
+        $writeType = null;
+        switch ($type) {
+            case  DataFileDetector::TYPE_SCHEDULE_XLS:
+                $schedule = $this->scheduleParser->parseScheduleXls(
+                    $excelFile,
+                    ScheduleParser::createHospitalTimeSlices()
+                )
+                    ->fillSkills('medicine')
+                    ->fillLocation('ambulance office')
+                ;
+                $writeType = Profile::WRITE_TYPE_ORIGINAL_FILE;
+                break;
+            case DataFileDetector::TYPE_AVAILABILITIES_XLS:
+                $schedule = $this->scheduleParser->parsePreferedScheduleXls($excelFile, $profileObj);
+                $employeesNames = $schedule->getEmployeesNames();
+                $subjects = $this->subjectRepository->loadSubjectsByNames($employeesNames);
+                $schedule->fillEmployeesWithSubjectsData($subjects);
+                $writeType = Profile::WRITE_TYPE_TEMPLATE_FILE;
+                break;
+            case DataFileDetector::TYPE_SUBJECTS_XLS:
+                throw new ExcelParseException( 'Given file best matches for subjects');
+            case null:
+                throw new ExcelParseException('Cant define file structure');
+        }
 
-        // fill missing skills because they are non-existent in the exel file.
-        $schedule->fillSkills('medicine' );
-        $schedule->fillLocation('ambulance office');
 
-        return $schedule->toArray();
+        $array = $schedule->toArray();
+        // TODO make this assignment not so hacky
+        $array['writeType'] = $writeType;
+
+        return $array;
     }
 
 
@@ -48,21 +80,18 @@ class AmbulanceOfficeDataHandler implements SpreadSheetDataHandler
     {
         $schedule = new Schedule($data);
 
-        $subjects = $this->subjectRepository->loadSubjectsByNames( $schedule->getEmployeesNames() );
+        $subjects = $this->subjectRepository->loadSubjectsByNames($schedule->getEmployeesNames());
         $schedule->fillEmployeesWithSubjectsData($subjects);
 
         $profile = $job->getProfileObj();
-        if ( $profile->writeType == Profile::WRITE_TYPE_ORIGINAL_FILE ) {
-
+        if ($profile->writeType == Profile::WRITE_TYPE_ORIGINAL_FILE) {
             $originalFile = tempnam('/tmp', 'roster');
             file_put_contents($originalFile, $job->getOriginalFileContent());
 
             $this->scheduleWriter->writeSchedule($originalFile, $schedule, $excelFile);
-        }
-        elseif ($profile->writeType == Profile::WRITE_TYPE_TEMPLATE_FILE) {
+        } elseif ($profile->writeType == Profile::WRITE_TYPE_TEMPLATE_FILE) {
             $this->scheduleWriter->writeResultsUsingTemplate($schedule, $this->templateFile, $excelFile);
-        }
-        else {
+        } else {
             throw new SolverDataException(sprintf('Unknown write type %s', $profile->writeType));
         }
     }

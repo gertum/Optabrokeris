@@ -215,13 +215,20 @@ class JobController extends Controller
 
         $fileHandler = $fileHandlerFactory->createHandler($job->getType(), $file->getClientOriginalName());
 
-        $dataArray = $fileHandler->spreadSheetToArray($file->getRealPath());
+        $profileObj = $job->getProfileObj();
+        if (count($profileObj->getShiftBounds()) == 0) {
+            // setting default values for bounds, when bounds are not given
+            $profileObj->setShiftBounds([8, 20]);
+        }
+
+        $dataArray = $fileHandler->spreadSheetToArray($file->getRealPath(), $profileObj);
         $job->setOriginalFileContent(file_get_contents($file->getRealPath()));
 
         $fileHandler->validateDataArray($dataArray);
         $job->setData(json_encode($dataArray));
         $profileObj = $job->getProfileObj();
-        $profileObj->writeType = Profile::WRITE_TYPE_ORIGINAL_FILE;
+        // set value depending on file type
+        $profileObj->writeType = $dataArray['writeType'];
         $job->setProfile(json_encode($profileObj));
 
         $job->setFlagUploaded(true);
@@ -230,7 +237,6 @@ class JobController extends Controller
 
         $job->save();
 
-//
 //        $solverClient = $this->solverClientFactory->createClient($job->type);
 //        $data = $job->getData();
 //        $solverId = $solverClient->registerData($data);
@@ -275,6 +281,9 @@ class JobController extends Controller
         return $job;
     }
 
+    /**
+     * @deprecated use regular 'upload' function with a file detection code.
+     */
     public function uploadPreferredXlsx(
         Request $request,
         Job $job,
@@ -311,7 +320,6 @@ class JobController extends Controller
         $profileObj = $job->getProfileObj();
         $profileObj->writeType = Profile::WRITE_TYPE_TEMPLATE_FILE;
         $job->setProfile(json_encode($profileObj));
-
 
         $job->setFlagUploaded(true);
         $job->setFlagSolving(false);
