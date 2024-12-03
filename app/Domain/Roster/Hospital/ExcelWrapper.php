@@ -58,7 +58,13 @@ class ExcelWrapper
             throw new ExcelParseException(sprintf('File %s does not exist', $file));
         }
 
-        $wrapper->xlsx = SimpleXLSX::parse($file);
+        $xlsx = SimpleXLSX::parse($file);
+
+        if ( !$xlsx ) {
+            throw new ExcelParseException(sprintf('File %s is not a valid excel', $file));
+        }
+
+        $wrapper->xlsx = $xlsx;
         $wrapper->rowsEx = $wrapper->xlsx->rowsEx();
 
         return $wrapper;

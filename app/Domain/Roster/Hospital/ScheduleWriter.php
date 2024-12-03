@@ -11,6 +11,7 @@ use App\Domain\Roster\Report\ScheduleReport;
 use App\Domain\Roster\Schedule;
 use App\Exceptions\ExcelParseException;
 use App\Exceptions\SolverDataException;
+use App\Exceptions\ValidateException;
 use App\Util\DateRecognizer;
 use App\Util\MapBuilder;
 use Carbon\Carbon;
@@ -39,7 +40,11 @@ class ScheduleWriter
         $worksheetId1 = 1;
 
         // $wrapper must tell where is the cell we need to edit
-        $wrapper = ExcelWrapper::parse($fileTemplate);
+        try {
+            $wrapper = ExcelWrapper::parse($fileTemplate);
+        } catch (ExcelParseException $e ) {
+            throw new ValidateException('Uploaded file or template is not a valid xlsx file.');
+        }
 
         $eilNrTitle = $wrapper->findEilNrTitle();
         $eilNrs = $wrapper->parseEilNrs($eilNrTitle);
