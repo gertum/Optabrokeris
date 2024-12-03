@@ -1,12 +1,12 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import {Head} from '@inertiajs/react';
-import {Avatar, Button, Col, Divider, Form, Layout, Row, Space, Upload} from 'antd';
+import {Avatar, Button, Col, Divider, Form, Layout, Row, Space, Upload, Statistic} from 'antd';
 import React, {useEffect, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import axios from 'axios';
 import {useNotification} from "@/Providers/NotificationProvider.jsx";
 import {useConfirmation} from '@/Providers/ConfirmationProvider.jsx';
-import {DownloadOutlined} from "@ant-design/icons";
+import {DownloadOutlined, DislikeOutlined, LikeOutlined, CheckOutlined} from "@ant-design/icons";
 
 const {Content} = Layout;
 const {Title} = Head;
@@ -102,12 +102,6 @@ export default function View({auth, job: initialJob}) {
 
     }
 
-    const handleUploadPreferred = async () => {
-        console.log('handleUploadPreferred called');
-        // yet we didn't find a way to get upload result, so we make additional request to get job content
-        await reloadJobContent();
-    }
-
     const handleUploadStandard = async () => {
         // yet we didn't find a way to get upload result, so we make additional request to get job content
         await reloadJobContent();
@@ -159,40 +153,16 @@ export default function View({auth, job: initialJob}) {
                         <Row>
                             <Col>
                                 <h3>Status</h3>
-                                Flag uploaded: {job.flag_uploaded ? "yes" : "no"};<br/>
-                                Flag solving started: {job.flag_solving ? "yes" : "no"};<br/>
-                                Flags solving done: {job.flag_solved ? <span style={{ color: 'green' }}>YES</span> : "no"};<br/>
-                                Solver status: {job.status} <br/>
-                                Last error:  <span style={{ color: 'red' }}>{job.error_message}</span> <br/>
+                                <Statistic title="Uploaded" value={job.flag_uploaded?'+':'-'} prefix={job.flag_uploaded?<LikeOutlined />:<DislikeOutlined/> } />
+                                <Statistic title="Solving started" value={job.flag_solving?'+':'-'} prefix={job.flag_solving?<LikeOutlined />:<DislikeOutlined/> } />
+                                <Statistic title="Solving started" value={job.flag_solved?'+':'-'} prefix={job.flag_solved?<CheckOutlined />:<DislikeOutlined/> } />
+                                <Statistic title="Solver status" value={job.status}  />
+                                <Statistic title="Last error" value={job.error_message}  />
                             </Col>
                         </Row>
                         <Row>
-                            {/*<Col>*/}
-                            {/*    <Divider orientation="left">Upload preferred timings xlsx file</Divider>*/}
-                            {/*    <Form*/}
-                            {/*        onFinish={() => handleUploadPreferred()}*/}
-                            {/*        className="mt-4"*/}
-                            {/*        name={"prefered-upload-form"}>*/}
-                            {/*        <Upload.Dragger*/}
-                            {/*            action={`/api/job/${job.id}/upload-preferred?_token=${token}`}*/}
-                            {/*            maxCount={1}*/}
-                            {/*            listType="picture"*/}
-                            {/*            accept=".xlsx"*/}
-                            {/*            name={'file'}*/}
-                            {/*            onChange={() => handleUploadPreferred()}*/}
-                            {/*        >*/}
-                            {/*            {t('step.fileUploadForm.dragFiles')}*/}
-                            {/*            <br/>*/}
-                            {/*            <Space>*/}
-                            {/*                <Button>{t('jobs.uploadPreferred')}</Button>*/}
-                            {/*            </Space>*/}
-                            {/*        </Upload.Dragger>*/}
-                            {/*    </Form>*/}
-
-                            {/*</Col>*/}
                             <Col>
                                 <Divider orientation="left">Upload schedule or preferences xlsx file</Divider>
-
                                 <Form onFinish={() => handleUploadStandard()} className="mt-4">
                                     <Upload.Dragger
                                         action={`/api/job/${job.id}/upload?_token=${token}`}

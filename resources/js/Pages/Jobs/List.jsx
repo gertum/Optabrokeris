@@ -220,7 +220,7 @@ export default function JobList({auth}) {
                                         </Avatar>
                                     }
                                     title={job.name}
-                                    description="Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+                                    description="-"
                                 />
                             </Skeleton>
                         </List.Item>
