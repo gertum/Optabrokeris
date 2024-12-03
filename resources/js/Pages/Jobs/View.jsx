@@ -5,7 +5,6 @@ import { Button, Col, Divider, Form, Layout, Row, Space, Upload, Statistic, Aler
 import { useTranslation } from 'react-i18next';
 import axios from 'axios';
 import { useNotification } from '@/Providers/NotificationProvider.jsx';
-import { useConfirmation } from '@/Providers/ConfirmationProvider.jsx';
 import {
     DownloadOutlined,
     DislikeOutlined,
@@ -122,12 +121,12 @@ export default function JobView({ auth, job: initialJob }) {
             user={auth?.user}
             header={
                 <h2 className="font-semibold text-xl text-gray-800 leading-tight">
-                    {`Job "${job?.name}"`}
+                    {`Profile "${job?.name}"`}
                 </h2>
             }
         >
             <Head>
-                <Title>{`Job ${job?.name}`}</Title>
+                <Title>{`Profile ${job?.name}`}</Title>
             </Head>
 
             <Content
