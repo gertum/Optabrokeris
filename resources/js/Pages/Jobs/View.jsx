@@ -155,7 +155,7 @@ export default function View({auth, job: initialJob}) {
                                 <h3>Status</h3>
                                 <Statistic title="Uploaded" value={job.flag_uploaded?'+':'-'} prefix={job.flag_uploaded?<LikeOutlined />:<DislikeOutlined/> } />
                                 <Statistic title="Solving started" value={job.flag_solving?'+':'-'} prefix={job.flag_solving?<LikeOutlined />:<DislikeOutlined/> } />
-                                <Statistic title="Solving started" value={job.flag_solved?'+':'-'} prefix={job.flag_solved?<CheckOutlined />:<DislikeOutlined/> } />
+                                <Statistic title="Solving DONE" value={job.flag_solved?'+':'-'} prefix={job.flag_solved?<CheckOutlined />:<DislikeOutlined/> } />
                                 <Statistic title="Solver status" value={job.status}  />
                                 <Statistic title="Last error" value={job.error_message}  />
                             </Col>
