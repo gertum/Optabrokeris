@@ -410,6 +410,9 @@ class FixedSimpleXLSXEx
     {
         $this->comments = [];
         foreach ($this->xlsx->sheetRels as $index => $xml) {
+            if ( $xml === false ) {
+                continue;
+            }
             foreach ($xml->Relationship as $rel) {
                 $rel_type = basename(trim((string) $rel['Type']));
                 $rel_target = (string) $rel['Target'];
@@ -647,6 +650,9 @@ class FixedSimpleXLSXEx
     {
         $this->hyperlinks = [];
         foreach ($this->xlsx->sheetRels as $index => $xml) {
+            if( $xml === false ) {
+                continue;
+            }
             $sheet = $this->xlsx->sheets[$index];
             $link_ids = [];
             // hyperlink

@@ -10,7 +10,6 @@ use App\Util\DateRecognizer;
 use App\Util\MapBuilder;
 use Carbon\Carbon;
 use DateTimeInterface;
-use Shuchkin\SimpleXLSX;
 
 /**
  * The main excel parser class for now.
@@ -32,7 +31,7 @@ class ExcelWrapper
     const TARGET_DATE_FORMAT = 'Y-m-d\\TH:i:s';
 //
     protected array $rowsEx = [];
-    protected ?SimpleXLSX $xlsx = null;
+    protected ?FixedSimpleXLSX $xlsx = null;
 
     /**
      * In memory cache
@@ -76,7 +75,7 @@ class ExcelWrapper
         return $this->rowsEx;
     }
 
-    public function getXlsx(): ?SimpleXLSX
+    public function getXlsx(): ?FixedSimpleXLSX
     {
         return $this->xlsx;
     }
