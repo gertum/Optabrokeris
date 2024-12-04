@@ -60,6 +60,7 @@ class ScheduleParser
      */
     public function parseScheduleXls(string $file, ?array $timeSlices = null): Schedule
     {
+        // TODO reikia padaryti apjungimą pagal teisingus slices ( 8, 20 ) vietoj (0,8,20)
         if ($timeSlices == null || count($timeSlices) == 0) {
             $timeSlices = ScheduleParser::createHospitalTimeSlices();
         }
