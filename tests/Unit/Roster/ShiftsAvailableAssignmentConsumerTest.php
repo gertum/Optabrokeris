@@ -33,7 +33,11 @@ class ShiftsAvailableAssignmentConsumerTest extends TestCase
         $this->assertEquals($shifts[$expectedIndex]->start, $expectedShift->start);
         $this->assertEquals($shifts[$expectedIndex]->end, $expectedShift->end);
 
-        if ($shifts[$expectedIndex]->employee) {
+        if ( $expectedShift->employee == null ) {
+            $this->assertNull($shifts[$expectedIndex]->employee);
+        }
+        else {
+            $this->assertNotNull($shifts[$expectedIndex]->employee);
             $this->assertEquals($shifts[$expectedIndex]->employee->name, $expectedShift->employee->name);
         }
     }
@@ -42,11 +46,6 @@ class ShiftsAvailableAssignmentConsumerTest extends TestCase
     {
         return [
             'test1' => [
-                // from=1970-01-01 08:00:00, till=1970-01-01 20:00:00
-                // impossible variation will need to assign day outside
-//                'from' => '1970-01-01 08:00:00',
-//                'till'=>'1970-01-01 20:00:00',
-                // ---
                 'from' => '2024-06-03T08:00:00',
                 'till' => '2024-06-03T20:00:00',
                 'employee' => (new Employee())->setName('Marry'),
@@ -183,7 +182,56 @@ class ShiftsAvailableAssignmentConsumerTest extends TestCase
                     ->setEnd('2024-06-01T08:00:00')
                     ->setEmployee(null)
             ],
+            'test 7 differs by a seconds part' => [
+                'from' => '2024-11-06T08:00:09',
+                'till' => '2024-11-06T20:00:09', // this should be the next  day time
+                'employee' => (new Employee())->setName('Marry'),
+                'shifts' => [
+                    (new Shift())
+                        ->setStart('2024-11-05T20:00:00')
+                        ->setEnd('2024-11-06T00:00:00'),
+                    (new Shift())
+                        ->setStart('2024-11-06T00:00:00')
+                        ->setEnd('2024-11-06T08:00:00'),
+                    (new Shift())
+                        ->setStart('2024-11-06T08:00:00')
+                        ->setEnd('2024-11-06T20:00:00'),
+                    (new Shift())
+                        ->setStart('2024-11-06T20:00:00')
+                        ->setEnd('2024-11-07T00:00:00'),
+                ],
+                'expectedIndex' => 2,
+                'expectedShift' => (new Shift())
+                    ->setStart('2024-11-06T08:00:00')
+                    ->setEnd('2024-11-06T20:00:00')
+                    ->setEmployee((new Employee())->setName('Marry'))
+            ],
+            'test 7 differs by a seconds part, if not too much' => [
+                'from' => '2024-11-06T08:00:09',
+                'till' => '2024-11-06T20:00:09', // this should be the next  day time
+                'employee' => (new Employee())->setName('Marry'),
+                'shifts' => [
+                    (new Shift())
+                        ->setStart('2024-11-05T20:00:00')
+                        ->setEnd('2024-11-06T00:00:00'),
+                    (new Shift())
+                        ->setStart('2024-11-06T00:00:00')
+                        ->setEnd('2024-11-06T08:00:00'),
+                    (new Shift())
+                        ->setStart('2024-11-06T08:00:00')
+                        ->setEnd('2024-11-06T20:00:00'),
+                    (new Shift())
+                        ->setStart('2024-11-06T20:00:00')
+                        ->setEnd('2024-11-07T00:00:00'),
+                ],
+                'expectedIndex' => 3,
+                'expectedShift' => (new Shift())
+                    ->setStart('2024-11-06T20:00:00')
+                    ->setEnd('2024-11-07T00:00:00')
+                    ->setEmployee(null)
+            ],
 
+            // This case is not working by the requirements
             // test with interval 08:00 - 24:00 ( 08:00 - 00:00 )
 //            'test 8-24' => [
 //                'from' => '2024-06-05T08:00:00',

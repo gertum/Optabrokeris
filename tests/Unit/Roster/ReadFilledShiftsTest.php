@@ -22,7 +22,13 @@ class ReadFilledShiftsTest extends TestCase
         $this->assertEquals($expectedShift->start, $shift->start );
         $this->assertEquals($expectedShift->end, $shift->end );
 
-        $this->assertEquals( $expectedShift->employee->name, $shift->employee->name);
+        if ( $expectedShift->employee == null ) {
+            $this->assertNull($shift->employee);
+        }
+        else {
+            $this->assertNotNull($shift->employee);
+            $this->assertEquals($expectedShift->employee->name, $shift->employee->name);
+        }
     }
 
     public static function provideShiftsData() : array {
@@ -109,6 +115,18 @@ class ReadFilledShiftsTest extends TestCase
             ],
 
             // test with interval 08:00 - 24:00 ( 08:00 - 00:00 )
+
+            // parse already solved xlsx
+            'test parse solved' => [
+                'xslxFile'  => __DIR__.'/data/solved.xlsx',
+                'expectedShift' => (new Shift())
+                    ->setStart('2024-11-06T08:00:00')
+                    ->setEnd('2024-11-06T20:00:00')
+                    ->setEmployee(
+                        (new Employee())
+                            ->setName("Vilma Grakauskienė")
+                    )
+            ],
         ];
     }
 }

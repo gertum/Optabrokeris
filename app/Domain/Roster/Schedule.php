@@ -82,14 +82,28 @@ class Schedule extends DataTransferObject
      */
     public function findShiftByStartDate($start): ?Shift
     {
-        BinarySearch::search($this->shiftList, $start, fn(Shift $shift, string $start) => $shift->start <=> $start);
+        // kažkoks bugas  juk reikia rezultatą paimti
+        $index = BinarySearch::search($this->shiftList, $start, fn(Shift $shift, string $start) =>
+            $shift->start <=> $start,
+            true);
 
-        $filteredShifts = array_filter($this->shiftList, fn(Shift $shift) => $shift->start == $start);
-        if (count($filteredShifts) == 0) {
+//        $filteredShifts = array_filter($this->shiftList, fn(Shift $shift) => $shift->start == $start);
+//        if (count($filteredShifts) == 0) {
+//            return null;
+//        }
+//
+//        return reset($filteredShifts);
+
+        if ( $index < 0 ) {
             return null;
         }
 
-        return reset($filteredShifts);
+        // go up till $start is between begin and end
+        while ( $this->shiftList[$index]->start < $start ) {
+            $index++;
+        }
+
+        return $this->shiftList[$index];
     }
 
     public function fillSkills(string $skill): self
