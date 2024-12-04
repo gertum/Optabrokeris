@@ -5,6 +5,7 @@ namespace App\Domain\Roster\Hospital;
 use App\Domain\Roster\Availability;
 use App\Domain\Roster\Employee;
 use App\Exceptions\ExcelParseException;
+use App\Fixed\FixedSimpleXLSX;
 use App\Util\DateRecognizer;
 use App\Util\MapBuilder;
 use Carbon\Carbon;
@@ -29,7 +30,7 @@ class ExcelWrapper
     const DESIRED_BACGROUND_UNHASHED = 'DDFFDD';
 
     const TARGET_DATE_FORMAT = 'Y-m-d\\TH:i:s';
-
+//
     protected array $rowsEx = [];
     protected ?SimpleXLSX $xlsx = null;
 
@@ -58,7 +59,7 @@ class ExcelWrapper
             throw new ExcelParseException(sprintf('File %s does not exist', $file));
         }
 
-        $xlsx = SimpleXLSX::parse($file);
+        $xlsx = FixedSimpleXLSX::parse($file);
 
         if ( !$xlsx ) {
             throw new ExcelParseException(sprintf('File %s is not a valid excel', $file));

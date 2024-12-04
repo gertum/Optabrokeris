@@ -229,7 +229,14 @@ class JobController extends Controller
             $job->save();
 
             throw new ValidateException($e->getMessage());
+        } catch (\Error $error) {
+            // for debugging
+            throw $error;
+        } catch (\Throwable $t) {
+            // for debugging
+            throw $t;
         }
+
         $job->setOriginalFileContent(file_get_contents($file->getRealPath()));
 
         $fileHandler->validateDataArray($dataArray);
