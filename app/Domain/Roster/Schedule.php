@@ -289,4 +289,40 @@ class Schedule extends DataTransferObject
 
         return $newShiftsList;
     }
+
+    /**
+     * @return Availability[]
+     */
+    public function recalculateAvailabilitiesByShifts(): array {
+        $this->referenceEmployeesToAvailabilities();
+        $this->assignEmployeesSequenceNumbers();
+        $this->sortAvailabilities();
+        $availabilities = [];
+        $id = 1;
+        foreach ($this->employeeList as $employee) {
+            foreach ($this->shiftList as $shift) {
+                $foundAvailability = $this->findAvailability($employee->name, $shift->start, true);
+
+                $availabilities[] = (new Availability())
+                    ->setEmployee($employee)
+                    ->setDate($shift->start)
+                    ->setDateTill($shift->end)
+                    ->setAvailabilityType($foundAvailability->availabilityType)
+                    ->setId($id++)
+                ;
+
+            }
+        }
+        return $availabilities;
+    }
+
+    public function referenceEmployeesToAvailabilities() : void {
+        $employeesByNames = MapBuilder::buildMap($this->employeeList, fn(Employee $e)=> $e->name );
+        foreach ($this->availabilityList as $availability) {
+            if ( !array_key_exists($availability->employee->name, $employeesByNames)) {
+                continue;
+            }
+            $availability->setEmployee( $employeesByNames[$availability->employee->name]);
+        }
+    }
 }
