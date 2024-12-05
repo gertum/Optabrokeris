@@ -54,7 +54,9 @@ class AmbulanceOfficeDataHandler implements SpreadSheetDataHandler
                     ->fillLocation('ambulance office');
 
 
+                // These two functions should fix schedule to be more solvable by the solver.
                 $schedule->setShiftList($schedule->recalculateShiftsByBounds($profileObj->getShiftBounds()));
+                $schedule->setAvailabilityList( $schedule->recalculateAvailabilitiesByShifts() );
 
                 $writeType = Profile::WRITE_TYPE_ORIGINAL_FILE;
                 break;

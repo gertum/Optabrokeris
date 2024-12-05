@@ -22,10 +22,10 @@ class FixAvailabilitiesByShiftsTest extends TestCase
 
     public static function provideSchedules() : array {
         return [
-//            'test0' => [
-//                'schedule' =>  new Schedule(),
-//                'expectedAvailabilities' => [],
-//            ],
+            'test0' => [
+                'schedule' =>  new Schedule(),
+                'expectedAvailabilities' => [],
+            ],
             'test1 for 1 employee' => [
                 'schedule' =>  (new Schedule())->setAvailabilityList([
                     (new Availability())
