@@ -3,6 +3,7 @@
 namespace App\Domain\Roster;
 
 use App\Util\BinarySearch;
+use App\Util\DateRecognizer;
 use App\Util\MapBuilder;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
@@ -82,17 +83,9 @@ class Schedule extends DataTransferObject
      */
     public function findShiftByStartDate($start): ?Shift
     {
-        // kažkoks bugas  juk reikia rezultatą paimti
         $index = BinarySearch::search($this->shiftList, $start, fn(Shift $shift, string $start) =>
             $shift->start <=> $start,
             true);
-
-//        $filteredShifts = array_filter($this->shiftList, fn(Shift $shift) => $shift->start == $start);
-//        if (count($filteredShifts) == 0) {
-//            return null;
-//        }
-//
-//        return reset($filteredShifts);
 
         if ( $index < 0 ) {
             return null;
@@ -261,5 +254,35 @@ class Schedule extends DataTransferObject
             }
         }
         return null;
+    }
+
+
+    /**
+     * @param float[] $shiftsBounds
+     * @return Shift[]
+     */
+    public function recalculateShiftsByBounds(array $shiftsBounds ) : array {
+        // We assume that the following is valid for the TWO CONSECUTIVE shifts:
+        // previous end time is the same as the next start time.
+
+        $newShiftsList = [];
+        $previousShift = clone $this->shiftList[0];
+        for ($i = 1; $i < count($this->shiftList); $i++) {
+            $currentShift = $this->shiftList[$i];
+
+            // decide if we need to join shifts or not to join
+            $previousEndDate = Carbon::parse($previousShift->end);
+            $previousEndBound = DateRecognizer::calculateFloatingHourOfDate($previousEndDate);
+            if ( !in_array($previousEndBound, $shiftsBounds) ) {
+                $previousShift->setEnd($currentShift->end);
+            }
+            else {
+                $newShiftsList[] = $previousShift;
+                $previousShift = clone $currentShift;
+            }
+        }
+        $newShiftsList[] = $previousShift;
+
+        return $newShiftsList;
     }
 }

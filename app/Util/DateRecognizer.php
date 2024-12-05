@@ -2,6 +2,8 @@
 
 namespace App\Util;
 
+use Carbon\Carbon;
+
 /**
  * Recognizes date from a value received from a xlsx cell.
  */
@@ -129,5 +131,13 @@ class DateRecognizer
         if ( array_key_exists($monthName, $ltLatMontSet) ) {
             $this->month = $ltLatMontSet[$monthName];
         }
+    }
+
+    /**
+     * The logic of this function is used somewhere in the code already.
+     * Must be replaced by the call of this function.
+     */
+    public static function calculateFloatingHourOfDate(Carbon $date) : float {
+        return $date->hour + $date->minute/60;
     }
 }

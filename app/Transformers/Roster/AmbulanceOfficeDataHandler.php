@@ -23,11 +23,12 @@ class AmbulanceOfficeDataHandler implements SpreadSheetDataHandler
     private string $templateFile = '';
 
     public function __construct(
-        ScheduleWriter $scheduleWriter,
+        ScheduleWriter    $scheduleWriter,
         SubjectRepository $subjectRepository,
-        ScheduleParser $scheduleParser,
-        DataFileDetector $dataFileDetector
-    ) {
+        ScheduleParser    $scheduleParser,
+        DataFileDetector  $dataFileDetector
+    )
+    {
         $this->scheduleWriter = $scheduleWriter;
         $this->subjectRepository = $subjectRepository;
         $this->scheduleParser = $scheduleParser;
@@ -50,8 +51,11 @@ class AmbulanceOfficeDataHandler implements SpreadSheetDataHandler
                     ScheduleParser::createHospitalTimeSlices()
                 )
                     ->fillSkills('medicine')
-                    ->fillLocation('ambulance office')
-                ;
+                    ->fillLocation('ambulance office');
+
+
+                $schedule->setShiftList($schedule->recalculateShiftsByBounds($profileObj->getShiftBounds()));
+
                 $writeType = Profile::WRITE_TYPE_ORIGINAL_FILE;
                 break;
             case DataFileDetector::TYPE_AVAILABILITIES_XLS:
@@ -62,7 +66,7 @@ class AmbulanceOfficeDataHandler implements SpreadSheetDataHandler
                 $writeType = Profile::WRITE_TYPE_TEMPLATE_FILE;
                 break;
             case DataFileDetector::TYPE_SUBJECTS_XLS:
-                throw new ExcelParseException( 'Given file best matches for subjects');
+                throw new ExcelParseException('Given file best matches for subjects');
             case null:
                 throw new ExcelParseException('Cant define file structure');
         }
