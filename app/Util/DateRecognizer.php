@@ -138,6 +138,14 @@ class DateRecognizer
      * Must be replaced by the call of this function.
      */
     public static function calculateFloatingHourOfDate(Carbon $date) : float {
-        return $date->hour + $date->minute/60;
+        return $date->hour + (float) $date->minute/60;
+    }
+
+    public static function getHourOfBound(float $bound) : int {
+        return floor($bound);
+    }
+
+    public static function getMinuteOfBound(float $bound) : int {
+        return floor(($bound - self::getHourOfBound($bound))*60);
     }
 }

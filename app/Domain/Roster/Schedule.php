@@ -265,6 +265,10 @@ class Schedule extends DataTransferObject
         // We assume that the following is valid for the TWO CONSECUTIVE shifts:
         // previous end time is the same as the next start time.
 
+        if ( count($this->shiftList) == 0) {
+            return [];
+        }
+
         $newShiftsList = [];
         $previousShift = clone $this->shiftList[0];
         for ($i = 1; $i < count($this->shiftList); $i++) {
