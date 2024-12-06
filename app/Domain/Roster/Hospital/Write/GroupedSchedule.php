@@ -8,6 +8,9 @@ use App\Util\BinarySearch;
 use App\Util\Grouper;
 use Carbon\Carbon;
 
+/**
+ * @Deprecated: regular Schedule class has all required methods.
+ */
 class GroupedSchedule
 {
     // may be should use occupations list here
@@ -36,14 +39,6 @@ class GroupedSchedule
         return $this->availabilitiesByEmployees[$employeeName];
     }
 
-//    public function findAvailability(string $employeeName, string $dateFormatted): ?Availability
-//    {
-//        $availability = $this->findAvailabilityInner($employeeName, $dateFormatted);
-//
-//        if ( )
-//
-//        return null;
-//    }
     public function findAvailability(string $employeeName, string $dateFormatted): ?Availability
     {
         $availabilities = &$this->availabilitiesByEmployees[$employeeName];

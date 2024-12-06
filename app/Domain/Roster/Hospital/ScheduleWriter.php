@@ -339,8 +339,13 @@ class ScheduleWriter
         // search corresponding availabilities for each day
         // mark availability with the preselected color
 
-        $groupedSchedule = new GroupedSchedule();
-        $groupedSchedule->importSchedule($schedule);
+//        $groupedSchedule = new GroupedSchedule();
+//        $groupedSchedule->importSchedule($schedule);
+
+        $schedule->referenceEmployeesToAvailabilities();
+        $schedule->assignEmployeesSequenceNumbers();
+        $schedule->sortAvailabilities();
+
 
         $row = $monthDaysMatcher->getRow();
         foreach ($schedule->employeeList as $employee) {
@@ -349,13 +354,13 @@ class ScheduleWriter
                 $column = $monthDaysMatcher->getColumn() + $day - 1;
 
 
-                $nightDate = Carbon::create($monthDate->year, $monthDate->month, $day, 0);
-                $dayDate = Carbon::create($monthDate->year, $monthDate->month, $day, 8);
+                $nightDate = Carbon::create($monthDate->year, $monthDate->month, $day, 20, 1);
+                $dayDate = Carbon::create($monthDate->year, $monthDate->month, $day, 8, 1);
                 $dayDateFormatted = $dayDate->format(Schedule::TARGET_DATE_FORMAT);
                 $nightDateFormatted = $nightDate->format(Schedule::TARGET_DATE_FORMAT);
 
-                $availability = $groupedSchedule->findAvailability($employee->getKey(), $dayDateFormatted);
-                $availabilityNight = $groupedSchedule->findAvailability($employee->getKey(), $nightDateFormatted);
+                $availability = $schedule->findAvailability($employee->getKey(), $dayDateFormatted, true);
+                $availabilityNight = $schedule->findAvailability($employee->getKey(), $nightDateFormatted, true);
                 if ($availability == null) {
                     $availability = (new Availability())->setAvailabilityType(Availability::UNAVAILABLE);
                 }
@@ -376,12 +381,12 @@ class ScheduleWriter
                 if ($availability->availabilityType == Availability::UNAVAILABLE
                     && $availabilityNight->availabilityType != Availability::UNAVAILABLE
                 ) {
-                    $this->setCellColor($sheet, $cell2->name, ExcelWrapper::UNAVAILABLE_DAY_BACKGROUND_UNHASHED);
+                    $this->setCellColor($sheet, $cell1->name, ExcelWrapper::UNAVAILABLE_DAY_BACKGROUND_UNHASHED);
                 }
                 if ($availability->availabilityType != Availability::UNAVAILABLE
                     && $availabilityNight->availabilityType == Availability::UNAVAILABLE
                 ) {
-                    $this->setCellColor($sheet, $cell1->name, ExcelWrapper::UNAVAILABLE_NIGHT_BACKGROUND_UNHASHED);
+                    $this->setCellColor($sheet, $cell2->name, ExcelWrapper::UNAVAILABLE_NIGHT_BACKGROUND_UNHASHED);
                 }
 
 

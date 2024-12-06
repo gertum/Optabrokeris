@@ -19,6 +19,8 @@ class ShiftsTransformerTest extends TestCase
     {
         $occupations = ShiftsListTransformer::transform($shifts);
 
+        $occupations = array_map ( fn(DayOccupation $o )=>$o->clearIntermediateFields(), $occupations);
+
         $this->assertEquals($expectedOccupations, $occupations);
     }
 
@@ -126,7 +128,7 @@ class ShiftsTransformerTest extends TestCase
                     (new DayOccupation())
                         ->setDay(1)
                         // hack value
-                        ->setStartHour(0.001)
+                        ->setStartHour(0.0)
                         ->setEndHour(24.0)
                         ->setEmployee((new Employee())->setName('Peter')),
                     (new DayOccupation())
@@ -182,6 +184,30 @@ class ShiftsTransformerTest extends TestCase
                         ->setDay(2)
                         ->setStartHour(0.0)
                         ->setEndHour(8.0)
+                        ->setEmployee((new Employee())->setName('Peter')),
+                ],
+            ],
+            'end or previous month' => [
+                'shifts' => [
+                    (new Shift())
+                        ->setStart('2024-01-31T20:00:00')
+                        ->setEnd('2024-02-01T08:00:00')
+                        ->setEmployee((new Employee())->setName('Peter')),
+                    (new Shift())
+                        ->setStart('2024-02-01T08:00:00')
+                        ->setEnd('2024-02-01T20:00:00')
+                        ->setEmployee((new Employee())->setName('Peter')),
+                ],
+                'expectedOccupations' => [
+                    (new DayOccupation())
+                        ->setDay(31)
+                        ->setStartHour(20.0)
+                        ->setEndHour(24.0)
+                        ->setEmployee((new Employee())->setName('Peter')),
+                    (new DayOccupation())
+                        ->setDay(1)
+                        ->setStartHour(0.0)
+                        ->setEndHour(20.0)
                         ->setEmployee((new Employee())->setName('Peter')),
                 ],
             ],
