@@ -35,6 +35,27 @@ class ScheduleParser
         [['xn'], [Availability::UNAVAILABLE, Availability::AVAILABLE]],
     ];
 
+    const SYMBOLS_TO_AVAILABILITIES_MAP_NEW = [
+        [
+            [
+                'Х', // different encoding!
+                'X',
+                'x',
+                'a',
+                'A'
+            ],
+            [Availability::UNAVAILABLE, Availability::UNAVAILABLE]
+        ],
+        // we will use both lowercase on the tested data
+        [['', 'dn', 'd2'], [Availability::AVAILABLE, Availability::AVAILABLE]],
+        [['p'], [Availability::DESIRED, Availability::DESIRED]],
+        [['d'], [Availability::DESIRED, Availability::UNDESIRED]],
+        [['n'], [Availability::UNDESIRED, Availability::DESIRED]],
+        [['xd'], [Availability::UNAVAILABLE, Availability::AVAILABLE]],
+        [['xn'], [Availability::AVAILABLE, Availability::UNAVAILABLE]],
+    ];
+
+
     const AVAILABILITIES_MATCHERS_KEYS = [
         'x',
         'xn',
@@ -348,7 +369,79 @@ class ScheduleParser
                         (new Availability())
                             ->setDate($dayStartStr)
                             ->setDateTill($dayEndStr)
-                            ->setAvailabilityType($availabilityDay)
+                            ->setAvailabilityType($availabilityDay),
+                    ];
+                }
+            }
+        }
+
+        return MapBuilder::buildMap(
+            $availabilities,
+            fn(Availability $a) => $a->date instanceof DateTimeInterface ?
+                $a->date->format(Schedule::TARGET_DATE_FORMAT) : $a->date
+        );
+    }
+    /**
+     * We are going to set availabilities independent on profile.
+     * @return Availability[]
+     */
+    public function createAvailabilitiesForOneDayNew(?string $availabilitySymbols, Carbon $currentDay): array
+    {
+        $availabilities = [];
+
+        // function 'modify' is not immutable
+        $previousDay = clone($currentDay);
+        $previousDay = $previousDay->modify('-1 day');
+
+        // function 'modify' is not immutable
+        $nextDay = clone($currentDay);
+        $nextDay = $nextDay->modify('+1 day');
+
+//        $nightStartStr = Carbon::create($currentDay->year, $currentDay->month, $currentDay->day, 20)
+//            ->format(Schedule::TARGET_DATE_FORMAT)
+//        ;
+        $dayStartStr = Carbon::create($currentDay->year, $currentDay->month, $currentDay->day, 8)
+            ->format(Schedule::TARGET_DATE_FORMAT)
+        ;
+        $dayEndStr = Carbon::create($currentDay->year, $currentDay->month, $currentDay->day, 20)
+            ->format(Schedule::TARGET_DATE_FORMAT)
+        ;
+        $nightStartStr = $dayEndStr;
+
+        $nextDayStartStr = Carbon::create($nextDay->year, $nextDay->month, $nextDay->day, 8)
+            ->format(Schedule::TARGET_DATE_FORMAT)
+        ;
+
+        $availabilitySymbols = strtolower(trim($availabilitySymbols));
+
+        if (in_array($availabilitySymbols, ['8-8', '8-8r.']) || str_contains(
+                $availabilitySymbols,
+                '08-08'
+            )) { // special case!!!
+            $availabilities = [
+                (new Availability())
+                    ->setDate($dayStartStr)
+                    ->setDateTill($dayEndStr)
+                    ->setAvailabilityType(Availability::DESIRED),
+
+                (new Availability())
+                    ->setDate($dayEndStr)
+                    ->setDateTill($nextDayStartStr)
+                    ->setAvailabilityType(Availability::DESIRED)
+            ];
+        } else {
+            foreach (self::SYMBOLS_TO_AVAILABILITIES_MAP_NEW as list($symbolsArray, list($availabilityDay, $availabilityNight))) {
+                if (in_array($availabilitySymbols, $symbolsArray)) {
+                    $availabilities = [
+                        (new Availability)
+                            ->setDate($dayStartStr)
+                            ->setDateTill($dayEndStr)
+                            ->setAvailabilityType($availabilityDay),
+                        (new Availability)
+                            ->setDate($nightStartStr)
+                            ->setDateTill($nextDayStartStr)
+                            ->setAvailabilityType($availabilityNight),
+
                     ];
                 }
             }
