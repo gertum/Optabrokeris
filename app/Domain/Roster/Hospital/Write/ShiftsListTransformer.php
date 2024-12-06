@@ -40,7 +40,10 @@ class ShiftsListTransformer
                     ->setDay($startDate->day)
                     ->setStartTime($startDate)
                     ->setEndTime($endDate)
-                    ->setDateFormatted($startDate->format('Y-m-d'));
+                    ->setDateFormatted($startDate->format('Y-m-d'))
+                    ->calculateStartHour()
+                    ->calculateEndHour()
+                    ->fixEndHour();
                 continue;
             }
 
@@ -50,7 +53,10 @@ class ShiftsListTransformer
                 ->setDay($startDate->day)
                 ->setStartTime(clone $startDate)
                 ->setEndTime(Carbon::create($startDate->year, $startDate->month, $startDate->day, 24))
-                ->setDateFormatted($startDate->format('Y-m-d'));
+                ->setDateFormatted($startDate->format('Y-m-d'))
+                ->calculateStartHour()
+                ->calculateEndHour()
+                ->fixEndHour();
 
             $startDate->addDay();
 //            if ($endDate->diff($startDate)->days > 2) {
@@ -63,7 +69,10 @@ class ShiftsListTransformer
                     ->setDay($startDate->day)
                     ->setStartTime(Carbon::create($startDate->year, $startDate->month, $startDate->day, 0))
                     ->setEndTime(Carbon::create($startDate->year, $startDate->month, $startDate->day, 24))
-                    ->setDateFormatted($startDate->format('Y-m-d'));
+                    ->setDateFormatted($startDate->format('Y-m-d'))
+                    ->calculateStartHour()
+                    ->calculateEndHour()
+                    ->fixEndHour();
                 $startDate->addDay();
             }
             $occupations[] = (new DayOccupation())
@@ -71,7 +80,10 @@ class ShiftsListTransformer
                 ->setDay($startDate->day)
                 ->setStartTime(Carbon::create($startDate->year, $startDate->month, $startDate->day, 0))
                 ->setEndTime($endDate)
-                ->setDateFormatted($startDate->format('Y-m-d'));
+                ->setDateFormatted($startDate->format('Y-m-d'))
+                ->calculateStartHour()
+                ->calculateEndHour()
+                ->fixEndHour();
 
             // ----------------------- end of split part ------------------------------------
         }
@@ -101,7 +113,9 @@ class ShiftsListTransformer
                 ->setDateFormatted($oGroup[0]->getDateFormatted())
                 ->calculateStartHour()
                 ->calculateEndHour()
-                ->fixEndHour();
+                ->fixEndHour()
+//                ->setOccupiedHours(self::calculateDurationsSum($oGroup))
+            ;
 
         }
 
@@ -109,5 +123,17 @@ class ShiftsListTransformer
 
         return $resultOccupations;
     }
+
+//    /**
+//     * @param DayOccupation[] $occupations
+//     * @return float
+//     */
+//    public static function calculateDurationsSum(array $occupations): float {
+//        $durations = array_map ( fn($o)=>$o->getEndHour() - $o->getStartHour() , $occupations);
+//
+//        $sum = array_reduce($durations, fn($sum, $value)=> $sum+$value,0);
+//
+//        return $sum;
+//    }
 
 }

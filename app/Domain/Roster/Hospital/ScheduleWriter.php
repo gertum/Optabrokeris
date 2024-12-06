@@ -5,7 +5,7 @@ namespace App\Domain\Roster\Hospital;
 use alexandrainst\XlsxFastEditor\XlsxFastEditor;
 use App\Domain\Roster\Availability;
 use App\Domain\Roster\Employee;
-use App\Domain\Roster\Hospital\Write\GroupedSchedule;
+use App\Domain\Roster\Hospital\Write\DayOccupation;
 use App\Domain\Roster\Hospital\Write\ShiftsListTransformer;
 use App\Domain\Roster\Report\ScheduleReport;
 use App\Domain\Roster\Schedule;
@@ -13,6 +13,7 @@ use App\Exceptions\ExcelParseException;
 use App\Exceptions\SolverDataException;
 use App\Exceptions\ValidateException;
 use App\Util\DateRecognizer;
+use App\Util\Grouper;
 use App\Util\MapBuilder;
 use Carbon\Carbon;
 use PhpOffice\PhpSpreadsheet\Cell\DataType;
@@ -42,7 +43,7 @@ class ScheduleWriter
         // $wrapper must tell where is the cell we need to edit
         try {
             $wrapper = ExcelWrapper::parse($fileTemplate);
-        } catch (ExcelParseException $e ) {
+        } catch (ExcelParseException $e) {
             throw new ValidateException('Uploaded file or template is not a valid xlsx file.');
         }
 
@@ -61,33 +62,33 @@ class ScheduleWriter
 //        $flagNewVersion = true;
 
 //        if ($flagNewVersion) {
-            foreach ($occupations as $occupation) {
-                if ($occupation->getEmployee() == null || $occupation->getEmployee()->name == null) {
-                    continue;
-                }
-
-                if (!array_key_exists($occupation->getEmployee()->name, $employeesByName)) {
-                    $this->logger->warning(
-                        sprintf(
-                            'Could not find employee by name [%s] in excel file [%s]',
-                            $occupation->getEmployee()->name,
-                            $fileTemplate
-                        )
-                    );
-                    continue;
-                }
-
-                $parsedEmployee = $employeesByName[$occupation->getEmployee()->name];
-                $row = $parsedEmployee->getRow();
-
-                $column = $wrapper->getColumnByDay($eilNrTitle->getColumn(), $occupation->getDay());
-
-                $cellFrom = $wrapper->getCell($row, $column);
-                $cellTill = $wrapper->getCell($row + 1, $column);
-
-                $xlsxFastEditor->writeFloat($worksheetId1, $cellFrom->name, $occupation->getStartHour() / 24);
-                $xlsxFastEditor->writeFloat($worksheetId1, $cellTill->name, $occupation->getEndHour() / 24);
+        foreach ($occupations as $occupation) {
+            if ($occupation->getEmployee() == null || $occupation->getEmployee()->name == null) {
+                continue;
             }
+
+            if (!array_key_exists($occupation->getEmployee()->name, $employeesByName)) {
+                $this->logger->warning(
+                    sprintf(
+                        'Could not find employee by name [%s] in excel file [%s]',
+                        $occupation->getEmployee()->name,
+                        $fileTemplate
+                    )
+                );
+                continue;
+            }
+
+            $parsedEmployee = $employeesByName[$occupation->getEmployee()->name];
+            $row = $parsedEmployee->getRow();
+
+            $column = $wrapper->getColumnByDay($eilNrTitle->getColumn(), $occupation->getDay());
+
+            $cellFrom = $wrapper->getCell($row, $column);
+            $cellTill = $wrapper->getCell($row + 1, $column);
+
+            $xlsxFastEditor->writeFloat($worksheetId1, $cellFrom->name, $occupation->getStartHour() / 24);
+            $xlsxFastEditor->writeFloat($worksheetId1, $cellTill->name, $occupation->getEndHour() / 24);
+        }
 //        }
 //        else {
 //// =========================== old version ==========================================================
@@ -223,12 +224,15 @@ class ScheduleWriter
 
         $scheduleReport->fillFromSchedule($schedule, $this->logger);
 
+        $occupations = ShiftsListTransformer::transform($schedule->shiftList);
+
         $this->writeHeaderDate($sheet, $wrapper, $monthDate);
         $this->writeEmployees($sheet, $wrapper, $schedule, $scheduleReport);
         $this->markWeekends($sheet, $wrapper, $schedule, $monthDate);
         $this->putGreenSeparator($sheet, $wrapper, $schedule, $monthDate);
         $this->writeAvailabilities($sheet, $wrapper, $schedule, $monthDate);
-        $this->writeAssignedShifts($sheet, $wrapper, $schedule, $monthDate);
+        $this->writeAssignedShifts($sheet, $wrapper, $schedule, $monthDate, $occupations);
+        $this->writeSummaries($sheet, $wrapper, $schedule, $monthDate, $occupations);
 
         $writer = new Xlsx($spreadsheet);
         $writer->setPreCalculateFormulas(false);
@@ -406,7 +410,8 @@ class ScheduleWriter
         Worksheet    $worksheet,
         ExcelWrapper $wrapper,
         Schedule     $schedule,
-        Carbon $monthDate,
+        Carbon       $monthDate,
+        array $occupations
     )
     {
         $eilNrMatcher = $wrapper->getMatcher('eilNr');
@@ -421,11 +426,11 @@ class ScheduleWriter
         /** @var Employee[] $employeesByName */
         $employeesByName = MapBuilder::buildMap($schedule->employeeList, fn(Employee $e) => $e->name);
 
-        $occupations = ShiftsListTransformer::transform($schedule->shiftList);
+//        $occupations = ShiftsListTransformer::transform($schedule->shiftList);
 
         foreach ($occupations as $occupation) {
 
-            if ( $occupation->getStartTime()->month != $monthDate->month ) {
+            if ($occupation->getStartTime()->month != $monthDate->month) {
                 continue;
             }
 
@@ -470,5 +475,41 @@ class ScheduleWriter
         $value = sprintf('%sm. %s mėn.', $monthDate->year, $monthName);
         $cell = $wrapper->getCell($headerDateMatcher->getRow(), $headerDateMatcher->getColumn());
         $worksheet->setCellValue($cell->name, $value);
+    }
+
+    /**
+     * @param DayOccupation[] $occupations
+     */
+    private function writeSummaries(
+        Worksheet    $worksheet,
+        ExcelWrapper $wrapper,
+        Schedule     $schedule,
+        Carbon       $monthDate,
+        array $occupations
+    )
+    {
+        $eilNrMatcher = $wrapper->getMatcher('eilNr');
+        $row = $eilNrMatcher->getRow() + 2 + count($schedule->employeeList) * 2;
+        $nameCell = $wrapper->getCell($row, $eilNrMatcher->getColumn() + 1);
+
+        // TODO patikslinti labelį
+        $worksheet->setCellValue($nameCell->name, "Suma kiekvieną parą");
+        $monthDaysMatcher = $wrapper->getMatcher('monthDays');
+
+        /** @var DayOccupation[][] $groupedOccupations */
+        $groupedOccupations = Grouper::group($occupations, fn(DayOccupation $o) => $o->getDateFormatted());
+
+        foreach ($groupedOccupations as $oGroup) {
+            if ( $oGroup[0]->getStartTime()->month != $monthDate->month) {
+                continue;
+            }
+
+            $durations = array_map ( fn($o)=>$o->getEndHour() - $o->getStartHour() , $oGroup);
+            $sum = array_reduce($durations, fn($sum, $value)=> $sum+$value,0);
+
+            $column = $monthDaysMatcher->getColumn() + $oGroup[0]->getDay() - 1;
+            $daySumColumn = $wrapper->getCell($row, $column);
+            $worksheet->setCellValueExplicit($daySumColumn->name, $sum, DataType::TYPE_STRING );
+        }
     }
 }

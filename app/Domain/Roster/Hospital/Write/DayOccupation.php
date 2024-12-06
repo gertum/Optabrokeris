@@ -20,6 +20,8 @@ class DayOccupation
 
     private ?Employee $employee;
 
+//    private float $occupiedHours;
+
     public function getDay(): int
     {
         return $this->day;
@@ -136,4 +138,15 @@ class DayOccupation
 
         return $this;
     }
+
+//    public function getOccupiedHours(): float
+//    {
+//        return $this->occupiedHours;
+//    }
+//
+//    public function setOccupiedHours(float $occupiedHours): DayOccupation
+//    {
+//        $this->occupiedHours = $occupiedHours;
+//        return $this;
+//    }
 }
