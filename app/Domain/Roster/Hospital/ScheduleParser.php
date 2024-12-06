@@ -312,6 +312,45 @@ class ScheduleParser
     }
 
     /**
+     * @param string[] $collectedValues
+     * @param Carbon $startingDate
+     * @return Availability[]
+     */
+    public function createAvailabilitiesForMultipleDayNew(array $collectedValues, Carbon $startingDate): array
+    {
+        if (count($collectedValues) == 0) {
+            return [];
+        }
+
+        $availabilities = [];
+
+        foreach ($collectedValues as $day => $value) {
+            $dayDate = Carbon::create($startingDate->year, $startingDate->month, $day);
+            $dayAvailabilities = $this->createAvailabilitiesForOneDay($value, $dayDate);
+
+            // we may resolve overlapping issues by indexing availabilities by availability start date and then check dates when merging arrays.
+            $availabilities = self::mergeAvailabilities($availabilities, $dayAvailabilities);
+        }
+
+        // --- filling gaps
+        $maxDay = max(array_keys($collectedValues));
+        $minDay = min(array_keys($collectedValues));
+
+        $startingDateTime = Carbon::create($startingDate->year, $startingDate->month, $minDay);
+        $startingDateTime = $startingDateTime->modify('-1 day');
+        $startingDateTime->setTime(20, 0);
+
+
+        $endDateTime = Carbon::create($startingDate->year, $startingDate->month, $maxDay);
+        $endDateTime = $endDateTime->modify('+1 day');
+        $endDateTime->setTime(8, 0); // we take next day morning
+        $availabilities = $this->fillGaps($startingDateTime, $endDateTime, $availabilities, Availability::UNDESIRED);
+        // ---
+
+        return $availabilities;
+    }
+
+    /**
      * We are going to set availabilities independent on profile.
      * @return Availability[]
      */
