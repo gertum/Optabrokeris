@@ -37,6 +37,12 @@ class AppServiceProvider extends ServiceProvider
                     ->setTemplateFile(config('features.hospital_template_file'));
             }
         );
+        $this->app->singleton(
+            ScheduleParser::class,
+            function (Application $app) {
+                return (new ScheduleParser())->setParserVersion(2);
+            }
+        );
     }
 
     /**

@@ -76,6 +76,8 @@ class ScheduleParser
         'nameAndLastname',
     ];
 
+    private int $parserVersion = 1;
+
     /**
      * @param DateInterval[] $timeSlices
      */
@@ -166,8 +168,7 @@ class ScheduleParser
             $dateRecognizer->getMonth(),
             $dateFrom->daysInMonth,
             24
-        )->toImmutable()
-        ;
+        )->toImmutable();
         $shifts = ShiftsBuilder::buildShiftsOfBounds($dateFrom, $dateTill, $profile->getShiftBounds());
         $schedule->setShiftList($shifts);
 
@@ -202,8 +203,7 @@ class ScheduleParser
                 ->setName($employeeCell->value)
                 ->setExcelRow($employeeCell->r)
                 ->setRow($row)
-                ->setSequenceNumber($sequenceNumber++)
-            ;
+                ->setSequenceNumber($sequenceNumber++);
             // max working hours are taken from subjects
 
             $row++;
@@ -218,9 +218,10 @@ class ScheduleParser
      */
     public function parseAvailabilities(
         PreferencesExcelWrapper $wrapper,
-        CarbonInterface $startingDate,
-        array $employees
-    ): array {
+        CarbonInterface         $startingDate,
+        array                   $employees
+    ): array
+    {
         $availabilities = [];
         // 1) find a cell with value '1' at the row index 1, then use it as the marker of the column,
         // where availabilities starts from
@@ -253,7 +254,12 @@ class ScheduleParser
             }
 
             $startingDate = Carbon::create($startingDate->year, $startingDate->month, 1);
-            $employeeAvailabilities = $this->createAvailabilitiesForMultipleDay($collectedValues, $startingDate);
+
+            if ($this->parserVersion == 1) {
+                $employeeAvailabilities = $this->createAvailabilitiesForMultipleDay($collectedValues, $startingDate);
+            } elseif ($this->parserVersion == 2) {
+                $employeeAvailabilities = $this->createAvailabilitiesForMultipleDayNew($collectedValues, $startingDate);
+            }
 
 
             array_walk($employeeAvailabilities, fn(Availability $a) => $a->setEmployee($employee));
@@ -367,17 +373,13 @@ class ScheduleParser
         $nextDay = $nextDay->modify('+1 day');
 
         $nightStartStr = Carbon::create($previousDay->year, $previousDay->month, $previousDay->day, 20)
-            ->format(Schedule::TARGET_DATE_FORMAT)
-        ;
+            ->format(Schedule::TARGET_DATE_FORMAT);
         $dayStartStr = Carbon::create($currentDay->year, $currentDay->month, $currentDay->day, 8)
-            ->format(Schedule::TARGET_DATE_FORMAT)
-        ;
+            ->format(Schedule::TARGET_DATE_FORMAT);
         $dayEndStr = Carbon::create($currentDay->year, $currentDay->month, $currentDay->day, 20)
-            ->format(Schedule::TARGET_DATE_FORMAT)
-        ;
+            ->format(Schedule::TARGET_DATE_FORMAT);
         $nextDayStartStr = Carbon::create($nextDay->year, $nextDay->month, $nextDay->day, 8)
-            ->format(Schedule::TARGET_DATE_FORMAT)
-        ;
+            ->format(Schedule::TARGET_DATE_FORMAT);
 
         $availabilitySymbols = strtolower(trim($availabilitySymbols));
 
@@ -420,6 +422,7 @@ class ScheduleParser
                 $a->date->format(Schedule::TARGET_DATE_FORMAT) : $a->date
         );
     }
+
     /**
      * We are going to set availabilities independent on profile.
      * @return Availability[]
@@ -440,16 +443,13 @@ class ScheduleParser
 //            ->format(Schedule::TARGET_DATE_FORMAT)
 //        ;
         $dayStartStr = Carbon::create($currentDay->year, $currentDay->month, $currentDay->day, 8)
-            ->format(Schedule::TARGET_DATE_FORMAT)
-        ;
+            ->format(Schedule::TARGET_DATE_FORMAT);
         $dayEndStr = Carbon::create($currentDay->year, $currentDay->month, $currentDay->day, 20)
-            ->format(Schedule::TARGET_DATE_FORMAT)
-        ;
+            ->format(Schedule::TARGET_DATE_FORMAT);
         $nightStartStr = $dayEndStr;
 
         $nextDayStartStr = Carbon::create($nextDay->year, $nextDay->month, $nextDay->day, 8)
-            ->format(Schedule::TARGET_DATE_FORMAT)
-        ;
+            ->format(Schedule::TARGET_DATE_FORMAT);
 
         $availabilitySymbols = strtolower(trim($availabilitySymbols));
 
@@ -528,9 +528,10 @@ class ScheduleParser
     public function fillGaps(
         Carbon $startDate,
         Carbon $endDate,
-        array $availabilities,
+        array  $availabilities,
         string $defaultAvailabilityType
-    ): array {
+    ): array
+    {
         $currentDate = clone $startDate;
         $interval12 = new DateInterval('PT12H');
 
@@ -546,8 +547,7 @@ class ScheduleParser
             $availability = (new Availability())
                 ->setDate($currentDateStr)
                 ->setDateTill($nextDateStr)
-                ->setAvailabilityType($defaultAvailabilityType)
-            ;
+                ->setAvailabilityType($defaultAvailabilityType);
 
             $availabilities[$currentDateStr] = $availability;
         }
@@ -587,5 +587,16 @@ class ScheduleParser
         $wrapper->registerMatcher('n', new CustomValueCellMatcher('/^n$/i'));
         $wrapper->registerMatcher('d2', new CustomValueCellMatcher('/^d2$/i'));
         $wrapper->registerMatcher('dn', new CustomValueCellMatcher('/^dn$/i'));
+    }
+
+    public function getParserVersion(): int
+    {
+        return $this->parserVersion;
+    }
+
+    public function setParserVersion(int $parserVersion): ScheduleParser
+    {
+        $this->parserVersion = $parserVersion;
+        return $this;
     }
 }
