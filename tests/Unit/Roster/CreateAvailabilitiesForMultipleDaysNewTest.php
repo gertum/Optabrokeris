@@ -66,7 +66,7 @@ class CreateAvailabilitiesForMultipleDaysNewTest extends TestCase
                     (new Availability())
                         ->setDate('2024-11-02T20:00:00')
                         ->setDateTill('2024-11-03T08:00:00')
-                        ->setAvailabilityType(Availability::AVAILABLE),
+                        ->setAvailabilityType(Availability::UNDESIRED),
                     (new Availability())
                         ->setDate('2024-11-03T08:00:00')
                         ->setDateTill('2024-11-03T20:00:00')
@@ -74,7 +74,7 @@ class CreateAvailabilitiesForMultipleDaysNewTest extends TestCase
                     (new Availability())
                         ->setDate('2024-11-03T20:00:00')
                         ->setDateTill('2024-11-04T08:00:00')
-                        ->setAvailabilityType(Availability::UNDESIRED),
+                        ->setAvailabilityType(Availability::AVAILABLE),
                 ],
             ],
             'test3 overlapping' => [
@@ -103,7 +103,7 @@ class CreateAvailabilitiesForMultipleDaysNewTest extends TestCase
                     (new Availability())
                         ->setDate('2024-11-03T20:00:00')
                         ->setDateTill('2024-11-04T08:00:00')
-                        ->setAvailabilityType(Availability::UNDESIRED),
+                        ->setAvailabilityType(Availability::AVAILABLE),
                 ],
             ],
             'test4 gap' => [

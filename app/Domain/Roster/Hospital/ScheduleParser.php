@@ -326,7 +326,7 @@ class ScheduleParser
 
         foreach ($collectedValues as $day => $value) {
             $dayDate = Carbon::create($startingDate->year, $startingDate->month, $day);
-            $dayAvailabilities = $this->createAvailabilitiesForOneDay($value, $dayDate);
+            $dayAvailabilities = $this->createAvailabilitiesForOneDayNew($value, $dayDate);
 
             // we may resolve overlapping issues by indexing availabilities by availability start date and then check dates when merging arrays.
             $availabilities = self::mergeAvailabilities($availabilities, $dayAvailabilities);
