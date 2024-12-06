@@ -228,7 +228,7 @@ class ScheduleWriter
         $this->markWeekends($sheet, $wrapper, $schedule, $monthDate);
         $this->putGreenSeparator($sheet, $wrapper, $schedule, $monthDate);
         $this->writeAvailabilities($sheet, $wrapper, $schedule, $monthDate);
-        $this->writeAssignedShifts($sheet, $wrapper, $schedule);
+        $this->writeAssignedShifts($sheet, $wrapper, $schedule, $monthDate);
 
         $writer = new Xlsx($spreadsheet);
         $writer->setPreCalculateFormulas(false);
@@ -406,6 +406,7 @@ class ScheduleWriter
         Worksheet    $worksheet,
         ExcelWrapper $wrapper,
         Schedule     $schedule,
+        Carbon $monthDate,
     )
     {
         $eilNrMatcher = $wrapper->getMatcher('eilNr');
@@ -423,6 +424,11 @@ class ScheduleWriter
         $occupations = ShiftsListTransformer::transform($schedule->shiftList);
 
         foreach ($occupations as $occupation) {
+
+            if ( $occupation->getStartTime()->month != $monthDate->month ) {
+                continue;
+            }
+
             if ($occupation->getEmployee() == null || $occupation->getEmployee()->name == null) {
                 continue;
             }

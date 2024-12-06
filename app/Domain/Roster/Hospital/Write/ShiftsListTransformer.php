@@ -53,6 +53,10 @@ class ShiftsListTransformer
                 ->setDateFormatted($startDate->format('Y-m-d'));
 
             $startDate->addDay();
+//            if ($endDate->diff($startDate)->days > 2) {
+//                throw new ExcelParseException(sprintf('Too big gap int the shift\'s %s start %s and end %s times',
+//                    $shift->id, $startDate, $endDate));
+//            }
             while ($startDate->day != $endDate->day) {
                 $occupations[] = (new DayOccupation())
                     ->setEmployee($shift->employee)
@@ -60,6 +64,7 @@ class ShiftsListTransformer
                     ->setStartTime(Carbon::create($startDate->year, $startDate->month, $startDate->day, 0))
                     ->setEndTime(Carbon::create($startDate->year, $startDate->month, $startDate->day, 24))
                     ->setDateFormatted($startDate->format('Y-m-d'));
+                $startDate->addDay();
             }
             $occupations[] = (new DayOccupation())
                 ->setEmployee($shift->employee)
@@ -85,7 +90,7 @@ class ShiftsListTransformer
             $startTime = $oGroup[0]->getStartTime();
             $endTime = last($oGroup)->getEndTime();
 
-            if ( $startTime == $endTime ) {
+            if ($startTime == $endTime) {
                 continue;
             }
             $resultOccupations[] = (new DayOccupation())

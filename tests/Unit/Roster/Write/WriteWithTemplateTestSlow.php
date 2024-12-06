@@ -119,8 +119,8 @@ class WriteWithTemplateTestSlow extends TestCase
                                 ->setEnd('2024-11-01T20:00:00')
                                 ->setEmployee((new Employee())->setName("Jonas Jonaitis")),
                             (new Shift())
-                                ->setStart('2024-11-01T20:00:00')
-                                ->setEnd('2024-11-02T08:00:00')
+                                ->setStart('2024-11-02T20:00:00')
+                                ->setEnd('2024-11-03T08:00:00')
                                 ->setEmployee((new Employee())->setName("Petras Petraitis")),
                         ]
                     )
