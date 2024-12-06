@@ -256,8 +256,8 @@ class PreferedScheduleParseTest extends TestCase
                     ->setStart('2024-11-01T20:00:00')
                     ->setEnd('2024-11-02T08:00:00'),
                 'checkAvailabilityParams' => [
-//                    ['name' => 'Martynas Judickas', 'date' => '2024-11-04T20:00:00'],
-//                    ['name' => 'Martynas Judickas', 'date' => '2024-11-05T08:00:00'],
+                    ['name' => 'Martynas Judickas', 'date' => '2024-11-04T20:00:00'],
+                    ['name' => 'Martynas Judickas', 'date' => '2024-11-05T08:00:00'],
                     ['name' => 'Edgaras Baliūnas', 'date' => '2024-11-04T00:00:00'],
                     ['name' => 'Edgaras Baliūnas', 'date' => '2024-11-04T12:00:00'],
                     ['name' => 'Edgaras Baliūnas', 'date' => '2024-11-05T00:00:00'],
@@ -267,28 +267,28 @@ class PreferedScheduleParseTest extends TestCase
                     ['name' => 'Mantė Šmigelskaitė', 'date' => '2024-11-08T08:00:00'],
                 ],
                 'expectedAvailabilities' => [
-//                    (new Availability())
-//                        ->setDate('2024-11-04T20:00:00')
-//                        ->setDateTill('2024-11-05T08:00:00')
-//                        ->setAvailabilityType(Availability::AVAILABLE)
-//                        ->setEmployee(
-//                            (new Employee())
-//                                ->setName('Martynas Judickas')
-//                                ->setRow(30)
-//                                ->setExcelRow(31)
-//                                ->setSequenceNumber(27)
-//                        ),
-//                    (new Availability())
-//                        ->setDate('2024-11-05T08:00:00')
-//                        ->setDateTill('2024-11-05T20:00:00')
-//                        ->setAvailabilityType(Availability::UNAVAILABLE)
-//                        ->setEmployee(
-//                            (new Employee())
-//                                ->setName('Martynas Judickas')
-//                                ->setRow(30)
-//                                ->setExcelRow(31)
-//                                ->setSequenceNumber(27)
-//                        ),
+                    (new Availability())
+                        ->setDate('2024-11-04T20:00:00')
+                        ->setDateTill('2024-11-05T08:00:00')
+                        ->setAvailabilityType(Availability::AVAILABLE)
+                        ->setEmployee(
+                            (new Employee())
+                                ->setName('Martynas Judickas')
+                                ->setRow(30)
+                                ->setExcelRow(31)
+                                ->setSequenceNumber(27)
+                        ),
+                    (new Availability())
+                        ->setDate('2024-11-05T08:00:00')
+                        ->setDateTill('2024-11-05T20:00:00')
+                        ->setAvailabilityType(Availability::UNAVAILABLE)
+                        ->setEmployee(
+                            (new Employee())
+                                ->setName('Martynas Judickas')
+                                ->setRow(30)
+                                ->setExcelRow(31)
+                                ->setSequenceNumber(27)
+                        ),
                     (new Availability())
                         ->setDate('2024-11-03T20:00:00')
                         ->setDateTill('2024-11-04T08:00:00')
