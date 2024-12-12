@@ -267,7 +267,7 @@ class ScheduleWriter
 
             $sheet->setCellValue($eilnrCell->name, $nr++);
             $sheet->setCellValue($nameCell->name, $employee->name);
-            $sheet->setCellValue($workingHOursPerDayCell->name, $employee->getWorkingHoursPerDayFormatted());
+            $sheet->setCellValueExplicit($workingHOursPerDayCell->name, $employee->getWorkingHoursPerDayFormatted(), DataType::TYPE_STRING);
             $sheet->setCellValue($positionAmountCell->name, $employee->getPositionAmountFormatted());
             $sheet->setCellValue($workingHoursPerMonthCell->name, $employee->getMaxWorkingHours());
 
