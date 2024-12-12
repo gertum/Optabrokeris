@@ -87,7 +87,7 @@ class JobHandleResultsTest extends TestCase
                     ->setResult('{"solverStatus": "SOLVING"}')
                 ,
             ],
-            'test solfing finished successfully' => [
+            'test solving finished successfully' => [
                 'result' => '{"solverStatus": "NOT_SOLVING"}',
                 'errorMessage' => '',
                 'job' => (new Job())

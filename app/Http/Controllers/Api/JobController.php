@@ -199,9 +199,8 @@ class JobController extends Controller
             throw new SolverException($message);
         }
 
+        $this->tryToGetResultFromSolver($job);
 
-        $job->setFlagSolved(false);
-        $job->setFlagSolving(false);
         $job->save();
 
         return $solvingResult;

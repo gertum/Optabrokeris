@@ -201,7 +201,7 @@ class Job extends Model
         return $this;
     }
 
-    public function handleResultFromSolver(string $result, string $errorMessage)
+    public function handleResultFromSolver(string $result, string $errorMessage): void
     {
         if ( $errorMessage == '' ) {
             // hacky

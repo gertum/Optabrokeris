@@ -112,9 +112,11 @@ export default function JobView({ auth, job: initialJob }) {
             }, 1000);
             return () => clearInterval(timer);
         } else if (countdown === 0 && job.flag_solving) {
-            handleStop();
+            // When refreshing page this is called wrongly.
+            // handleStop();
+            reloadJobContent();
         }
-    }, [countdown, job.flag_solving]);
+    }, [countdown, job.status]);
 
     return (
         <AuthenticatedLayout
@@ -170,32 +172,34 @@ export default function JobView({ auth, job: initialJob }) {
                         <Statistic
                             title="Solution"
                             value={
-                                job.flag_solving
-                                    ? `${countdown > 0 ? `Ready in ${countdown}s` : 'Not ready'}`
-                                    : 'Ready'
+                                job.status === 'SOLVING_ACTIVE'
+                                    ? `${countdown > 0 ? `Ready in ${countdown}s` : 'Ready soon ..'}`
+                                    : (!!job.flag_solved ? 'Ready' : 'Not ready')
                             }
                         />
                         <Space>
-                            {!!job.flag_solving && (
+                            {job.status === 'SOLVING_ACTIVE' && (
                                 <Button icon={<LoadingOutlined />} danger onClick={handleStop}>
                                     Stop solving
                                 </Button>
                             )}
-                            {!job.flag_solving && (
+                            {job.status !== 'SOLVING_ACTIVE' && (
                                 <Button icon={<PlayCircleOutlined />} onClick={handleSolve}>
                                     Solve
                                 </Button>
                             )}
-                            {!job.flag_solving && (
-                                <Button
-                                    type="primary"
-                                    icon={<DownloadOutlined />}
-                                    href={`/api/job/${job.id}/download?_token=${token}`}
-                                    target="_blank"
-                                >
-                                    Download
-                                </Button>
+
+                            {job.status !== 'SOLVING_ACTIVE' && (
+                            <Button
+                                type="primary"
+                                icon={<DownloadOutlined />}
+                                href={`/api/job/${job.id}/download?_token=${token}`}
+                                target="_blank"
+                            >
+                                Download
+                            </Button>
                             )}
+
                         </Space>
                     </Col>
                 </Row>
