@@ -7,7 +7,7 @@ use Carbon\Carbon;
 class WorkingDaysCalculator
 {
 
-    public static function getWorkingDaysInMonth(int $year, int $month, HolidayProvider $holidayProvider, array $weekWorkDays ) : int  {
+    public static function calculateWorkingDaysInMonth(int $year, int $month, HolidayProvider $holidayProvider, array $weekWorkDays ) : int  {
 
         $dayInMonth = Carbon::create($year, $month, 1);
 
