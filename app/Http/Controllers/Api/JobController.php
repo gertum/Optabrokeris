@@ -323,7 +323,7 @@ class JobController extends Controller
             $profileObj->setShiftBounds([8, 20]);
         }
 
-        $schedule = $scheduleParser->parsePreferedScheduleXls($xlsxFile->getRealPath(), $profileObj);
+        $schedule = $scheduleParser->parsePreferredScheduleXls($xlsxFile->getRealPath(), $profileObj);
 
         $employeesNames = $schedule->getEmployeesNames();
         $subjects = $subjectRepository->loadSubjectsByNames($employeesNames);

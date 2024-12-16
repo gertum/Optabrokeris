@@ -31,7 +31,7 @@ class PreferedScheduleParseTest extends TestCase
         $scheduleParser = new ScheduleParser();
         $scheduleParser->setParserVersion(1);
 
-        $schedule = $scheduleParser->parsePreferedScheduleXls($file, $profile);
+        $schedule = $scheduleParser->parsePreferredScheduleXls($file, $profile);
 
         $this->assertGreaterThan($checkEmployeeIndex, count($schedule->employeeList));
         $this->assertEquals($expectedEmployee, $schedule->employeeList[$checkEmployeeIndex]);

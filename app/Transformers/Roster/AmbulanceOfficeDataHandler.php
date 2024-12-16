@@ -62,7 +62,7 @@ class AmbulanceOfficeDataHandler implements SpreadSheetDataHandler
                 $writeType = Profile::WRITE_TYPE_ORIGINAL_FILE;
                 break;
             case DataFileDetector::TYPE_AVAILABILITIES_XLS:
-                $schedule = $this->scheduleParser->parsePreferedScheduleXls($excelFile, $profileObj);
+                $schedule = $this->scheduleParser->parsePreferredScheduleXls($excelFile, $profileObj);
                 $employeesNames = $schedule->getEmployeesNames();
                 $subjects = $this->subjectRepository->loadSubjectsByNames($employeesNames);
                 BeforeApplyingSubjectsToScheduleEvent::dispatch($subjects, $schedule);

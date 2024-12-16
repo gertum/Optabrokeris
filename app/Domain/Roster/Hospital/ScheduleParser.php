@@ -149,7 +149,7 @@ class ScheduleParser
         ];
     }
 
-    public function parsePreferedScheduleXls(string $file, Profile $profile): Schedule
+    public function parsePreferredScheduleXls(string $file, Profile $profile): Schedule
     {
         $schedule = new Schedule();
 
@@ -282,6 +282,7 @@ class ScheduleParser
      * @param string[] $collectedValues
      * @param Carbon $startingDate
      * @return Availability[]
+     * @deprecated use createAvailabilitiesForMultipleDayNew
      */
     public function createAvailabilitiesForMultipleDay(array $collectedValues, Carbon $startingDate): array
     {
@@ -359,6 +360,7 @@ class ScheduleParser
     /**
      * We are going to set availabilities independent on profile.
      * @return Availability[]
+     * @deprecated use createAvailabilitiesForOneDayNew instead
      */
     public function createAvailabilitiesForOneDay(?string $availabilitySymbols, Carbon $currentDay): array
     {
@@ -598,5 +600,17 @@ class ScheduleParser
     {
         $this->parserVersion = $parserVersion;
         return $this;
+    }
+
+    /**
+     * new version of parseScheduleXls
+     * @return void
+     */
+    public function parseScheduleXlsNew() {
+        // TODO parse more colors
+    }
+
+    public function parseColorAvailabilities() {
+
     }
 }
