@@ -2,13 +2,16 @@
 
 namespace App\Providers;
 
+use App\Domain\Roster\Events\BeforeApplyingSubjectsToScheduleEvent;
 use App\Domain\Roster\Hospital\DataFileDetector;
 use App\Domain\Roster\Hospital\ScheduleParser;
 use App\Domain\Roster\Hospital\ScheduleWriter;
+use App\Domain\Roster\Listeners\RecalculateMonthHoursListener;
 use App\Repositories\SubjectRepository;
 use App\Transformers\Roster\AmbulanceOfficeDataHandler;
 use App\Transformers\SpreadSheetHandlerFactory;
 use Illuminate\Foundation\Application;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -50,6 +53,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        Event::listen(
+            BeforeApplyingSubjectsToScheduleEvent::class,
+            RecalculateMonthHoursListener::class,
+        );
     }
 }

@@ -4,9 +4,11 @@ namespace App\Http\Controllers\Api;
 
 use App\Domain\Roster\Hospital\SubjectsXslsParser;
 use App\Domain\Roster\SubjectsContainer;
+use App\Domain\Util\HolidayProviderFactory;
 use App\Exceptions\SolverDataException;
 use App\Models\Subject;
 use App\Repositories\SubjectRepository;
+use App\Util\WorkingDaysCalculator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -91,6 +93,7 @@ class SubjectController
         }
         $subjectsXslParser = new SubjectsXslsParser();
         $subjectsContainer = $subjectsXslParser->parse($file->getRealPath());
+
         $subjectsContainer->recalculateMonthHours(20, true);
 
         // calculate hours in month

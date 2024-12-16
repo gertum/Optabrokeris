@@ -2,6 +2,7 @@
 
 namespace App\Transformers\Roster;
 
+use App\Domain\Roster\Events\BeforeApplyingSubjectsToScheduleEvent;
 use App\Domain\Roster\Hospital\DataFileDetector;
 use App\Domain\Roster\Hospital\ScheduleParser;
 use App\Domain\Roster\Hospital\ScheduleWriter;
@@ -64,6 +65,7 @@ class AmbulanceOfficeDataHandler implements SpreadSheetDataHandler
                 $schedule = $this->scheduleParser->parsePreferedScheduleXls($excelFile, $profileObj);
                 $employeesNames = $schedule->getEmployeesNames();
                 $subjects = $this->subjectRepository->loadSubjectsByNames($employeesNames);
+                BeforeApplyingSubjectsToScheduleEvent::dispatch($subjects, $schedule);
                 $schedule->fillEmployeesWithSubjectsData($subjects);
                 $writeType = Profile::WRITE_TYPE_TEMPLATE_FILE;
                 break;
@@ -87,6 +89,8 @@ class AmbulanceOfficeDataHandler implements SpreadSheetDataHandler
         $schedule = new Schedule($data);
 
         $subjects = $this->subjectRepository->loadSubjectsByNames($schedule->getEmployeesNames());
+
+        BeforeApplyingSubjectsToScheduleEvent::dispatch($subjects, $schedule);
         $schedule->fillEmployeesWithSubjectsData($subjects);
 
         $profile = $job->getProfileObj();
