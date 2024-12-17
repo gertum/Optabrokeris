@@ -78,6 +78,8 @@ class ScheduleParser
 
     private int $parserVersion = 1;
 
+    private $availabilityId=0;
+
     /**
      * @param DateInterval[] $timeSlices
      */
@@ -606,11 +608,167 @@ class ScheduleParser
      * new version of parseScheduleXls
      * @return void
      */
-    public function parseScheduleXlsNew() {
-        // TODO parse more colors
+    public function parseScheduleXlsNew(string $file, ?array $timeSlices = null) {
+        // TODO reikia padaryti apjungimą pagal teisingus slices ( 8, 20 ) vietoj (0,8,20)
+        if ($timeSlices == null || count($timeSlices) == 0) {
+            $timeSlices = ScheduleParser::createHospitalTimeSlices();
+        }
+
+        $schedule = new Schedule();
+
+        $wrapper = ExcelWrapper::parse($file);
+
+        $eilNrTitle = $wrapper->findEilNrTitle();
+        $eilNrs = $wrapper->parseEilNrs($eilNrTitle);
+        $employees = $wrapper->parseEmployees($eilNrs);
+
+        $dateRecognizer = $wrapper->findYearMonth();
+
+        $dateFrom = Carbon::create($dateRecognizer->getYear(), $dateRecognizer->getMonth())->toImmutable();
+
+        $maxAvailabilityDate = $wrapper->extractMaxAvailabilityDate(
+            $eilNrs[0],
+            $dateRecognizer->getYear(),
+            $dateRecognizer->getMonth()
+        );
+
+        /** @var Carbon $dateTill */
+        $dateTill = Carbon::createFromInterface($maxAvailabilityDate);
+        $dateTill->setTime(24, 0);
+
+        $shifts = ShiftsBuilder::buildShifts($dateFrom, $dateTill->toImmutable(), $timeSlices);
+
+        $schedule->setShiftList($shifts);
+
+        $assignmentConsumer = new ShiftsAvailableAssignmentConsumer($shifts);
+
+        $availabilities = $this->parseColorAvailabilities(
+            $wrapper,
+            $eilNrs,
+            $employees,
+            $dateRecognizer->getYear(),
+            $dateRecognizer->getMonth(),
+            $assignmentConsumer
+        );
+
+        $availabilitiesFlat = array_reduce(
+            $availabilities,
+            fn($flatList, $availabilitiesSubList) => array_merge($flatList, $availabilitiesSubList),
+            []
+        );
+
+        $schedule->setEmployeeList($employees);
+        $schedule->setAvailabilityList($availabilitiesFlat);
+
+        return $schedule;
     }
 
-    public function parseColorAvailabilities() {
+    public function parseColorAvailabilities(
+        ExcelWrapper $wrapper,
+        array $eilNrs,
+        array $employees,
+        int $year,
+        int $month,
+        ?AvailableAssignmentConsumer $assignmentConsumer
 
+    ) {
+        $this->availabilityId = 1;
+        /** @var Employee[] $employeesByRow */
+        $employeesByRow = MapBuilder::buildMap($employees, fn(Employee $employee) => $employee->getRow());
+
+        /** @var Availability[][] $availabilities */
+        $availabilities = [];
+
+        foreach ($eilNrs as $eilNr) {
+            if (!array_key_exists($eilNr->getRow(), $employeesByRow)) {
+                throw new ExcelParseException(sprintf('No employee in row %s', $eilNr->getRow()));
+            }
+
+            $employee = $employeesByRow[$eilNr->getRow()];
+            $employeeAvailabilities = $this->parseColorAvailabilitiesForEilNr(
+                $wrapper,
+                $eilNr,
+                $year,
+                $month,
+                $employee,
+                $assignmentConsumer
+            );
+            $availabilities[$eilNr->getValue()] = $employeeAvailabilities;
+        }
+
+        return $availabilities;
+    }
+
+
+    /**
+     * @return Availability[]
+     */
+    public function parseColorAvailabilitiesForEilNr(
+        ExcelWrapper $wrapper,
+        EilNr $eilNr,
+        int $year,
+        int $month,
+        Employee $employee,
+        ?AvailableAssignmentConsumer $assignmentConsumer
+    ): array {
+        /** @var Availability[] $availabilities */
+        $availabilities = [];
+
+        $row = $eilNr->getRow();
+
+        $monthDate = Carbon::create($year, $month);
+        for ($day = 1; $day <= $monthDate->daysInMonth; $day++) {
+            $date = Carbon::create($year, $month, $day);
+            $column = $wrapper->getColumnByDay($eilNr->getColumn(), $day);
+
+            $availabilityCell = $wrapper->getCell($row, $column);
+            // go till green line ( add break in to the cycle )
+            if ($availabilityCell->getBackgroundColor() == ExcelWrapper::SEPARATOR_BACKGROUND) {
+                break;
+            }
+
+            $availabilityType = Availability::AVAILABLE;
+
+            if ($availabilityCell->getBackgroundColor() == ExcelWrapper::UNAVAILABLE_BACKGROUND) {
+                $availabilityType = Availability::UNAVAILABLE;
+            }
+
+            $availability = (new Availability())
+                ->setId($this->availabilityId++)
+                ->setEmployee($employee)
+                ->setAvailabilityType($availabilityType)
+                ->setDate($date);
+
+            $from = $availabilityCell->value;
+            $availabilityCell2 = $wrapper->getCell($row + 1, $column);
+            $till = $availabilityCell2->value;
+
+            if ($from != null || $till != null) {
+                // DO not change availability type, because it  is not correct to make DESIRED for a whole day.
+                // The DESIRED availability is set in the roster solver for the exact same time period as is defined in  the assigned shift.
+//                $availability->setAvailabilityType(Availability::DESIRED);
+
+                if ($from == null) {
+                    $from = "00:00";
+                }
+
+                $tillDay = $day;
+                if ($till == null) {
+                    $till = "00:00";
+                    $tillDay = $day + 1;
+                }
+
+                $fromDate = Carbon::parse($from)->setDate($year, $month, $day)->format(ExcelWrapper::TARGET_DATE_FORMAT);
+                $tillDate = Carbon::parse($till)->setDate($year, $month, $tillDay)->format(ExcelWrapper::TARGET_DATE_FORMAT);
+
+                if ($assignmentConsumer != null) {
+                    $assignmentConsumer->setAssignment($fromDate, $tillDate, $employee);
+                }
+            }
+
+            $availabilities[] = $availability;
+        }
+
+        return $availabilities;
     }
 }
