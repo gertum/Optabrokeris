@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Tests\Unit\Roster;
-
 
 use App\Domain\Roster\Availability;
 use App\Domain\Roster\Hospital\ScheduleParser;
@@ -17,8 +15,7 @@ class ScheduleParserAvailabilitiesNewTest extends TestCase
      */
     public function testScheduleParserForAvailabilities(
         string $file,
-        int $expectedAvailabilitiesCount,
-        int $testedAvailabilityIndex,
+        string $testedAvailabilityDate,
         string $expectedEmployeeName,
         string $expectedAvailabilityType,
         DateTimeInterface $expectedAvailabilityDate
@@ -27,10 +24,7 @@ class ScheduleParserAvailabilitiesNewTest extends TestCase
 
         $schedule = $scheduleParser->parseScheduleXlsNew($file, ScheduleParser::createHospitalTimeSlices());
 
-        $this->assertCount($expectedAvailabilitiesCount, $schedule->availabilityList);
-
-        $availability = $schedule->availabilityList[$testedAvailabilityIndex];
-
+        $availability = $schedule->findAvailability($expectedEmployeeName, $testedAvailabilityDate, true);
         $this->assertEquals($expectedEmployeeName, $availability->employee->name);
         $this->assertEquals($expectedAvailabilityType, $availability->availabilityType);
         $this->assertEquals($expectedAvailabilityDate, $availability->date);
@@ -41,13 +35,10 @@ class ScheduleParserAvailabilitiesNewTest extends TestCase
         return [
             'test small 1' => [
                 'file' => __DIR__ . '/data/preferences_solved_result.xlsx',
-                // TODO remove this
-                'expectedAvailabilitiesCount' => 12,
-                // TODO use date instead of index
-                'testedAvailabilityIndex' => 6,
-                'expectedEmployeeName' => 'Aleksandras Briedis 24/12',
+                'testedAvailabilityDate' => '2024-11-01',
+                'expectedEmployeeName' => 'Aleksandras Briedis',
                 'expectedAvailabilityType' => Availability::AVAILABLE,
-                'expectedAvailabilityDate' => Carbon::create(2024, 06, 01)
+                'expectedAvailabilityDate' => Carbon::create(2024, 11, 1)
             ],
         ];
     }
