@@ -22,7 +22,7 @@ class ScheduleParserAvailabilitiesNewTest extends TestCase
     ) {
         $scheduleParser = new ScheduleParser();
 
-        $schedule = $scheduleParser->parseScheduleXls($file, ScheduleParser::createHospitalTimeSlices());
+        $schedule = $scheduleParser->parseScheduleXlsNew($file, ScheduleParser::createHospitalTimeSlices());
         $availability = $schedule->findAvailability($expectedEmployeeName, $testedAvailabilityDate, true);
 
         $this->assertEquals($expectedEmployeeName, $availability->employee->name);
