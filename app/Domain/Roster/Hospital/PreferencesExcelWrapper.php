@@ -2,6 +2,7 @@
 
 namespace App\Domain\Roster\Hospital;
 
+use App\Exceptions\ValidateException;
 use App\Util\DateRecognizer;
 
 class PreferencesExcelWrapper extends ExcelWrapper
@@ -14,8 +15,13 @@ class PreferencesExcelWrapper extends ExcelWrapper
 
         $dateRecognizer = new DateRecognizer();
 
-        $yearCell = $this->getCell(0,0)->value;
-        $dateRecognizer->setYear( $yearCell );
+        $yearCellValue = $this->getCell(0,0)->value;
+        $year = intval($yearCellValue);
+        if ( $year == 0 ) {
+            throw new ValidateException('Given excel does not contain correct year value');
+        }
+
+        $dateRecognizer->setYear(  $year );
 
         // extract month
         $collectedCells = [];
