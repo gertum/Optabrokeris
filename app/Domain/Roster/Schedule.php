@@ -206,12 +206,7 @@ class Schedule extends DataTransferObject
 
     public function sortAvailabilities()
     {
-        usort(
-            $this->availabilityList,
-            fn(Availability $a, Availability $b) => (
-                    $a->employee->getSequenceNumber() <=> $b->employee->getSequenceNumber()
-                ) * 2 + ($a->date <=> $b->date)
-        );
+        usort($this->availabilityList,fn(Availability $a, Availability $b) => $a->compareTo($b));
     }
 
     /**
@@ -231,10 +226,8 @@ class Schedule extends DataTransferObject
 
         $availabilityIndex = BinarySearch::search(
             $this->availabilityList,
-            ['seq' => $employee->getSequenceNumber(), 'date' => $startDate],
-            fn(Availability $availability, $searchParams) => (
-                    $availability->employee->getSequenceNumber() <=> $searchParams['seq']
-                ) * 2 + ($availability->date <=> $searchParams['date']),
+            (new Availability())->setEmployee($employee)->setDate($startDate),
+            fn(Availability $availability, $searchAvailability) => $availability->compareTo($searchAvailability),
             $nearestDown,
             $nearestUp
         );

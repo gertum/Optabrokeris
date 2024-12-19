@@ -6,9 +6,7 @@ use App\Domain\Roster\Availability;
 use App\Domain\Roster\Employee;
 use App\Domain\Roster\Schedule;
 use Carbon\Carbon;
-use Carbon\Exceptions\Exception;
 use PHPUnit\Framework\TestCase;
-use Spatie\DataTransferObject\DataTransferObject;
 
 class FindAvailabilityTest extends TestCase
 {
@@ -24,8 +22,8 @@ class FindAvailabilityTest extends TestCase
         $schedule->referenceEmployeesToAvailabilities();
         $schedule->assignEmployeesSequenceNumbers();
         $schedule->sortAvailabilities();
-        $availability = $schedule->findAvailability($employeeName, $searchDate);
-        $this->assertEquals($expectedAvailability->date, $availability->date);
+        $availability = $schedule->findAvailability($employeeName, $searchDate, true);
+        $this->assertEquals($expectedAvailability->getCarbonDate(), $availability->getCarbonDate());
         $this->assertEquals($expectedAvailability->employee->name, $availability->employee->name);
     }
 
