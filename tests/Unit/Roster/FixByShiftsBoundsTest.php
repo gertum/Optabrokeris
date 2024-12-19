@@ -57,6 +57,25 @@ class FixByShiftsBoundsTest extends TestCase
                     ],
 
             ],
+
+//            'test3 absolutely different dates' => [
+//                'originalSchedule' =>
+//                    (new Schedule())->setShiftList([
+//                        (new Shift())->setStart('2024-11-01T00:00:00')->setEnd('2024-11-01T12:00:00'),
+//                        (new Shift())->setStart('2024-11-01T12:00:09')->setEnd('2024-11-02T00:00:00'),
+//                        (new Shift())->setStart('2024-11-02T00:00:00')->setEnd('2024-11-02T12:00:00'),
+//                        (new Shift())->setStart('2024-11-02T12:00:00')->setEnd('2024-11-03T00:00:00'),
+//                    ]),
+//                'bounds' => [8, 20],
+//                'expectedShifts' =>
+//                    [
+//                        (new Shift())->setStart('2024-11-01T08:00:00')->setEnd('2024-11-01T20:00:00'),
+//                        (new Shift())->setStart('2024-11-01T20:00:00')->setEnd('2024-11-02T08:00:00'),
+//                        (new Shift())->setStart('2024-11-02T08:00:00')->setEnd('2024-11-02T20:00:00'),
+//                    ],
+//
+//            ],
+
         ];
     }
 }

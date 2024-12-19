@@ -253,10 +253,14 @@ class Schedule extends DataTransferObject
     /**
      * @param float[] $shiftsBounds
      * @return Shift[]
+     * @deprecated incorrect and unusable
      */
     public function recalculateShiftsByBounds(array $shiftsBounds ) : array {
         // We assume that the following is valid for the TWO CONSECUTIVE shifts:
         // previous end time is the same as the next start time.
+
+        // The only reason we use previous shifts list is that the employee might be assigned already.
+        // better way is to build completely new shifts lists and somehow assign previous employees to the new list.
 
         if ( count($this->shiftList) == 0) {
             return [];

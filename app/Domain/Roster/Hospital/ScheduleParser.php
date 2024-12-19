@@ -616,12 +616,8 @@ class ScheduleParser
     /**
      * new version of parseScheduleXls
      */
-    public function parseScheduleXlsNew(string $file, ?array $timeSlices = null): Schedule
+    public function parseScheduleXlsNew(string $file, array $shiftBounds): Schedule
     {
-        if ( $timeSlices == null ) {
-            $timeSlices = ShiftsBuilder::transformBoundsToTimeSlices([0, 8, 20]);
-        }
-
         $schedule = new Schedule();
 
         $wrapper = ExcelWrapper::parse($file);
@@ -644,7 +640,7 @@ class ScheduleParser
         $dateTill = Carbon::createFromInterface($maxAvailabilityDate);
         $dateTill->setTime(24, 0);
 
-        $shifts = ShiftsBuilder::buildShifts($dateFrom, $dateTill->toImmutable(), $timeSlices);
+        $shifts = ShiftsBuilder::buildShiftsOfBounds($dateFrom, $dateTill->toImmutable(), $shiftBounds);
 
         $schedule->setShiftList($shifts);
 

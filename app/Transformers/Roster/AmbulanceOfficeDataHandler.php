@@ -50,25 +50,25 @@ class AmbulanceOfficeDataHandler implements SpreadSheetDataHandler
             case  DataFileDetector::TYPE_SCHEDULE_XLS:
 
                 // default value
-                $shiftBounds = [0, 8, 20];
+                $shiftBounds = [8, 20];
 
                 // value from profile
                 if ( $profileObj != null && count($profileObj->getShiftBounds()) > 0 ) {
                     $shiftBounds = $profileObj->getShiftBounds();
                 }
-                $timeSlices = ShiftsBuilder::transformBoundsToTimeSlices($shiftBounds);
+//                $timeSlices = ShiftsBuilder::transformBoundsToTimeSlices($shiftBounds);
 
                 // kol kas new nesuveikia, dar blogai ..
-                $schedule = $this->scheduleParser->parseScheduleXls(
+                $schedule = $this->scheduleParser->parseScheduleXlsNew(
                     $excelFile,
-                    $timeSlices
+                    $shiftBounds
                 )
                     ->fillSkills('medicine')
                     ->fillLocation('ambulance office');
 
 
                 // These two functions should fix schedule to be more solvable by the solver.
-                $schedule->setShiftList($schedule->recalculateShiftsByBounds($profileObj->getShiftBounds()));
+//                $schedule->setShiftList($schedule->recalculateShiftsByBounds($profileObj->getShiftBounds()));
                 $schedule->setAvailabilityList( $schedule->recalculateAvailabilitiesByShifts() );
 
                 $writeType = Profile::WRITE_TYPE_ORIGINAL_FILE;
