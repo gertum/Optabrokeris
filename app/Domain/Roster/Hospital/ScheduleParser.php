@@ -12,7 +12,6 @@ use Carbon\Carbon;
 use Carbon\CarbonInterface;
 use DateInterval;
 use DateTimeInterface;
-use Spatie\DataTransferObject\DataTransferObject;
 
 class ScheduleParser
 {
@@ -79,7 +78,7 @@ class ScheduleParser
 
     private int $parserVersion = 1;
 
-    private int $availabilityId = 0;
+    private $availabilityId=0;
 
     /**
      * @param DateInterval[] $timeSlices
@@ -606,14 +605,12 @@ class ScheduleParser
     }
 
     /**
-     * New version of parseScheduleXls
-     *
-     * Parse more colors.
-     *
+     * new version of parseScheduleXls
      */
     public function parseScheduleXlsNew(string $file, ?array $timeSlices = null) : Schedule {
+        // TODO reikia padaryti apjungimą pagal teisingus slices ( 8, 20 ) vietoj (0,8,20)
         if ($timeSlices == null || count($timeSlices) == 0) {
-            $timeSlices = ShiftsBuilder::transformBoundsToTimeSlices([8,20]);
+            $timeSlices = ScheduleParser::createHospitalTimeSlices();
         }
 
         $schedule = new Schedule();
@@ -665,14 +662,6 @@ class ScheduleParser
         return $schedule;
     }
 
-    /**
-     * @param array $eilNrs
-     * @param array $employees
-     * @param int $year
-     * @param int $month
-     * @param AvailableAssignmentConsumer|null $assignmentConsumer
-     * @return array
-     */
     public function parseColorAvailabilities(
         ExcelWrapper $wrapper,
         array $eilNrs,
@@ -680,7 +669,8 @@ class ScheduleParser
         int $year,
         int $month,
         ?AvailableAssignmentConsumer $assignmentConsumer
-    ) : array {
+
+    ) {
         $this->availabilityId = 1;
         /** @var Employee[] $employeesByRow */
         $employeesByRow = MapBuilder::buildMap($employees, fn(Employee $employee) => $employee->getRow());
@@ -708,13 +698,18 @@ class ScheduleParser
         return $availabilities;
     }
 
-    private function parseColorAvailabilitiesForEilNr(
+
+    /**
+     * @return Availability[]
+     */
+    public function parseColorAvailabilitiesForEilNr(
         ExcelWrapper $wrapper,
         EilNr $eilNr,
         int $year,
         int $month,
         Employee $employee,
-        ?AvailableAssignmentConsumer $assignmentConsumer) {
+        ?AvailableAssignmentConsumer $assignmentConsumer
+    ): array {
         /** @var Availability[] $availabilities */
         $availabilities = [];
 
@@ -723,8 +718,6 @@ class ScheduleParser
         $monthDate = Carbon::create($year, $month);
         for ($day = 1; $day <= $monthDate->daysInMonth; $day++) {
             $date = Carbon::create($year, $month, $day);
-
-            // TODO different way - find column by finding number 1 in the table header.
             $column = $wrapper->getColumnByDay($eilNr->getColumn(), $day);
 
             $availabilityCell = $wrapper->getCell($row, $column);
@@ -776,6 +769,5 @@ class ScheduleParser
         }
 
         return $availabilities;
-
     }
 }

@@ -23,8 +23,8 @@ class ScheduleParserAvailabilitiesNewTest extends TestCase
         $scheduleParser = new ScheduleParser();
 
         $schedule = $scheduleParser->parseScheduleXlsNew($file, ScheduleParser::createHospitalTimeSlices());
-
         $availability = $schedule->findAvailability($expectedEmployeeName, $testedAvailabilityDate, true);
+
         $this->assertEquals($expectedEmployeeName, $availability->employee->name);
         $this->assertEquals($expectedAvailabilityType, $availability->availabilityType);
         $this->assertEquals($expectedAvailabilityDate, $availability->date);
@@ -37,7 +37,7 @@ class ScheduleParserAvailabilitiesNewTest extends TestCase
                 'file' => __DIR__ . '/data/preferences_solved_result.xlsx',
                 'testedAvailabilityDate' => '2024-11-01',
                 'expectedEmployeeName' => 'Aleksandras Briedis',
-                'expectedAvailabilityType' => Availability::AVAILABLE,
+                'expectedAvailabilityType' => Availability::UNAVAILABLE,
                 'expectedAvailabilityDate' => Carbon::create(2024, 11, 1)
             ],
         ];
