@@ -56,6 +56,7 @@ class ShiftsBuilder
     }
 
     /**
+     * TODO move to utils
      * @param float[] $bounds each bound is an hour in a day;
      * @return DateInterval[]
      */

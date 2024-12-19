@@ -4,6 +4,7 @@ namespace Tests\Unit\Roster;
 
 use App\Domain\Roster\Availability;
 use App\Domain\Roster\Hospital\ScheduleParser;
+use App\Domain\Roster\Hospital\ShiftsBuilder;
 use Carbon\Carbon;
 use PHPUnit\Framework\TestCase;
 use DateTimeInterface;
@@ -22,7 +23,9 @@ class ScheduleParserAvailabilitiesNewTest extends TestCase
     ) {
         $scheduleParser = new ScheduleParser();
 
-        $schedule = $scheduleParser->parseScheduleXlsNew($file, ScheduleParser::createHospitalTimeSlices());
+        $timeSlices = ShiftsBuilder::transformBoundsToTimeSlices([8,20]);
+        $schedule = $scheduleParser->parseScheduleXlsNew($file, $timeSlices);
+        $schedule->sortAvailabilities();
         $availability = $schedule->findAvailability($expectedEmployeeName, $testedAvailabilityDate, true);
 
         $this->assertEquals($expectedEmployeeName, $availability->employee->name);
