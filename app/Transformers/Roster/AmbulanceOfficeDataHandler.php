@@ -6,6 +6,7 @@ use App\Domain\Roster\Events\BeforeApplyingSubjectsToScheduleEvent;
 use App\Domain\Roster\Hospital\DataFileDetector;
 use App\Domain\Roster\Hospital\ScheduleParser;
 use App\Domain\Roster\Hospital\ScheduleWriter;
+use App\Domain\Roster\Hospital\ShiftsBuilder;
 use App\Domain\Roster\Profile;
 use App\Domain\Roster\Schedule;
 use App\Exceptions\ExcelParseException;
@@ -47,9 +48,20 @@ class AmbulanceOfficeDataHandler implements SpreadSheetDataHandler
         $writeType = null;
         switch ($type) {
             case  DataFileDetector::TYPE_SCHEDULE_XLS:
+
+                // default value
+                $shiftBounds = [0, 8, 20];
+
+                // value from profile
+                if ( $profileObj != null && count($profileObj->getShiftBounds()) > 0 ) {
+                    $shiftBounds = $profileObj->getShiftBounds();
+                }
+                $timeSlices = ShiftsBuilder::transformBoundsToTimeSlices($shiftBounds);
+
+                // kol kas new nesuveikia, dar blogai ..
                 $schedule = $this->scheduleParser->parseScheduleXls(
                     $excelFile,
-                    ScheduleParser::createHospitalTimeSlices()
+                    $timeSlices
                 )
                     ->fillSkills('medicine')
                     ->fillLocation('ambulance office');

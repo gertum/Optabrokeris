@@ -25,7 +25,7 @@ class ParseTwiceScheduleTestSlow extends TestCase
         $logger = new Logger('test');
 
         $scheduleParser = new ScheduleParser();
-        $schedule = $scheduleParser->parseScheduleXls($sourceXlsx, ScheduleParser::createHospitalTimeSlices());
+        $schedule = $scheduleParser->parseScheduleXlsNew($sourceXlsx, ScheduleParser::createHospitalTimeSlices());
 
 //        $destinationXlsx = tempnam('/tmp', 'tempxlsx');
         $destinationXlsx = $tmpXlsx;
@@ -35,7 +35,7 @@ class ParseTwiceScheduleTestSlow extends TestCase
 
         // new parser to clear in memory cache of the parser.
         $scheduleParser = new ScheduleParser();
-        $schedule2 = $scheduleParser->parseScheduleXls($destinationXlsx, ScheduleParser::createHospitalTimeSlices());
+        $schedule2 = $scheduleParser->parseScheduleXlsNew($destinationXlsx, ScheduleParser::createHospitalTimeSlices());
 
         $this->assertEquals($schedule,$schedule2);
     }

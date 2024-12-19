@@ -82,6 +82,7 @@ class ScheduleParser
 
     /**
      * @param DateInterval[] $timeSlices
+     * @deprecated use parseScheduleXlsNew instead
      */
     public function parseScheduleXls(string $file, ?array $timeSlices = null): Schedule
     {
@@ -617,7 +618,9 @@ class ScheduleParser
      */
     public function parseScheduleXlsNew(string $file, ?array $timeSlices = null): Schedule
     {
-        $timeSlices = ShiftsBuilder::transformBoundsToTimeSlices([0, 8, 20]);
+        if ( $timeSlices == null ) {
+            $timeSlices = ShiftsBuilder::transformBoundsToTimeSlices([0, 8, 20]);
+        }
 
         $schedule = new Schedule();
 
@@ -768,6 +771,9 @@ class ScheduleParser
             $availability2Type = Availability::AVAILABLE;
 
             $background2 = $availabilityCell2->getBackgroundColor();
+            if ( $background2 == '' ) {
+                $background2 = $background1;
+            }
             if (in_array(
                 $background2,
                 [
