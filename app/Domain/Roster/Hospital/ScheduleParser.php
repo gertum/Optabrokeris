@@ -78,7 +78,7 @@ class ScheduleParser
 
     private int $parserVersion = 1;
 
-    private $availabilityId=0;
+    private $availabilityId = 0;
 
     /**
      * @param DateInterval[] $timeSlices
@@ -170,7 +170,8 @@ class ScheduleParser
             $dateRecognizer->getMonth(),
             $dateFrom->daysInMonth,
             24
-        )->toImmutable();
+        )->toImmutable()
+        ;
         $shifts = ShiftsBuilder::buildShiftsOfBounds($dateFrom, $dateTill, $profile->getShiftBounds());
         $schedule->setShiftList($shifts);
 
@@ -205,7 +206,8 @@ class ScheduleParser
                 ->setName($employeeCell->value)
                 ->setExcelRow($employeeCell->r)
                 ->setRow($row)
-                ->setSequenceNumber($sequenceNumber++);
+                ->setSequenceNumber($sequenceNumber++)
+            ;
             // max working hours are taken from subjects
 
             $row++;
@@ -220,10 +222,9 @@ class ScheduleParser
      */
     public function parseAvailabilities(
         PreferencesExcelWrapper $wrapper,
-        CarbonInterface         $startingDate,
-        array                   $employees
-    ): array
-    {
+        CarbonInterface $startingDate,
+        array $employees
+    ): array {
         $availabilities = [];
         // 1) find a cell with value '1' at the row index 1, then use it as the marker of the column,
         // where availabilities starts from
@@ -377,13 +378,17 @@ class ScheduleParser
         $nextDay = $nextDay->modify('+1 day');
 
         $nightStartStr = Carbon::create($previousDay->year, $previousDay->month, $previousDay->day, 20)
-            ->format(Schedule::TARGET_DATE_FORMAT);
+            ->format(Schedule::TARGET_DATE_FORMAT)
+        ;
         $dayStartStr = Carbon::create($currentDay->year, $currentDay->month, $currentDay->day, 8)
-            ->format(Schedule::TARGET_DATE_FORMAT);
+            ->format(Schedule::TARGET_DATE_FORMAT)
+        ;
         $dayEndStr = Carbon::create($currentDay->year, $currentDay->month, $currentDay->day, 20)
-            ->format(Schedule::TARGET_DATE_FORMAT);
+            ->format(Schedule::TARGET_DATE_FORMAT)
+        ;
         $nextDayStartStr = Carbon::create($nextDay->year, $nextDay->month, $nextDay->day, 8)
-            ->format(Schedule::TARGET_DATE_FORMAT);
+            ->format(Schedule::TARGET_DATE_FORMAT)
+        ;
 
         $availabilitySymbols = strtolower(trim($availabilitySymbols));
 
@@ -447,13 +452,16 @@ class ScheduleParser
 //            ->format(Schedule::TARGET_DATE_FORMAT)
 //        ;
         $dayStartStr = Carbon::create($currentDay->year, $currentDay->month, $currentDay->day, 8)
-            ->format(Schedule::TARGET_DATE_FORMAT);
+            ->format(Schedule::TARGET_DATE_FORMAT)
+        ;
         $dayEndStr = Carbon::create($currentDay->year, $currentDay->month, $currentDay->day, 20)
-            ->format(Schedule::TARGET_DATE_FORMAT);
+            ->format(Schedule::TARGET_DATE_FORMAT)
+        ;
         $nightStartStr = $dayEndStr;
 
         $nextDayStartStr = Carbon::create($nextDay->year, $nextDay->month, $nextDay->day, 8)
-            ->format(Schedule::TARGET_DATE_FORMAT);
+            ->format(Schedule::TARGET_DATE_FORMAT)
+        ;
 
         $availabilitySymbols = strtolower(trim($availabilitySymbols));
 
@@ -532,10 +540,9 @@ class ScheduleParser
     public function fillGaps(
         Carbon $startDate,
         Carbon $endDate,
-        array  $availabilities,
+        array $availabilities,
         string $defaultAvailabilityType
-    ): array
-    {
+    ): array {
         $currentDate = clone $startDate;
         $interval12 = new DateInterval('PT12H');
 
@@ -551,7 +558,8 @@ class ScheduleParser
             $availability = (new Availability())
                 ->setDate($currentDateStr)
                 ->setDateTill($nextDateStr)
-                ->setAvailabilityType($defaultAvailabilityType);
+                ->setAvailabilityType($defaultAvailabilityType)
+            ;
 
             $availabilities[$currentDateStr] = $availability;
         }
@@ -607,11 +615,9 @@ class ScheduleParser
     /**
      * new version of parseScheduleXls
      */
-    public function parseScheduleXlsNew(string $file, ?array $timeSlices = null) : Schedule {
-        // TODO reikia padaryti apjungimą pagal teisingus slices ( 8, 20 ) vietoj (0,8,20)
-        if ($timeSlices == null || count($timeSlices) == 0) {
-            $timeSlices = ScheduleParser::createHospitalTimeSlices();
-        }
+    public function parseScheduleXlsNew(string $file, ?array $timeSlices = null): Schedule
+    {
+        $timeSlices = ShiftsBuilder::transformBoundsToTimeSlices([0, 8, 20]);
 
         $schedule = new Schedule();
 
@@ -721,25 +727,82 @@ class ScheduleParser
             $column = $wrapper->getColumnByDay($eilNr->getColumn(), $day);
 
             $availabilityCell = $wrapper->getCell($row, $column);
+            $availabilityCell2 = $wrapper->getCell($row + 1, $column);
+
             // go till green line ( add break in to the cycle )
             if ($availabilityCell->getBackgroundColor() == ExcelWrapper::SEPARATOR_BACKGROUND) {
                 break;
             }
 
             $availabilityType = Availability::AVAILABLE;
+            $background1 = $availabilityCell->getBackgroundColor();
 
-            if ($availabilityCell->getBackgroundColor() == ExcelWrapper::UNAVAILABLE_BACKGROUND) {
+            if (in_array(
+                $background1,
+                [
+                    ExcelWrapper::UNAVAILABLE_BACKGROUND_HASHED,
+                    ExcelWrapper::UNAVAILABLE_DAY_BACKGROUND_HASHED,
+                    ExcelWrapper::UNAVAILABLE_NIGHT_BACKGROUND_HASHED
+                ]
+            )) {
                 $availabilityType = Availability::UNAVAILABLE;
+            }
+
+            if (in_array(
+                $background1,
+                [
+                    ExcelWrapper::DESIRED_BACGROUND_HASHED,
+                ]
+            )) {
+                $availabilityType = Availability::DESIRED;
             }
 
             $availability = (new Availability())
                 ->setId($this->availabilityId++)
                 ->setEmployee($employee)
                 ->setAvailabilityType($availabilityType)
-                ->setDate($date);
+                ->setDate($date)
+            ;
+
+            // get color of the availability cell2
+            $availability2Type = Availability::AVAILABLE;
+
+            $background2 = $availabilityCell2->getBackgroundColor();
+            if (in_array(
+                $background2,
+                [
+                    ExcelWrapper::UNAVAILABLE_BACKGROUND_HASHED,
+                    ExcelWrapper::UNAVAILABLE_DAY_BACKGROUND_HASHED,
+                    ExcelWrapper::UNAVAILABLE_NIGHT_BACKGROUND_HASHED
+                ]
+            )) {
+                $availability2Type = Availability::UNAVAILABLE;
+            }
+
+            if (in_array(
+                $background2,
+                [
+                    ExcelWrapper::DESIRED_BACGROUND_HASHED,
+                ]
+            )) {
+                $availability2Type = Availability::DESIRED;
+            }
+
+
+            $date2 = Carbon::create($year, $month, $day, 12);
+
+            $availability2 = (new Availability())
+                ->setId($this->availabilityId++)
+                ->setEmployee($employee)
+                ->setAvailabilityType($availability2Type)
+                ->setDate($date2)
+            ;
+
+            $availabilities[] = $availability;
+            $availabilities[] = $availability2;
+
 
             $from = $availabilityCell->value;
-            $availabilityCell2 = $wrapper->getCell($row + 1, $column);
             $till = $availabilityCell2->value;
 
             if ($from != null || $till != null) {
@@ -757,15 +820,19 @@ class ScheduleParser
                     $tillDay = $day + 1;
                 }
 
-                $fromDate = Carbon::parse($from)->setDate($year, $month, $day)->format(ExcelWrapper::TARGET_DATE_FORMAT);
-                $tillDate = Carbon::parse($till)->setDate($year, $month, $tillDay)->format(ExcelWrapper::TARGET_DATE_FORMAT);
+                $fromDate = Carbon::parse($from)->setDate($year, $month, $day)->format(
+                    ExcelWrapper::TARGET_DATE_FORMAT
+                )
+                ;
+                $tillDate = Carbon::parse($till)->setDate($year, $month, $tillDay)->format(
+                    ExcelWrapper::TARGET_DATE_FORMAT
+                )
+                ;
 
                 if ($assignmentConsumer != null) {
                     $assignmentConsumer->setAssignment($fromDate, $tillDate, $employee);
                 }
             }
-
-            $availabilities[] = $availability;
         }
 
         return $availabilities;
