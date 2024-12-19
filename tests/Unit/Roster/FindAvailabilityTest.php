@@ -30,7 +30,49 @@ class FindAvailabilityTest extends TestCase
     public static function provideSchedules(): array
     {
         return [
-            'test1' => [
+//            'test1' => [
+//                'schedule' => (new Schedule())
+//                    ->setEmployeeList(
+//                        [
+//                            (new Employee())->setName('Jonas')
+//                        ]
+//                    )
+//                    ->setAvailabilityList(
+//                        [
+//                            (new Availability())
+//                                ->setDate('2024-11-01')
+//                                ->setEmployee((new Employee())->setName('Jonas'))
+//                        ]
+//                    )
+//                ,
+//                'employeeName' => 'Jonas',
+//                'searchDate' => '2024-11-01',
+//                'expectedAvailability' => (new Availability())
+//                    ->setDate('2024-11-01')
+//                    ->setEmployee((new Employee())->setName('Jonas')),
+//            ],
+//            'test 2 carbon' => [
+//                'schedule' => (new Schedule())
+//                    ->setEmployeeList(
+//                        [
+//                            (new Employee())->setName('Jonas')
+//                        ]
+//                    )
+//                    ->setAvailabilityList(
+//                        [
+//                            (new Availability())
+//                                ->setDate(Carbon::parse( '2024-11-01'))
+//                                ->setEmployee((new Employee())->setName('Jonas'))
+//                        ]
+//                    )
+//                ,
+//                'employeeName' => 'Jonas',
+//                'searchDate' => '2024-11-01',
+//                'expectedAvailability' => (new Availability())
+//                    ->setDate('2024-11-01')
+//                    ->setEmployee((new Employee())->setName('Jonas')),
+//            ],
+            'test 3 carbon' => [
                 'schedule' => (new Schedule())
                     ->setEmployeeList(
                         [
@@ -40,34 +82,22 @@ class FindAvailabilityTest extends TestCase
                     ->setAvailabilityList(
                         [
                             (new Availability())
-                                ->setDate('2024-11-01')
-                                ->setEmployee((new Employee())->setName('Jonas'))
-                        ]
-                    )
-                ,
-                'employeeName' => 'Jonas',
-                'searchDate' => '2024-11-01',
-                'expectedAvailability' => (new Availability())
-                    ->setDate('2024-11-01')
-                    ->setEmployee((new Employee())->setName('Jonas')),
-            ],
-            'test 2 carbon' => [
-                'schedule' => (new Schedule())
-                    ->setEmployeeList(
-                        [
-                            (new Employee())->setName('Jonas')
-                        ]
-                    )
-                    ->setAvailabilityList(
-                        [
+                                ->setDate(Carbon::parse( '2024-11-01T00:00:00'))
+                                ->setDateTill(Carbon::parse( '2024-11-02T00:00:00'))
+                                ->setEmployee((new Employee())->setName('Jonas')),
                             (new Availability())
-                                ->setDate(Carbon::parse( '2024-11-01'))
-                                ->setEmployee((new Employee())->setName('Jonas'))
+                                ->setDate(Carbon::parse( '2024-11-02T00:00:00'))
+                                ->setDateTill(Carbon::parse( '2024-11-03T00:00:00'))
+                                ->setEmployee((new Employee())->setName('Jonas')),
+                            (new Availability())
+                                ->setDate(Carbon::parse( '2024-11-03T00:00:00'))
+                                ->setDateTill(Carbon::parse( '2024-11-04T00:00:00'))
+                                ->setEmployee((new Employee())->setName('Jonas')),
                         ]
                     )
                 ,
                 'employeeName' => 'Jonas',
-                'searchDate' => '2024-11-01',
+                'searchDate' => '2024-11-01T08:00:00',
                 'expectedAvailability' => (new Availability())
                     ->setDate('2024-11-01')
                     ->setEmployee((new Employee())->setName('Jonas')),

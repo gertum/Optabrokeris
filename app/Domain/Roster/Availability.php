@@ -84,7 +84,7 @@ class Availability extends DataTransferObject
      */
     private ?Carbon $_carbonDate = null;
 
-    public function getCarbonDate(): ?string
+    public function getCarbonDate(): ?Carbon
     {
         if ($this->_carbonDate == null) {
             if (is_string($this->date)) {
@@ -100,10 +100,7 @@ class Availability extends DataTransferObject
     }
 
 
-    /**
-     * @param Carbon|string $date
-     */
-    public function compareToDate($date): int
+    public function compareToDate(Carbon|string $date): int
     {
         if (is_string($this->date) && is_string($date)) {
             return $this->date <=> $date;
@@ -113,7 +110,7 @@ class Availability extends DataTransferObject
             return $this->getCarbonDate() <=> $date;
         }
 
-        if ( is_string($date)) {
+        if (is_string($date)) {
             $carbonDate = Carbon::parse($date);
             return $this->getCarbonDate() <=> $carbonDate;
         }
