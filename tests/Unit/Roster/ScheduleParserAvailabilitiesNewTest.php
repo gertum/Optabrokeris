@@ -4,10 +4,9 @@ namespace Tests\Unit\Roster;
 
 use App\Domain\Roster\Availability;
 use App\Domain\Roster\Hospital\ScheduleParser;
-use App\Domain\Roster\Hospital\ShiftsBuilder;
 use Carbon\Carbon;
-use PHPUnit\Framework\TestCase;
 use DateTimeInterface;
+use PHPUnit\Framework\TestCase;
 
 class ScheduleParserAvailabilitiesNewTest extends TestCase
 {
@@ -23,8 +22,8 @@ class ScheduleParserAvailabilitiesNewTest extends TestCase
     ) {
         $scheduleParser = new ScheduleParser();
 
-        $timeSlices = ShiftsBuilder::transformBoundsToTimeSlices([8,20]);
-        $schedule = $scheduleParser->parseScheduleXlsNew($file, $timeSlices);
+//        $timeSlices = ShiftsBuilder::transformBoundsToTimeSlices([8,20]);
+        $schedule = $scheduleParser->parseScheduleXlsNew($file, [8, 20]);
         // adapt slices to availabilities later?
 
         $schedule->sortAvailabilities();

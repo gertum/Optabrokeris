@@ -24,7 +24,7 @@ class WriteScheduleTest extends TestCase
         // asserts
         $scheduleParser = new ScheduleParser();
 
-        $targetSchedule = $scheduleParser->parseScheduleXlsNew($destinationXlsx);
+        $targetSchedule = $scheduleParser->parseScheduleXls($destinationXlsx);
         $foundShift = $targetSchedule->findShiftByStartDate($expectedShift->start);
 
         $this->assertEquals($expectedShift->start, $foundShift->start);
