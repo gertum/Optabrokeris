@@ -106,12 +106,14 @@ class AmbulanceOfficeDataHandler implements SpreadSheetDataHandler
         $schedule->fillEmployeesWithSubjectsData($subjects);
 
         $profile = $job->getProfileObj();
-        if ($profile->writeType == Profile::WRITE_TYPE_ORIGINAL_FILE) {
+        $alwaysUseTemplate = true;
+
+        if ($profile->writeType == Profile::WRITE_TYPE_ORIGINAL_FILE && !$alwaysUseTemplate) {
             $originalFile = tempnam('/tmp', 'roster');
             file_put_contents($originalFile, $job->getOriginalFileContent());
 
             $this->scheduleWriter->writeSchedule($originalFile, $schedule, $excelFile);
-        } elseif ($profile->writeType == Profile::WRITE_TYPE_TEMPLATE_FILE) {
+        } elseif ($profile->writeType == Profile::WRITE_TYPE_TEMPLATE_FILE || $alwaysUseTemplate) {
             $this->scheduleWriter->writeResultsUsingTemplate($schedule, $this->templateFile, $excelFile);
         } else {
             throw new SolverDataException(sprintf('Unknown write type %s', $profile->writeType));
